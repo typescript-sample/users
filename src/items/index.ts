@@ -1,5 +1,5 @@
 import { Log, Manager, Search } from 'onecore';
-import { DB, postgres, SearchBuilder } from 'query-core';
+import { DB, postgres, Query, SearchBuilder } from 'query-core';
 import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
 import { ItemController } from './item-controller';
 import { buildQuery } from './query';
@@ -20,5 +20,6 @@ export function useItemService(db: DB): ItemService {
   return new ItemManager(builder.search, repository);
 }
 export function useItemController(log: Log, db: DB): ItemController {
-  return new ItemController(log, useItemService(db));
+  const query = new Query<Item, string, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
+  return new ItemController(log, query);
 }

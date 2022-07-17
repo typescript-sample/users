@@ -1,9 +1,9 @@
-import { Controller, Log } from 'express-ext';
-import { Item, ItemFilter, ItemService } from './item';
+import { Log, ViewController } from 'express-ext';
+import { Item, ItemFilter, ItemQuery } from './item';
 
-export class ItemController extends Controller<Item, string, ItemFilter> {
-  constructor(log: Log, private itemService: ItemService) {
-    super(log, itemService);
+export class ItemController extends ViewController<Item, string, ItemFilter> {
+  constructor(log: Log, itemQuery: ItemQuery) {
+    super(log, itemQuery);
     this.array = ['status'];
   }
 }

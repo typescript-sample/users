@@ -1,9 +1,8 @@
-import { Log, Manager, Search } from 'onecore';
-import { DB, postgres, SearchBuilder } from 'query-core';
+import { DB, Log, Manager, Search } from 'onecore';
+import { postgres, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
 import { MyItemController } from './item-controller';
-import {buildQuery} from './query';
 export * from './item';
 export { MyItemController };
 

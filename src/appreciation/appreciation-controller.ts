@@ -5,7 +5,7 @@ import { ParsedQs } from 'qs';
 import { Appreciation, AppreciationFilter, AppreciationReply, AppreciationReplyFilter, AppreciationReplyService, AppreciationService, UsefulAppreciation, UsefulAppreciationFilter } from './appreciation';
 export class AppreciationController extends Controller<Appreciation, string, AppreciationFilter> {
   constructor(log: Log, public userService: AppreciationService, build?: Build<Appreciation>) {
-    super(log, userService, undefined, build);
+    super(log, userService, build);
     this.usefulAppreciation = this.usefulAppreciation.bind(this);
     this.search = this.search.bind(this);
   }
@@ -42,7 +42,7 @@ export class AppreciationController extends Controller<Appreciation, string, App
 
 export class AppreciationReplyController extends Controller<AppreciationReply, string, AppreciationReplyFilter> {
   constructor(log: Log, public serviceAppreciation: AppreciationReplyService, build?: Build<AppreciationReply>) {
-    super(log, serviceAppreciation, undefined, build);
+    super(log, serviceAppreciation, build);
     this.create = this.create.bind(this);
     this.usefulAppreciation = this.usefulAppreciation.bind(this);
     this.search = this.search.bind(this);

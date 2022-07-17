@@ -1,4 +1,4 @@
-import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
+import { Attributes, DateRange, Filter, NumberRange, Query, Repository, Service } from 'onecore';
 
 export interface Item {
   id: string;
@@ -26,8 +26,9 @@ export interface ItemFilter extends Filter {
 
 export interface ItemRepository extends Repository<Item, string> {
 }
-
 export interface ItemService extends Service<Item, string, ItemFilter> {
+}
+export interface ItemQuery extends Query<Item, string, ItemFilter> {
 }
 
 export const itemModel: Attributes = {
