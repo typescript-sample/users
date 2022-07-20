@@ -5,6 +5,7 @@ export interface Item {
   title: string;
   status: string;
   price: number;
+  imageURL?: string;
   brand: string;
   publishedAt?: Date;
   expiredAt?: Date;
@@ -29,8 +30,6 @@ export interface ItemRepository extends Repository<Item, string> {
 
 export interface ItemService extends Service<Item, string, ItemFilter> {
 }
-export interface ItemQuery extends Query<Item, string, ItemFilter> {
-}
 
 export const itemModel: Attributes = {
   id: {
@@ -42,6 +41,9 @@ export const itemModel: Attributes = {
     required: true,
     length: 300,
     q: true
+  },
+  imageURL: {
+    length: 1500,
   },
   price: {
     type: 'number'

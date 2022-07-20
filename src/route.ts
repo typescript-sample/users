@@ -100,8 +100,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.post('/items/search', ctx.items.search);
   app.get('/items/search', ctx.items.search);
-  // app.post('/items/', ctx.items.create);
   app.get('/items/:id', ctx.items.load);
+  // app.post('/items/', ctx.items.create);
   // app.put('/items/:id', ctx.items.update);
   // app.patch('/items/:id', ctx.items.patch);
   // app.delete('/items/:id', ctx.items.delete);

@@ -197,14 +197,10 @@ create table categories(
   updatedat timestamp
 );
 
-insert into categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
-insert into categories (categoryid,categoryname,status) VALUES ('animated','animated','A');
+
+insert into categories (categoryid,categoryname,status) VALUES ('action','action','A');
 insert into categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
-insert into categories (categoryid,categoryname,status) VALUES ('drama','drama','A');
-insert into categories (categoryid,categoryname,status) VALUES ('horror','horror','A');
-insert into categories (categoryid,categoryname,status) VALUES ('crime','crime','A');
-insert into categories (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
-insert into categories (categoryid,categoryname,status) VALUES ('family','family','A');
+insert into categories (categoryid,categoryname,status) VALUES ('camera','camera','A');
 insert into categories (categoryid,categoryname,status) VALUES ('mobiphone','mobiphone','A');
 insert into categories (categoryid,categoryname,status) VALUES ('technological','technological','A');
 insert into categories (categoryid,categoryname,status) VALUES ('apple','apple','A');
@@ -216,6 +212,7 @@ create table items
     title character varying(120) not null,
     status char(1) not null,
 	price numeric(16,2) not null,
+	imageurl character varying(1500),
     brand character varying(120) not null,
 	publishedat timestamp with time zone,
 	expiredat timestamp with time zone,
@@ -223,11 +220,11 @@ create table items
     categories character varying[]
 );
 
-insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('01', 'Movie tickets', 'A', 100000, 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
-insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('02', 'Iphone 13', 'A', 20000000, 'Apple', '2022-07-19', '2025-07-19', 'Iphone 13 from Apple', '{mobiphone,technological,apple}');
-insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('03', 'Camera', 'A', 100000000, 'Samsung', '2022-07-19', '2025-07-19', 'Camera from Samsung', '{camera,technological}');
-insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('04', 'Movie tickets', 'A', 100000, 'Disney', '2022-07-19', '2022-08-25', 'Minion mooive ticket', '{comedy,action}');
-insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('05', 'Macbook', 'A', 25000000, 'Apple', '2022-07-19', '2025-07-19', 'Macbook from Apple', '{laptop,technological,apple}');
+insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('01', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
+insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('02', 'Iphone 13', 'A', 20000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Apple', '2022-07-19', '2025-07-19', 'Iphone 13 from Apple', '{mobiphone,technological,apple}');
+insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('03', 'Camera', 'A', 100000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Samsung', '2022-07-19', '2025-07-19', 'Camera from Samsung', '{camera,technological}');
+insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('04', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Disney', '2022-07-19', '2022-08-25', 'Minion mooive ticket', '{comedy,action}');
+insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('05', 'Macbook', 'A', 25000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Apple', '2022-07-19', '2025-07-19', 'Macbook from Apple', '{laptop,technological,apple}');
 
 select * from items where categories && '{"apple"}';
 
