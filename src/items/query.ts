@@ -32,9 +32,31 @@ export function buildQuery(s: ItemFilter): Statement {
     where.push(`categories && $${i++}`);
   }
 
+  if (s.brand && s.brand.length > 0) {
+    const brand = [];
+    for (const b of s.brand) {
+      brand.push(`brand = $${i++}`);
+      params.push(b);
+    }
+    where.push(`(${brand.join(" or ")})`);
+  }
+  if (s.price) {
+    if (s.price.min && s.price.max) {
+      where.push(`price >= $${i++} and price <= $${i++}`);
+      params.push(s.price.min);
+      params.push(s.price.max);
+    } else if (s.price.min) {
+      where.push(`price >= $${i++}`);
+      params.push(s.price.min);
+    } else if (s.price.max) {
+      where.push(`price <= $${i++}`);
+      params.push(s.price.max);
+    }
+  }
   if (where.length > 0) {
     query = query + ` where ` + where.join(' and ');
   }
+  console.log(query, params);
 
   return { query, params };
 }

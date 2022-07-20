@@ -1,4 +1,4 @@
-import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
+import { Attributes, DateRange, Filter, NumberRange, Repository, Service, Query } from 'onecore';
 
 export interface Item {
   id: string;
@@ -6,8 +6,8 @@ export interface Item {
   status: string;
   price: number;
   brand: string;
-  publishedAt: Date;
-  expiredAt: Date;
+  publishedAt?: Date;
+  expiredAt?: Date;
   description?: string;
   categories?: string[];
 }
@@ -29,11 +29,14 @@ export interface ItemRepository extends Repository<Item, string> {
 
 export interface ItemService extends Service<Item, string, ItemFilter> {
 }
+export interface ItemQuery extends Query<Item, string, ItemFilter> {
+}
 
 export const itemModel: Attributes = {
   id: {
     key: true,
-    length: 40
+    length: 40,
+    match: 'equal',
   },
   title: {
     required: true,
@@ -57,7 +60,7 @@ export const itemModel: Attributes = {
     length: 1
   },
   description: {
-    length: 300,
+    length: 1000,
   },
   categories: {
     type: 'strings',

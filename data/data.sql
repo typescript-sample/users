@@ -185,7 +185,7 @@ create table if not exists comments (
   author varchar(255),
   comment text,
   createdat date
-)
+);
 
 create table categories(
   categoryid character varying(40) primary key,
@@ -197,25 +197,49 @@ create table categories(
   updatedat timestamp
 );
 
-INSERT INTO categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('animated','animated','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('drama','drama','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('horror','horror','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('crime','crime','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
-INSERT INTO categories (categoryid,categoryname,status) VALUES ('family','family','A');
+insert into categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
+insert into categories (categoryid,categoryname,status) VALUES ('animated','animated','A');
+insert into categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
+insert into categories (categoryid,categoryname,status) VALUES ('drama','drama','A');
+insert into categories (categoryid,categoryname,status) VALUES ('horror','horror','A');
+insert into categories (categoryid,categoryname,status) VALUES ('crime','crime','A');
+insert into categories (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
+insert into categories (categoryid,categoryname,status) VALUES ('family','family','A');
+insert into categories (categoryid,categoryname,status) VALUES ('mobiphone','mobiphone','A');
+insert into categories (categoryid,categoryname,status) VALUES ('technological','technological','A');
+insert into categories (categoryid,categoryname,status) VALUES ('apple','apple','A');
+insert into categories (categoryid,categoryname,status) VALUES ('laptop','laptop','A');
 
 create table items
 (
     id character varying(40) primary key,
     title character varying(120) not null,
     status char(1) not null,
-    description character varying(120),
-    categories character varying[],
+	price numeric(16,2) not null,
+    brand character varying(120) not null,
+	publishedat timestamp with time zone,
+	expiredat timestamp with time zone,
+    description character varying(1000),
+    categories character varying[]
 );
 
-insert into users (id, title, status, description, categories) values ('01', 'vexemphim', 'A', 'vexemphimsieuhay', '{horror,drama}');
-insert into users (id, title, status, description, categories) values ('02', 'phimhay', 'A', 'phimsieuhay', '{horror,crime}');
+insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('01', 'Movie tickets', 'A', 100000, 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
+insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('02', 'Iphone 13', 'A', 20000000, 'Apple', '2022-07-19', '2025-07-19', 'Iphone 13 from Apple', '{mobiphone,technological,apple}');
+insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('03', 'Camera', 'A', 100000000, 'Samsung', '2022-07-19', '2025-07-19', 'Camera from Samsung', '{camera,technological}');
+insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('04', 'Movie tickets', 'A', 100000, 'Disney', '2022-07-19', '2022-08-25', 'Minion mooive ticket', '{comedy,action}');
+insert into items (id, title, status, price, brand, publishedat, expiredat, description, categories) values ('05', 'Macbook', 'A', 25000000, 'Apple', '2022-07-19', '2025-07-19', 'Macbook from Apple', '{laptop,technological,apple}');
 
-select * from users where categories && '{"horror"}';
+select * from items where categories && '{"apple"}';
+
+create table brands(
+  brand character varying(255) primary key
+);
+
+insert into brands (brand) VALUES('Sony');
+insert into brands (brand) VALUES ('Samsung');
+insert into brands (brand) VALUES ('Canon');
+insert into brands (brand) VALUES ('Nikon');
+insert into brands (brand) VALUES ('Olypus');
+insert into brands (brand) VALUES ('Xiaomi');
+insert into brands (brand) VALUES ('Apple');
+insert into brands (brand) VALUES ('Disney');

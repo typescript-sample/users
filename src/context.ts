@@ -69,7 +69,7 @@ import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from './my-articles';
-import { MyItemController, useItemController as useMyItemController } from './my-items';
+import { MyItemController, useMyItemController } from './my-items';
 import {
   MyProfileController,
   useMyProfileController,
@@ -101,6 +101,7 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: UserController;
+  brand: QueryController<string[]>;
   skill: QueryController<string[]>;
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
@@ -225,7 +226,17 @@ export function useContext(
 
   const user = useUserController(logger.error, mainDB);
 
-
+  const brandService = new StringService(
+    "brands",
+    "brand",
+    queryDB.query,
+    queryDB.exec
+  );
+  const brand = new QueryController<string[]>(
+    logger.error,
+    brandService.load,
+    "keyword"
+  );
   const skillService = new StringService(
     'skills',
     'skill',
@@ -302,7 +313,7 @@ export function useContext(
   const article = useArticleController(logger.error, mainDB);
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
-  const myitems = useMyItemController(logger.error, queryDB, mapper);
+  const myitems = useMyItemController(logger.error, queryDB, brandService.save, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
   return {
@@ -314,6 +325,7 @@ export function useContext(
     password,
     myprofile,
     user,
+    brand,
     skill,
     interest,
     lookingFor,
