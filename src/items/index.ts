@@ -4,6 +4,7 @@ import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item
 import { ItemController } from './item-controller';
 import { buildQuery } from './query';
 export * from './item';
+import { useQuery } from 'query-mappers';
 
 export { ItemController };
 
@@ -15,6 +16,7 @@ export class ItemManager extends Manager<Item, string, ItemFilter> implements It
   }
 }
 export function useItemService(db: DB): ItemService {
+  // const queryItems = useQuery('items', mapper, itemModel, true);
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
   const repository = new SqlItemRepository(db);
   return new ItemManager(builder.search, repository);

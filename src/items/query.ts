@@ -38,7 +38,7 @@ export function buildQuery(s: ItemFilter): Statement {
       brand.push(`brand = $${i++}`);
       params.push(b);
     }
-    where.push(`(${brand.join(" or ")})`);
+    where.push(`(${brand.join(" or ")})`); 
   }
   if (s.price) {
     if (s.price.min && s.price.max) {

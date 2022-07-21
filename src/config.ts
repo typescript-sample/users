@@ -45,13 +45,6 @@ export const config = {
         rejectUnauthorized: false,
       }
     }
-    // query: {
-    //   user: "postgres",
-    //   host: "localhost",
-    //   password: "hatmua123!@#",
-    //   database: "users",
-    //   port: 5555,
-    // }
   },
   secret: 'secret',
   auth: {

@@ -5,7 +5,7 @@ export interface Item {
   title: string;
   status: string;
   price: number;
-  imageURL?: string;
+  imageurl?: string;
   brand: string;
   publishedAt?: Date;
   expiredAt?: Date;
