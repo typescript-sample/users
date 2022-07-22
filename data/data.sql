@@ -4,7 +4,7 @@ create table users
 	username character varying(120),
 	email character varying(120),
 	phone character varying(45),
-	gender char(1),
+	gender char(1),	
 	displayname character varying(500),
 	givenName character varying(100),
 	familyName character varying(100),
@@ -240,3 +240,19 @@ insert into brands (brand) VALUES ('Olypus');
 insert into brands (brand) VALUES ('Xiaomi');
 insert into brands (brand) VALUES ('Apple');
 insert into brands (brand) VALUES ('Disney');
+
+
+create table companys
+(
+    id character varying(40) not null primary key,
+    name character varying(120),
+    description character varying(1000),
+    size integer,
+    establishedAt timestamp with time zone,
+    catagories character varying[]
+);
+insert into companys (id, name, description, size, establishedAt, catagories) values ('id1','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
+insert into companys (id, name, description, size, establishedAt, catagories) values ('id2','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
+insert into companys (id, name, description, size, establishedAt, catagories) values ('id3','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
+insert into companys (id, name, description, size, establishedAt, catagories) values ('id4','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
+insert into companys (id, name, description, size, establishedAt, catagories) values ('id5','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');

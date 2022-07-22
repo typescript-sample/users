@@ -133,4 +133,12 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/categories/:id', ctx.category.update);
   app.patch('/categories/:id', ctx.category.patch);
   app.delete('/categories/:id', ctx.category.delete);
+
+  app.post('/companys/search', ctx.company.search);
+  app.get('/companys/search', ctx.company.search);
+  app.get('/companys/:id', ctx.company.load);
+  app.post('/companys/', ctx.company.create);
+  app.put('/companys/:id', ctx.company.update);
+  app.patch('/companys/:id', ctx.company.patch);
+  app.delete('/companys/:id', ctx.company.delete);
 }

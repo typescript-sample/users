@@ -65,6 +65,7 @@ import { ArticleController, useArticleController } from './article';
 import { CategoryController, useCategoryController } from './category';
 import { CommentController, useCommentController } from './comment';
 import { ItemController, useItemController } from './items';
+import { CompanyController, useCompanyController } from './company';
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
@@ -113,6 +114,7 @@ export interface ApplicationContext {
   items: ItemController;
   comment: CommentController;
   category: CategoryController;
+  company:CompanyController;
 }
 
 export function useContext(
@@ -316,6 +318,7 @@ export function useContext(
   const myitems = useMyItemController(logger.error, queryDB, brandService.save, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
+  const company = useCompanyController(logger.error, queryDB);
   return {
     health,
     log,
@@ -336,7 +339,8 @@ export function useContext(
     myitems,
     items,
     comment,
-    category
+    category,
+    company
   };
 }
 
