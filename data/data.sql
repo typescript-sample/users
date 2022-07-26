@@ -242,17 +242,34 @@ insert into brands (brand) VALUES ('Apple');
 insert into brands (brand) VALUES ('Disney');
 
 
-create table companys
+create table companies
 (
     id character varying(40) not null primary key,
     name character varying(120),
     description character varying(1000),
     size integer,
+    status char(1) not null,
     establishedAt timestamp with time zone,
-    catagories character varying[]
+    categories character varying[]
 );
-insert into companys (id, name, description, size, establishedAt, catagories) values ('id1','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
-insert into companys (id, name, description, size, establishedAt, catagories) values ('id2','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
-insert into companys (id, name, description, size, establishedAt, catagories) values ('id3','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
-insert into companys (id, name, description, size, establishedAt, catagories) values ('id4','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
-insert into companys (id, name, description, size, establishedAt, catagories) values ('id5','Softwave company', 'This is description', 500, '2022-07-21','{Catagories1, Catagories2}');
+insert into companies (id, name, description, size, status, establishedAt, categories) values ('id1','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id2','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id3','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id4','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id5','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+
+create table company_categories(
+  categoryid character varying(40) primary key,
+  categoryname character varying(300) not null,
+  createdby character varying(40),
+  createdat timestamp,
+  updatedby character varying(40),
+  updatedat timestamp
+);
+
+
+insert into company_categories (categoryid,categoryname) VALUES ('Entertainment','Entertainment');
+insert into company_categories (categoryid,categoryname) VALUES ('Financial business','Financial business');
+insert into company_categories (categoryid,categoryname) VALUES ('Industrial production','Industrial production');
+insert into company_categories (categoryid,categoryname) VALUES ('Real estate business','Real estate business');
+insert into company_categories (categoryid,categoryname) VALUES ('Business services','Business services');

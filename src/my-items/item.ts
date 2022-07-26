@@ -17,10 +17,10 @@ export interface ItemFilter extends Filter {
   id?: string;
   title?: string;
   price?: NumberRange;
+  status?: string;
   brand?: string;
   publishAt?: DateRange;
   expiredAt?: DateRange;
-  status?: string;
   description?: string;
   categories?: string[];
 }

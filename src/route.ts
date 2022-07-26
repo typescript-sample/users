@@ -134,11 +134,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/categories/:id', ctx.category.patch);
   app.delete('/categories/:id', ctx.category.delete);
 
-  app.post('/companys/search', ctx.company.search);
-  app.get('/companys/search', ctx.company.search);
-  app.get('/companys/:id', ctx.company.load);
-  app.post('/companys/', ctx.company.create);
-  app.put('/companys/:id', ctx.company.update);
-  app.patch('/companys/:id', ctx.company.patch);
-  app.delete('/companys/:id', ctx.company.delete);
+  app.post('/companies/search', ctx.company.search);
+  app.get('/companies/search', ctx.company.search);
+  app.get('/companies/:id', ctx.company.load);
+  app.post('/companies/', ctx.company.create);
+  app.put('/companies/:id', ctx.company.update);
+  app.patch('/companies/:id', ctx.company.patch);
+  app.delete('/companies/:id', ctx.company.delete);
+  
+  app.get('/company-categories/search', ctx.companyCategories.search);
+  app.get('/company-categories/:id', ctx.companyCategories.load);
+  app.post('/company-categories/', ctx.companyCategories.create);
+  app.put('/company-categories/:id', ctx.companyCategories.update);
+  app.patch('/company-categories/:id', ctx.companyCategories.patch);
+  app.delete('/company-categories/:id', ctx.companyCategories.delete);
+
 }
