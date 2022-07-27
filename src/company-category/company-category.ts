@@ -1,24 +1,22 @@
 import { Attributes, Filter, Service } from 'onecore';
 import { Repository } from 'query-core';
 
-export interface CategoryFilter extends Filter {
+export interface CompanyCategoryFilter extends Filter {
   id?: string;
   categoryName?: string;
-  status?:string;
 }
-export interface Category {
+export interface CompanyCategory {
   categoryId: string;
   categoryName: string;
-  status:string;
 }
-export interface CategoryRepository extends Repository<Category, string>{
+export interface CompanyCategoryRepository extends Repository<CompanyCategory, string>{
 
 }
-export interface CategoryService extends Service<Category, string, CategoryFilter> {
+export interface CompanyCategoryService extends Service<CompanyCategory, string, CompanyCategoryFilter> {
 
 }
 
-export const categoryModel: Attributes = {
+export const companyCategoryModel: Attributes = {
   categoryId: {
     key: true,
     length: 40,
@@ -28,10 +26,6 @@ export const categoryModel: Attributes = {
     required: true,
     length: 300,
     q:true
-  },
-  status: {
-    match: 'equal',
-    length: 1
   },
   createdBy: {},
   createdAt: {

@@ -7,9 +7,10 @@ export interface Item {
   title: string;
   status: string;
   price: number;
+  imageURL?: string;
   brand: string;
-  publishedAt: Date;
-  expiredAt: Date;
+  publishedAt?: Date;
+  expiredAt?: Date;
   description?: string;
   categories?: string[];
   gallery?: UploadInfo[];
@@ -20,10 +21,10 @@ export interface ItemFilter extends Filter {
   id?: string;
   title?: string;
   price?: NumberRange;
+  status?: string;
   brand?: string;
   publishAt?: DateRange;
   expiredAt?: DateRange;
-  status?: string;
   description?: string;
   categories?: string[];
 }
@@ -45,12 +46,16 @@ export interface ItemService extends Service<Item, string, ItemFilter> {
 export const itemModel: Attributes = {
   id: {
     key: true,
-    length: 40
+    length: 40,
+    match: 'equal',
   },
   title: {
     required: true,
     length: 300,
     q: true
+  },
+  imageURL: {
+    length: 1500,
   },
   price: {
     type: 'number'
@@ -69,7 +74,7 @@ export const itemModel: Attributes = {
     length: 1
   },
   description: {
-    length: 300,
+    length: 1000,
   },
   categories: {
     type: 'strings',
@@ -77,8 +82,5 @@ export const itemModel: Attributes = {
   gallery: {
     type: 'array',
     typeof: fileUploadGalleryModel,
-  },
-  imageURL:{
-
   }
 };

@@ -56,6 +56,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/skills', ctx.skill.query);
   app.get('/interests', ctx.interest.query);
   app.get('/looking-for', ctx.lookingFor.query);
+  app.get('/brands/', ctx.brand.query);
 
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
@@ -103,8 +104,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.post('/items/search', ctx.items.search);
   app.get('/items/search', ctx.items.search);
-  // app.post('/items/', ctx.items.create);
   app.get('/items/:id', ctx.items.load);
+  // app.post('/items/', ctx.items.create);
   // app.put('/items/:id', ctx.items.update);
   // app.patch('/items/:id', ctx.items.patch);
   // app.delete('/items/:id', ctx.items.delete);
@@ -153,4 +154,20 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/categories/:id', ctx.category.update);
   app.patch('/categories/:id', ctx.category.patch);
   app.delete('/categories/:id', ctx.category.delete);
+
+  app.post('/companies/search', ctx.company.search);
+  app.get('/companies/search', ctx.company.search);
+  app.get('/companies/:id', ctx.company.load);
+  app.post('/companies/', ctx.company.create);
+  app.put('/companies/:id', ctx.company.update);
+  app.patch('/companies/:id', ctx.company.patch);
+  app.delete('/companies/:id', ctx.company.delete);
+  
+  app.get('/company-categories/search', ctx.companyCategories.search);
+  app.get('/company-categories/:id', ctx.companyCategories.load);
+  app.post('/company-categories/', ctx.companyCategories.create);
+  app.put('/company-categories/:id', ctx.companyCategories.update);
+  app.patch('/company-categories/:id', ctx.companyCategories.patch);
+  app.delete('/company-categories/:id', ctx.companyCategories.delete);
+
 }

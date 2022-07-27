@@ -65,13 +65,15 @@ import { ArticleController, useArticleController } from './article';
 import { CategoryController, useCategoryController } from './category';
 import { CommentController, useCommentController } from './comment';
 import { ItemController, useItemController } from './items';
+import { CompanyController, useCompanyController } from './company';
+import { CompanyCategoryController, useCompanyCategoryController } from './company-category';
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from './my-articles';
-import { MyItemController, useItemController as useMyItemController, useItemUploadController as useMyItemUploadController } from './my-items';
+import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
 import {
-  MyProfileController, 
+  MyProfileController,
   useMyProfileController,
   UserSettings,
 } from './my-profile';
@@ -102,6 +104,7 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: UserController;
+  brand: QueryController<string[]>;
   skill: QueryController<string[]>;
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
@@ -114,6 +117,8 @@ export interface ApplicationContext {
   items: ItemController;
   comment: CommentController;
   category: CategoryController;
+  company: CompanyController;
+  companyCategories: CompanyCategoryController;
 }
 
 export function useContext(
@@ -227,7 +232,17 @@ export function useContext(
 
   const user = useUserController(logger.error, mainDB);
 
-
+  const brandService = new StringService(
+    "brands",
+    "brand",
+    queryDB.query,
+    queryDB.exec
+  );
+  const brand = new QueryController<string[]>(
+    logger.error,
+    brandService.load,
+    "keyword"
+  );
   const skillService = new StringService(
     'skills',
     'skill',
@@ -302,10 +317,12 @@ export function useContext(
   const article = useArticleController(logger.error, mainDB);
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
-  const myitems = useMyItemController(logger.error, queryDB, storageRepository,deleteFile,generate,useBuildUrl(conf.bucket),[],[],undefined,conf.modelItem,mapper);
-  const myitemsUpload = useMyItemUploadController(logger.error, queryDB, storageRepository,deleteFile,generate,useBuildUrl(conf.bucket),[],[],undefined,conf.modelItem,mapper);
+  const myitems = useMyItemController(logger.error, queryDB, storageRepository, brandService.save, deleteFile, generate, useBuildUrl(conf.bucket), [], [], undefined, conf.modelItem, mapper);
+  const myitemsUpload = useMyItemUploadController(logger.error, queryDB, storageRepository, brandService.save, deleteFile, generate, useBuildUrl(conf.bucket), [], [], undefined, conf.modelItem, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
+  const company = useCompanyController(logger.error, queryDB);
+  const companyCategories = useCompanyCategoryController(logger.error, queryDB);
   return {
     health,
     log,
@@ -315,6 +332,7 @@ export function useContext(
     password,
     myprofile,
     user,
+    brand,
     skill,
     interest,
     lookingFor,
@@ -326,7 +344,9 @@ export function useContext(
     myitemsUpload,
     items,
     comment,
-    category
+    category,
+    company,
+    companyCategories
   };
 }
 
