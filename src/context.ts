@@ -30,6 +30,7 @@ import {
 } from 'google-storage';
 import { generateToken } from 'jsonwebtoken-plus';
 import { MailConfig, MailService, Send } from 'mail-core';
+import { MyItemUploadController } from 'my-items/item-controller';
 import nodemailer from 'nodemailer';
 import { ModelConf, StorageConf } from 'one-storage';
 import { PasswordController } from 'password-express';
@@ -57,9 +58,8 @@ import {
 import { createValidator } from 'xvalidators';
 import {
   AppreciationController,
-  AppreciationReplyController,
   useAppreciationController,
-  useAppreciationReplyController,
+  // useAppreciationReplyController,
 } from './appreciation';
 import { ArticleController, useArticleController } from './article';
 import { CategoryController, useCategoryController } from './category';
@@ -69,9 +69,9 @@ import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from './my-articles';
-import { MyItemController, useItemController as useMyItemController } from './my-items';
+import { MyItemController, useItemController as useMyItemController, useItemUploadController as useMyItemUploadController } from './my-items';
 import {
-  MyProfileController,
+  MyProfileController, 
   useMyProfileController,
   UserSettings,
 } from './my-profile';
@@ -91,6 +91,7 @@ export interface Config {
   storage: StorageConf;
   model: ModelConf;
   modelAppreciation: ModelConfig;
+  modelItem: ModelConf;
 }
 export interface ApplicationContext {
   health: HealthController;
@@ -107,8 +108,9 @@ export interface ApplicationContext {
   appreciation: AppreciationController;
   article: ArticleController;
   myarticles: MyArticleController;
-  appreciationReply: AppreciationReplyController;
+  // appreciationReply: ReplyController;
   myitems: MyItemController;
+  myitemsUpload: MyItemUploadController;
   items: ItemController;
   comment: CommentController;
   category: CategoryController;
@@ -263,15 +265,13 @@ export function useContext(
   const appreciation = useAppreciationController(
     logger.error,
     mainDB,
-    undefined,
-    build
   );
-  const appreciationReply = useAppreciationReplyController(
-    logger.error,
-    mainDB,
-    undefined,
-    build
-  );
+  // const appreciationReply = useAppreciationReplyController(
+  //   logger.error,
+  //   mainDB,
+  //   undefined,
+  //   build
+  // );
 
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
@@ -302,7 +302,8 @@ export function useContext(
   const article = useArticleController(logger.error, mainDB);
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
-  const myitems = useMyItemController(logger.error, queryDB, mapper);
+  const myitems = useMyItemController(logger.error, queryDB, storageRepository,deleteFile,generate,useBuildUrl(conf.bucket),[],[],undefined,conf.modelItem,mapper);
+  const myitemsUpload = useMyItemUploadController(logger.error, queryDB, storageRepository,deleteFile,generate,useBuildUrl(conf.bucket),[],[],undefined,conf.modelItem,mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
   return {
@@ -320,8 +321,9 @@ export function useContext(
     appreciation,
     article,
     myarticles,
-    appreciationReply,
+    // appreciationReply,
     myitems,
+    myitemsUpload,
     items,
     comment,
     category

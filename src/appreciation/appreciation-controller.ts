@@ -1,78 +1,99 @@
 import { Request, Response } from 'express';
-import { Build, buildArray, Controller, format, fromRequest, getParameters, handleError, jsonResult, Log } from 'express-ext';
+import { Build, Controller, handleError, Log } from 'express-ext';
 import { ParamsDictionary } from 'express-serve-static-core';
+import { Validator } from 'onecore';
 import { ParsedQs } from 'qs';
-import { Appreciation, AppreciationFilter, AppreciationReply, AppreciationReplyFilter, AppreciationReplyService, AppreciationService, UsefulAppreciation, UsefulAppreciationFilter } from './appreciation';
-export class AppreciationController extends Controller<Appreciation, string, AppreciationFilter> {
-  constructor(log: Log, public userService: AppreciationService, build?: Build<Appreciation>) {
-    super(log, userService, build);
-    this.usefulAppreciation = this.usefulAppreciation.bind(this);
-    this.search = this.search.bind(this);
+import { createValidator } from 'xvalidators';
+import { Appreciation, AppreciationFilter, AppreciationId, appreciationModel, AppreciationService, Reply } from './appreciation';
+
+export class AppreciationController extends Controller<Appreciation, AppreciationId, AppreciationFilter> {
+  validator: Validator<Appreciation>;
+  constructor(log: Log, protected appreciationService: AppreciationService, build?: Build<Appreciation>) {
+    super(log, appreciationService, build);
+    this.validator = createValidator<Appreciation>(appreciationModel);
+    this.load = this.load.bind(this);
+    this.update = this.update.bind(this);
+    this.reply = this.reply.bind(this);
+    this.removeReply = this.removeReply.bind(this);
+    this.updateReply = this.updateReply.bind(this);
+    this.setUseful = this.setUseful.bind(this);
+    this.getReplys = this.getReplys.bind(this)
   }
 
-  usefulAppreciation(req: Request, res: Response) {
-    const { appreciationId, userId } = req.body;
-    if (appreciationId && userId) {
-      const useful: UsefulAppreciationFilter = {
-        appreciationId, userId
-      };
-      return this.userService.usefulAppreciation(useful).then(
-        rs => {
-          if (rs > 0) {
-            res.status(200).json(rs).end();
-          } else {
-            res.status(500).json(rs).end();
-          }
-        }
-      );
-    } else {
-      return res.status(400).end('data cannot be empty');
-    }
+  load(req: Request, res: Response) {
+    const id = req.params.id;
+    const author = req.params.author;
+    const appreciationId: AppreciationId = { id, author };
+    this.appreciationService.load(appreciationId).then(appreciation => {
+      if (appreciation) {
+        return res.status(200).json(appreciation).end();
+      } else {
+        return res.status(200).json({}).end();
+      }
+    }).catch(err => handleError(err, res, this.log));
   }
 
-  search(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): void {
-    const s = fromRequest<AppreciationFilter>(req, buildArray(this.array, this.fields, this.excluding));
-    const l = getParameters(s, this.config);
-    const s2 = format(s, this.dates, this.numbers);
-    this.userService.searchWithReply(s2, req.query.userIdUseful?.toString(), l.limit, l.skipOrRefId, l.fields)
-      .then(result => jsonResult(res, result, this.csv, l.fields, this.config))
-      .catch(err => handleError(err, res, this.log));
-  }
-}
-
-export class AppreciationReplyController extends Controller<AppreciationReply, string, AppreciationReplyFilter> {
-  constructor(log: Log, public serviceAppreciation: AppreciationReplyService, build?: Build<AppreciationReply>) {
-    super(log, serviceAppreciation, build);
-    this.create = this.create.bind(this);
-    this.usefulAppreciation = this.usefulAppreciation.bind(this);
-    this.search = this.search.bind(this);
+  getReplys(req: Request, res: Response) {
+    const id = req.params.id;
+    const author = req.params.author;
+    this.appreciationService.getReplys(id, author).then(rep => {
+      return res.status(200).json(rep).end();
+    }).catch(err => handleError(err, res, this.log));
   }
 
-  usefulAppreciation(req: Request, res: Response) {
-    const { appreciationId, userId } = req.body;
-    if (appreciationId && userId) {
-      const useful: UsefulAppreciationFilter = {
-        appreciationId, userId
-      };
-      return this.serviceAppreciation.usefulAppreciation(useful).then(
-        rs => {
-          if (rs > 0) {
-            res.status(200).json(rs).end();
-          } else {
-            res.status(500).json(rs).end();
-          }
-        }
-      );
-    } else {
-      return res.status(400).end('data cannot be empty');
-    }
+  reply(req: Request, res: Response) {
+    const id = req.params.id;
+    const author = req.params.author;
+    const userId = req.params.userid;
+    const reply: Reply = { id, author, userId, ...req.body };
+    this.appreciationService.reply(reply).then(rep => {
+      return res.status(200).json(rep).end();
+    }).catch(err => handleError(err, res, this.log));
   }
-  search(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): void {
-    const s = fromRequest<AppreciationReplyFilter>(req, buildArray(this.array, this.fields, this.excluding));
-    const l = getParameters(s, this.config);
-    const s2 = format(s, this.dates, this.numbers);
-    this.serviceAppreciation.searchWithReply(s2, req.query.userIdUseful?.toString(), l.limit, l.skipOrRefId, l.fields)
-      .then(result => jsonResult(res, result, this.csv, l.fields, this.config))
-      .catch(err => handleError(err, res, this.log));
+
+  removeReply(req: Request, res: Response) {
+    const id = req.params.id;
+    const author = req.params.author;
+    const userId = req.params.userid;
+    this.appreciationService.removeReply(id, author, userId).then(reply => {
+      return res.status(200).json(reply).end();
+    }).catch(err => handleError(err, res, this.log));
+  }
+
+  updateReply(req: Request, res: Response) {
+    const id = req.params.id;
+    const author = req.params.author;
+    const userId = req.params.userid;
+    const reply: Reply = { id, author, userId, ...req.body };
+    this.appreciationService.updateReply(reply).then(rep => {
+      return res.status(200).json(rep).end();
+    }).catch(err => handleError(err, res, this.log));
+  }
+
+  setUseful(req: Request, res: Response) {
+    console.log('useful');
+    console.log(req.params);
+    const id = req.params.id;
+    const author = req.params.author;
+    const userId = req.params.userid;
+    this.appreciationService.setUseful(id, author, userId).then(rs => {
+      return res.status(200).json(rs).end();
+    }).catch(err => handleError(err, res, this.log));
+
+  }
+
+  delete(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): void {
+    const id = req.params.id;
+    const author = req.params.author;
+    this.appreciationService.delete({ id, author }).then(rs => {
+      return res.status(200).json(rs).end();
+    }).catch(err => handleError(err, res, this.log));
+  }
+  update(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): void {
+    const id = req.params.id;
+    const author = req.params.author;
+    this.appreciationService.update({ id, author, ...req.body }).then(rs => {
+      return res.status(200).json(rs).end();
+    }).catch(err => handleError(err, res, this.log));
   }
 }

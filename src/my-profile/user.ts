@@ -11,7 +11,6 @@ export interface User {
   skills: Skill[];
   achievements: Achievement[];
   settings?: UserSettings;
-  avatarUrl?: string;
   title?: string;
   image?: UploadSize[];
   coverURL?: string;
@@ -24,6 +23,7 @@ export interface User {
   company?: string;
   lookingFor?: string[];
   gallery?: UploadInfo[];
+  imageUrl?: string;
 }
 export interface Skill {
   skill: string;
@@ -170,14 +170,17 @@ export const userModel: Attributes = {
   settings: {
     type: 'object',
     typeof: userSettingsModel,
-  }
-  /*,
-  uploadCover: {
-    type: 'primitives',
-    typeof: fileUploadModel,
   },
-  uploadGallery: {
+  bio:{
+  },
+  coverURL:{
+
+  },
+  imageURL:{
+
+  },
+  gallery: {
     type: 'array',
-    typeof: fileUploadModel,
-  },*/
+    typeof: fileUploadGalleryModel,
+  },
 };
