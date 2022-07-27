@@ -1,8 +1,7 @@
 import { DB, Log, Manager, Search } from 'onecore';
-import { postgres, SearchBuilder, Query } from 'query-core';
+import { postgres, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
-import { buildQuery } from './query';
 import { MyItemController } from './item-controller';
 export * from './item';
 export { MyItemController };
@@ -36,7 +35,7 @@ export class ItemManager extends Manager<Item, string, ItemFilter> implements It
 export function useMyItemService(db: DB, save: (values: string[]) => Promise<number>, mapper?: TemplateMap): ItemService {
   const queryItems = useQuery('items', mapper, itemModel, true);
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, queryItems);
-  const repository = new SqlItemRepository(db);
+  const repository = new SqlItemRepository(db, 'items');
   return new ItemManager(builder.search, repository, save);
 }
 export function useMyItemController(log: Log, db: DB, save: (values: string[]) => Promise<number>, mapper?: TemplateMap): MyItemController {
