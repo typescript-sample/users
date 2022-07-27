@@ -30,6 +30,7 @@ import {
 } from "google-storage";
 import { generateToken } from "jsonwebtoken-plus";
 import { MailConfig, MailService, Send } from "mail-core";
+import { MyItemUploadController } from "my-items/item-controller";
 import nodemailer from "nodemailer";
 import { ModelConf, StorageConf } from "one-storage";
 import { PasswordController } from "password-express";
@@ -57,25 +58,33 @@ import {
 import { createValidator } from "xvalidators";
 import {
   AppreciationController,
-  AppreciationReplyController,
   useAppreciationController,
-  useAppreciationReplyController,
+  // useAppreciationReplyController,
 } from "./appreciation";
 import { ArticleController, useArticleController } from "./article";
 import { CategoryController, useCategoryController } from "./category";
 import { CommentController, useCommentController } from "./comment";
 import { ItemController, useItemController } from "./items";
 import {
-  useResponseCommentController,
-  useResponseController,
+  ResponseController,
   ResponseCommentController,
-  ResponseController
+  useResponseController,
+  useResponseCommentController,
 } from "./response";
+import { CompanyController, useCompanyController } from "./company";
+import {
+  CompanyCategoryController,
+  useCompanyCategoryController,
+} from "./company-category";
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from "./my-articles";
-import { MyItemController, useMyItemController } from "./my-items";
+import {
+  MyItemController,
+  useMyItemController,
+  useMyItemUploadController,
+} from "./my-items";
 import {
   MyProfileController,
   useMyProfileController,
@@ -103,6 +112,7 @@ export interface Config {
   storage: StorageConf;
   model: ModelConf;
   modelAppreciation: ModelConfig;
+  modelItem: ModelConf;
 }
 export interface ApplicationContext {
   health: HealthController;
@@ -122,13 +132,16 @@ export interface ApplicationContext {
   locationRate: LocationRateController;
   article: ArticleController;
   myarticles: MyArticleController;
-  appreciationReply: AppreciationReplyController;
+  // appreciationReply: ReplyController;
   myitems: MyItemController;
-  category: CategoryController;
+  myitemsUpload: MyItemUploadController;
   items: ItemController;
+  comment: CommentController;
+  category: CategoryController;
+  company: CompanyController;
+  companyCategories: CompanyCategoryController;
   response: ResponseController;
   itemComment: ResponseCommentController;
-  comment: CommentController;
 }
 
 export function useContext(
@@ -290,18 +303,13 @@ export function useContext(
     "keyword"
   );
 
-  const appreciation = useAppreciationController(
-    logger.error,
-    mainDB,
-    undefined,
-    build
-  );
-  const appreciationReply = useAppreciationReplyController(
-    logger.error,
-    mainDB,
-    undefined,
-    build
-  );
+  const appreciation = useAppreciationController(logger.error, mainDB);
+  // const appreciationReply = useAppreciationReplyController(
+  //   logger.error,
+  //   mainDB,
+  //   undefined,
+  //   build
+  // );
 
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
@@ -335,16 +343,43 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
   const response = useResponseController(logger.error, queryDB, mapper);
-  const itemComment = useResponseCommentController(logger.error, queryDB, mapper);
-
+  const itemComment = useResponseCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
   const myitems = useMyItemController(
     logger.error,
     queryDB,
+    storageRepository,
     brandService.save,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
+  const myitemsUpload = useMyItemUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    brandService.save,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
     mapper
   );
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
+  const company = useCompanyController(logger.error, queryDB);
+  const companyCategories = useCompanyCategoryController(logger.error, queryDB);
   return {
     health,
     log,
@@ -363,13 +398,16 @@ export function useContext(
     locationRate,
     article,
     myarticles,
-    appreciationReply,
+    // appreciationReply,
     myitems,
+    myitemsUpload,
     items,
     response,
     itemComment,
     comment,
     category,
+    company,
+    companyCategories,
   };
 }
 

@@ -1,3 +1,5 @@
+import { fileUploadGalleryModel } from '../my-profile';
+import { UploadInfo } from 'one-storage';
 import { Attributes, DateRange, Filter, NumberRange, Query, Repository, Service } from 'onecore';
 
 export interface Item {
@@ -11,6 +13,7 @@ export interface Item {
   expiredAt?: Date;
   description?: string;
   categories?: string[];
+  gallery?: UploadInfo[];
 }
 
 export interface ItemFilter extends Filter {
@@ -66,5 +69,9 @@ export const itemModel: Attributes = {
   },
   categories: {
     type: 'strings',
+  },
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
   },
 };

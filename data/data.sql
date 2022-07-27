@@ -4,7 +4,7 @@ create table users
 	username character varying(120),
 	email character varying(120),
 	phone character varying(45),
-	gender char(1),
+	gender char(1),	
 	displayname character varying(500),
 	givenName character varying(100),
 	familyName character varying(100),
@@ -437,3 +437,35 @@ insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7a18c
 insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
 insert into locationrate (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
 insert into locationrate (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
+
+create table companies
+(
+    id character varying(40) not null primary key,
+    name character varying(120),
+    description character varying(1000),
+    size integer,
+    status char(1) not null,
+    establishedAt timestamp with time zone,
+    categories character varying[]
+);
+insert into companies (id, name, description, size, status, establishedAt, categories) values ('id1','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id2','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id3','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id4','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name, description, size,status, establishedAt, categories) values ('id5','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+
+create table company_categories(
+  categoryid character varying(40) primary key,
+  categoryname character varying(300) not null,
+  createdby character varying(40),
+  createdat timestamp,
+  updatedby character varying(40),
+  updatedat timestamp
+);
+
+
+insert into company_categories (categoryid,categoryname) VALUES ('Entertainment','Entertainment');
+insert into company_categories (categoryid,categoryname) VALUES ('Financial business','Financial business');
+insert into company_categories (categoryid,categoryname) VALUES ('Industrial production','Industrial production');
+insert into company_categories (categoryid,categoryname) VALUES ('Real estate business','Real estate business');
+insert into company_categories (categoryid,categoryname) VALUES ('Business services','Business services');
