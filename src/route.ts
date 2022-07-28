@@ -140,6 +140,21 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
 
 
+  app.get('/item-comment/search', ctx.itemComment.search);
+  app.post('/item-comment/search', ctx.itemComment.search);
+  app.post('/item-response', ctx.response.response);
+  app.get('/item-response/search', ctx.response.search);
+  app.post('/item-response/search', ctx.response.search);
+  app.get('/item-response/comment/search', ctx.itemComment.search);
+  app.post('/item-response/comment/search', ctx.itemComment.search);
+  app.put('/item-response/:id/:author', ctx.response.updateResponse);
+  app.get('/item-response/:id/:author', ctx.response.load);
+  app.post('/item-response/useful/:id/:author/:userid', ctx.response.setUseful);
+  app.delete('/item-response/useful/:id/:author/:userid', ctx.response.removeUseful);
+  app.post('/item-response/comment/:id/:author/:userid', ctx.response.comment);
+  app.delete('/item-response/comment/:commentid/:author', ctx.response.removeComment);
+  app.put('/item-response/comment/:commentid/:id/:author/:userid', ctx.response.updateComment);
+
   app.post('/comment/search', ctx.comment.search);
   app.get('/comment/search', ctx.comment.search);
   app.get('/comment/:id', ctx.comment.load);
@@ -155,6 +170,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/categories/:id', ctx.category.update);
   app.patch('/categories/:id', ctx.category.patch);
   app.delete('/categories/:id', ctx.category.delete);
+
+  app.post("/locations/search", ctx.location.search);
+  app.get("/locations/search", ctx.location.search);
+  app.get("/locations/:id", ctx.location.load);
+
+  app.get("/location-rate/search", ctx.locationRate.search);
+  app.post("/location-rate/search", ctx.locationRate.search);
+  app.get("/location-rate/:id", ctx.locationRate.load);
 
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);
