@@ -35,7 +35,7 @@ export class SqlAppreciationRepository extends Repository<Appreciation, Apprecia
       if (!a) { return Promise.resolve(-1); }
       obj.updateAt = new Date;
       const histories=a.histories?a.histories:[]
-      histories.push( { review: a.review, time: a.time })
+      histories.push( { review: a.review, time: a.time,title:a.title })
       obj.histories = histories
       const stmt = buildToUpdate(obj, 'appreciation', appreciationModel, this.param);
       if (!stmt) {

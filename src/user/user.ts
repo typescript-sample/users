@@ -19,6 +19,18 @@ export interface User {
   email?: string;
   phone?: string;
   dateOfBirth?: string;
+  links?: Social
+}
+
+export interface Social {
+  google: string;
+  facebook: string;
+  github: string;
+  instagram: string;
+  twitter: string;
+  skype: string;
+  dribble: string;
+  linkedin: string;
 }
 export interface UserRepository extends ViewRepository<User, string> {
 }
@@ -44,5 +56,14 @@ export const userModel: Attributes = {
   },
   interests: {
     type: 'strings'
+  },
+  links:{
+
+  },
+  imageURL:{
+
+  },
+  coverURL:{
+    
   }
 };

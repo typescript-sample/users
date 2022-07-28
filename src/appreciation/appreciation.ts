@@ -28,6 +28,7 @@ export interface Appreciation {
 export interface Histories {
   time: Date;
   review: string;
+  title:string;
 }
 export interface AppreciationRepository extends Repository<Appreciation, AppreciationId> {
   getAppreciation(id: string, author: string): Promise<Appreciation | null>;
@@ -47,9 +48,11 @@ export interface AppreciationService extends Service<Appreciation, AppreciationI
 export const appreciationModel: Attributes = {
   id: {
     key: true,
-    length: 40
+    length: 40,
+    required: true,
   },
   author: {
+    key: true,
     required: true,
     length: 255,
   },
@@ -91,7 +94,7 @@ export interface Reply {
   author: string;
   userId: string;
   review: string;
-  createAt: Date;
+  time: Date;
   updateAt: Date;
 }
 export interface ReplyRepository extends Repository<Reply, ReplyId> {
@@ -133,7 +136,7 @@ export const replyModel: Attributes = {
   review: {
     length: 255
   },
-  createAt: {
+  time: {
     type: 'datetime'
   },
   updateAt: {

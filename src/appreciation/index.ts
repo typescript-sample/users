@@ -41,7 +41,7 @@ export class AppreciationManager extends Manager<Appreciation, AppreciationId, A
       if (checkReply) {
         return false;
       } else {
-        reply.createAt ? reply.createAt = reply.createAt : reply.createAt = new Date();
+        reply.time ? reply.time = reply.time : reply.time = new Date();
         reply.updateAt ? reply.updateAt = reply.updateAt : reply.updateAt = new Date();
         const wait = await this.replyRepository.insert(reply);
         await this.repository.increaseReplyCount(reply.id, reply.author);
