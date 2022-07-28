@@ -1,5 +1,6 @@
 import { Attributes, DateRange, Filter, Repository } from 'onecore';
 import { UploadData } from 'upload-express';
+import { Company, Education, Work } from 'user';
 
 export interface User {
   id: string;
@@ -24,7 +25,10 @@ export interface User {
   lookingFor?: string[];
   gallery?: UploadInfo[];
   imageURL?: string;
-  links?: Social
+  links?: Social;
+  works: Work[];
+  companies: Company[];
+  educations: Education[];
 }
 export interface Social {
   google: string;
@@ -194,7 +198,16 @@ export const userModel: Attributes = {
     type: 'array',
     typeof: fileUploadGalleryModel,
   },
-  links:{
+  links: {
     type: 'object',
+  },
+  companies: {
+
+  },
+  educations: {
+
+  },
+  works: {
+
   }
 };

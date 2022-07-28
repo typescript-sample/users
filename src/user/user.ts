@@ -13,13 +13,43 @@ export interface Skill {
   skill: string;
   hirable?: boolean;
 }
+
+export interface Work {
+  name: string;
+  position: string;
+  description: string;
+  item: Object[];
+  from: Date;
+  to: Date;
+}
+
+export interface Company {
+  id?: string
+  name: string
+  position: string;
+  descrition: string;
+  from: Date;
+  to: Date;
+}
+export interface Education {
+  school: string;
+  degree: string;
+  major: string;
+  title: string;
+  from: Date;
+  to: Date;
+}
+
 export interface User {
   id?: string;
   username?: string;
   email?: string;
   phone?: string;
   dateOfBirth?: string;
-  links?: Social
+  links?: Social;
+  works:Work[];
+  companies:Company[];
+  educations:Education[];
 }
 
 export interface Social {
@@ -57,13 +87,13 @@ export const userModel: Attributes = {
   interests: {
     type: 'strings'
   },
-  links:{
+  links: {
 
   },
-  imageURL:{
+  imageURL: {
 
   },
-  coverURL:{
-    
-  }
+  coverURL: {
+
+  },
 };
