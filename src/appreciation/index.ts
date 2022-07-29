@@ -1,158 +1,128 @@
-import { Build } from 'express-ext';
-import { Log, Manager, Search, SearchResult } from 'onecore';
+import { Build, Log } from 'express-ext';
+import { Manager, Search, SearchResult } from 'onecore';
+import { buildToSave } from 'pg-extension';
 import { DB, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { Appreciation, AppreciationFilter, AppreciationModel, AppreciationReply, AppreciationReplyFilter, AppreciationReplyModel, AppreciationReplyRepository, AppreciationReplyService, AppreciationRepository, AppreciationService, UsefulAppreciation, UsefulAppreciationFilter, UsefulAppreciationModel, UsefulAppreciationRepository } from './appreciation';
-import { AppreciationController, AppreciationReplyController } from './appreciation-controller';
-import { SqlAppreciationReplyRepository } from './appreciation-reply-repository';
+import { Appreciation, AppreciationFilter, AppreciationId, appreciationModel, AppreciationRepository, AppreciationService, Reply, ReplyFilter, ReplyId, replyModel, ReplyRepository, ReplyService, Useful, usefulModel, UsefulRepository } from './appreciation';
+import { AppreciationController } from './appreciation-controller';
+import { AppreciationReplyController } from './reply-controller';
+import { SqlAppreciationRepository } from './sql-appreciation-repository';
+import { SqlReplyRepository } from './sql-reply-repository';
+import { SqlUsefulRepository } from './sql-useful-repository';
+
 export * from './appreciation-controller';
+export * from './reply-controller';
+export * from './appreciation';
 export { AppreciationController };
+export { AppreciationReplyController };
 
-import { SqlAppreciationRepository } from './appreciation-repository';
-import { SqlUsefulAppreciationRepository } from './appreciation-useful-repository';
-
-export class AppreciationManager extends Manager<Appreciation, string, AppreciationFilter> implements AppreciationService {
-  constructor(public searchAppreciation: Search<Appreciation, AppreciationFilter>, repository: AppreciationRepository, public useful: UsefulAppreciationRepository, public searchUseful: Search<UsefulAppreciation, UsefulAppreciationFilter>) {
-    super(searchAppreciation, repository);
-    this.usefulAppreciation = this.usefulAppreciation.bind(this);
-    this.searchWithReply = this.searchWithReply.bind(this);
+export class AppreciationManager extends Manager<Appreciation, AppreciationId, AppreciationFilter> implements AppreciationService {
+  constructor(search: Search<Appreciation, AppreciationFilter>,
+    public repository: AppreciationRepository, private replyRepository: ReplyRepository, private usefulRepository: UsefulRepository) {
+    super(search, repository);
+    this.reply = this.reply.bind(this);
+    this.removeReply = this.removeReply.bind(this);
+    this.updateReply = this.updateReply.bind(this);
+    this.setUseful = this.setUseful.bind(this);
   }
 
-  async usefulAppreciation(obj: UsefulAppreciation): Promise<number> {
-    const data = await this.searchUseful(obj);
-    let isInsert = false;
-    if (data.list.length > 0) {
-      const rs = await this.useful.deleteUseful(data.list[0].appreciationId, data.list[0].userId);
-      if (!rs) {
+  async getReplys(id: string, author: string, ctx?: any): Promise<Reply[]> {
+    const data = await this.replyRepository.getReplys(id, author)
+    return data
+  }
+
+  async reply(reply: Reply): Promise<boolean> {
+    const checkReply = await this.replyRepository.getReply(reply.id, reply.author, reply.userId);
+    const checkAppreciation = await this.repository.getAppreciation(reply.id, reply.author);
+
+    if (!checkAppreciation) { // cmt not exist in db -> cant rep
+      return false;
+    } else {
+      if (checkReply) {
+        return false;
+      } else {
+        reply.time ? reply.time = reply.time : reply.time = new Date();
+        reply.updateAt ? reply.updateAt = reply.updateAt : reply.updateAt = new Date();
+        const wait = await this.replyRepository.insert(reply);
+        await this.repository.increaseReplyCount(reply.id, reply.author);
+        console.log(reply);
+        return true;
+      }
+    }
+  }
+
+  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number> {
+    return this.replyRepository.getReply(id, author, userId).then(exist => {
+      if (exist) {
+        return this.replyRepository.removeReply(id, author, userId).then(res => {
+          if (res > 0) {
+            return this.repository.decreaseReplyCount(id, author);
+          } else {
+            return 0;
+          }
+        });
+      } else {
         return 0;
       }
-    } else {
-      const newUseful = { ...obj };
-      const rs = await this.useful.insert(newUseful);
-      if (rs < 1) {
-        return rs;
-      }
-      isInsert = true;
-    }
-    const appreciation = await this.repository.load(obj.appreciationId);
-    if (appreciation) {
-      isInsert ? appreciation.usefulCount += 1 : appreciation.usefulCount -= 1;
-      const rs = await this.repository.update(appreciation);
-      if (rs === 1) {
-        return isInsert ? 1 : 2; /// 1:insert
-      }
-    }
-    return 0;
+    });
   }
-  async searchWithReply(s: AppreciationFilter, userId?: string, limit?: number, offset?: string | number, fields?: string[]): Promise<SearchResult<Appreciation>> {
-    const data = await this.searchAppreciation(s, limit, offset, fields);
-    if (data.list.length === 0 || !userId) { return data; }
-    const listAppreciation: Appreciation[] = data.list;
-    for (const appreciation of listAppreciation) {
-      const filter: UsefulAppreciationFilter = {
-        appreciationId: appreciation.id,
-        userId
-      };
-      const listUseful = await this.searchUseful(filter);
-      if (listUseful.list.length > 0) {
-        appreciation.isUseful = true;
+
+  async updateReply(reply: Reply): Promise<number> {
+    const exist = await this.replyRepository.getReply(reply.id, reply.author, reply.userId);
+    if (!exist) {
+      return 0;
+    } else {
+      return await this.replyRepository.update(reply);
+    }
+  }
+
+  async setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number> {
+    const check = await this.usefulRepository.getUseful(id, author, userId);
+    console.log(check);
+    if (check) {
+      return 0;
+    } else {
+      const useful: Useful = { id, author, userId, reviewTime: new Date };
+      const rs = await this.usefulRepository.save(useful);
+      console.log(rs);
+      if (rs > 0) {
+        const res = await this.replyRepository.increaseUsefulCount(id, author, userId);
+        console.log(res);
+        return 1;
+      } else {
+        return 0;
       }
     }
-    data.list = listAppreciation;
-    return data;
   }
 }
+
 export function useAppreciationService(db: DB, mapper?: TemplateMap): AppreciationService {
-  const query = useQuery('appreciation', mapper, AppreciationModel, true);
-  const queryUseful = useQuery('usefulappreciation', mapper, UsefulAppreciationModel, true);
-  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(db.query, 'appreciation', AppreciationModel, db.driver, query);
-  const builderUseful = new SearchBuilder<UsefulAppreciation, UsefulAppreciationFilter>(db.query, 'usefulappreciation', UsefulAppreciationModel, db.driver, queryUseful);
-  const repository = new SqlAppreciationRepository(db);
-  const useful = new SqlUsefulAppreciationRepository(db);
-  return new AppreciationManager(builder.search, repository, useful, builderUseful.search);
+  const query = useQuery('appreciation', mapper, appreciationModel, true);
+  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(db.query, 'appreciation', appreciationModel, db.driver, query);
+  const repository = new SqlAppreciationRepository(db, 'appreciation', buildToSave);
+  const replyRepository = new SqlReplyRepository(db, 'reply', buildToSave);
+  const usefulRepository = new SqlUsefulRepository(db, 'useful', usefulModel, buildToSave);
+  return new AppreciationManager(builder.search, repository, replyRepository, usefulRepository);
 }
 
-export class AppreciationReplyManager extends Manager<AppreciationReply, string, AppreciationReplyFilter> implements AppreciationReplyService {
-  constructor(public searchAppreciation: Search<AppreciationReply, AppreciationReplyFilter>, public repositoryReply: AppreciationReplyRepository, public repositoryAppreciation: AppreciationRepository, public useful: UsefulAppreciationRepository, public searchUseful: Search<UsefulAppreciation, UsefulAppreciationFilter>) {
-    super(searchAppreciation, repositoryReply);
-    this.usefulAppreciation = this.usefulAppreciation.bind(this);
-    this.searchWithReply = this.searchWithReply.bind(this);
-  }
-
-  async usefulAppreciation(obj: UsefulAppreciation): Promise<number> {
-    const data = await this.searchUseful(obj);
-    let isInsert = false;
-    if (data.list.length > 0) {
-      const rs = await this.useful.deleteUseful(data.list[0].appreciationId, data.list[0].userId);
-      if (!rs) {
-        return 0;
-      }
-    } else {
-      const newUseful = { ...obj };
-      const rs = await this.useful.insert(newUseful);
-      if (rs < 1) {
-        return rs;
-      }
-      isInsert = true;
-    }
-    const appreciation = await this.repositoryReply.load(obj.appreciationId);
-    if (appreciation) {
-      isInsert ? appreciation.usefulCount += 1 : appreciation.usefulCount -= 1;
-      const rs = await this.repositoryReply.update(appreciation);
-      if (rs === 1) {
-        return isInsert ? 1 : 2; /// 1:insert
-      }
-    }
-    return 0;
-  }
-
-  override async insert(obj: AppreciationReply, ctx?: any): Promise<number> {
-    await this.repositoryReply.insert(obj);
-    const rs = await this.repositoryAppreciation.increaseReply(obj.appreciationId || '', 1);
-    return rs ? 1 : 0;
-  }
-
-  async searchWithReply(s: AppreciationFilter, userId?: string, limit?: number, offset?: string | number, fields?: string[]): Promise<SearchResult<Appreciation>> {
-    const data = await this.searchAppreciation(s, limit, offset, fields);
-    if (data.list.length === 0 || !userId) { return data; }
-    const listAppreciation: AppreciationReply[] = data.list;
-    for (const appreciation of listAppreciation) {
-      const filter: UsefulAppreciationFilter = {
-        appreciationId: appreciation.id,
-        userId
-      };
-      const listUseful = await this.searchUseful(filter);
-      if (listUseful.list.length > 0) {
-        appreciation.isUseful = true;
-      }
-    }
-    data.list = listAppreciation;
-    return data;
-  }
-
-  override async delete(id: string, ctx?: any): Promise<number> {
-    const appreciationReply = await this.repositoryReply.load(id);
-    if (!appreciationReply) { return 0; }
-    await this.repositoryReply.delete(id);
-    const rs = await this.repositoryAppreciation.increaseReply(appreciationReply.appreciationId || '', -1);
-    return rs ? 1 : 0;
-  }
-}
-export function useAppreciationReplyService(db: DB, mapper?: TemplateMap): AppreciationReplyService {
-  const query = useQuery('appreciationreply', mapper, AppreciationModel, true);
-  const queryUseful = useQuery('usefulappreciation', mapper, UsefulAppreciationModel, true);
-  const repositoryReply = new SqlAppreciationReplyRepository(db);
-  const builder = new SearchBuilder<AppreciationReply, AppreciationReplyFilter>(db.query, 'appreciationreply', AppreciationReplyModel, db.driver, query);
-  const builderUseful = new SearchBuilder<UsefulAppreciation, UsefulAppreciationFilter>(db.query, 'usefulappreciation', UsefulAppreciationModel, db.driver, queryUseful);
-  const repository = new SqlAppreciationRepository(db);
-  const useful = new SqlUsefulAppreciationRepository(db);
-  return new AppreciationReplyManager(builder.search, repositoryReply, repository, useful, builderUseful.search);
-}
-//
 export function useAppreciationController(log: Log, db: DB, mapper?: TemplateMap, build?: Build<Appreciation>): AppreciationController {
   return new AppreciationController(log, useAppreciationService(db, mapper), build);
 }
 
-export function useAppreciationReplyController(log: Log, db: DB, mapper?: TemplateMap, build?: Build<AppreciationReply>): AppreciationReplyController {
-  return new AppreciationReplyController(log, useAppreciationReplyService(db, mapper), build);
+export class ReplyManager extends Manager<Reply, ReplyId, ReplyFilter> implements ReplyService {
+  constructor(search: Search<Reply, ReplyFilter>,
+    protected replyRepository: ReplyRepository) {
+    super(search, replyRepository);
+  }
+}
+
+export function useReplyService(db: DB, mapper?: TemplateMap): ReplyService {
+  const repQuery = useQuery('reply', mapper, replyModel, true);
+  const builder = new SearchBuilder<Reply, ReplyFilter>(db.query, 'reply', replyModel, db.driver, repQuery);
+  const replyRepository = new SqlReplyRepository(db, 'reply', buildToSave);
+  return new ReplyManager(builder.search, replyRepository);
+}
+
+export function useAppreciationReplyController(log: Log, db: DB, mapper?: TemplateMap): AppreciationReplyController {
+  return new AppreciationReplyController(log, useReplyService(db, mapper));
 }

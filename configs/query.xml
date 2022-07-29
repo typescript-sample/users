@@ -77,7 +77,8 @@
         <if test="sort != null">
       order by {sort}
     </if>
-    </select>
+  </select>
+
   <select id="article">
     select * 
     from articles
@@ -114,6 +115,7 @@
       order by {sort}
     </if>
   </select>
+
   <select id="comment">
     select * 
     from comments 

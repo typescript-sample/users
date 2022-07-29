@@ -176,13 +176,15 @@ Nếu đường link đó không hoạt động, hãy sao chép đường link �
     gallery: 'gallery',
   },
   model: {
-    id: 'userId',
+    id: 'id',
+  },
+  modelItem: {
+    id: 'id',
   },
   modelAppreciation: {
-    id: 'id',
     payload: 'payload',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
+    createdAt: 'time',
+    updatedAt: 'updateAt',
   },
   settings: {
     language: 'en-us',

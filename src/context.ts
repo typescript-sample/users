@@ -1,5 +1,5 @@
-import { Storage } from '@google-cloud/storage';
-import { AuthenticationController } from 'authen-express';
+import { Storage } from "@google-cloud/storage";
+import { AuthenticationController } from "authen-express";
 import {
   Authenticator,
   CodeMailSender,
@@ -7,9 +7,9 @@ import {
   SqlAuthTemplateConfig,
   User,
   useUserRepository,
-} from 'authen-service';
-import { compare } from 'bcrypt';
-import { Comparator } from 'bcrypt-plus';
+} from "authen-service";
+import { compare } from "bcrypt";
+import { Comparator } from "bcrypt-plus";
 import {
   HealthController,
   LogController,
@@ -20,31 +20,32 @@ import {
   QueryController,
   resources,
   useBuild,
-} from 'express-ext';
+} from "express-ext";
 import {
   deleteFile,
   GoogleStorageRepository,
   map,
   StorageConfig,
   useBuildUrl,
-} from 'google-storage';
-import { generateToken } from 'jsonwebtoken-plus';
-import { MailConfig, MailService, Send } from 'mail-core';
-import nodemailer from 'nodemailer';
-import { ModelConf, StorageConf } from 'one-storage';
-import { PasswordController } from 'password-express';
+} from "google-storage";
+import { generateToken } from "jsonwebtoken-plus";
+import { MailConfig, MailService, Send } from "mail-core";
+import { MyItemUploadController } from "my-items/item-controller";
+import nodemailer from "nodemailer";
+import { ModelConf, StorageConf } from "one-storage";
+import { PasswordController } from "password-express";
 import {
   MailSender,
   PasswordService,
   PasswordTemplateConfig,
-  usePasswordRepository
-} from 'password-service';
-import { CodeRepository, DB, StringService } from 'pg-extension';
-import { createChecker } from 'query-core';
-import { TemplateMap } from 'query-mappers';
-import { SendGridMailService } from 'sendgrid-plus';
-import shortid from 'shortid';
-import { SignupController } from 'signup-express';
+  usePasswordRepository,
+} from "password-service";
+import { CodeRepository, DB, StringService } from "pg-extension";
+import { createChecker } from "query-core";
+import { TemplateMap } from "query-mappers";
+import { SendGridMailService } from "sendgrid-plus";
+import shortid from "shortid";
+import { SignupController } from "signup-express";
 import {
   initStatus,
   Signup,
@@ -52,32 +53,50 @@ import {
   SignupService,
   SignupTemplateConfig,
   useRepository,
-  Validator
-} from 'signup-service';
-import { createValidator } from 'xvalidators';
+  Validator,
+} from "signup-service";
+import { createValidator } from "xvalidators";
 import {
   AppreciationController,
-  AppreciationReplyController,
   useAppreciationController,
-  useAppreciationReplyController,
-} from './appreciation';
-import { ArticleController, useArticleController } from './article';
-import { CategoryController, useCategoryController } from './category';
-import { CommentController, useCommentController } from './comment';
-import { ItemController, useItemController } from './items';
-import { CompanyController, useCompanyController,useCinemaRateController,useRateCommentController } from './company';
-import { CompanyCategoryController, useCompanyCategoryController } from './company-category';
+  // useAppreciationReplyController,
+} from "./appreciation";
+import { ArticleController, useArticleController } from "./article";
+import { CategoryController, useCategoryController } from "./category";
+import { CommentController, useCommentController } from "./comment";
+import { ItemController, useItemController } from "./items";
+import {
+  ResponseController,
+  ResponseCommentController,
+  useResponseController,
+  useResponseCommentController,
+} from "./response";
+import { CompanyController, useCompanyController,useCinemaRateController,useRateCommentController } from "./company";
+import {
+  CompanyCategoryController,
+  useCompanyCategoryController,
+} from "./company-category";
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
-} from './my-articles';
-import { MyItemController, useMyItemController } from './my-items';
+} from "./my-articles";
+import {
+  MyItemController,
+  useMyItemController,
+  useMyItemUploadController,
+} from "./my-items";
 import {
   MyProfileController,
   useMyProfileController,
   UserSettings,
-} from './my-profile';
-import { UserController, useUserController } from './user';
+} from "./my-profile";
+import { UserController, useUserController } from "./user";
+import {
+  LocationController,
+  useLocationController,
+  LocationRateController,
+  useLocationRateController,
+} from "./location";
 
 import { RateCommentController } from './rate-company/comment-controller';
 import { RateController } from './rate-company/rate-controller';
@@ -96,6 +115,7 @@ export interface Config {
   storage: StorageConf;
   model: ModelConf;
   modelAppreciation: ModelConfig;
+  modelItem: ModelConf;
 }
 export interface ApplicationContext {
   health: HealthController;
@@ -111,18 +131,21 @@ export interface ApplicationContext {
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
   appreciation: AppreciationController;
+  location: LocationController;
+  locationRate: LocationRateController;
   article: ArticleController;
   myarticles: MyArticleController;
-  appreciationReply: AppreciationReplyController;
+  // appreciationReply: ReplyController;
   myitems: MyItemController;
+  myitemsUpload: MyItemUploadController;
   items: ItemController;
   comment: CommentController;
   comments: RateCommentController;
   category: CategoryController;
-  company:CompanyController;
-  companyCategories:CompanyCategoryController;
-
-
+  company: CompanyController;
+  companyCategories: CompanyCategoryController;
+  response: ResponseController;
+  itemComment: ResponseCommentController;
   rate: RateController;
 }
 
@@ -150,7 +173,10 @@ export function useContext(
     conf.auth.template.body,
     conf.auth.template.subject
   );
-  const verifiedCodeRepository = new CodeRepository<string>(mainDB, 'authencodes');
+  const verifiedCodeRepository = new CodeRepository<string>(
+    mainDB,
+    "authencodes"
+  );
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(
     queryDB,
     conf.auth
@@ -184,11 +210,11 @@ export function useContext(
     conf.signup.template.body,
     conf.signup.template.subject
   );
-  const passcodeRepository = new CodeRepository<string>(mainDB, 'signupcodes');
+  const passcodeRepository = new CodeRepository<string>(mainDB, "signupcodes");
   const signupRepository = useRepository<string, Signup>(
     mainDB,
-    'users',
-    'passwords',
+    "users",
+    "passwords",
     conf.signup.userStatus,
     conf.signup.fields,
     conf.signup.maxPasswordAge,
@@ -216,7 +242,7 @@ export function useContext(
     conf.password.templates.reset.body,
     conf.password.templates.reset.subject
   );
-  const codeRepository = new CodeRepository<string>(mainDB, 'passwordcodes');
+  const codeRepository = new CodeRepository<string>(mainDB, "passwordcodes");
   const passwordRepository = usePasswordRepository<string>(
     mainDB,
     conf.password.db,
@@ -249,51 +275,46 @@ export function useContext(
     "keyword"
   );
   const skillService = new StringService(
-    'skills',
-    'skill',
+    "skills",
+    "skill",
     queryDB.query,
     queryDB.exec
   );
   const skill = new QueryController<string[]>(
     logger.error,
     skillService.load,
-    'keyword'
+    "keyword"
   );
   const interestService = new StringService(
-    'interests',
-    'interest',
+    "interests",
+    "interest",
     queryDB.query,
     queryDB.exec
   );
   const interest = new QueryController<string[]>(
     logger.error,
     interestService.load,
-    'keyword'
+    "keyword"
   );
   const lookingForService = new StringService(
-    'searchs',
-    'item',
+    "searchs",
+    "item",
     queryDB.query,
     queryDB.exec
   );
   const lookingFor = new QueryController<string[]>(
     logger.error,
     interestService.load,
-    'keyword'
+    "keyword"
   );
 
-  const appreciation = useAppreciationController(
-    logger.error,
-    mainDB,
-    undefined,
-    build
-  );
-  const appreciationReply = useAppreciationReplyController(
-    logger.error,
-    mainDB,
-    undefined,
-    build
-  );
+  const appreciation = useAppreciationController(logger.error, mainDB);
+  // const appreciationReply = useAppreciationReplyController(
+  //   logger.error,
+  //   mainDB,
+  //   undefined,
+  //   build
+  // );
 
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
@@ -321,10 +342,45 @@ export function useContext(
     undefined,
     conf.model
   );
+  const location = useLocationController(logger.error, queryDB, mapper);
+  const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const article = useArticleController(logger.error, mainDB);
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
-  const myitems = useMyItemController(logger.error, queryDB, brandService.save, mapper);
+  const response = useResponseController(logger.error, queryDB, mapper);
+  const itemComment = useResponseCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
+  const myitems = useMyItemController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    brandService.save,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
+  const myitemsUpload = useMyItemUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    brandService.save,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
   const comment = useCommentController(logger.error, queryDB, mapper);
   const category = useCategoryController(logger.error, queryDB);
   const company = useCompanyController(logger.error, queryDB);
@@ -346,11 +402,16 @@ export function useContext(
     interest,
     lookingFor,
     appreciation,
+    location,
+    locationRate,
     article,
     myarticles,
-    appreciationReply,
+    // appreciationReply,
     myitems,
+    myitemsUpload,
     items,
+    response,
+    itemComment,
     comment,
     category,
     company,
@@ -367,7 +428,7 @@ export function hasTwoFactors(userId: string): Promise<boolean> {
   return Promise.resolve(false);
 }
 export function useSend(conf: MailConfig): Send {
-  if (conf.provider === 'sendgrid') {
+  if (conf.provider === "sendgrid") {
     return new SendGridMailService(conf.key).send;
   } else {
     const transporter = nodemailer.createTransport(conf.smtp);

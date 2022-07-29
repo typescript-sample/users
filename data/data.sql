@@ -128,7 +128,23 @@ create table articles (
   tags character varying[]
 );
 
-insert into articles(id, title, name, description, type, content, authorId, tags) values ('01', 'This is title 01', 'This is name 01', 'This is description 01', 'type 01', '<h2 class=\"sapo\" style=\"margin-right: 0px; margin-bottom: 12px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 22px; font-family: NotoSans-Bold; vertical-align: baseline; color: rgb(34, 34, 34); letter-spacing: -0.2px; background-color: rgba(255, 255, 255, 0.95);\">TTO - Cần nhìn lại toàn bộ hạ tầng ở các đô thị, dự báo được tính cực đoan của khí hậu thời tiết, xây dựng hệ thống huyết mạch trong việc thu nước mưa, thoát nước mưa, xử lý nước thải phải đồng bộ.</h2><div class=\"relate-container\" style=\"margin-bottom: 15px; padding-top: 10px; padding-bottom: 10px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; font-size: medium; line-height: inherit; font-family: Arial, Helvetica, sans-serif; vertical-align: baseline; background-color: rgb(246, 246, 246); letter-spacing: normal;\"><ul style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 28px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline; list-style-position: initial; list-style-image: initial;\"><li style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\"><a data-zone=\"0\" data-type=\"1\" data-newstype=\"30\" data-id=\"20220316165612959\" title=\"Bộ trưởng Trần Hồng Hà: "Lướt sóng đất đai nay mua mai bán, phải đánh thuế cao hơn"\" data-objecttype=\"1\" data-title-encode=\"QiVFMSVCQiU5OSUyMHRyJUM2JUIwJUUxJUJCJTlGbmclMjBUciVFMSVCQSVBN24lMjBIJUUxJUJCJTkzbmclMjBIJUMzJUEwJTNBJTIwJTI3TCVDNiVCMCVFMSVCQiU5QnQlMjBzJUMzJUIzbmclMjAlQzQlOTElRTElQkElQTV0JTIwJUM0JTkxYWklMjBuYXklMjBtdWElMjBtYWklMjBiJUMzJUExbiUyQyUyMHBoJUUxJUJBJUEzaSUyMCVDNCU5MSVDMyVBMW5oJTIwdGh1JUUxJUJBJUJGJTIwY2FvJTIwaCVDNiVBMW4lMjc=\" href=\"https://tuoitre.vn/bo-truong-tran-hong-ha-luot-song-dat-dai-nay-mua-mai-ban-phai-danh-thue-cao-hon-20220316165612959.htm\" style=\"margin: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 12px; line-height: 2.08; font-family: Roboto-Bold; vertical-align: baseline; display: block; color: rgb(34, 34, 34);\">Bộ trưởng Trần Hồng Hà: "Lướt sóng đất đai nay mua mai bán, phải đánh thuế cao hơn"</a></li><li style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\"><a data-zone=\"0\" data-type=\"1\" data-newstype=\"29\" data-id=\"2022052916162767\" title=\"Đường phố Hà Nội ngập sâu sau cơn mưa lớn\" data-objecttype=\"1\" data-title-encode=\"JUM0JTkwJUM2JUIwJUUxJUJCJTlEbmclMjBwaCVFMSVCQiU5MSUyMEglQzMlQTAlMjBOJUUxJUJCJTk5aSUyMG5nJUUxJUJBJUFEcCUyMHMlQzMlQTJ1JTIwc2F1JTIwYyVDNiVBMW4lMjBtJUM2JUIwYSUyMGwlRTElQkIlOUJu\" href=\"https://tuoitre.vn/duong-pho-ha-noi-ngap-sau-sau-con-mua-lon-2022052916162767.htm\" style=\"margin: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 12px; line-height: 2.08; font-family: Roboto-Bold; vertical-align: baseline; display: block; color: rgb(34, 34, 34);\">Đường phố Hà Nội ngập sâu sau cơn mưa lớn</a></li><li style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\"><a data-zone=\"0\" data-type=\"1\" data-newstype=\"29\" data-id=\"20220524131820668\" title=\"Mưa ngớt, bà con ngoại thành Hà Nội vẫn lội bì bõm trong nước ngập\" data-objecttype=\"1\" data-title-encode=\"TSVDNiVCMGElMjBuZyVFMSVCQiU5QnQlMkMlMjBiJUMzJUEwJTIwY29uJTIwbmdvJUUxJUJBJUExaSUyMHRoJUMzJUEwbmglMjBIJUMzJUEwJTIwTiVFMSVCQiU5OWklMjB2JUUxJUJBJUFCbiUyMGwlRTElQkIlOTlpJTIwYiVDMyVBQyUyMGIlQzMlQjVtJTIwdHJvbmclMjBuJUM2JUIwJUUxJUJCJTlCYyUyMG5nJUUxJUJBJUFEcA==\" href=\"https://tuoitre.vn/mua-ngot-ba-con-ngoai-thanh-ha-noi-van-loi-bi-bom-trong-nuoc-ngap-20220524131820668.htm\" style=\"margin: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 12px; line-height: 2.08; font-family: Roboto-Bold; vertical-align: baseline; display: block; color: rgb(34, 34, 34);\">Mưa ngớt, bà con ngoại thành Hà Nội vẫn lội bì bõm trong nước ngập</a></li></ul></div><div class=\"content fck\" id=\"main-detail-body\" style=\"border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: medium; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; color: rgb(34, 34, 34); letter-spacing: -0.2px; background-color: rgba(255, 255, 255, 0.95);\"><div class=\"VCSortableInPreviewMode active\" type=\"Photo\" style=\"margin: 1.3em auto 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 11px; line-height: 1.45; vertical-align: baseline; text-align: center; display: table; position: relative; z-index: 2;\"><div style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\"><a href=\"https://cdn.tuoitre.vn/2022/5/30/2848798734034629116734795425013104285785636n-16538832846551058100556.jpg\" data-fancybox-group=\"img-lightbox\" title=\"Ông Trần Hồng Hà cho rằng cần có quy hoạch giao thông đô thị đồng bộ với không gian ngầm để ứng phó với biến đổi khí hậu - Ảnh: Đ.X.\" target=\"_blank\" class=\"detail-img-lightbox\" style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline; display: initial; cursor: zoom-in; color: rgb(237, 27, 47); letter-spacing: -0.2px;\"><img src=\"https://cdn.tuoitre.vn/thumb_w/586/2022/5/30/2848798734034629116734795425013104285785636n-16538832846551058100556.jpg\" id=\"img_b91de7b0-dfcc-11ec-89ce-b5d264a03ea0\" w=\"2048\" h=\"1365\" alt=\"Hà Nội ngập lụt, Bộ trưởng Trần Hồng Hà khuyến nghị biến sân vận động, cánh đồng thành bể chứa - Ảnh 1.\" title=\"Hà Nội ngập lụt, Bộ trưởng Trần Hồng Hà khuyến nghị biến sân vận động, cánh đồng thành bể chứa - Ảnh 1.\" rel=\"lightbox\" photoid=\"b91de7b0-dfcc-11ec-89ce-b5d264a03ea0\" type=\"photo\" data-original=\"https://cdn.tuoitre.vn/2022/5/30/2848798734034629116734795425013104285785636n-16538832846551058100556.jpg\" width=\"\" height=\"\" class=\"lightbox-content\" style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline; max-width: 100%; color: transparent; width: 586px;\"></a></div><div class=\"PhotoCMS_Caption ck_legend caption\" style=\"margin: -5px 0px 24px; padding: 5px 8px; border: 0px; font: inherit; vertical-align: baseline; background: rgb(233, 233, 233); text-align: left;\"><p data-placeholder=\"[nhập chú thích]\" class=\"\" style=\"margin-right: 0px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 12px; line-height: 1.45; vertical-align: baseline; letter-spacing: -0.2px; opacity: 0.7; margin-bottom: 0px !important;\">Ông Trần Hồng Hà cho rằng cần có quy hoạch giao thông đô thị đồng bộ với không gian ngầm để ứng phó với biến đổi khí hậu - Ảnh: Đ.X.</p></div></div><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Trao đổi với báo chí bên hành lang Quốc hội sáng 30-5, Bộ trưởng Bộ Tài nguyên và môi trường Trần Hồng Hà cho rằng trước diễn biến thời tiết bất thường gây ra mưa lớn như những ngày qua,&nbsp;<span style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\">không chỉ ở Việt Nam mà tại các nước có hạ tầng phát triển như Mỹ, châu Âu, khó có hạ tầng nào chịu đựng được.</span></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">\"Chúng ta cần thấy rằng vấn đề dị thường của thời tiết như mưa lớn cực đoan với việc đầu tư hạ tầng thiếu đồng bộ, thiếu tầm nhìn, đều mang đến những nguy cơ như nhau\", ông Hà cảnh báo.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><b style=\"margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: bold; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; letter-spacing: -0.2px;\"><span style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\">* Thực tế ở các thành phố lớn của ta hầu hết là các nhà cao tầng, đó có phải là nguyên nhân dẫn đến tình trạng sau một cơn mưa lớn Hà Nội biến thành sông?</span><br></b></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Hệ thống nhà cao tầng và việc ngập lụt tại thành phố chưa chắc đã có mối liên hệ với nhau. Tất nhiên là có ảnh hưởng. Hạ tầng tiêu thoát nước phải tính toán trữ được cả lượng nước con người sử dụng, cũng như lượng nước mưa trong thời tiết cực đoan. Tính toán đồng bộ cơ sở hạ tầng, số lượng người dân, nước thải cộng với nước mưa.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><b style=\"margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: bold; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; letter-spacing: -0.2px;\">* Theo ông, có phải năng lực dự báo còn hạn chế nên không đánh giá hết được những nguy cơ ngập úng ở các thành phố khi có diễn biến thời tiết bất lợi?</b></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Tôi nghĩ rằng dự báo có thể làm được. Khi dự báo nói đến lưu lượng mưa trong một đơn vị thời gian, tính toán được trên một mét vuông lượng mưa thế nào. Vấn đề là chúng ta cần làm tiếp bài toán mô hình, khả năng của hệ thống tiêu thoát nước.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Hiện công tác dự báo cũng đã thực hiện được điều đó. Tất nhiên để dự báo trong thời gian ngắn, chính xác là điều không dễ. Đặc biệt, bài toán đặt ra là phải dự báo trong điều kiện thời tiết cực đoan, dù độ chính xác còn khác nhau.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><b style=\"margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: bold; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; letter-spacing: -0.2px;\">* Ông có cho rằng Hà Nội nên có dự án chống ngập giống TP.HCM?</b></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Trước hết, Hà Nội cần tăng cường công tác dự báo. Hà Nội cũng cần có dự án tổng thể, trong đó đánh giá một cách căn cơ và đưa ra những số liệu lịch sử cũng như số liệu về các hiện tượng cực đoan của thời tiết với lượng mưa như thế này.</p><div id=\"zone-jnvk0c1v\" style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\"><div id=\"share-jnvk0cro\" style=\"margin: 0px auto; padding: 0px; border: 0px; font: inherit; vertical-align: baseline; max-width: 450px;\"></div></div><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Hà Nội cũng cần nghiên cứu một cách kỹ càng, cách tiếp cận khi thiết kế đô thị là hướng tới đô thị thông minh, chống chịu được các hiện tượng thời tiết cực đoan.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Còn bài toán mang tính ứng phó, tức khi đã ngập rồi thì phải sử dụng các máy bơm để thoát nước, là phương án trù bị thôi. Khi xây dựng đô thị, phải tính toán hệ thống tiêu thoát nước, đảm đương được huyết mạch của đô thị, để trở thành đô thị có khả năng chống chịu một cách thông minh, đảm bảo được tính bền vững khi thời tiết cực đoan.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Do vậy, cần có một dự án tiếp cận một cách tổng thể, xuất phát từ dự báo, quy hoạch để có một hạ tầng có thể chống chịu, thích ứng, phù hợp được. Thêm vào đó là các giải pháp kỹ thuật, sử dụng các giải pháp mang tính chủ động.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><b style=\"margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: bold; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; letter-spacing: -0.2px;\">* Ông có thể nói cụ thể hơn về mô hình xây dựng đô thị thông minh bền vững gắn với thích ứng biến đổi khí hậu?</b></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Phải nhìn lại toàn bộ hạ tầng ở các đô thị. Trước hết phải dự báo được tính cực đoan của khí hậu thời tiết, xây dựng hệ thống huyết mạch trong việc&nbsp;<span style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\">thu nước mưa, thoát nước mưa, xử lý nước thải phải đồng bộ.</span></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><span style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\">Trong thiết kế phải tính toán được độ cao của các khu vực và khi thiết kế hệ thống thoát nước ngầm của đô thị cần có tầm nhìn để khu vực đó tự nhiên thoát được nước. Khu vực không tự thoát được nước thì phải sử dụng máy móc thiết bị để thoát nước.</span></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\"><span style=\"margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline;\">Trong trường hợp thời tiết cực đoan hơn nữa thì phải có phương án xây dựng hệ thống để trữ nước. Như Nhật Bản có khu vực ngầm được bố trí, gọi là hầm chứa lớn ở dưới, vừa giữ lượng nước, vừa dự trữ nước để khi hạn hán thì sử dụng tưới cây.</span><br></p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Hoặc tại các trường học, sân vận động, cánh đồng, nếu có thể điều chỉnh van trong hệ thống để dẫn nước vào những nơi này, trở thành nơi chứa nước tạm thời để tránh ngập cho những nơi xung yếu.</p><p style=\"margin-right: 0px; margin-bottom: 24px; margin-left: 0px; padding: 0px; border: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 16px; line-height: 1.44; font-family: NotoSans-Regular; vertical-align: baseline; letter-spacing: -0.2px;\">Thậm chí, như tôi đã nói, dưới đường giao thông cần xây dựng hệ thống các tầng chứa nước, thùng rất lớn để chứa nước. Đó là giải pháp mà các nước làm, tất nhiên là đắt đỏ, nhưng quan trọng là tầm nhìn, thiết kế và đầu tư hạ tầng và phải đồng bộ.</p></div>', '77c35c38c3554ea6906730dbcfeca0f2', '{tag01, tag02}');
+insert into articles(id, title, name, description, type, content, authorId, tags) values ('01', 'This is title 01', 'This is name 01', 'This is description 01', 'type 01', '<div class="key-event__content"> 
+    <p>Trong phần thủ tục, các luật sư bảo vệ người bị hại đề nghị HĐXX xác định tỷ lệ thương tích của bị hại vào các ngày 7, 10, và 12.12.2021, nhằm xem xét xử lý các bị cáo hành vi “cố ý gây thương tích. </p> 
+    <p>Bên cạnh đó, các luật sư đề nghị HĐXX xem xét và xác định Thái đồng phạm tội danh "giết người" với bị cáo Trang.</p>  
+    <table class="picture" align="center"> 
+     <tbody> 
+      <tr> 
+       <td class="pic"> <img data-image-id="3910826" src="https://image.thanhnien.vn/w2048/Uploaded/2022/bahgtm/2022_07_21/thai-2-3830.jpg" data-width="2560" data-height="1697" class="cms-photo" alt="Xét xử vụ bé gái 8 tuổi bị bạo hành tử vong: Tòa cân nhắc khi trình chiếu video hành vi phạm tội  - ảnh 1" caption="Xét xử vụ bé gái 8 tuổi bị bạo hành tử vong: Tòa cân nhắc khi trình chiếu video hành vi phạm tội  - ảnh 1"> </td> 
+      </tr> 
+      <tr>
+       <td class="caption"><p>Bị cáo Trung Thái và Quỳnh Trang tại phiên tòa sáng 21.7</p>
+        <div class="source">
+         <p>ngọc dương</p>
+        </div></td>
+      </tr> 
+     </tbody>
+    </table> 
+   </div>', '77c35c38c3554ea6906730dbcfeca0f2', '{tag01, tag02}');
 insert into articles(id, title, name, description, type, content, authorId, tags) values ('02', 'This is title 02', 'This is name 02', 'This is description 02', 'type 02', 'This is content 02', '77c35c38c3554ea6906730dbcfeca0f2', '{tag01, tag02}');
 insert into articles(id, title, name, description, type, content, authorId, tags) values ('03', 'This is title 03', 'This is name 03', 'This is description 03', 'type 03', 'This is content 03', '77c35c38c3554ea6906730dbcfeca0f2', '{tag01, tag02}');
 insert into articles(id, title, name, description, type, content, authorId, tags) values ('04', 'This is title 04', 'This is name 04', 'This is description 04', 'type 04', 'This is content 04', '77c35c38c3554ea6906730dbcfeca0f2', '{tag01, tag02}');
@@ -187,27 +203,8 @@ create table if not exists comments (
   createdat date
 );
 
-create table categories(
-  categoryid character varying(40) primary key,
-  categoryname character varying(300) not null,
-  status char(1) not null,
-  createdby character varying(40),
-  createdat timestamp,
-  updatedby character varying(40),
-  updatedat timestamp
-);
-
-
-insert into categories (categoryid,categoryname,status) VALUES ('action','action','A');
-insert into categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
-insert into categories (categoryid,categoryname,status) VALUES ('camera','camera','A');
-insert into categories (categoryid,categoryname,status) VALUES ('mobiphone','mobiphone','A');
-insert into categories (categoryid,categoryname,status) VALUES ('technological','technological','A');
-insert into categories (categoryid,categoryname,status) VALUES ('apple','apple','A');
-insert into categories (categoryid,categoryname,status) VALUES ('laptop','laptop','A');
-
-create table items
-(
+-- Item
+create table items (
     id character varying(40) primary key,
     title character varying(120) not null,
     status char(1) not null,
@@ -228,19 +225,218 @@ insert into items (id, title, status, price, imageurl, brand, publishedat, expir
 
 select * from items where categories && '{"apple"}';
 
-create table brands(
+create table categories(
+  categoryid character varying(40) primary key,
+  categoryname character varying(300) not null,
+  status char(1) not null,
+  createdby character varying(40),
+  createdat timestamp,
+  updatedby character varying(40),
+  updatedat timestamp
+);
+
+insert into categories (categoryid,categoryname,status) values ('action','action','A');
+insert into categories (categoryid,categoryname,status) values ('comedy','comedy','A');
+insert into categories (categoryid,categoryname,status) values ('camera','camera','A');
+insert into categories (categoryid,categoryname,status) values ('mobiphone','mobiphone','A');
+insert into categories (categoryid,categoryname,status) values ('technological','technological','A');
+insert into categories (categoryid,categoryname,status) values ('apple','apple','A');
+insert into categories (categoryid,categoryname,status) values ('laptop','laptop','A');
+
+
+create table brands (
   brand character varying(255) primary key
 );
 
-insert into brands (brand) VALUES('Sony');
-insert into brands (brand) VALUES ('Samsung');
-insert into brands (brand) VALUES ('Canon');
-insert into brands (brand) VALUES ('Nikon');
-insert into brands (brand) VALUES ('Olypus');
-insert into brands (brand) VALUES ('Xiaomi');
-insert into brands (brand) VALUES ('Apple');
-insert into brands (brand) VALUES ('Disney');
+insert into brands (brand) values('Sony');
+insert into brands (brand) values ('Samsung');
+insert into brands (brand) values ('Canon');
+insert into brands (brand) values ('Nikon');
+insert into brands (brand) values ('Olypus');
+insert into brands (brand) values ('Xiaomi');
+insert into brands (brand) values ('Apple');
+insert into brands (brand) values ('Disney');
 
+
+create table item_response(
+  id character varying(40) not null,
+  author character varying(40) not null,
+  description text,
+  time timestamp,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  histories jsonb[],
+  primary key (id, author)
+);
+
+insert into item_response (id,author,description,time) values ('01','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
+insert into item_response (id,author,description,time) values ('02','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
+insert into item_response (id,author,description,time) values ('03','77c35c38c3554ea6906730dbcfeca0f2', 'Wow', '2022-07-22');
+insert into item_response (id,author,description,time) values ('04','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
+insert into item_response (id,author,description,time) values ('05','77c35c38c3554ea6906730dbcfeca0f2', 'I hate this', '2022-07-22');
+
+
+create table item_comment(
+  commentId serial not null,
+  id character varying(40) not null,
+  author character varying(40) not null,
+  userId character varying(40) not null,
+  comment text,
+  time timestamp,
+  updatedat timestamp,
+  histories jsonb[],
+  primary key (commentId)
+);
+
+insert into item_comment (id,author,userId,comment,time) values ('01','02','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
+insert into item_comment (id,author,userId,comment,time) values ('02','06','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
+insert into item_comment (id,author,userId,comment,time) values ('03','05','77c35c38c3554ea6906730dbcfeca0f2', 'abc', '2022-07-22');
+insert into item_comment (id,author,userId,comment,time) values ('04','07','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
+insert into item_comment (id,author,userId,comment,time) values ('05','11','77c35c38c3554ea6906730dbcfeca0f2', '123', '2022-07-22');
+
+CREATE TABLE item_info(
+  id varchar(255),
+  viewCount integer DEFAULT 0,
+  primary key(id)
+)
+
+create table item_response_reaction(
+	id varchar(255),
+	author varchar(255),
+	userid varchar(255),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
+
+-- Location
+create table locations (
+    id character varying(40) primary key,
+    name character varying(300) not null,
+    type character varying(40),
+    description character varying(1000),
+    status char(1) not null,
+	latitude numeric(20,16) not null,
+	longitude numeric(20,16) not null,
+	imageURL character varying(1500),
+	coverURL character varying(1500)
+);
+
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d146cbffbdf2b1d30742262',	
+	'Highland Coffee',
+	'coffee',
+	'Highland Coffee',
+	'A',
+	106.62435293197633,
+	10.852848365357607,
+	'https://thumbs.dreamstime.com/z/highlands-coffee-shop-vung-tau-vietnam-jan-facade-vietnamese-chain-producer-distributor-86167986.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d1d7a18c5e4f320a86ca6b1',	
+	'Trung Nguyen Coffee',
+	'coffee',
+	'Trung Nguyen Coffee',
+	'A',
+	106.631039,
+	10.855858,
+	'https://cdn2.shopify.com/s/files/1/0065/6759/1999/files/dia-chi-trung-nguyen-legend-cafe-tai-vincom-ha-nam_grande.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d1d7a66c5e4f320a86ca6b2',	
+	'Highland Coffee',
+	'coffee',
+	'Highland Coffee',
+	'A',
+	106.630691,
+	10.855842,
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/image/5d1d7a66c5e4f320a86ca6b2_IFc9Db9DT_c.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d1d7a85c5e4f320a86ca6b3',	
+	'Starbucks Coffee',
+	'coffee',
+	'Starbucks Coffee',
+	'A',
+	106.631495,
+	10.854809,
+	'https://ichef.bbci.co.uk/news/976/cpsprodpb/17185/production/_118879549_gettyimages-1308703596.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d1d7b79c5e4f320a86ca6b4',	
+	'King Coffee',
+	'coffee',
+	'King Coffee',
+	'A',
+	106.624183,
+	10.855761,
+	'https://www.asia-bars.com/wp-content/uploads/2015/11/cong-caphe-1.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d1efb3796988a127077547c',	
+	'Sumo BBQ Restaurant',
+	'restaurant',
+	'farthest',
+	'A',
+	106.624169,
+	10.855769,
+	'https://135525-391882-2-raikfcquaxqncofqfm.stackpathdns.com/wp-content/uploads/2021/04/Summo-BBQ-1280x960.jpeg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+	'5d562ad357568217d0d9a2d5',	
+	'CGV',
+	'cinema',
+	'CGV cinema',
+	'A',
+	106.6316112323025,
+	10.85486116109013,
+	'https://rapchieuphim.com/photos/9/rap-cgv-su-van-hanh/rap-CGV-Su-van-hanh-8__2_.jpg',
+	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
+);
+
+
+create table locationinfo (
+  id character varying(40) primary key,
+  rate numeric DEFAULT 0,
+  rate1 integer DEFAULT 0,
+  rate2 integer DEFAULT 0,
+  rate3 integer DEFAULT 0,
+  rate4 integer DEFAULT 0,
+  rate5 integer DEFAULT 0,
+  viewCount integer DEFAULT 0
+);
+
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d146cbffbdf2b1d30742262',3.1811023622047245,22,32,15,17,41,123);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a18c5e4f320a86ca6b1',3.4,1,1,0,1,2,2);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a66c5e4f320a86ca6b2',3.857142857142857,1,0,0,4,2,4);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a85c5e4f320a86ca6b3',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7b79c5e4f320a86ca6b4',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1efb3796988a127077547c',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d562ad357568217d0d9a2d5',0,0,0,0,0,0,0);
+
+
+create table locationrate (
+  id character varying(40) not null,
+  author character varying(40) not null,
+  rate integer not null,
+  rateTime timestamp without time zone,
+  review text,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  primary key (id, author)
+);
+
+insert into locationrate (id, author, rate, rateTime, review) values ('5d146cbffbdf2b1d30742262','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Bad');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7a18c5e4f320a86ca6b1','77c35c38c3554ea6906730dbcfeca0f2',3,'2021-10-01','Poor');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
 
 create table companies
 (

@@ -1,4 +1,6 @@
-import { Attributes, DateRange, Filter, NumberRange, Repository, Service, Query } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
+import { UploadData, UploadGallery, UploadInfo } from 'one-storage';
+import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
 
 export interface Item {
   id: string;
@@ -11,6 +13,8 @@ export interface Item {
   expiredAt?: Date;
   description?: string;
   categories?: string[];
+  gallery?: UploadInfo[];
+  imageUrl?: string;
 }
 
 export interface ItemFilter extends Filter {
@@ -29,6 +33,14 @@ export interface ItemRepository extends Repository<Item, string> {
 }
 
 export interface ItemService extends Service<Item, string, ItemFilter> {
+  uploadCoverImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
+  uploadImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
+  uploadGalleryFile(uploadGallery: UploadGallery<string>): Promise<UploadInfo[]>;
+  updateGallery(id: string, data: UploadInfo[]): Promise<boolean>;
+  deleteGalleryFile(id: string, url: string): Promise<boolean>;
+  getGalllery(id: string): Promise<UploadInfo[]>;
+  addExternalResource(id: string, data: UploadInfo): Promise<boolean>;
+  deleteExternalResource(id: string, url: string): Promise<boolean>;
 }
 
 export const itemModel: Attributes = {
@@ -67,4 +79,8 @@ export const itemModel: Attributes = {
   categories: {
     type: 'strings',
   },
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
+  }
 };

@@ -61,29 +61,34 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
+  
 
-  app.get('/appreciation', ctx.appreciation.search);
-  app.post('/appreciation/search', ctx.appreciation.search);
   app.get('/appreciation/search', ctx.appreciation.search);
-  app.get('/appreciation/:id', ctx.appreciation.load);
+  app.post('/appreciation/search', ctx.appreciation.search);
+  app.post('/appreciation/reply/search', ctx.comment.search);
   app.post('/appreciation', ctx.appreciation.create);
-  app.put('/appreciation/:id', ctx.appreciation.update);
-  app.patch('/appreciation/:id', ctx.appreciation.patch);
-  app.delete('/appreciation/:id', ctx.appreciation.delete);
-  app.post('/appreciation/useful', ctx.appreciation.usefulAppreciation);
+  app.put('/appreciation/:id/:author', ctx.appreciation.update);
+  app.delete('/appreciation/:id/:author', ctx.appreciation.delete);
+  app.post('/appreciation/:id/:author', ctx.appreciation.load);
+  app.put('/appreciation/:id/:author', ctx.appreciation.update);
+  app.patch('/appreciation/:id/:author', ctx.appreciation.patch);
+  app.get('/appreciation/reply/:id/:author', ctx.appreciation.getReplys);
+  app.post('/appreciation/reply/:id/:author/:userid', ctx.appreciation.reply);
+  app.delete('/appreciation/reply/:id/:author/:userid', ctx.appreciation.removeReply);
+  app.put('/appreciation/reply/:id/:author/:userid', ctx.appreciation.updateReply);
   // appreciation reply
-  app.get('/appreciation-reply', ctx.appreciationReply.search);
-  app.post('/appreciation-reply/search', ctx.appreciationReply.search);
-  app.get('/appreciation-reply/search', ctx.appreciationReply.search);
-  app.get('/appreciation-reply/:id', ctx.appreciationReply.load);
-  app.post('/appreciation-reply', ctx.appreciationReply.insert);
-  app.put('/appreciation-reply/:id', ctx.appreciationReply.update);
-  app.patch('/appreciation-reply/:id', ctx.appreciationReply.patch);
-  app.delete('/appreciation-reply/:id', ctx.appreciationReply.delete);
-  app.post(
-    '/appreciation-reply/useful',
-    ctx.appreciationReply.usefulAppreciation
-  );
+  // app.get('/appreciation-reply', ctx.appreciationReply.search);
+  // app.post('/appreciation-reply/search', ctx.appreciationReply.search);
+  // app.get('/appreciation-reply/search', ctx.appreciationReply.search);
+  // app.get('/appreciation-reply/:id', ctx.appreciationReply.load);
+  // app.post('/appreciation-reply', ctx.appreciationReply.insert);
+  // app.put('/appreciation-reply/:id', ctx.appreciationReply.update);
+  // app.patch('/appreciation-reply/:id', ctx.appreciationReply.patch);
+  // app.delete('/appreciation-reply/:id', ctx.appreciationReply.delete);
+  // app.post(
+  //   '/appreciation-reply/useful',
+  //   ctx.appreciationReply.usefulAppreciation
+  // );
 
   app.post('/articles/search', ctx.article.search);
   app.get('/articles/search', ctx.article.search);
@@ -113,10 +118,42 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
   app.get('/my-items/:id', ctx.myitems.load);
+  app.get(
+    '/my-items/:id/fetchImageGalleryUploaded',
+    ctx.myitemsUpload.getGallery
+  );
   app.post('/my-items', ctx.myitems.create);
   app.put('/my-items/:id', ctx.myitems.update);
   app.patch('/my-items/:id', ctx.myitems.patch);
   app.delete('/my-items/:id', ctx.myitems.delete);
+  app.post(
+    '/my-items/:id/upload',
+    parser.array('files'),
+    ctx.myitemsUpload.uploadImage
+  );
+  app.post(
+    '/my-items/:id/gallery',
+    parser.single('file'),
+    ctx.myitemsUpload.uploadGallery
+  );
+  app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
+  app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
+
+
+  app.get('/item-comment/search', ctx.itemComment.search);
+  app.post('/item-comment/search', ctx.itemComment.search);
+  app.post('/item-response', ctx.response.response);
+  app.get('/item-response/search', ctx.response.search);
+  app.post('/item-response/search', ctx.response.search);
+  app.get('/item-response/comment/search', ctx.itemComment.search);
+  app.post('/item-response/comment/search', ctx.itemComment.search);
+  app.put('/item-response/:id/:author', ctx.response.updateResponse);
+  app.get('/item-response/:id/:author', ctx.response.load);
+  app.post('/item-response/useful/:id/:author/:userid', ctx.response.setUseful);
+  app.delete('/item-response/useful/:id/:author/:userid', ctx.response.removeUseful);
+  app.post('/item-response/comment/:id/:author/:userid', ctx.response.comment);
+  app.delete('/item-response/comment/:commentid/:author', ctx.response.removeComment);
+  app.put('/item-response/comment/:commentid/:id/:author/:userid', ctx.response.updateComment);
 
   app.post('/comment/search', ctx.comment.search);
   app.get('/comment/search', ctx.comment.search);
@@ -133,6 +170,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/categories/:id', ctx.category.update);
   app.patch('/categories/:id', ctx.category.patch);
   app.delete('/categories/:id', ctx.category.delete);
+
+  app.post("/locations/search", ctx.location.search);
+  app.get("/locations/search", ctx.location.search);
+  app.get("/locations/:id", ctx.location.load);
+
+  app.get("/location-rate/search", ctx.locationRate.search);
+  app.post("/location-rate/search", ctx.locationRate.search);
+  app.get("/location-rate/:id", ctx.locationRate.load);
 
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);

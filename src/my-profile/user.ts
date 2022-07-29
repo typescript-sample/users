@@ -1,5 +1,6 @@
 import { Attributes, DateRange, Filter, Repository } from 'onecore';
 import { UploadData } from 'upload-express';
+import { Company, Education, Work } from 'user';
 
 export interface User {
   id: string;
@@ -11,7 +12,6 @@ export interface User {
   skills: Skill[];
   achievements: Achievement[];
   settings?: UserSettings;
-  avatarUrl?: string;
   title?: string;
   image?: UploadSize[];
   coverURL?: string;
@@ -24,6 +24,21 @@ export interface User {
   company?: string;
   lookingFor?: string[];
   gallery?: UploadInfo[];
+  imageURL?: string;
+  links?: Social;
+  works: Work[];
+  companies: Company[];
+  educations: Education[];
+}
+export interface Social {
+  google: string;
+  facebook: string;
+  github: string;
+  instagram: string;
+  twitter: string;
+  skype: string;
+  dribble: string;
+  linkedin: string;
 }
 export interface Skill {
   skill: string;
@@ -81,7 +96,7 @@ export interface UserFilter extends Filter {
   skills: Skill[];
   achievements: Achievement[];
 }
-export interface UserRepository extends Repository<User, string> {}
+export interface UserRepository extends Repository<User, string> { }
 export interface MyProfileService {
   getMyProfile(id: string): Promise<User | null>;
   getMySettings(id: string): Promise<UserSettings | null>;
@@ -170,14 +185,29 @@ export const userModel: Attributes = {
   settings: {
     type: 'object',
     typeof: userSettingsModel,
-  }
-  /*,
-  uploadCover: {
-    type: 'primitives',
-    typeof: fileUploadModel,
   },
-  uploadGallery: {
+  bio: {
+  },
+  coverURL: {
+
+  },
+  imageURL: {
+
+  },
+  gallery: {
     type: 'array',
-    typeof: fileUploadModel,
-  },*/
+    typeof: fileUploadGalleryModel,
+  },
+  links: {
+    type: 'object',
+  },
+  companies: {
+
+  },
+  educations: {
+
+  },
+  works: {
+
+  }
 };
