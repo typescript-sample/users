@@ -61,6 +61,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
+  
 
   app.get('/appreciation/search', ctx.appreciation.search);
   app.post('/appreciation/search', ctx.appreciation.search);
@@ -71,7 +72,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/appreciation/:id/:author', ctx.appreciation.load);
   app.put('/appreciation/:id/:author', ctx.appreciation.update);
   app.patch('/appreciation/:id/:author', ctx.appreciation.patch);
-  app.post('/appreciation/reply/:id/:author', ctx.appreciation.getReplys);
+  app.get('/appreciation/reply/:id/:author', ctx.appreciation.getReplys);
   app.post('/appreciation/reply/:id/:author/:userid', ctx.appreciation.reply);
   app.delete('/appreciation/reply/:id/:author/:userid', ctx.appreciation.removeReply);
   app.put('/appreciation/reply/:id/:author/:userid', ctx.appreciation.updateReply);
