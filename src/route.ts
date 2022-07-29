@@ -111,9 +111,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   // app.patch('/items/:id', ctx.items.patch);
   // app.delete('/items/:id', ctx.items.delete);
 
-  app.post('/item-appreciation/search', ctx.items.search);
-  app.get('/item-appreciation/search', ctx.items.search);
-  app.get('/item-appreciation/:id', ctx.items.load);
+  // app.post('/item-appreciation/search', ctx.items.search);
+  // app.get('/item-appreciation/search', ctx.items.search);
+  // app.get('/item-appreciation/:id', ctx.items.load);
 
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
@@ -139,14 +139,13 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
   app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
 
-
-  app.get('/item-comment/search', ctx.itemComment.search);
-  app.post('/item-comment/search', ctx.itemComment.search);
+  app.get('/item-comment/search', ctx.response.getComments);
+  app.post('/item-comment/search', ctx.response.getComments);
   app.post('/item-response', ctx.response.response);
   app.get('/item-response/search', ctx.response.search);
   app.post('/item-response/search', ctx.response.search);
-  app.get('/item-response/comment/search', ctx.itemComment.search);
-  app.post('/item-response/comment/search', ctx.itemComment.search);
+  app.get('/item-response/comment/search', ctx.response.getComments);
+  app.post('/item-response/comment/search', ctx.response.getComments);
   app.put('/item-response/:id/:author', ctx.response.updateResponse);
   app.get('/item-response/:id/:author', ctx.response.load);
   app.post('/item-response/useful/:id/:author/:userid', ctx.response.setUseful);

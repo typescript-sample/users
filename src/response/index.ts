@@ -2,20 +2,19 @@ import { Log } from "express-ext";
 import { buildToSave } from "pg-extension";
 import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import { ResponseCommentController } from "./comment-controller";
 import {
   infoModel,
   Response,
+  ResponseFilter,
+  ResponseService,
+  responseModel,
   ResponseComment,
   ResponseCommentFilter,
-  responseCommentModel,
   ResponseCommentService,
-  ResponseFilter,
-  responseModel,
-  ResponseService,
+  responseCommentModel,
 } from "./response";
 import { ResponseController } from "./response-controller";
-import { ResponseCommentManager, ResponseManager } from "./service";
+import { ResponseManager } from "./service";
 import {
   responseReactionModel,
   SqlInfoRepository,
@@ -29,7 +28,6 @@ export * from "./response";
 export * from "./service";
 export * from "./sql-response-repository";
 export { ResponseController };
-export { ResponseCommentController };
 
 export function useResponseService(
   db: DB,
@@ -89,39 +87,4 @@ export function useResponseController(
   mapper?: TemplateMap
 ): ResponseController {
   return new ResponseController(log, useResponseService(db, mapper));
-}
-
-export function useResponseCommentService(
-  db: DB,
-  mapper?: TemplateMap
-): ResponseCommentService {
-  const query = useQuery("item_comment", mapper, responseCommentModel, true);
-  const builder = new SearchBuilder<ResponseComment, ResponseCommentFilter>(
-    db.query,
-    "item_comment",
-    responseCommentModel,
-    db.driver,
-    query
-  );
-  const responseCommentRepository = new SqlResponseCommentRepository(
-    db,
-    "item_comment",
-    responseCommentModel,
-    "item_response",
-    "replyCount",
-    "author",
-    "id"
-  );
-  return new ResponseCommentManager(builder.search, responseCommentRepository);
-}
-
-export function useResponseCommentController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): ResponseCommentController {
-  return new ResponseCommentController(
-    log,
-    useResponseCommentService(db, mapper)
-  );
 }
