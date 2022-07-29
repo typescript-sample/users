@@ -1,3 +1,4 @@
+import { SearchResult } from 'onecore';
 import { ShortComment } from "response";
 import { Manager, Search } from "./core";
 import {
@@ -14,6 +15,7 @@ import {
   ResponseService,
 } from "./response";
 export * from "./response";
+import { Result } from './core';
 
 export class ResponseManager
   extends Manager<Response, ResponseId, ResponseFilter>
@@ -28,13 +30,15 @@ export class ResponseManager
   ) {
     super(search, repository);
     this.response = this.response.bind(this);
-    this.update = this.update.bind(this);
-    this.save = this.save.bind(this);
-    this.comment = this.comment.bind(this);
+    this.insert = this.insert.bind(this);
+    this.search = this.search.bind(this);
     this.load = this.load.bind(this);
+    this.save = this.save.bind(this);
+    this.updateResponse = this.updateResponse.bind(this);
+    this.comment = this.comment.bind(this);
+    this.getComments = this.getComments.bind(this);
     this.removeComment = this.removeComment.bind(this);
     this.updateComment = this.updateComment.bind(this);
-    this.updateResponse = this.updateResponse.bind(this);
   }
   async response(response: Response): Promise<boolean> {
     let info = await this.infoRepository.load(response.id);
@@ -50,10 +54,51 @@ export class ResponseManager
     await this.repository.save(response);
     return true;
   }
+  // load(id: ResponseId, ctx?: any): Promise<Response | null> {
+  //   return this.repository.load(id, ctx);
+  // }
+
+  // save(response: Response, ctx?: any): Promise<number> {
+  //   return (this.repository.save ? this.repository.save(response, ctx) : Promise.resolve(-1));
+  // }
+  // insert(response: Response, ctx?: any): Promise<number> {
+  //   return this.repository.insert(response, ctx);
+  // }
+  // search(search: ResponseFilter): Promise<SearchResult<Response>> {
+  //   return this.repository.search(search);
+  // }
+
   getResponse(id: string, author: string): Promise<Response | null> {
     return this.repository.getResponse(id, author);
   }
-
+  update(response: Response): Promise<number> {
+    return this.repository
+      .getResponse(response.id, response.author)
+      .then((exist) => {
+        if (exist) {
+          response.time
+            ? (response.time = response.time)
+            : (response.time = new Date());
+          return this.repository.update(response);
+        } else {
+          return 0;
+        }
+      });
+  }
+  updateResponse(response: Response): Promise<number> {
+    return this.repository
+      .getResponse(response.id, response.author)
+      .then((exist) => {
+        if (exist) {
+          response.time
+            ? (response.time = response.time)
+            : (response.time = new Date());
+          return this.repository.update(response);
+        } else {
+          return 0;
+        }
+      });
+  }
   setUseful(id: string, author: string, userId: string): Promise<number> {
     return this.responseReactionRepository.save(id, author, userId, 1);
   }
@@ -73,6 +118,12 @@ export class ResponseManager
           return this.responseCommentRepository.insert(comment);
         }
       });
+  }
+  getComments(id: string, author: string, limit?: number): Promise<ResponseComment[] | null> {
+    if (limit && limit > 0) {
+      return this.responseCommentRepository.getComments(id, author, limit);
+    }
+    return this.responseCommentRepository.getComments(id, author);
   }
   removeComment(commentId: string, userId: string): Promise<number> {
     return this.responseCommentRepository.load(commentId).then((comment) => {
@@ -109,30 +160,5 @@ export class ResponseManager
         }
       });
   }
-  updateResponse(response: Response): Promise<number> {
-    return this.repository
-      .getResponse(response.id, response.author)
-      .then((exist) => {
-        if (exist) {
-          response.time
-            ? (response.time = response.time)
-            : (response.time = new Date());
-          return this.repository.update(response);
-        } else {
-          return 0;
-        }
-      });
-  }
-}
-// tslint:disable-next-line:max-classes-per-file
-export class ResponseCommentManager
-  extends Manager<ResponseComment, string, ResponseCommentFilter>
-  implements ResponseCommentService
-{
-  constructor(
-    search: Search<ResponseComment, ResponseCommentFilter>,
-    protected replyRepository: ResponseCommentRepository
-  ) {
-    super(search, replyRepository);
-  }
+
 }

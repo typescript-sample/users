@@ -67,9 +67,7 @@ import { CommentController, useCommentController } from "./comment";
 import { ItemController, useItemController } from "./items";
 import {
   ResponseController,
-  ResponseCommentController,
   useResponseController,
-  useResponseCommentController,
 } from "./response";
 import { CompanyController, useCompanyController } from "./company";
 import {
@@ -141,7 +139,6 @@ export interface ApplicationContext {
   company: CompanyController;
   companyCategories: CompanyCategoryController;
   response: ResponseController;
-  itemComment: ResponseCommentController;
 }
 
 export function useContext(
@@ -343,11 +340,6 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
   const response = useResponseController(logger.error, queryDB, mapper);
-  const itemComment = useResponseCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
   const myitems = useMyItemController(
     logger.error,
     queryDB,
@@ -403,7 +395,6 @@ export function useContext(
     myitemsUpload,
     items,
     response,
-    itemComment,
     comment,
     category,
     company,
