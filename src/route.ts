@@ -141,7 +141,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/companies/:id', ctx.company.update);
   app.patch('/companies/:id', ctx.company.patch);
   app.delete('/companies/:id', ctx.company.delete);
-  
+
   app.get('/company-categories/search', ctx.companyCategories.search);
   app.get('/company-categories/:id', ctx.companyCategories.load);
   app.post('/company-categories/', ctx.companyCategories.create);
@@ -149,4 +149,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/company-categories/:id', ctx.companyCategories.patch);
   app.delete('/company-categories/:id', ctx.companyCategories.delete);
 
+
+  app.get('/company/comment/search', ctx.comments.search);
+  app.post('/company/comment/search', ctx.comments.search);
+  app.post('/company/rates', ctx.rate.rate);
+  app.get('/company/rates/search', ctx.rate.search);
+  app.post('/company/rates/search', ctx.rate.search);
+  app.get('/company/rates/comment/search', ctx.comments.search);
+  app.post('/company/rates/comment/search', ctx.comments.search);
+  app.put('/company/rates/:id/:author', ctx.rate.updateRate);
+  app.get('/company/rates/:id/:author', ctx.rate.load);
+  app.post('/company/rates/useful/:id/:author/:userId', ctx.rate.setUseful);
+  app.delete('/company/rates/useful/:id/:author/:userId', ctx.rate.removeUseful);
+  app.post('/company/rates/comment/:id/:author/:userId', ctx.rate.comment);
+  app.delete('/company/rates/comment/:commentId/:author', ctx.rate.removeComment);
+  app.put('/company/rates/comment/:commentId/:id/:author/:userId', ctx.rate.updateComment);
 }

@@ -1,23 +1,28 @@
 import { Attributes, Filter, Repository, Query,Service,NumberRange } from 'onecore';
+import { Info } from 'rate5';
 
 export interface Company {
   id: string;
   name: string;
   description: string;
+  address:string,
   size: number;
   status: string;
   establishedAt: Date;
   categories: string[];
+  info?: Info;
 }
 
 export interface CompanyFilter extends Filter {
     id?: string;
     name?: string;
     description?: string;
+    address?:string,
     size?: NumberRange;
     status?: string;
     establishedAt?: Date;
     categories?: string[];
+    info?: Info;
 }
 export interface CompanyRepository extends Repository<Company, string> {
 }
@@ -36,6 +41,9 @@ export const companyModel: Attributes = {
   },
   size: {
     type:'number'
+  },
+  address: {
+    length: 255,
   },
   status: {
     match: 'equal',

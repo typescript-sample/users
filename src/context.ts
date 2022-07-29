@@ -65,7 +65,7 @@ import { ArticleController, useArticleController } from './article';
 import { CategoryController, useCategoryController } from './category';
 import { CommentController, useCommentController } from './comment';
 import { ItemController, useItemController } from './items';
-import { CompanyController, useCompanyController } from './company';
+import { CompanyController, useCompanyController,useCinemaRateController,useRateCommentController } from './company';
 import { CompanyCategoryController, useCompanyCategoryController } from './company-category';
 import {
   ArticleController as MyArticleController,
@@ -78,6 +78,9 @@ import {
   UserSettings,
 } from './my-profile';
 import { UserController, useUserController } from './user';
+
+import { RateCommentController } from './rate-company/comment-controller';
+import { RateController } from './rate-company/rate-controller';
 
 resources.createValidator = createValidator;
 
@@ -114,9 +117,13 @@ export interface ApplicationContext {
   myitems: MyItemController;
   items: ItemController;
   comment: CommentController;
+  comments: RateCommentController;
   category: CategoryController;
   company:CompanyController;
   companyCategories:CompanyCategoryController;
+
+
+  rate: RateController;
 }
 
 export function useContext(
@@ -322,6 +329,9 @@ export function useContext(
   const category = useCategoryController(logger.error, queryDB);
   const company = useCompanyController(logger.error, queryDB);
   const companyCategories = useCompanyCategoryController(logger.error, queryDB);
+  const rate = useCinemaRateController(logger.error, mainDB, mapper);
+  const comments = useRateCommentController(logger.error, mainDB, mapper);
+  
   return {
     health,
     log,
@@ -344,7 +354,9 @@ export function useContext(
     comment,
     category,
     company,
-    companyCategories
+    companyCategories,
+    rate,
+    comments
   };
 }
 
