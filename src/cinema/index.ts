@@ -24,35 +24,35 @@ import {
   SqlRateReactionRepository,
   SqlRateRepository,
 } from "rate-query";
-import { Rater, RateService } from "rate-core";
+import { Rater, RateRepository, RateService } from "rate-core";
 import {
-  Location,
-  LocationFilter,
-  locationModel,
-  LocationRepository,
-  LocationService,
-} from "./location";
-import { LocationController } from "./location-controller";
-import { SqlLocationRepository } from "./sql-location-repository";
+  Cinema,
+  CinemaFilter,
+  cinemaModel,
+  CinemaRepository,
+  CinemaService,
+} from "./cinema";
+import { CinemaController } from "./cinema-controller";
+import { SqlCinemaRepository } from "./sql-cinema-repository";
 import { check } from "xvalidators";
-export * from "./location-controller";
-export { LocationController };
 
-export class LocationManager
-  extends Manager<Location, string, LocationFilter>
-  implements LocationService
+export { CinemaController };
+
+export class CinemaManager
+  extends Manager<Cinema, string, CinemaFilter>
+  implements CinemaService
 {
   constructor(
-    search: Search<Location, LocationFilter>,
-    repository: LocationRepository,
+    search: Search<Cinema, CinemaFilter>,
+    repository: CinemaRepository,
     private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
   }
 
-  load(id: string): Promise<Location | null> {
-    return this.repository.load(id).then((location) => {
-      if (!location) {
+  load(id: string): Promise<Cinema | null> {
+    return this.repository.load(id).then((cinema) => {
+      if (!cinema) {
         return null;
       } else {
         return this.infoRepository.load(id).then((info) => {
@@ -60,63 +60,60 @@ export class LocationManager
             delete (info as any)["id"];
             delete (info as any)["count"];
             delete (info as any)["score"];
-            location.info = info;
+            cinema.info = info;
           }
-          console.log({ location });
+          console.log({ cinema });
 
-          return location;
+          return cinema;
         });
       }
     });
   }
 }
 
-export function useLocationService(
-  db: DB,
-  mapper?: TemplateMap
-): LocationService {
-  const query = useQuery("locations", mapper, locationModel, true);
-  const builder = new SearchBuilder<Location, LocationFilter>(
+export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
+  const query = useQuery("cinema", mapper, cinemaModel, true);
+  const builder = new SearchBuilder<Cinema, CinemaFilter>(
     db.query,
-    "locations",
-    locationModel,
+    "cinema",
+    cinemaModel,
     db.driver,
     query
   );
-  const repository = new SqlLocationRepository(db, "locations");
+  const repository = new SqlCinemaRepository(db, "cinema");
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "location_info",
+    "info",
     infoModel,
     buildToSave
   );
-  return new LocationManager(builder.search, repository, infoRepository);
+  return new CinemaManager(builder.search, repository, infoRepository);
 }
 
-export function useLocationController(
+export function useCinemaController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): LocationController {
-  return new LocationController(log, useLocationService(db, mapper));
+): CinemaController {
+  return new CinemaController(log, useCinemaService(db, mapper));
 }
 
-export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater {
-  const query = useQuery("location_rates", mapper, rateModel, true);
+export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater {
+  const query = useQuery("rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    "location_rates",
+    "rates",
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    "location_rates",
+    "rates",
     rateModel,
     buildToSave,
     5,
-    "location_info",
+    "info",
     "rate",
     "count",
     "score",
@@ -125,24 +122,24 @@ export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater {
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "location_info",
+    "info",
     infoModel,
     buildToSave
   );
   const rateReactionRepository = new SqlRateReactionRepository(
     db,
-    "location_ratereaction",
+    "ratereaction",
     rateReactionModel,
-    "location_rates",
+    "rates",
     "usefulCount",
     "author",
     "id"
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "location_comments",
+    "rate_comments",
     rateCommentModel,
-    "location_rates",
+    "rates",
     "id",
     "author",
     "replyCount",
@@ -161,7 +158,7 @@ export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater {
   );
 }
 
-export function useLocationRateController(
+export function useCinemaRateController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
@@ -170,7 +167,7 @@ export function useLocationRateController(
   const commentValidator = new CommentValidator(rateCommentModel, check);
   return new RateController(
     log,
-    useLocationRateService(db, mapper),
+    useCinemaRateService(db, mapper),
     rateValidator,
     commentValidator,
     ["time"],
@@ -183,23 +180,23 @@ export function useLocationRateController(
   );
 }
 
-export function useLocationRateCommentService(
+export function useCinemaRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery {
-  const query = useQuery("location_comments", mapper, rateCommentModel, true);
+  const query = useQuery("ratecomment", mapper, rateCommentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    "location_comments",
+    "rate_comments",
     rateCommentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "location_comments",
+    "rate_comments",
     rateCommentModel,
-    "location_rates",
+    "rates",
     "id",
     "author",
     "replyCount",
@@ -211,14 +208,14 @@ export function useLocationRateCommentService(
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 
-export function useLocationRateCommentController(
+export function useCinemaRateCommentController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
 ): RateCommentController<Comment> {
   return new RateCommentController(
     log,
-    useLocationRateCommentService(db, mapper)
+    useCinemaRateCommentService(db, mapper)
   );
 }
 export function generate(): string {

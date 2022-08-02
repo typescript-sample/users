@@ -1,5 +1,7 @@
-import { Attributes, Filter, Repository, Service } from "onecore";
-import { Info } from "../rate"
+import { Attributes, Filter, Service } from "onecore";
+import { Repository } from 'query-core';
+import { Info } from 'rate-core';
+
 
 export interface LocationFilter extends Filter {
   id?: string;

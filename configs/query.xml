@@ -116,6 +116,336 @@
     </if>
   </select>
 
+
+  
+  <select id="cinema">
+    select *
+    from cinema
+    where
+    <if test="id != null">
+      id = #{id} and
+    </if>
+    <if test="name != null">
+      name ilike #{name} and
+    </if>
+    <if test="address != null">
+      address ilike (#{address}) and
+    </if>
+    <if test="status != null">
+      status in (#{status}) and
+    </if>
+    <if test="parent != null">
+      parent ilike #{parent} and
+    </if>
+    <if test="q != null">
+      (name like #{q} ) and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="info">
+    select * from info
+    <if test="id != null">
+      id = #{id} and
+    </if>
+    <if test="rate != null">
+      rate = #{rate} and
+    </if>
+    <if test="count != null">
+      count = #{count} and
+    </if>
+    <if test="score != null">
+      score = #{score} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="cinemaRate">
+    select *
+    from cinemarate
+    where
+    <if test="id != null">
+      id = (#{id}) and
+    </if> 
+    <if test="userId != null">
+      userId = (#{userId}) and
+    </if>  
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="rates">
+    select r.*
+    <if test="userId != null">
+      ,
+      case
+        when u.reaction = 1 then true
+        else false
+      end
+        as disable
+    </if>   
+    from rates r
+    <if test="userId != null">
+      left join ratereaction u 
+        on u.id = r.id
+        and u.author = r.author
+        and u.userId = #{userId}
+    </if> 
+    where
+    <if test="id != null">
+      r.id = #{id} and
+    </if> 
+    <if test="author != null">
+      r.author = #{author} and
+    </if> 
+    <if test="rate != null">
+      r.rate = #{rate} and
+    </if>   
+    <if test="ratetime != null">   
+      r.time >= #{time} and
+    </if>   
+    <if test="review != null">
+      r.review like #{review} and
+    </if>
+    <if test="usefulCount != null">
+      r.usefulCount >= (#{usefulCount}) and
+    </if>    
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="ratereaction">
+    select *
+    from ratereaction
+    where
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="userId != null">
+      userId = #{userId} and
+    </if>  
+    <if test="author != null">
+      author = #{author} and
+    </if>  
+    <if test="time != null">
+      time >= #{time} and
+    </if>  
+    <if test="reaction != null">
+      reaction = #{reaction} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+    <select id="ratecomment">
+    select *
+    from rate_comments
+    where
+    <if test="commentId != null">
+      commentId = #{commentId} and
+    </if> 
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="author != null">
+      author = #{author} and
+    </if> 
+    <if test="userId != null">
+      userId = #{userId} and
+    </if>   
+    <if test="comment != null">
+      comment ilike #{comment} and
+    </if>  
+    <if test="time != null">
+      time >= #{time} and
+    </if>
+    <if test="updateAt != null">
+      updateAt >= #{updateAt} and
+    </if>
+    <if test="histories != null">
+      histories in #{histories} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="film">
+    select *
+    from films
+    where
+    <if test="title != null">
+    title like #{title} and
+    </if>
+    <if test="description != null">
+    description like #{description} and
+    </if>
+    <if test ="imageUrl != null">
+    imageUrl like #{imageUrl} and 
+    </if>
+    <if test = "trailerUrl != null">
+    trailerUrl like #{trailerUrl} and
+    </if>
+    <if test="categories != null" array="skip">
+      categories && #{categories} and
+    </if>
+    <if test="directors != null" array="skip">
+      directors && #{directors} and
+    </if>
+    <if test="cast != null" array="skip">
+      cast && #{cast} and
+    </if>
+    <if test="productions != null" array="skip">
+      productions && #{productions} and
+    </if>
+    <if test="countries != null" array="skip">
+      countries && #{countries} and
+    </if>
+    <if test="q != null">
+      (title like #{q} or description like #{q} or imageUrl like #{q} or trailerUrl like #{trailerUrl}) and
+    </if>
+    <if test="sort != null">
+      order by {sort}
+    </if>
+    1 = 1
+  </select>
+
+  <select id="rates_film_info">
+    select * from rates_film_info
+    <if test="id != null">
+      id = #{id} and
+    </if>
+    <if test="rate != null">
+      rate = #{rate} and
+    </if>
+    <if test="count != null">
+      count = #{count} and
+    </if>
+    <if test="score != null">
+      score = #{score} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="rates_film">
+    select r.*
+    <if test="userId != null">
+      ,
+      case
+        when rfr.reaction = 1 then true
+        else false
+      end
+        as disable
+    </if>   
+    from rates_film r
+    <if test="userId != null">
+      left join rates_film_reaction rfr
+        on rfr.id = r.id
+        and rfr.author = r.author
+        and rfr.userId = #{userId}
+    </if> 
+    where
+    <if test="id != null">
+      r.id = #{id} and
+    </if> 
+    <if test="author != null">
+      r.author = #{author} and
+    </if> 
+    <if test="rate != null">
+      r.rate = #{rate} and
+    </if>   
+    <if test="ratetime != null">   
+      r.time >= #{time} and
+    </if>   
+    <if test="review != null">
+      r.review like #{review} and
+    </if>
+    <if test="usefulCount != null">
+      r.usefulCount >= (#{usefulCount}) and
+    </if>    
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="rates_film_reaction">
+    select *
+    from rates_film_reaction
+    where
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="userId != null">
+      userId = #{userId} and
+    </if>  
+    <if test="author != null">
+      author = #{author} and
+    </if>  
+    <if test="time != null">
+      time >= #{time} and
+    </if>  
+    <if test="reaction != null">
+      reaction = #{reaction} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+  <select id="rates_film_comments">
+    select *
+    from rates_film_comments
+    where
+    <if test="commentId != null">
+      commentId = #{commentId} and
+    </if> 
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="author != null">
+      author = #{author} and
+    </if> 
+    <if test="userId != null">
+      userId = #{userId} and
+    </if>   
+    <if test="comment != null">
+      comment ilike #{comment} and
+    </if>  
+    <if test="time != null">
+      time >= #{time} and
+    </if>
+    <if test="updateAt != null">
+      updateAt >= #{updateAt} and
+    </if>
+    <if test="histories != null">
+      histories in #{histories} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+
+
+
   <select id="comment">
     select * 
     from comments 
@@ -131,6 +461,7 @@
       order by {sort}
     </if>
   </select>
+
   <select id="companies">
         select *
     from companies
@@ -233,6 +564,7 @@
       order by {sort}
     </if>
   </select>
+
   <select id="info">
     select * from info_company
     <if test="id != null">
@@ -246,6 +578,7 @@
       order by {sort}
     </if>
   </select>
+
   <select id="ratereaction">
     select *
     from ratereaction_company

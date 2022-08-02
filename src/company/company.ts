@@ -1,11 +1,12 @@
-import { Attributes, Filter, Repository, Query,Service,NumberRange } from 'onecore';
-import { Info } from 'rate5';
+import { Attributes, Filter, Service, NumberRange } from "onecore";
+import { Repository } from "query-core";
+import { Info } from "rate-core";
 
 export interface Company {
   id: string;
   name: string;
   description: string;
-  address:string,
+  address: string;
   size: number;
   status: string;
   establishedAt: Date;
@@ -14,45 +15,44 @@ export interface Company {
 }
 
 export interface CompanyFilter extends Filter {
-    id?: string;
-    name?: string;
-    description?: string;
-    address?:string,
-    size?: NumberRange;
-    status?: string;
-    establishedAt?: Date;
-    categories?: string[];
-    info?: Info;
+  id?: string;
+  name?: string;
+  description?: string;
+  address?: string;
+  size?: NumberRange;
+  status?: string;
+  establishedAt?: Date;
+  categories?: string[];
+  info?: Info;
 }
-export interface CompanyRepository extends Repository<Company, string> {
-}
-export interface CompanyService extends Service<Company, string, CompanyFilter> {
-}
+export interface CompanyRepository extends Repository<Company, string> {}
+export interface CompanyService
+  extends Service<Company, string, CompanyFilter> {}
 export const companyModel: Attributes = {
   id: {
     key: true,
-    match: 'equal'
+    match: "equal",
   },
   name: {
-    length:120
+    length: 120,
   },
   description: {
-    length:1000
+    length: 1000,
   },
   size: {
-    type:'number'
+    type: "number",
   },
   address: {
     length: 255,
   },
   status: {
-    match: 'equal',
-    length: 1
+    match: "equal",
+    length: 1,
   },
-  establishedAt:{
-    type:'datetime'
+  establishedAt: {
+    type: "datetime",
   },
-  categories:{
-    type:'strings'
-  }
+  categories: {
+    type: "strings",
+  },
 };

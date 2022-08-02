@@ -56,48 +56,63 @@ import {
   Validator,
 } from "signup-service";
 import { createValidator } from "xvalidators";
+import { RateController, RateCommentController } from "rate-express";
+import { Comment, Rate, RateFilter } from "rate-core";
+
 import {
   AppreciationController,
   useAppreciationController,
   // useAppreciationReplyController,
 } from "./appreciation";
 import { ArticleController, useArticleController } from "./article";
-import { CategoryController, useCategoryController } from "./category";
-import { CommentController, useCommentController } from "./comment";
-import { ItemController, useItemController } from "./items";
-import {
-  ResponseController,
-  useResponseController,
-} from "./response";
-import { CompanyController, useCompanyController,useCinemaRateController,useRateCommentController } from "./company";
-import {
-  CompanyCategoryController,
-  useCompanyCategoryController,
-} from "./company-category";
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from "./my-articles";
 import {
+  CategoryController,
+  useItemCategoryController,
+  useFilmCategoryController,
+  useCompanyCategoryController,
+} from "./category";
+import {
+  CinemaController,
+  useCinemaController,
+  useCinemaRateController,
+  useCinemaRateCommentController,
+} from "./cinema";
+import { CommentController, useCommentController } from "./comment";
+import {
+  CompanyController,
+  useCompanyController,
+  useCompanyRateController,
+  useCompanyRateCommentController,
+} from "./company";
+import {
+  FilmController,
+  useFilmController,
+  useFilmRateCommentController,
+  useFilmRateController,
+} from "./film";
+import { ItemController, useItemController } from "./items";
+import {
   MyItemController,
   useMyItemController,
   useMyItemUploadController,
 } from "./my-items";
+import { ResponseController, useResponseController } from "./response";
+import {
+  LocationController,
+  useLocationController,
+  useLocationRateController,
+  useLocationRateCommentController,
+} from "./location";
 import {
   MyProfileController,
   useMyProfileController,
   UserSettings,
 } from "./my-profile";
 import { UserController, useUserController } from "./user";
-import {
-  LocationController,
-  useLocationController,
-  LocationRateController,
-  useLocationRateController,
-} from "./location";
-
-import { RateCommentController } from './rate-company/comment-controller';
-import { RateController } from './rate-company/rate-controller';
 
 resources.createValidator = createValidator;
 
@@ -124,28 +139,40 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: UserController;
-  brand: QueryController<string[]>;
   skill: QueryController<string[]>;
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
   educationQuery: QueryController<string[]>;
   companyQuery: QueryController<string[]>;
   appreciation: AppreciationController;
-  location: LocationController;
-  locationRate: LocationRateController;
+  // appreciationReply: ReplyController;
   article: ArticleController;
   myarticles: MyArticleController;
-  // appreciationReply: ReplyController;
+  cinema: CinemaController;
+  cinemaRate: RateController<Rate, RateFilter, Comment>;
+  cinemaComment: RateCommentController<Comment>;
+  company: CompanyController;
+  companyRate: RateController<Rate, RateFilter, Comment>;
+  companyComment: RateCommentController<Comment>;
+  companyCategory: CategoryController;
+  comment: CommentController;
+  film: FilmController;
+  filmRate: RateController<Rate, RateFilter, Comment>;
+  filmComment: RateCommentController<Comment>;
+  filmCategory: CategoryController;
+  director: QueryController<string[]>;
+  cast: QueryController<string[]>;
+  production: QueryController<string[]>;
+  country: QueryController<string[]>;
+  items: ItemController;
+  brand: QueryController<string[]>;
+  itemCategory: CategoryController;
   myitems: MyItemController;
   myitemsUpload: MyItemUploadController;
-  items: ItemController;
-  comment: CommentController;
-  comments: RateCommentController;
-  category: CategoryController;
-  company: CompanyController;
-  companyCategories: CompanyCategoryController;
+  location: LocationController;
+  locationRate: RateController<Rate, RateFilter, Comment>;
+  locationComment: RateCommentController<Comment>;
   response: ResponseController;
-  rate: RateController;
 }
 
 export function useContext(
@@ -262,40 +289,6 @@ export function useContext(
 
   const user = useUserController(logger.error, mainDB);
 
-  const brandService = new StringService(
-    "brands",
-    "brand",
-    queryDB.query,
-    queryDB.exec
-  );
-  const brand = new QueryController<string[]>(
-    logger.error,
-    brandService.load,
-    "keyword"
-  );
-  const companyService = new StringService(
-    "user_companies",
-    "company",
-    queryDB.query,
-    queryDB.exec
-  );
-  const companyQuery = new QueryController<string[]>(
-    logger.error,
-    companyService.load,
-    "keyword"
-  );
-  const educationService = new StringService(
-    "educations",
-    "school",
-    queryDB.query,
-    queryDB.exec
-  );
-  const educationQuery = new QueryController<string[]>(
-    logger.error,
-    educationService.load,
-    "keyword"
-  );
-
   const skillService = new StringService(
     "skills",
     "skill",
@@ -329,7 +322,28 @@ export function useContext(
     interestService.load,
     "keyword"
   );
-
+  const companyService = new StringService(
+    "user_companies",
+    "company",
+    queryDB.query,
+    queryDB.exec
+  );
+  const companyQuery = new QueryController<string[]>(
+    logger.error,
+    companyService.load,
+    "keyword"
+  );
+  const educationService = new StringService(
+    "educations",
+    "school",
+    queryDB.query,
+    queryDB.exec
+  );
+  const educationQuery = new QueryController<string[]>(
+    logger.error,
+    educationService.load,
+    "keyword"
+  );
   const appreciation = useAppreciationController(logger.error, mainDB);
   // const appreciationReply = useAppreciationReplyController(
   //   logger.error,
@@ -366,12 +380,111 @@ export function useContext(
     undefined,
     conf.model
   );
-  const location = useLocationController(logger.error, queryDB, mapper);
-  const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const article = useArticleController(logger.error, mainDB);
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
+
+  const company = useCompanyController(logger.error, queryDB);
+  const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
+  const companyComment = useCompanyRateCommentController(
+    logger.error,
+    mainDB,
+    mapper
+  );
+  const companyCategory = useCompanyCategoryController(
+    logger.error,
+    queryDB,
+    mapper
+  );
+
+  const cinema = useCinemaController(logger.error, queryDB, mapper);
+  const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
+  const cinemaComment = useCinemaRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
+
+  const directorService = new StringService(
+    "film_directors",
+    "director",
+    queryDB.query,
+    queryDB.exec
+  );
+  const director = new QueryController<string[]>(
+    logger.error,
+    directorService.load,
+    "keyword"
+  );
+  const castService = new StringService(
+    "film_cast",
+    "actor",
+    queryDB.query,
+    queryDB.exec
+  );
+  const cast = new QueryController<string[]>(
+    logger.error,
+    castService.load,
+    "keyword"
+  );
+  const productionService = new StringService(
+    "film_productions",
+    "production",
+    queryDB.query,
+    queryDB.exec
+  );
+  const production = new QueryController<string[]>(
+    logger.error,
+    productionService.load,
+    "keyword"
+  );
+  const countryService = new StringService(
+    "film_countries",
+    "country",
+    queryDB.query,
+    queryDB.exec
+  );
+  const country = new QueryController<string[]>(
+    logger.error,
+    countryService.load,
+    "keyword"
+  );
+  const film = useFilmController(
+    logger.error,
+    queryDB,
+    directorService.save,
+    castService.save,
+    productionService.save,
+    countryService.save,
+    mapper
+  );
+  const filmRate = useFilmRateController(logger.error, queryDB, mapper);
+  const filmComment = useFilmRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
+  const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
+
+  const location = useLocationController(logger.error, queryDB, mapper);
+  const locationRate = useLocationRateController(logger.error, queryDB, mapper);
+  const locationComment = useLocationRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
   const items = useItemController(logger.error, queryDB);
-  const response = useResponseController(logger.error, queryDB, mapper);
+  const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
+  const brandService = new StringService(
+    "brands",
+    "brand",
+    queryDB.query,
+    queryDB.exec
+  );
+  const brand = new QueryController<string[]>(
+    logger.error,
+    brandService.load,
+    "keyword"
+  );
   const myitems = useMyItemController(
     logger.error,
     queryDB,
@@ -400,13 +513,9 @@ export function useContext(
     conf.modelItem,
     mapper
   );
+  const response = useResponseController(logger.error, queryDB, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
-  const category = useCategoryController(logger.error, queryDB);
-  const company = useCompanyController(logger.error, queryDB);
-  const companyCategories = useCompanyCategoryController(logger.error, queryDB);
-  const rate = useCinemaRateController(logger.error, mainDB, mapper);
-  const comments = useRateCommentController(logger.error, mainDB, mapper);
-  
+
   return {
     health,
     log,
@@ -416,28 +525,40 @@ export function useContext(
     password,
     myprofile,
     user,
-    brand,
     skill,
     interest,
     lookingFor,
     educationQuery,
     companyQuery,
     appreciation,
+    // appreciationReply,
+    comment,
+    cinema,
+    cinemaRate,
+    cinemaComment,
+    company,
+    companyRate,
+    companyComment,
+    companyCategory,
+    film,
+    filmRate,
+    filmComment,
+    filmCategory,
+    director,
+    cast,
+    production,
+    country,
     location,
     locationRate,
+    locationComment,
     article,
     myarticles,
-    // appreciationReply,
+    items,
+    itemCategory,
+    brand,
     myitems,
     myitemsUpload,
-    items,
     response,
-    comment,
-    category,
-    company,
-    companyCategories,
-    rate,
-    comments
   };
 }
 
