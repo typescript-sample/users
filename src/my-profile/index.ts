@@ -9,11 +9,11 @@ import { MyProfileController, Save } from './user-controller';
 export * from './user';
 export { MyProfileController };
 
-export function useMyProfileController(log: Log, db: DB, settings: UserSettings, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, sizesCover: number[],
+export function useMyProfileController(log: Log, db: DB, settings: UserSettings, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf): MyProfileController {
   const repository = new SqlUserRepositoy(db);
   const service = new MyProfileManager(repository, settings, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new MyProfileController(log, service, generateId, sizesCover, sizesImage, saveSkills, saveInterests, saveLookingFor);
+  return new MyProfileController(log, service, generateId, sizesCover, sizesImage, saveSkills, saveInterests, saveLookingFor,saveEducation,saveCompany);
 }
 
 export class MyProfileManager extends StorageService<User, string> implements MyProfileService {

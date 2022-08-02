@@ -142,6 +142,8 @@ export interface ApplicationContext {
   skill: QueryController<string[]>;
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
+  educationQuery: QueryController<string[]>;
+  companyQuery: QueryController<string[]>;
   appreciation: AppreciationController;
   // appreciationReply: ReplyController;
   article: ArticleController;
@@ -320,7 +322,28 @@ export function useContext(
     interestService.load,
     "keyword"
   );
-
+  const companyService = new StringService(
+    "user_companies",
+    "company",
+    queryDB.query,
+    queryDB.exec
+  );
+  const companyQuery = new QueryController<string[]>(
+    logger.error,
+    companyService.load,
+    "keyword"
+  );
+  const educationService = new StringService(
+    "educations",
+    "school",
+    queryDB.query,
+    queryDB.exec
+  );
+  const educationQuery = new QueryController<string[]>(
+    logger.error,
+    educationService.load,
+    "keyword"
+  );
   const appreciation = useAppreciationController(logger.error, mainDB);
   // const appreciationReply = useAppreciationReplyController(
   //   logger.error,
@@ -350,6 +373,8 @@ export function useContext(
     skillService.save,
     interestService.save,
     lookingForService.save,
+    educationService.save,
+    companyService.save,
     sizesCover,
     sizesImage,
     undefined,
@@ -365,7 +390,11 @@ export function useContext(
     mainDB,
     mapper
   );
-  const companyCategory = useCompanyCategoryController(logger.error, queryDB, mapper);
+  const companyCategory = useCompanyCategoryController(
+    logger.error,
+    queryDB,
+    mapper
+  );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
@@ -499,6 +528,8 @@ export function useContext(
     skill,
     interest,
     lookingFor,
+    educationQuery,
+    companyQuery,
     appreciation,
     // appreciationReply,
     comment,
