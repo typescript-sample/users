@@ -1,6 +1,6 @@
-import { Attributes, Filter, Service } from 'onecore';
-import { Repository } from 'query-core';
-import { Info } from 'rate-core';
+import { Attributes, Filter, Service } from "onecore";
+import { Repository } from "query-core";
+import { Info } from "rate-core";
 
 export interface CinemaFilter extends Filter {
   id?: string;
@@ -40,11 +40,9 @@ export interface Cinema {
   info?: Info;
 }
 
+export interface CinemaRepository extends Repository<Cinema, string> {}
 
-export interface CinemaRepository extends Repository<Cinema, string> { }
-
-export interface CinemaService extends Service<Cinema, string, CinemaFilter> {
-}
+export interface CinemaService extends Service<Cinema, string, CinemaFilter> {}
 
 export const galleryModel: Attributes = {
   url: {
@@ -59,7 +57,7 @@ export const cinemaModel: Attributes = {
   id: {
     key: true,
     length: 40,
-    match: 'equal'
+    match: "equal",
   },
   name: {
     length: 255,
@@ -68,10 +66,10 @@ export const cinemaModel: Attributes = {
     length: 255,
   },
   parent: {
-    length: 40
+    length: 40,
   },
   status: {
-    length: 1
+    length: 1,
   },
   latitude: {
     length: 255,
@@ -82,19 +80,18 @@ export const cinemaModel: Attributes = {
   imageUrl: {},
   createdBy: {},
   createdAt: {
-    column: 'createdat',
-    type: 'datetime'
+    column: "createdat",
+    type: "datetime",
   },
   updatedBy: {},
   updatedAt: {
-    column: 'createdat',
-    type: 'datetime'
+    column: "createdat",
+    type: "datetime",
   },
   gallery: {
-    column: 'gallery',
-    type: 'array',
+    column: "gallery",
+    type: "array",
     typeof: galleryModel,
   },
-  coverUrl: {}
+  coverUrl: {},
 };
-

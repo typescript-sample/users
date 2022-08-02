@@ -1,6 +1,6 @@
-import { Attributes, Filter, Service } from 'onecore';
-import { Repository } from 'query-core';
-import { Info10 } from 'rate-core';
+import { Attributes, Filter, Service } from "onecore";
+import { Repository } from "query-core";
+import { Info10 } from "rate-core";
 
 export interface FilmFilter extends Filter {
   filmId?: string;
@@ -11,7 +11,7 @@ export interface FilmFilter extends Filter {
   status?: string;
   categories?: string[];
   directors?: string[];
-  filmcast? : string[];
+  filmcast?: string[];
   productions?: string[];
   countries?: string[];
 }
@@ -25,63 +25,59 @@ export interface Film {
   trailerUrl?: string;
   categories?: string[];
   directors?: string[];
-  filmcast? : string[];
+  filmcast?: string[];
   productions?: string[];
   countries?: string[];
   info?: Info10;
 }
 
-export interface FilmRepository extends Repository<Film, string> {
-}
-export interface FilmService extends Service<Film, string, FilmFilter> {
-}
+export interface FilmRepository extends Repository<Film, string> {}
+export interface FilmService extends Service<Film, string, FilmFilter> {}
 
 export const filmModel: Attributes = {
   filmId: {
     key: true,
-    length: 40
+    length: 40,
   },
   title: {
     required: true,
     length: 300,
-    q: true
+    q: true,
   },
   description: {
     length: 300,
   },
   imageUrl: {
-    length: 300
+    length: 300,
   },
   trailerUrl: {
-    length: 300
+    length: 300,
   },
   categories: {
-    type: 'primitives',
+    type: "primitives",
   },
   status: {
-    match: 'equal',
-    length: 1
+    match: "equal",
+    length: 1,
   },
   directors: {
-    type: 'primitives',
+    type: "primitives",
   },
   filmcast: {
-    type: 'primitives',
+    type: "primitives",
   },
   productions: {
-    type: 'primitives',
+    type: "primitives",
   },
   countries: {
-    type: 'primitives',
+    type: "primitives",
   },
   createdBy: {},
   createdAt: {
-    type: 'datetime'
+    type: "datetime",
   },
   updatedBy: {},
   updatedAt: {
-    type: 'datetime'
+    type: "datetime",
   },
-
 };
-
