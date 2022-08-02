@@ -134,7 +134,7 @@ export function useFilmService(
     db.driver,
     query
   );
-  const repository = new SqlFilmRepositoy(db, "film");
+  const repository = new SqlFilmRepositoy(db, "films");
   const infoRepository = new SqlInfoRepository<Info10>(
     db,
     "rates_film_info",

@@ -136,7 +136,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/films/categories/:id', ctx.filmCategory.patch);
   app.delete('/films/categories/:id', ctx.filmCategory.delete);
 
-  app.get('/films', ctx.film.search);
+  // app.get('/films', ctx.film.search);
   app.post('/films', ctx.film.create);
   app.get('/films/search', ctx.film.search);
   app.post('/films/search', ctx.film.search);
