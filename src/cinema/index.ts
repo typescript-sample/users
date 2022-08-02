@@ -11,23 +11,23 @@ import { CommentValidator, RateValidator } from 'rate-core';
 import { RateCommentController, RateController } from 'rate-express';
 import { rateReactionModel, SqlInfoRepository, SqlCommentRepository, SqlRateReactionRepository, SqlRateRepository } from 'rate-query';
 import {  Rater, RateRepository, RateService } from 'rate-core';
-import { Company, CompanyFilter, companyModel, CompanyRepository, CompanyService } from './company';
-import { CompanyController } from './company-controller';
-import { SqlCompanyRepository } from './sql-company-repository';
+import { Cinema, CinemaFilter, cinemaModel, CinemaRepository, CinemaService } from './cinema';
+import { CinemaController } from './cinema-controller';
+import { SqlCinemaRepository } from './sql-cinema-repository';
 import { check } from 'xvalidators';
-export * from './company-controller';
-export { CompanyController };
 
-export class CompanyManager extends Manager<Company, string, CompanyFilter> implements CompanyService {
-  constructor(search: Search<Company, CompanyFilter>,
-    repository: CompanyRepository,
+export { CinemaController };
+
+export class CinemaManager extends Manager<Cinema, string, CinemaFilter> implements CinemaService {
+  constructor(search: Search<Cinema, CinemaFilter>,
+    repository: CinemaRepository,
     private infoRepository: InfoRepository<Info>) {
     super(search, repository);
   }
 
-  load(id: string): Promise<Company | null> {
-    return this.repository.load(id).then(company => {
-      if (!company) {
+  load(id: string): Promise<Cinema | null> {
+    return this.repository.load(id).then(cinema => {
+      if (!cinema) {
         return null;
       } else {
         return this.infoRepository.load(id).then(info => {
@@ -35,30 +35,30 @@ export class CompanyManager extends Manager<Company, string, CompanyFilter> impl
             delete (info as any)['id'];
             delete (info as any)['count'];
             delete (info as any)['score'];
-            company.info = info;
+            cinema.info = info;
           }
-          console.log({ company });
+          console.log({ cinema });
 
-          return company;
+          return cinema;
         });
       }
     });
   }
 }
 
-export function useCompanyService(db: DB, mapper?: TemplateMap): CompanyService {
-  const query = useQuery('company', mapper, companyModel, true);
-  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, db.driver, query);
-  const repository = new SqlCompanyRepository(db, 'companies');
+export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
+  const query = useQuery('cinema', mapper, cinemaModel, true);
+  const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, db.driver, query);
+  const repository = new SqlCinemaRepository(db);
   const infoRepository = new SqlInfoRepository<Info>(db, 'info', infoModel, buildToSave);
-  return new CompanyManager(builder.search, repository, infoRepository);
+  return new CinemaManager(builder.search, repository, infoRepository);
 }
 
-export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): CompanyController {
-  return new CompanyController(log, useCompanyService(db, mapper));
+export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): CinemaController {
+  return new CinemaController(log, useCinemaService(db, mapper));
 }
 
-export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater {
+export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater {
   const query = useQuery('rates', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'rates', rateModel, db.driver, query);
   const rateRepository = new SqlRateRepository<Rate>(db, 'rates', rateModel, buildToSave, 5, 'info', 'rate', 'count', 'score', 'author', 'id');
@@ -70,13 +70,13 @@ export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater {
   return new RateService(builder.search, rateRepository, infoRepository, rateCommentRepository, rateReactionRepository, queryUrl);
 }
 
-export function useCompanyRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate, RateFilter, Comment> {
+export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate, RateFilter, Comment> {
   const rateValidator = new RateValidator(rateModel, check, 5);
   const commentValidator = new CommentValidator(rateCommentModel, check);
-  return new RateController(log, useCompanyRateService(db, mapper), rateValidator, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'], generate, 'commentId', 'userId', 'author', 'id');
+  return new RateController(log, useCinemaRateService(db, mapper), rateValidator, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'], generate, 'commentId', 'userId', 'author', 'id');
 }
 
-export function useCompanyRateCommentService(db: DB, mapper?: TemplateMap): CommentQuery {
+export function useCinemaRateCommentService(db: DB, mapper?: TemplateMap): CommentQuery {
   const query = useQuery('ratecomment', mapper, rateCommentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'rate_comments', rateCommentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'rate_comments', rateCommentModel, 'rates', 'id', 'author', 'replyCount', 'author', 'time', 'id');
@@ -84,8 +84,8 @@ export function useCompanyRateCommentService(db: DB, mapper?: TemplateMap): Comm
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 
-export function useCompanyRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
-  return new RateCommentController(log, useCompanyRateCommentService(db, mapper));
+export function useCinemaRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
+  return new RateCommentController(log, useCinemaRateCommentService(db, mapper));
 }
 export function generate(): string {
   return shortid.generate();

@@ -438,6 +438,16 @@ insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7b79c
 insert into locationrate (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
 insert into locationrate (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
 
+CREATE TABLE location_ratereaction(
+	id character varying(40),
+	author character varying(40),
+	userid character varying(40),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
+
+
 create table companies
 (
     id character varying(40) not null primary key,

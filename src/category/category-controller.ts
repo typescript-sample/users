@@ -11,5 +11,4 @@ export class CategoryController extends Controller<
     super(log, categoryService);
     this.array = ["status"];
   }
-
 }

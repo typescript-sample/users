@@ -1,41 +1,42 @@
-import { buildToSave } from "pg-extension";
 import { Log, Manager, Search } from "onecore";
-import { DB, postgres, SearchBuilder } from "query-core";
+import { buildToSave, useUrlQuery } from "pg-extension";
+import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import { LocationController } from "./location-controller";
-import { SqlLocationRepository } from "./sql-location-repository";
+import shortid from "shortid";
+import {
+  CommentQuery,
+  Info,
+  infoModel,
+  InfoRepository,
+  Rate,
+  Comment,
+  CommentFilter,
+  rateCommentModel,
+  RateFilter,
+  rateModel,
+} from "rate-core";
+import { CommentValidator, RateValidator } from "rate-core";
+import { RateCommentController, RateController } from "rate-express";
+import {
+  rateReactionModel,
+  SqlInfoRepository,
+  SqlCommentRepository,
+  SqlRateReactionRepository,
+  SqlRateRepository,
+} from "rate-query";
+import { Rater, RateService } from "rate-core";
 import {
   Location,
   LocationFilter,
   locationModel,
   LocationRepository,
   LocationService,
-} from "./location"; // rate
-import {
-  rateModel,
-  infoModel,
-  rateReactionModel,
-  rateCommentModel,
-  Rate,
-  RateFilter,
-  RateService,
-  RateController,
-  RateManager,
-  RateRepository,
-  InfoRepository,
-  RateComment,
-  RateCommentFilter,
-  RateCommentService,
-  RateCommentController,
-  RateCommentManager,
-  SqlRateRepository,
-  SqlInfoRepository,
-  SqlRateReactionRepository,
-  SqlRateCommentRepository,
-} from "../rate";
-
+} from "./location";
+import { LocationController } from "./location-controller";
+import { SqlLocationRepository } from "./sql-location-repository";
+import { check } from "xvalidators";
 export * from "./location-controller";
-export { LocationController, RateController as LocationRateController };
+export { LocationController };
 
 export class LocationManager
   extends Manager<Location, string, LocationFilter>
@@ -44,25 +45,25 @@ export class LocationManager
   constructor(
     search: Search<Location, LocationFilter>,
     repository: LocationRepository,
-    private infoRepository: InfoRepository,
-    private rateRepository: RateRepository
+    private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
   }
 
   load(id: string): Promise<Location | null> {
-    console.log(id);
     return this.repository.load(id).then((location) => {
       if (!location) {
         return null;
       } else {
-        console.log(this.infoRepository);
         return this.infoRepository.load(id).then((info) => {
-          console.log(info);
           if (info) {
             delete (info as any)["id"];
+            delete (info as any)["count"];
+            delete (info as any)["score"];
             location.info = info;
           }
+          console.log({ location });
+
           return location;
         });
       }
@@ -79,28 +80,17 @@ export function useLocationService(
     db.query,
     "locations",
     locationModel,
-    postgres,
+    db.driver,
     query
   );
   const repository = new SqlLocationRepository(db, "locations");
-  const infoRepository = new SqlInfoRepository(
+  const infoRepository = new SqlInfoRepository<Info>(
     db,
     "location_info",
-    rateModel,
-    buildToSave
-  );
-  const rateRepository = new SqlRateRepository(
-    db,
-    "location_rate",
     infoModel,
     buildToSave
   );
-  return new LocationManager(
-    builder.search,
-    repository,
-    infoRepository,
-    rateRepository
-  );
+  return new LocationManager(builder.search, repository, infoRepository);
 }
 
 export function useLocationController(
@@ -111,26 +101,29 @@ export function useLocationController(
   return new LocationController(log, useLocationService(db, mapper));
 }
 
-// Rate
-export function useLocationRateService(
-  db: DB,
-  mapper?: TemplateMap
-): RateService {
-  const query = useQuery("location_rate", mapper, rateModel, true);
+export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater {
+  const query = useQuery("location_rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    "location_rate",
+    "location_rates",
     rateModel,
     db.driver,
     query
   );
-  const repository = new SqlRateRepository(
+  const rateRepository = new SqlRateRepository<Rate>(
     db,
-    "location_rate",
+    "location_rates",
     rateModel,
-    buildToSave
+    buildToSave,
+    5,
+    "location_info",
+    "rate",
+    "count",
+    "score",
+    "author",
+    "id"
   );
-  const infoRepository = new SqlInfoRepository(
+  const infoRepository = new SqlInfoRepository<Info>(
     db,
     "location_info",
     infoModel,
@@ -140,27 +133,31 @@ export function useLocationRateService(
     db,
     "location_ratereaction",
     rateReactionModel,
-    "location_rate",
+    "location_rates",
     "usefulCount",
     "author",
     "id"
   );
-
-  const rateCommentRepository = new SqlRateCommentRepository(
+  const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "location_rate_comments",
+    "location_comments",
     rateCommentModel,
-    "location_rate",
+    "location_rates",
+    "id",
+    "author",
     "replyCount",
     "author",
     "id"
   );
-  return new RateManager(
+  // select id, imageurl as url from users;
+  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  return new RateService(
     builder.search,
-    repository,
+    rateRepository,
     infoRepository,
     rateCommentRepository,
-    rateReactionRepository
+    rateReactionRepository,
+    queryUrl
   );
 }
 
@@ -168,46 +165,62 @@ export function useLocationRateController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): RateController {
-  return new RateController(log, useLocationRateService(db, mapper));
+): RateController<Rate, RateFilter, Comment> {
+  const rateValidator = new RateValidator(rateModel, check, 5);
+  const commentValidator = new CommentValidator(rateCommentModel, check);
+  return new RateController(
+    log,
+    useLocationRateService(db, mapper),
+    rateValidator,
+    commentValidator,
+    ["time"],
+    ["rate", "usefulCount", "replyCount", "count", "score"],
+    generate,
+    "commentId",
+    "userId",
+    "author",
+    "id"
+  );
 }
 
 export function useLocationRateCommentService(
   db: DB,
   mapper?: TemplateMap
-): RateCommentService {
-  const query = useQuery(
-    "location_ratecomment",
-    mapper,
-    rateCommentModel,
-    true
-  );
-  const builder = new SearchBuilder<RateComment, RateCommentFilter>(
+): CommentQuery {
+  const query = useQuery("location_comments", mapper, rateCommentModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    "location_rate_comments",
+    "location_comments",
     rateCommentModel,
     db.driver,
     query
   );
-  const rateCommentRepository = new SqlRateCommentRepository(
+  const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "location_rate_comments",
+    "location_comments",
     rateCommentModel,
-    "location_rate",
+    "location_rates",
+    "id",
+    "author",
     "replyCount",
     "author",
+    "time",
     "id"
   );
-  return new RateCommentManager(builder.search, rateCommentRepository);
+  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 
 export function useLocationRateCommentController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): RateCommentController {
+): RateCommentController<Comment> {
   return new RateCommentController(
     log,
     useLocationRateCommentService(db, mapper)
   );
+}
+export function generate(): string {
+  return shortid.generate();
 }

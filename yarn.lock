@@ -4100,10 +4100,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.5":
-  "integrity" "sha512-fupbPBr6ZUWxpZG4tUcmHU01s1UwBEsElXPCq1vVwQmx2Oboi5DYs4HWI8pHiUug5V5JfGwyc4hmS2Bsq0anKQ=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.5.tgz"
-  "version" "0.1.5"
+"pg-extension@^0.1.6":
+  "integrity" "sha512-Q535siPxCu/7N79+6HDryMJhFRwl9OwIerhL+Hb1g8qnfeboDtIOW6VwqFYN67R3+CyEIP+GyavOYTWWdm2xhg=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.6.tgz"
+  "version" "0.1.6"
   dependencies:
     "pg" "^8.6.0"
 
@@ -4355,11 +4355,20 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
   "version" "1.2.1"
 
-"rate-query@^0.0.3":
-  "version" "0.0.3"
+"rate-core@^0.0.5":
+  "integrity" "sha512-F/2hLmlEsdoJLmGiIwJIcrhLiiU8H2P1K/tTrbTOBay2dcedsDAsJSfhxJ7w56Z0svtpYOCOXfH/DxxAI/URtA=="
+  "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.0.5.tgz"
+  "version" "0.0.5"
 
-"rate5@^0.0.1":
-  "version" "0.0.1"
+"rate-express@^0.0.2":
+  "integrity" "sha512-zSN6crwRMAgRJu7LuEk7vEJ21BeFo8KiKkW+gLQb6D4bIoKegcB7fJ/i6wmeel4yphBmOajdy9LQSqnOl0fglw=="
+  "resolved" "https://registry.npmjs.org/rate-express/-/rate-express-0.0.2.tgz"
+  "version" "0.0.2"
+
+"rate-query@^0.0.6":
+  "integrity" "sha512-FLGkkwE/jXaiWY8eRZDGI7VRTtN3LO3cHS/0aZvGdsHfPiv8C/rx9qd/BiLvMnYkHClrrUNrLz4rU/LAogQm/A=="
+  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.6.tgz"
+  "version" "0.0.6"
 
 "raw-body@2.5.1":
   "integrity" "sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig=="
