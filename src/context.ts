@@ -127,6 +127,8 @@ export interface ApplicationContext {
   skill: QueryController<string[]>;
   interest: QueryController<string[]>;
   lookingFor: QueryController<string[]>;
+  educationQuery: QueryController<string[]>;
+  companyQuery: QueryController<string[]>;
   appreciation: AppreciationController;
   location: LocationController;
   locationRate: LocationRateController;
@@ -269,6 +271,29 @@ export function useContext(
     brandService.load,
     "keyword"
   );
+  const companyService = new StringService(
+    "user_companies",
+    "company",
+    queryDB.query,
+    queryDB.exec
+  );
+  const companyQuery = new QueryController<string[]>(
+    logger.error,
+    companyService.load,
+    "keyword"
+  );
+  const educationService = new StringService(
+    "educations",
+    "school",
+    queryDB.query,
+    queryDB.exec
+  );
+  const educationQuery = new QueryController<string[]>(
+    logger.error,
+    educationService.load,
+    "keyword"
+  );
+
   const skillService = new StringService(
     "skills",
     "skill",
@@ -332,6 +357,8 @@ export function useContext(
     skillService.save,
     interestService.save,
     lookingForService.save,
+    educationService.save,
+    companyService.save,
     sizesCover,
     sizesImage,
     undefined,
@@ -393,6 +420,8 @@ export function useContext(
     skill,
     interest,
     lookingFor,
+    educationQuery,
+    companyQuery,
     appreciation,
     location,
     locationRate,

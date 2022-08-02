@@ -16,6 +16,8 @@ export class MyProfileController extends UploadController {
     public saveSkills?: Save,
     public saveInterests?: Save,
     public saveLookingFor?: Save,
+    public saveEducation?: Save,
+    public saveCompany?: Save,
   ) {
     super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
     this.getMyProfile = this.getMyProfile.bind(this);
@@ -68,6 +70,14 @@ export class MyProfileController extends UploadController {
       }
       if (this.saveLookingFor && user.lookingFor) {
         this.saveLookingFor(user.lookingFor);
+      }
+      if (this.saveEducation && user.educations) {
+        const listSchool= user.educations.map(e=>e.school)
+        this.saveEducation(listSchool); 
+      }
+      if (this.saveCompany && user.companies) {
+        const listCompanyName= user.companies.map(c=>c.name)
+        this.saveCompany(listCompanyName);
       }
       this.service
         .saveMyProfile(user)
