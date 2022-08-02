@@ -57,7 +57,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/interests', ctx.interest.query);
   app.get('/looking-for', ctx.lookingFor.query);
   app.get('/brands/', ctx.brand.query);
-  app.get('/companies', ctx.companyQuery.query);
+  app.get('/user-companies', ctx.companyQuery.query);
   app.get('/educations', ctx.educationQuery.query);
 
   app.post('/users/search', ctx.user.search);
