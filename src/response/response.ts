@@ -1,4 +1,10 @@
-import { Attributes, Filter, Repository, Service, ViewRepository } from './core';
+import {
+  Attributes,
+  Filter,
+  Repository,
+  Service,
+  ViewRepository,
+} from "./core";
 
 export interface ResponseId {
   id: string;
@@ -26,58 +32,86 @@ export interface ResponseFilter extends Filter {
 export interface ResponseRepository extends Repository<Response, ResponseId> {
   save(obj: Response, ctx?: any): Promise<number>;
   getResponse(id: string, author: string): Promise<Response | null>;
+  // search(search: ResponseFilter): Promise<Response | null>;
 }
 
-export interface ResponseService extends Service<Response, ResponseId, ResponseFilter> {
+export interface ResponseService
+  extends Service<Response, ResponseId, ResponseFilter> {
+  response(response: Response): Promise<boolean>;
   getResponse(id: string, author: string): Promise<Response | null>;
   updateResponse(response: Response): Promise<number>;
-  response(response: Response): Promise<boolean>;
-  setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  setUseful(
+    id: string,
+    author: string,
+    userId: string,
+    ctx?: any
+  ): Promise<number>;
+  removeUseful(
+    id: string,
+    author: string,
+    userId: string,
+    ctx?: any
+  ): Promise<number>;
   comment(comment: ResponseComment): Promise<number>;
+  getComments(id: string, author: string, limit?: number): Promise<any>;
   removeComment(id: string, author: string, ctx?: any): Promise<number>;
   updateComment(comment: ResponseComment): Promise<number>;
 }
 
 export interface ResponseReactionRepository {
-  remove(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  save(id: string, author: string, userId: string, type: number): Promise<number>;
+  remove(
+    id: string,
+    author: string,
+    userId: string,
+    ctx?: any
+  ): Promise<number>;
+  save(
+    id: string,
+    author: string,
+    userId: string,
+    type: number
+  ): Promise<number>;
 }
 
-export interface ResponseCommentRepository extends Repository<ResponseComment, string> {
+export interface ResponseCommentRepository
+  extends Repository<ResponseComment, string> {
   remove(commentId: string, id: string, author: string): Promise<number>;
+  getComments(
+    id: string,
+    author: string,
+    limit?: number
+  ): Promise<ResponseComment[] | null>;
 }
 
-export interface ResponseCommentService extends Service<ResponseComment,string,ResponseCommentFilter> {
-}
+export interface ResponseCommentService
+  extends Service<ResponseComment, string, ResponseCommentFilter> {}
 
 export const responseModel: Attributes = {
   id: {
     key: true,
     required: true,
-    match: 'equal'
+    match: "equal",
   },
   author: {
     key: true,
     required: true,
-    match: 'equal'
+    match: "equal",
   },
-  description: {
-  },
+  description: {},
   time: {
-    type: 'datetime',
+    type: "datetime",
   },
   review: {
     q: true,
   },
   usefulCount: {
-    type: 'integer',
-    min: 0
+    type: "integer",
+    min: 0,
   },
   replyCount: {
-    type: 'integer',
-    min: 0
-  }
+    type: "integer",
+    min: 0,
+  },
 };
 
 export const infoModel: Attributes = {
@@ -85,7 +119,7 @@ export const infoModel: Attributes = {
     key: true,
   },
   viewCount: {
-    type: 'number'
+    type: "number",
   },
 };
 
@@ -123,39 +157,39 @@ export interface ResponseCommentFilter extends Filter {
 }
 export const commentModel: Attributes = {
   comment: {
-    length: 500
+    length: 500,
   },
   time: {
-    type: 'datetime'
-  }
+    type: "datetime",
+  },
 };
 export const responseCommentModel: Attributes = {
   commentId: {
-    key: true
+    key: true,
   },
   id: {
     required: true,
-    match: 'equal'
+    match: "equal",
   },
   author: {
     required: true,
-    match: 'equal'
+    match: "equal",
   },
   userId: {
     required: true,
-    match: 'equal'
+    match: "equal",
   },
   comment: {
-    length: 500
+    length: 500,
   },
   time: {
-    type: 'datetime'
+    type: "datetime",
   },
   updatedAt: {
-    type: 'datetime'
+    type: "datetime",
   },
   histories: {
-    type: 'array',
-    typeof: commentModel
-  }
+    type: "array",
+    typeof: commentModel,
+  },
 };

@@ -107,5 +107,6 @@ export interface ShortComment {
   time: Date;
 }
 export interface ResponseCommentRepository extends Repository<ResponseComment, string> {
+  getComments(id: string, author: string, limit?:number): Promise<ResponseComment[] | null>;
   remove(commentId: string, id: string, author: string): Promise<number>;
 }

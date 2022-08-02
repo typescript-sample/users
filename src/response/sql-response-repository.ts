@@ -132,10 +132,29 @@ export class SqlResponseCommentRepository
     this.author = author && author.length > 0 ? author : "author";
     this.insert = this.insert.bind(this);
     this.remove = this.remove.bind(this);
+    this.getComments = this.getComments.bind(this);
   }
   protected col: string;
   protected id: string;
   protected author: string;
+
+  getComments(id: string, author: string, limit?: number): Promise<ResponseComment[] | null> {
+    let sql = `select * from item_comment where id = ${this.param(1)} and author = ${this.param(2)}`;
+    if (limit && limit > 0) {
+      sql = sql + ` order by time desc limit ${limit}`;
+    } else {
+      sql = sql + ' order by time'
+    }
+    return this.query<ResponseComment>(sql, [id, author], this.map).then(comments => {
+    console.log('comments', comments);
+      if (limit && limit > 0) {
+        const newComments: ResponseComment[] =  comments.slice(0, limit);
+        return newComments;
+      } else {
+        return comments;
+      }
+    });
+  }
   insert(obj: ResponseComment): Promise<number> {
     const stmt = buildToInsert(
       obj,

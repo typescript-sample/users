@@ -443,16 +443,17 @@ create table companies
     id character varying(40) not null primary key,
     name character varying(120),
     description character varying(1000),
+    address character varying(255) not null,
     size integer,
     status char(1) not null,
     establishedAt timestamp with time zone,
     categories character varying[]
 );
-insert into companies (id, name, description, size, status, establishedAt, categories) values ('id1','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name, description, size,status, establishedAt, categories) values ('id2','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name, description, size,status, establishedAt, categories) values ('id3','Softwave company', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name, description, size,status, establishedAt, categories) values ('id4','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name, description, size,status, establishedAt, categories) values ('id5','Softwave company', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name,address, description, size, status, establishedAt, categories) values ('id1','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id2','Softwave company', ' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh','This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id3','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id4','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id5','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
 
 create table company_categories(
   categoryid character varying(40) primary key,
@@ -469,3 +470,80 @@ insert into company_categories (categoryid,categoryname) VALUES ('Financial busi
 insert into company_categories (categoryid,categoryname) VALUES ('Industrial production','Industrial production');
 insert into company_categories (categoryid,categoryname) VALUES ('Real estate business','Real estate business');
 insert into company_categories (categoryid,categoryname) VALUES ('Business services','Business services');
+
+CREATE TABLE review_company(
+  id varchar(255),
+  author varchar(255),
+  time timestamp,
+  review text,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  histories jsonb[],
+  primary key(id, author)
+)
+insert into review_company (id,author,time,review,usefulcount,replycount,histories) VALUES ('id1','ra0mKfxLs','2022-07-27 10:31:04.405','test', 0,0,'{}');
+
+
+
+create table if not exists reply_company (
+  id varchar(40) not null,
+  author varchar(40),
+  review text,
+  createdat date,
+  updatedat date,
+  userid varchar(40),
+  primary key (id)
+);
+
+create table if not exists useful_company (
+  id varchar(40) not null,
+  author varchar(40),
+  reviewTime date,
+  userid varchar(40),
+  primary key (id)
+);
+
+
+CREATE TABLE rates_company(
+  id varchar(255),
+  author varchar(255),
+  rate integer,
+  time timestamp,
+  review text,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  histories jsonb[],
+  primary key(id, author)
+)
+CREATE TABLE info_company(
+  id varchar(255),
+  rate numeric DEFAULT 0,
+  rate1 integer DEFAULT 0,
+  rate2 integer DEFAULT 0,
+  rate3 integer DEFAULT 0,
+  rate4 integer DEFAULT 0,
+  rate5 integer DEFAULT 0,
+  viewCount integer DEFAULT 0,
+  count integer DEFAULT 0,
+  score  numeric DEFAULT 0,
+  primary key(id)
+)
+CREATE TABLE ratereaction_company(
+	id varchar(255),
+	author varchar(255),
+	userid varchar(255),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
+CREATE TABLE rate_comments_company(
+  commentid varchar(255),
+  id varchar(255),
+  author varchar(255),
+  userid varchar(255),
+  comment text,
+  time timestamp,
+  updatedat timestamp,
+  histories jsonb[],
+  primary key(commentid)
+);

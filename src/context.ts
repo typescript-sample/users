@@ -67,11 +67,9 @@ import { CommentController, useCommentController } from "./comment";
 import { ItemController, useItemController } from "./items";
 import {
   ResponseController,
-  ResponseCommentController,
   useResponseController,
-  useResponseCommentController,
 } from "./response";
-import { CompanyController, useCompanyController } from "./company";
+import { CompanyController, useCompanyController,useCinemaRateController,useRateCommentController } from "./company";
 import {
   CompanyCategoryController,
   useCompanyCategoryController,
@@ -97,6 +95,9 @@ import {
   LocationRateController,
   useLocationRateController,
 } from "./location";
+
+import { RateCommentController } from './rate-company/comment-controller';
+import { RateController } from './rate-company/rate-controller';
 
 resources.createValidator = createValidator;
 
@@ -139,11 +140,12 @@ export interface ApplicationContext {
   myitemsUpload: MyItemUploadController;
   items: ItemController;
   comment: CommentController;
+  comments: RateCommentController;
   category: CategoryController;
   company: CompanyController;
   companyCategories: CompanyCategoryController;
   response: ResponseController;
-  itemComment: ResponseCommentController;
+  rate: RateController;
 }
 
 export function useContext(
@@ -370,11 +372,6 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
   const items = useItemController(logger.error, queryDB);
   const response = useResponseController(logger.error, queryDB, mapper);
-  const itemComment = useResponseCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
   const myitems = useMyItemController(
     logger.error,
     queryDB,
@@ -407,6 +404,9 @@ export function useContext(
   const category = useCategoryController(logger.error, queryDB);
   const company = useCompanyController(logger.error, queryDB);
   const companyCategories = useCompanyCategoryController(logger.error, queryDB);
+  const rate = useCinemaRateController(logger.error, mainDB, mapper);
+  const comments = useRateCommentController(logger.error, mainDB, mapper);
+  
   return {
     health,
     log,
@@ -432,11 +432,12 @@ export function useContext(
     myitemsUpload,
     items,
     response,
-    itemComment,
     comment,
     category,
     company,
     companyCategories,
+    rate,
+    comments
   };
 }
 
