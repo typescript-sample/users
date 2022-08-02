@@ -56,9 +56,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/skills', ctx.skill.query);
   app.get('/interests', ctx.interest.query);
   app.get('/looking-for', ctx.lookingFor.query);
-  app.get('/brands/', ctx.brand.query);
   app.get('/companies', ctx.companyQuery.query);
   app.get('/educations', ctx.educationQuery.query);
+  app.get('/brands/', ctx.brand.query);
 
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
@@ -105,6 +105,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/my-articles/:id', ctx.myarticles.delete);
   app.delete('/my-articles/userId', ctx.myarticles.delete);
 
+
   app.get('/cinema/search', ctx.cinema.search);
   app.post('/cinema/search', ctx.cinema.search);
   app.get('/cinema', ctx.cinema.search);
@@ -127,6 +128,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/cinema/rates/comment/:commentId/:author', ctx.cinemaRate.removeComment);
   app.put('/cinema/rates/comment/:commentId/:id/:author/:userId', ctx.cinemaRate.updateComment);
   
+
   app.get('/films/categories/search', ctx.filmCategory.search);
   app.post('/films/categories/', ctx.filmCategory.create);
   app.get('/films/categories/:id', ctx.filmCategory.load);
@@ -153,6 +155,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/films/rates/comment/:id/:author/:userId', ctx.filmRate.comment);
   app.put('/films/rates/comment/:commentId/:id/:author/:userId', ctx.filmRate.updateComment);
   app.delete('/films/rates/comment/:commentId/:author', ctx.filmRate.removeComment);
+
 
   app.get('/items/categories/search', ctx.itemCategory.search);
   app.get('/items/categories/:id', ctx.itemCategory.load);
@@ -228,6 +231,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/locations/rates/comment/:commentId/:author', ctx.locationRate.removeComment);
   app.put('/locations/rates/comment/:commentId/:id/:author/:userId', ctx.locationRate.updateComment);
 
+
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);
   app.get('/companies/:id', ctx.company.load);
@@ -242,7 +246,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/companies/categories/:id', ctx.companyCategory.update);
   app.patch('/companies/categories/:id', ctx.companyCategory.patch);
   app.delete('/companies/categories/:id', ctx.companyCategory.delete);
-
 
   app.post('/companies/rates', ctx.companyRate.rate);
   app.get('/companies/rates/search', ctx.companyRate.search);
