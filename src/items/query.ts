@@ -6,7 +6,8 @@ export function buildQuery(s: ItemFilter): Statement {
   const where = [];
   const params = [];
   let i = 1;
-
+  console.log(s.categories)
+  console.log(s.sortItem)
   if (s.id && s.id.length > 0) {
     where.push(`id = $${i++}`);
     params.push(s.id);
@@ -56,7 +57,12 @@ export function buildQuery(s: ItemFilter): Statement {
   if (where.length > 0) {
     query = query + ` where ` + where.join(' and ');
   }
-  console.log(query, params);
+
+  // console.log(s.sort);
+  if (s.sortItem) {
+    query = query + ` order by ${s.sortItem}`;
+  }
+  // console.log(query, params);
 
   return { query, params };
 }

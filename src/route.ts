@@ -258,4 +258,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/companies/rates/comment/:id/:author/:userId', ctx.companyRate.comment);
   app.delete('/companies/rates/comment/:commentId/:author', ctx.companyRate.removeComment);
   app.put('/companies/rates/comment/:commentId/:id/:author/:userId', ctx.companyRate.updateComment);
+
+
+  app.get('/item/save-item/:id/:itemId', ctx.items.savedItems);
+  app.get('/item/save-item/:id/', ctx.items.getSavedItems);
 }
