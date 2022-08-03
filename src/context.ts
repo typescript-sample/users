@@ -114,6 +114,11 @@ import {
 } from "./my-profile";
 import { UserController, useUserController } from "./user";
 
+import {
+  JobController,
+  useJobController,
+} from "./jobs";
+
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -173,6 +178,7 @@ export interface ApplicationContext {
   locationRate: RateController<Rate, RateFilter, Comment>;
   locationComment: RateCommentController<Comment>;
   response: ResponseController;
+  jobs:JobController
 }
 
 export function useContext(
@@ -515,6 +521,7 @@ export function useContext(
   );
   const response = useResponseController(logger.error, queryDB, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
+  const jobs = useJobController(logger.error, mainDB, mapper);
 
   return {
     health,
@@ -559,6 +566,7 @@ export function useContext(
     myitems,
     myitemsUpload,
     response,
+    jobs
   };
 }
 

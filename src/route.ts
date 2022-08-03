@@ -262,4 +262,12 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/item/save-item/:id/:itemId', ctx.items.savedItems);
   app.get('/item/save-item/:id/', ctx.items.getSavedItems);
+
+  app.get('/jobs/search', ctx.jobs.search);
+  app.post('/jobs/search', ctx.jobs.search);
+  app.get('/jobs/:id', ctx.jobs.load);
+  app.post('/jobs/', ctx.jobs.create);
+  app.put('/jobs/:id', ctx.jobs.update);
+  app.patch('/jobs/:id', ctx.jobs.patch);
+  app.delete('/jobs/:id', ctx.jobs.delete);
 }
