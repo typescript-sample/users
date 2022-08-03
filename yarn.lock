@@ -5912,10 +5912,10 @@
   "resolved" "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz"
   "version" "4.0.2"
 
-"xvalidators@^0.0.4":
-  "integrity" "sha512-yfwHB8JMbJY3w54fOeq/v18SmsspaJeLUQERxpMd+87gh/PSv3ak68KSiu1iydYBjZd/Idx6ChPuEKjFPfPwxQ=="
-  "resolved" "https://registry.npmjs.org/xvalidators/-/xvalidators-0.0.4.tgz"
-  "version" "0.0.4"
+"xvalidators@^0.0.5":
+  "integrity" "sha512-pdiPXMfuA8NzqU3qeWgJIWyDaeUaRHg3y0if7j40eI5Nwb3LmUs3vS7OQslsOcPDa23bOnotzJ92WCDTjBhOZg=="
+  "resolved" "https://registry.npmjs.org/xvalidators/-/xvalidators-0.0.5.tgz"
+  "version" "0.0.5"
 
 "y18n@^4.0.0":
   "integrity" "sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ=="

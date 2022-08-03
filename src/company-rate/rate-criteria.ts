@@ -70,28 +70,10 @@ export const rateFullInfoModel: Attributes = {
         type: 'number',
     },
     count: {
-        type: 'number',
+        type: 'integer',
     },
     score: {
         type: 'number',
-    }
-}
-
-export const criteriaModel: Attributes = {
-    criteria1: {
-        type: 'number'
-    },
-    criteria2: {
-        type: 'number'
-    },
-    criteria3: {
-        type: 'number'
-    },
-    criteria4: {
-        type: 'number'
-    },
-    criteria5: {
-        type: 'number'
     }
 }
 
@@ -108,8 +90,7 @@ export const rateCriteriaModel: Attributes = {
         type: 'number'
     },
     rates: {
-        type: 'array',
-        typeof: criteriaModel
+        type: 'integers'
     },
     time: {
         type: 'datetime'

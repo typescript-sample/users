@@ -53,7 +53,7 @@
     "signup-express": "^0.0.1",
     "signup-service": "^0.0.7",
     "upload-express": "^0.1.2",
-    "xvalidators": "^0.0.4"
+    "xvalidators": "^0.0.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
