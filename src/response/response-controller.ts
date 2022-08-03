@@ -3,7 +3,7 @@ import { getStatusCode, handleError, Log } from "express-ext";
 import { Validator } from "onecore";
 import { Response, ResponseFilter, ResponseService } from "./response";
 import { Comment } from "rate-core";
-import { ReactionController } from "rate-express";
+import { ReactionController } from "reaction-express";
 export class ResponseController extends ReactionController<
   Response,
   ResponseFilter,

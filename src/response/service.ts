@@ -13,23 +13,22 @@ import {
   InfoRepository,
   ReactionRepository,
   CommentRepository,
-} from "rate-query";
+} from "reaction-query";
 
 import { ShortComment } from "rate-core";
+import { SearchResult } from "onecore";
 export * from "./response";
 
 export class ResponseManager
-  extends Manager<Response, ResponseId, ResponseFilter>
   implements ResponseService
 {
   constructor(
-    search: Search<Response, ResponseFilter>,
+    protected find: Search<Response, ResponseFilter>,
     public repository: ResponseRepository,
     private infoRepository: InfoRepository<Info>,
     private responseCommentRepository: CommentRepository<Comment>,
     private responseReactionRepository: ReactionRepository
   ) {
-    super(search, repository);
     this.response = this.response.bind(this);
     this.updateResponse = this.updateResponse.bind(this);
     this.comment = this.comment.bind(this);
@@ -37,7 +36,12 @@ export class ResponseManager
     this.removeComment = this.removeComment.bind(this);
     this.updateComment = this.updateComment.bind(this);
   }
-
+  search(s: ResponseFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<Response>> {
+    return this.find(s, limit, offset, fields);
+  }
+  load(id: string, author: string): Promise<Response|null> {
+    return this.repository.load(id, author);
+  }
   async response(response: Response): Promise<boolean> {
     let info = await this.infoRepository.load(response.id);
     if (!info) {
@@ -53,11 +57,11 @@ export class ResponseManager
     return true;
   }
   getResponse(id: string, author: string): Promise<Response | null> {
-    return this.repository.getResponse(id, author);
+    return this.repository.load(id, author);
   }
   updateResponse(response: Response): Promise<number> {
     return this.repository
-      .getResponse(response.id, response.author)
+      .load(response.id, response.author)
       .then((exist) => {
         if (exist) {
           response.time
@@ -77,7 +81,7 @@ export class ResponseManager
   }
   comment(comment: Comment): Promise<number> {
     return this.repository
-      .getResponse(comment.id, comment.author)
+      .load(comment.id, comment.author)
       .then((checkResponse) => {
         if (!checkResponse) {
           return 0;

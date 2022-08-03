@@ -21,8 +21,8 @@ import {
   SqlInfoRepository,
   SqlCommentRepository,
   SqlReactionRepository,
-} from "rate-query";
-import { Comment, rateCommentModel, CommentValidator } from "rate-core";
+} from "reaction-query";
+import { Comment, CommentValidator } from "rate-core";
 
 export * from "./response-controller";
 export * from "./response";

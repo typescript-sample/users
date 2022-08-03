@@ -56,7 +56,7 @@ import {
   Validator,
 } from "signup-service";
 import { createValidator } from "xvalidators";
-import { RateController, RateCommentController } from "rate-express";
+import { RateController, RateCommentController } from "reaction-express";
 import { Comment, Rate, RateFilter } from "rate-core";
 
 import {

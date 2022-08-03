@@ -4326,10 +4326,10 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"query-core@^0.1.22":
-  "integrity" "sha512-VfWMzH4/EmKqOgcYsS+0GFFmgx0Xlpz1AizNSi0s4Nx5w4ERykG5ziZA1Of+jJ0cURAMhuMSN6T7T0jsI/lGaw=="
-  "resolved" "https://registry.npmjs.org/query-core/-/query-core-0.1.22.tgz"
-  "version" "0.1.22"
+"query-core@^0.1.23":
+  "integrity" "sha512-7iSHA1bwB0PSG2uNyECtIqVfWgM5Pu8fB1Cu4W+sdzZpuI83cgE/3cH5zCFDoJaiCJMi8EQXbgwkoDDOKlzkrA=="
+  "resolved" "https://registry.npmjs.org/query-core/-/query-core-0.1.23.tgz"
+  "version" "0.1.23"
 
 "query-mappers@^0.0.3":
   "integrity" "sha512-PMX6NNj3xLqUPplcwTMKjJBOA9a42DxZJ9BOhWJr0v6JdqeaZlv9VzkWghAgkZPygbpthRErn2HyRDzGuftT9g=="
@@ -4355,20 +4355,15 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
   "version" "1.2.1"
 
-"rate-core@^0.0.5":
-  "integrity" "sha512-F/2hLmlEsdoJLmGiIwJIcrhLiiU8H2P1K/tTrbTOBay2dcedsDAsJSfhxJ7w56Z0svtpYOCOXfH/DxxAI/URtA=="
-  "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.0.5.tgz"
-  "version" "0.0.5"
+"rate-core@^0.0.6":
+  "integrity" "sha512-rQ2LbPGrGI6EZTlUjIofMEiXJiGP3cBOyKBwrEjBDDy9CROanSym0pQ/8l8FFNmkS3lSDy9mOZLXMoIYlYIb8g=="
+  "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.0.6.tgz"
+  "version" "0.0.6"
 
-"rate-express@^0.0.4":
-  "integrity" "sha512-G9kf6SbwErSo9vHxCXCpbVnesFEWiDyZ4ev1S3854xmKi0OMei9AJmEspoOWO5gaPKn5js1V5fL1Ck4BFtUPvQ=="
-  "resolved" "https://registry.npmjs.org/rate-express/-/rate-express-0.0.4.tgz"
-  "version" "0.0.4"
-
-"rate-query@^0.0.7":
-  "integrity" "sha512-UjSiqtr4mx/7owSA8Vb4sUE+N11eY5rlA1TOPKRZZJ6DziDQeOyj4osgAIVJtovLDtQOa5MWITJBmPzLtqkIZw=="
-  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.7.tgz"
-  "version" "0.0.7"
+"rate-query@^0.0.8":
+  "integrity" "sha512-7XTxtEO1cfDx4Sr6sV8spERj8rgB0Bs+RmVC7pcWcawoMFEAVEcq10ZiWk8N1IeoYvcW/0tsqwt1I27rHN1JYA=="
+  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.8.tgz"
+  "version" "0.0.8"
 
 "raw-body@2.5.1":
   "integrity" "sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig=="
@@ -4389,6 +4384,16 @@
     "ini" "~1.3.0"
     "minimist" "^1.2.0"
     "strip-json-comments" "~2.0.1"
+
+"reaction-express@^0.1.0":
+  "integrity" "sha512-C10qmOxZU8wcuuGKojqEJu4usKf3O8wPR6ozlbABQOAoRHvzfoN4yXJLb3iop96+7b/x5fTZF7fNYB23OjVsZg=="
+  "resolved" "https://registry.npmjs.org/reaction-express/-/reaction-express-0.1.0.tgz"
+  "version" "0.1.0"
+
+"reaction-query@^0.0.1":
+  "integrity" "sha512-klkTEJYMbACgGuhZpb5h3rmM4wkphvxapQUUy8ms9WCkOz8kV95omsDf4jz741Vjkc5RJKZXamoh3Y3XiXe6eg=="
+  "resolved" "https://registry.npmjs.org/reaction-query/-/reaction-query-0.0.1.tgz"
+  "version" "0.0.1"
 
 "readable-stream@^2.0.0", "readable-stream@^2.0.1", "readable-stream@^2.0.2", "readable-stream@^2.1.5", "readable-stream@^2.2.2", "readable-stream@^2.3.6", "readable-stream@~2.3.6", "readable-stream@1 || 2":
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="

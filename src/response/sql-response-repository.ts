@@ -1,6 +1,7 @@
 import {
   Attributes,
   DB,
+  GenericRepository,
   Repository,
   Statement,
 } from "query-core";
@@ -11,7 +12,7 @@ import {
 } from "./core-query";
 
 export class SqlResponseRepository
-  extends Repository<Response, ResponseId>
+  extends GenericRepository<Response, string, string>
   implements ResponseRepository
 {
   constructor(
@@ -27,9 +28,9 @@ export class SqlResponseRepository
       i?: number
     ) => Statement | undefined
   ) {
-    super(db, table, attributes);
+    super(db, table, attributes, 'id', 'author');
     this.save = this.save.bind(this);
-    this.getResponse = this.getResponse.bind(this);
+    this.load = this.load.bind(this);
   }
   
   save(obj: Response, ctx?: any): Promise<number> {
@@ -39,18 +40,5 @@ export class SqlResponseRepository
     } else {
       return Promise.resolve(0);
     }
-  }
-  getResponse(id: string, author: string, ctx?: any): Promise<Response | null> {
-    return this.query<Response>(
-      `select * from ${this.table} where id = ${this.param(
-        1
-      )} and author = ${this.param(2)}`,
-      [id, author],
-      this.map,
-      undefined,
-      ctx
-    ).then((responses) => {
-      return responses && responses.length > 0 ? responses[0] : null;
-    });
   }
 }

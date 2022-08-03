@@ -11,19 +11,21 @@ import {
   Rate,
   Comment,
   CommentFilter,
-  rateCommentModel,
   RateFilter,
   rateModel,
 } from "rate-core";
 import { CommentValidator, RateValidator } from "rate-core";
-import { RateCommentController, RateController } from "rate-express";
+import { RateCommentController, RateController } from "reaction-express";
 import {
+  SqlRateRepository,
+} from "rate-query";
+import {
+  commentModel,
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlReactionRepository,
-  SqlRateRepository,
-} from "rate-query";
+  SqlReactionRepository
+} from "reaction-query";
 import { Rater, RateRepository, RateService } from "rate-core";
 import {
   Company,
@@ -141,7 +143,7 @@ export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater {
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
     "rate_comments",
-    rateCommentModel,
+    commentModel,
     "rates",
     "id",
     "author",
@@ -167,7 +169,7 @@ export function useCompanyRateController(
   mapper?: TemplateMap
 ): RateController<Rate, RateFilter, Comment> {
   const rateValidator = new RateValidator(rateModel, check, 5);
-  const commentValidator = new CommentValidator(rateCommentModel, check);
+  const commentValidator = new CommentValidator(commentModel, check);
   return new RateController(
     log,
     useCompanyRateService(db, mapper),
@@ -187,18 +189,18 @@ export function useCompanyRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery {
-  const query = useQuery("ratecomment", mapper, rateCommentModel, true);
+  const query = useQuery("ratecomment", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
     "rate_comments",
-    rateCommentModel,
+    commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
     "rate_comments",
-    rateCommentModel,
+    commentModel,
     "rates",
     "id",
     "author",

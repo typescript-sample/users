@@ -5,19 +5,21 @@ import { buildToSave } from "pg-extension";
 import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import {
+  SqlRateRepository,
+} from "rate-query";
+import {
+  commentModel,
   InfoRepository,
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlReactionRepository,
-  SqlRateRepository,
-} from "rate-query";
+  SqlReactionRepository
+} from "reaction-query";
 import {
   Info10,
   Comment,
   Rater,
   CommentFilter,
-  rateCommentModel,
   RateCommentQuery,
   CommentQuery,
 } from "rate-core";
@@ -31,9 +33,8 @@ import {
 } from "./film";
 import { FilmController } from "./film-controller";
 import { SqlFilmRepositoy } from "./sql-film-repository";
-import { RateController } from "rate-express";
+import { RateController, RateCommentController } from "reaction-express";
 import { RateService } from "rate-core";
-import { RateCommentController } from "rate-express";
 import { CommentValidator, RateValidator } from "rate-core";
 import { check } from "xvalidators";
 
@@ -213,7 +214,7 @@ export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater {
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
     "rates_film_comments",
-    rateCommentModel,
+    commentModel,
     "rates_film",
     "id",
     "author",
@@ -237,7 +238,7 @@ export function useFilmRateController(
   mapper?: TemplateMap
 ): RateController<Rate, RateFilter, Comment> {
   const rateValidator = new RateValidator(rateModel, check, 10);
-  const commentValidator = new CommentValidator(rateCommentModel, check);
+  const commentValidator = new CommentValidator(commentModel, check);
   return new RateController(
     log,
     useFilmRateService(db, mapper),
@@ -257,18 +258,18 @@ export function useFilmRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): RateCommentQuery {
-  const query = useQuery("rates_film_comments", mapper, rateCommentModel, true);
+  const query = useQuery("rates_film_comments", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
     "rates_film_comments",
-    rateCommentModel,
+    commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
     "rates_film_comments",
-    rateCommentModel,
+    commentModel,
     "rates_film",
     "id",
     "author",

@@ -116,8 +116,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/cinema/:id', ctx.cinema.patch);
   app.delete('/cinema/:id', ctx.cinema.delete);
 
-  app.get('/cinema/rates/search/:id/:author', ctx.cinemaRate.search);
-  app.post('/cinema/rates/search/:id/:author', ctx.cinemaRate.search);
+  app.get('/cinema/rates/search', ctx.cinemaRate.search);
+  app.post('/cinema/rates/search', ctx.cinemaRate.search);
   app.get('/cinema/rates/comment/search', ctx.cinemaComment.search);
   app.post('/cinema/rates/comment/search', ctx.cinemaComment.search);
   app.post('/cinema/rates/:id/:author', ctx.cinemaRate.rate);

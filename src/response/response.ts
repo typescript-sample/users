@@ -6,8 +6,7 @@ import {
 } from "./core";
 
 import { Comment } from 'rate-core';
-import { ReactionService } from "rate-express";
-
+import { ReactionService } from "reaction-express";
 
 export interface ResponseId {
   id: string;
@@ -32,9 +31,12 @@ export interface ResponseFilter extends Filter {
   replyCount?: number;
 }
 
-export interface ResponseRepository extends Repository<Response, ResponseId> {
+export interface ResponseRepository {
+  load(id: string, author: string): Promise<Response | null>;
   save(obj: Response, ctx?: any): Promise<number>;
-  getResponse(id: string, author: string): Promise<Response | null>;
+  insert(obj: Response, ctx?: any): Promise<number>;
+  update(obj: Response, ctx?: any): Promise<number>;
+  delete(id: string, author: string, ctx?: any): Promise<number>;
 }
 
 export interface ResponseService

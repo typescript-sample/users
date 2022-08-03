@@ -69,7 +69,9 @@ export interface Repository<T, ID> extends ViewRepository<T, ID> {
   save?(obj: T, ctx?: any): Promise<number>;
   delete(id: ID, ctx?: any): Promise<number>;
 }
-export interface ResponseRepository extends Repository<Response, ResponseId> {
+export interface ResponseRepository {
+  load(id: string, author: string): Promise<Response | null>;
   save(obj: Response, ctx?: any): Promise<number>;
-  getResponse(id: string, author: string): Promise<Response | null>;
+  insert(obj: Response, ctx?: any): Promise<number>;
+  update(obj: Response, ctx?: any): Promise<number>;
 }
