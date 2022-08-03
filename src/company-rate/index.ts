@@ -3,10 +3,10 @@ import { ErrorMessage, Manager, Search } from "onecore";
 import { buildToSave } from "pg-extension";
 import { Attributes, DB, SearchBuilder, SearchResult } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import { RateCriteria, RateCriteriaFilter, RateCriteriaId, rateCriteriaModel, RateCriteriaService, RateCriteriaRepository, ShortRate, RateFullInfo } from "./rate-criteria";
+import { RateCriteria, RateCriteriaFilter, rateCriteriaModel, RateCriteriaService, RateCriteriaRepository, ShortRate, RateFullInfo } from "./rate-criteria";
 import { RateCriteriaController } from "./rate-criteria-controller";
-import { SqlRateCriteriaRepository } from "./rate-criteria-repository";
-import { CommentValidator, Info, infoModel, RateValidator } from 'rate-core';
+import { SqlRatesRepository } from "rate-query";
+import { Info, infoModel } from 'rate-core';
 import { check } from 'xvalidators';
 import shortid from 'shortid';
 import { InfoRepository, SqlInfoRepository } from "reaction-query";
@@ -85,7 +85,7 @@ export class RateCriteriaManager implements RateCriteriaService {
 export function useRateCriteriaService(db: DB, mapper?: TemplateMap): RateCriteriaService {
     const query = useQuery('company_rate', mapper, rateCriteriaModel, true);
     const builder = new SearchBuilder<RateCriteria, RateCriteriaFilter>(db.query, 'company_rate', rateCriteriaModel, db.driver, query);
-    const repository = new SqlRateCriteriaRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info', ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'], 
+    const repository = new SqlRatesRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info', ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'], 
                                             rateCriteriaModel, buildToSave, 5,'rate' ,'count', 'score', 'author', 'id','id', 'id', 'rate');
     const infoRepository = new SqlInfoRepository<Info>(db, 'company_rate_full_info', infoModel, buildToSave);
     return new RateCriteriaManager(builder.search, repository, infoRepository);

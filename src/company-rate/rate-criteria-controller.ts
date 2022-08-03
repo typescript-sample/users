@@ -16,7 +16,7 @@ export interface Validator<T> {
 export class RateCriteriaController<R, F> {
     constructor(protected log: Log, protected rateCriteriaService: RateCriteriaService, public validator: Validator<R>, dates: string[], numbers: string[], public generate: () => string, commentId?: string, userId?: string, author?: string, id?: string) {
         this.search = this.search.bind(this);
-        this.getRate = this.getRate.bind(this);
+        this.load = this.load.bind(this);
         this.rate = this.rate.bind(this);
         this.dates = dates ? dates : ['time'];
         this.numbers = numbers ? numbers : ['rate', 'usefulCount', 'replyCount', 'count', 'score'];
@@ -46,7 +46,7 @@ export class RateCriteriaController<R, F> {
             .catch(err => handleError(err, res, this.log));
     }
 
-    getRate(req: Request, res: Response) {
+    load(req: Request, res: Response) {
         const id = req.params[this.id];
         const author = req.params[this.author];
         this.rateCriteriaService.load(id, author)
