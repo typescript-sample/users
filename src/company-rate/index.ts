@@ -1,15 +1,15 @@
 import { Log } from "express-ext";
-import { ErrorMessage, Manager, Search } from "onecore";
+import { ErrorMessage, Search } from "onecore";
 import { buildToSave } from "pg-extension";
 import { Attributes, DB, SearchBuilder, SearchResult } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import { RateCriteria, RateCriteriaFilter, rateCriteriaModel, RateCriteriaService, RateCriteriaRepository, ShortRate, RateFullInfo } from "./rate-criteria";
-import { RateCriteriaController } from "./rate-criteria-controller";
+import { CommentValidator, Info, infoModel, Comment, Rate, RateReactionRepository, RateCommentRepository, ShortComment } from 'rate-core';
 import { SqlRatesRepository } from "rate-query";
-import { Info, infoModel } from 'rate-core';
-import { check } from 'xvalidators';
+import { RateController, RateService } from "reaction-express";
+import { commentModel, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from "reaction-query";
 import shortid from 'shortid';
-import { InfoRepository, SqlInfoRepository } from "reaction-query";
+import { check } from 'xvalidators';
+import { RateCriteria, RateCriteriaFilter, rateCriteriaModel, RateCriteriaRepository, RateCriteriaService, RateFullInfo, ShortRate } from "./rate-criteria";
 
 export interface URL {
     id: string;
@@ -20,9 +20,20 @@ export class RateCriteriaManager implements RateCriteriaService {
         protected find: Search<RateCriteria, RateCriteriaFilter>,
         public repository: RateCriteriaRepository<RateCriteria>,
         public infoRepository: InfoRepository<RateFullInfo>,
+        private commentRepository: RateCommentRepository,
+        private rateReactionRepository: RateReactionRepository,
         private queryURL?: (ids: string[]) => Promise<URL[]>) {
         this.search = this.search.bind(this);
         this.load = this.load.bind(this);
+        this.rate = this.rate.bind(this);
+        this.getRate = this.getRate.bind(this);
+        this.setUseful = this.setUseful.bind(this);
+        this.removeUseful = this.removeUseful.bind(this);
+        this.comment = this.comment.bind(this);
+        this.removeComment = this.removeComment.bind(this);
+        this.updateComment = this.updateComment.bind(this);
+        this.getComments = this.getComments.bind(this);
+        this.getComment = this.getComment.bind(this);
     }
 
     search(s: RateCriteria, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<RateCriteria>> {
@@ -58,9 +69,9 @@ export class RateCriteriaManager implements RateCriteriaService {
     async rate(rate: RateCriteria): Promise<number> {
         const info = await this.infoRepository.load(rate.id);
         const newRate = { ...rate, time: new Date() };
-        
+
         if (!info) {
-            const r0 = await this.repository.insert(newRate, true);         
+            const r0 = await this.repository.insert(newRate, true);
             return r0;
         }
         const exist = await this.repository.load(rate.id, rate.author);
@@ -68,7 +79,7 @@ export class RateCriteriaManager implements RateCriteriaService {
             const r1 = await this.repository.insert(newRate);
             return r1;
         }
-    
+
         const sr: ShortRate = { review: exist.review, rates: exist.rates, time: exist.time };
         if (exist.histories && exist.histories.length > 0) {
             const history = exist.histories;
@@ -80,21 +91,87 @@ export class RateCriteriaManager implements RateCriteriaService {
         const res = await this.repository.update(newRate, exist.rate);
         return res
     }
+    getRate(id: string, author: string): Promise<RateCriteria | null> {
+        return this.repository.load(id, author);
+    }
+    setUseful(id: string, author: string, userId: string): Promise<number> {
+        return this.rateReactionRepository.save(id, author, userId, 1);
+    }
+    removeUseful(id: string, author: string, userId: string): Promise<number> {
+        return this.rateReactionRepository.remove(id, author, userId);
+    }
+    comment(comment: Comment): Promise<number> {
+        return this.repository.load(comment.id, comment.author).then(checkRate => {
+            if (!checkRate) {
+                return -1;
+            } else {
+                comment.time ? comment.time = comment.time : comment.time = new Date();
+                return this.commentRepository.insert(comment);
+            }
+        });
+    }
+    removeComment(commentId: string, userId: string): Promise<number> {
+        return this.commentRepository.load(commentId).then(comment => {
+            if (comment) {
+                if (userId === comment.author || userId === comment.userId) {
+                    return this.commentRepository.remove(commentId, comment.id, comment.author);
+                } else {
+                    return -2;
+                }
+            } else {
+                return -1;
+            }
+        });
+    }
+    updateComment(comment: Comment): Promise<number> {
+        return this.commentRepository.load(comment.commentId).then(exist => {
+            if (!exist) {
+                return -1;
+            } else {
+                if (exist.userId !== comment.userId) {
+                    return -2;
+                }
+                exist.updatedAt = new Date();
+                const c: ShortComment = { comment: exist.comment, time: exist.time };
+                if (exist.histories && exist.histories.length > 0) {
+                    exist.histories.push(c);
+                } else {
+                    exist.histories = [c];
+                }
+                exist.comment = comment.comment;
+                const res = this.commentRepository.update(exist);
+                return res;
+            }
+        });
+    }
+    getComments(id: string, author: string, limit?: number): Promise<Comment[]> {
+        return this.commentRepository.getComments(id, author, limit);
+    }
+    getComment(id: string): Promise<Comment | null> {
+        return this.commentRepository.load(id);
+    }
 }
 
 export function useRateCriteriaService(db: DB, mapper?: TemplateMap): RateCriteriaService {
     const query = useQuery('company_rate', mapper, rateCriteriaModel, true);
     const builder = new SearchBuilder<RateCriteria, RateCriteriaFilter>(db.query, 'company_rate', rateCriteriaModel, db.driver, query);
-    const repository = new SqlRatesRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info', ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'], 
-                                            rateCriteriaModel, buildToSave, 5,'rate' ,'count', 'score', 'author', 'id','id', 'id', 'rate');
+
+    const repository = new SqlRatesRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info', 
+                        ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'],
+                        rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id', 'id', 'id', 'rate');
+
     const infoRepository = new SqlInfoRepository<Info>(db, 'company_rate_full_info', infoModel, buildToSave);
-    return new RateCriteriaManager(builder.search, repository, infoRepository);
+    const rateReactionRepository = new SqlReactionRepository(db, "ratereaction", rateReactionModel, "rates", "usefulCount", "author", "id");
+    const rateCommentRepository = new SqlCommentRepository<Comment>( db, "rate_comments",commentModel,"rates", "id", "author", "replyCount", "author","id");
+    return new RateCriteriaManager(builder.search, repository, infoRepository, rateCommentRepository, rateReactionRepository);
 }
-export function useRateCriteriaController(log: Log, db: DB, mapper?: TemplateMap): RateCriteriaController<RateCriteria, RateCriteriaFilter> {
+export function useRateCriteriaController(log: Log, db: DB, mapper?: TemplateMap): RateController<RateCriteria, RateCriteriaFilter, Comment> {
     const rateValidator = new RateCriteriaValidator(rateCriteriaModel, check, 10);
-    return new RateCriteriaController(log, useRateCriteriaService(db, mapper), rateValidator, ['dates'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'], generate,
-                                     'commentId', 'userId', 'author', 'id');
+    const commentValidator = new CommentValidator(commentModel, check);
+    return new RateController(log, useRateCriteriaService(db, mapper), rateValidator, commentValidator, ['dates'], 
+                                ['rate', 'usefulCount', 'replyCount', 'count', 'score'], generate,'commentId', 'userId', 'author', 'id');
 }
+
 function binarySearch(ar: URL[], el: string): number {
     let m = 0;
     let n = ar.length - 1;

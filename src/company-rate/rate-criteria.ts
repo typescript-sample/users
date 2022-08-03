@@ -1,4 +1,5 @@
 import { Attributes, Filter, SearchResult } from 'onecore';
+import { Comment } from 'rate-core';
 
 export interface RateCriteria {
     id: string;
@@ -44,6 +45,14 @@ export interface RateCriteriaService {
     search(s: RateCriteriaFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<RateCriteria>>;
     load(id: string, author: string): Promise<RateCriteria | null>;
     rate(rate: RateCriteria): Promise<number>;
+
+    setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+    removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+    comment(comment: Comment): Promise<number>;
+    removeComment(id: string, author: string, ctx?: any): Promise<number>;
+    updateComment(comment: Comment): Promise<number>;
+    getComments(id: string, author: string, limit?: number): Promise<Comment[]>;
+    getComment(id: string): Promise<Comment | null>;
 }
 
 export interface RateFullInfo {
@@ -95,8 +104,8 @@ export const rateCriteriaModel: Attributes = {
         key: true,
         match: 'equal'
     },
-    rate: { 
-        type: 'number' 
+    rate: {
+        type: 'number'
     },
     rates: {
         type: 'array',
