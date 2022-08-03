@@ -100,7 +100,7 @@ import {
   useMyItemController,
   useMyItemUploadController,
 } from "./my-items";
-import { ResponseController, useResponseController } from "./response";
+import { ResponseController, useResponseController } from "./items-response";
 import {
   LocationController,
   useLocationController,
