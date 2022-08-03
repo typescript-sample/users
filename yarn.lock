@@ -4360,15 +4360,15 @@
   "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.0.5.tgz"
   "version" "0.0.5"
 
-"rate-express@^0.0.2":
-  "integrity" "sha512-zSN6crwRMAgRJu7LuEk7vEJ21BeFo8KiKkW+gLQb6D4bIoKegcB7fJ/i6wmeel4yphBmOajdy9LQSqnOl0fglw=="
-  "resolved" "https://registry.npmjs.org/rate-express/-/rate-express-0.0.2.tgz"
-  "version" "0.0.2"
+"rate-express@^0.0.4":
+  "integrity" "sha512-G9kf6SbwErSo9vHxCXCpbVnesFEWiDyZ4ev1S3854xmKi0OMei9AJmEspoOWO5gaPKn5js1V5fL1Ck4BFtUPvQ=="
+  "resolved" "https://registry.npmjs.org/rate-express/-/rate-express-0.0.4.tgz"
+  "version" "0.0.4"
 
-"rate-query@^0.0.6":
-  "integrity" "sha512-FLGkkwE/jXaiWY8eRZDGI7VRTtN3LO3cHS/0aZvGdsHfPiv8C/rx9qd/BiLvMnYkHClrrUNrLz4rU/LAogQm/A=="
-  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.6.tgz"
-  "version" "0.0.6"
+"rate-query@^0.0.7":
+  "integrity" "sha512-UjSiqtr4mx/7owSA8Vb4sUE+N11eY5rlA1TOPKRZZJ6DziDQeOyj4osgAIVJtovLDtQOa5MWITJBmPzLtqkIZw=="
+  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.7.tgz"
+  "version" "0.0.7"
 
 "raw-body@2.5.1":
   "integrity" "sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig=="

@@ -2,7 +2,6 @@ export interface ResponseId {
   id: string;
   author: string;
 }
-
 export interface Response {
   id: string;
   author: string;
@@ -10,10 +9,6 @@ export interface Response {
   time: Date;
   usefulCount: number;
   replyCount: number;
-}
-export interface Info {
-  id: string;
-  viewCount: number;
 }
 
 export type DataType = 'ObjectId' | 'date' | 'datetime' | 'time'
@@ -77,36 +72,4 @@ export interface Repository<T, ID> extends ViewRepository<T, ID> {
 export interface ResponseRepository extends Repository<Response, ResponseId> {
   save(obj: Response, ctx?: any): Promise<number>;
   getResponse(id: string, author: string): Promise<Response | null>;
-}
-export interface InfoRepository extends ViewRepository<Info, string> {
-  save(obj: Info, ctx?: any): Promise<number>;
-}
-export interface ResponseReaction {
-  id: string;
-  author: string;
-  userId: string;
-  time: Date;
-  reaction: number;
-}
-export interface ResponseReactionRepository {
-  remove(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  save(id: string, author: string, userId: string, type: number): Promise<number>;
-}
-export interface ResponseComment {
-  commentId: string;
-  id: string;
-  author: string;
-  userId: string;
-  comment: string;
-  time: Date;
-  updatedAt?: Date;
-  histories?: ShortComment[];
-}
-export interface ShortComment {
-  comment: string;
-  time: Date;
-}
-export interface ResponseCommentRepository extends Repository<ResponseComment, string> {
-  getComments(id: string, author: string, limit?:number): Promise<ResponseComment[] | null>;
-  remove(commentId: string, id: string, author: string): Promise<number>;
 }

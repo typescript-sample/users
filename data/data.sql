@@ -117,6 +117,7 @@ insert into searchs(item) values('room mate');
 insert into searchs(item) values('basketball team');
 -- insert into skills(skill) values ('java') on conflict(skill) do nothing
 
+
 create table articles (
   id character varying(40) primary key,
   title character varying(300),
@@ -277,7 +278,7 @@ insert into item_response (id,author,description,time) values ('05','77c35c38c35
 
 
 create table item_comment(
-  commentId serial not null,
+  commentId character varying(40) not null,
   id character varying(40) not null,
   author character varying(40) not null,
   userId character varying(40) not null,
@@ -557,3 +558,158 @@ CREATE TABLE rate_comments_company(
   histories jsonb[],
   primary key(commentid)
 );
+
+
+create table films(
+  filmid character varying(40) primary key,
+  title character varying(300) not null,
+  description character varying(300),
+  imageurl character varying(300),
+  trailerurl character varying(300),
+  categories character varying[],
+  status char(1) not null,
+  createdby character varying(40),
+  createdat timestamp,
+  updatedby character varying(40),
+  updatedat timestamp
+);
+
+create table if not exists usefulfilm(
+  id character varying(255) ,
+  author character varying(255),
+  createdat timestamp,
+  updatedat timestamp,
+  PRIMARY KEY (id, author)
+)
+
+--drop table categories
+create table film_categories(
+  categoryid character varying(40) primary key,
+  categoryname character varying(300) not null,
+  status char(1) not null,
+  createdby character varying(40),
+  createdat timestamp,
+  updatedby character varying(40),
+  updatedat timestamp
+);
+
+--drop table cinema
+CREATE TABLE cinema (
+  id varchar(40),
+  name varchar(255) NOT NULL,
+  address varchar(255) NOT NULL,
+  parent varchar(40),
+  status CHAR(1) NOT NULL,
+  latitude  numeric,
+  longitude numeric,
+  imageURL text,
+  createdby varchar(40),
+  createdat timestamp,
+  updatedby varchar(40),
+  updatedat timestamp,
+  gallery jsonb[],
+  coverUrl text
+  primary key(id)
+);
+
+CREATE TABLE filmInfo (
+  id varchar(255) PRIMARY KEY,
+  rate numeric DEFAULT 0,
+  rate1 integer DEFAULT 0,
+  rate2 integer DEFAULT 0,
+  rate3 integer DEFAULT 0,
+  rate4 integer DEFAULT 0,
+  rate5 integer DEFAULT 0,
+  rate6 integer DEFAULT 0,
+  rate7 integer DEFAULT 0,
+  rate8 integer DEFAULT 0,
+  rate9 integer DEFAULT 0,
+  rate10 integer DEFAULT 0,
+  viewCount integer DEFAULT 0
+);
+
+CREATE TABLE filmrate (
+  id varchar(255),
+  userid varchar(255),
+  rate integer DEFAULT 0,
+  rateTime date,
+  review varchar(255),
+  usefulcount integer DEFAULT 0,
+  PRIMARY KEY (id , userid)
+);
+
+CREATE TABLE info(
+  id varchar(255),
+  rate numeric DEFAULT 0,
+  rate1 integer DEFAULT 0,
+  rate2 integer DEFAULT 0,
+  rate3 integer DEFAULT 0,
+  rate4 integer DEFAULT 0,
+  rate5 integer DEFAULT 0,
+  viewCount integer DEFAULT 0,
+  primary key(id)
+)
+
+CREATE TABLE rates(
+  id varchar(255),
+  author varchar(255),
+  rate integer,
+  time timestamp,
+  review text,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  histories jsonb[],
+  primary key(id, author)
+)
+
+CREATE TABLE ratereaction(
+	id varchar(255),
+	author varchar(255),
+	userid varchar(255),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
+
+CREATE TABLE appreciation(
+	id varchar(255),
+	author varchar(255),
+	title text,
+	description text,
+	createat timestamp,
+	replycount integer default 0,
+	primary key(id, author)
+);
+
+CREATE TABLE rate_comments(
+  commentid varchar(255),
+  id varchar(255),
+  author varchar(255),
+  userid varchar(255),
+  comment text,
+  time timestamp,
+  updatedat timestamp,
+  histories jsonb[],
+  primary key(commentid)
+);
+
+
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('animated','animated','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('drama','drama','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('horror','horror','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('crime','crime','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
+INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('family','family','A');
+
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00001','The Shawshank Redemption','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{drama}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00002','Thor: Love and Thunder','https://genk.mediacdn.vn/139269124445442048/2022/4/19/2-16503255592162067496114.jpg','https://www.youtube.com/watch?v=tgB1wUcmbbw','{drama,crime}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00003','Top Gun: Maverick','https://www.cgv.vn/media/catalog/product/cache/3/image/c5f0a1eff4c394a251036189ccddaacd/t/o/top_gun_maverick_-_poster_28.03_1_.jpg','https://www.youtube.com/watch?v=yM389FbhlRQ','{action,drama}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00004','The Batman','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_batman-1.jpg','https://youtu.be/761uRaAoW00','{action,crime,drama}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00005','The Sadness','https://phimnhua.com/wp-content/uploads/2022/04/phimnhua_1650248826.jpg','https://www.youtube.com/watch?v=axjme4v-xRo','{horror}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00006','Doctor Strange in the Multiverse of Madness','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{action,adventure,fantasy}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00007','Fantastic Beasts: The Secrets of Dumbledore','https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/04/review-phim-sinh-vat-huyen-bi-3-fantastic-beasts-3-2-696x1031.jpg?fit=700%2C20000&quality=95&ssl=1','https://youtu.be/Y9dr2zw-TXQ','{family,adventure,fantasy}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00008','The Adam Project','http://photos.q00gle.com/storage/files/images-2021/images-movies/09/622b6789e7084.jpg','https://youtu.be/IE8HIsIrq4o','{action,comedy,adventure}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00009','Spider-Man: No Way Home','https://gamek.mediacdn.vn/133514250583805952/2021/11/17/photo-1-1637118381839432740223.jpg','https://www.youtube.com/watch?v=OB3g37GTALc','{action,adventure,fantasy}','A');
+INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00010','Dune','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/d/u/dune-poster-1.jpg','https://youtu.be/8g18jFHCLXk','{action,adventure,drama}','A');

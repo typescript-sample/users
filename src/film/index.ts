@@ -9,7 +9,7 @@ import {
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlRateReactionRepository,
+  SqlReactionRepository,
   SqlRateRepository,
 } from "rate-query";
 import {
@@ -201,7 +201,7 @@ export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater {
     info10Model,
     buildToSave
   );
-  const rateReactionRepository = new SqlRateReactionRepository(
+  const rateReactionRepository = new SqlReactionRepository(
     db,
     "rates_film_reaction",
     rateReactionModel,

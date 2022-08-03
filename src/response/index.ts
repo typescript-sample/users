@@ -1,32 +1,34 @@
+import shortid from "shortid";
 import { Log } from "express-ext";
 import { buildToSave } from "pg-extension";
 import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
+import { check, createValidator } from "xvalidators";
 import {
   infoModel,
+  Info,
   Response,
   ResponseFilter,
   ResponseService,
   responseModel,
-  ResponseComment,
-  ResponseCommentFilter,
-  ResponseCommentService,
   responseCommentModel,
 } from "./response";
 import { ResponseController } from "./response-controller";
 import { ResponseManager } from "./service";
+import { SqlResponseRepository } from "./sql-response-repository";
 import {
-  responseReactionModel,
+  rateReactionModel,
   SqlInfoRepository,
-  SqlResponseCommentRepository,
-  SqlResponseReactionRepository,
-  SqlResponseRepository,
-} from "./sql-response-repository";
+  SqlCommentRepository,
+  SqlReactionRepository,
+} from "rate-query";
+import { Comment, rateCommentModel, CommentValidator } from "rate-core";
 
 export * from "./response-controller";
 export * from "./response";
 export * from "./service";
 export * from "./sql-response-repository";
+
 export { ResponseController };
 
 export function useResponseService(
@@ -47,31 +49,34 @@ export function useResponseService(
     responseModel,
     buildToSave
   );
-  const infoRepository = new SqlInfoRepository(
+  const infoRepository = new SqlInfoRepository<Info>(
     db,
     "item_info",
     infoModel,
     buildToSave
   );
-  const responseReactionRepository = new SqlResponseReactionRepository(
+  const responseReactionRepository = new SqlReactionRepository(
     db,
     "item_response_reaction",
-    responseReactionModel,
+    rateReactionModel,
     "item_response",
     "usefulCount",
     "author",
     "id"
   );
-
-  const responseCommentRepository = new SqlResponseCommentRepository(
+  const responseCommentRepository = new SqlCommentRepository<Comment>(
     db,
     "item_comment",
     responseCommentModel,
     "item_response",
+    "id",
+    "author",
     "replyCount",
     "author",
+    "time",
     "id"
   );
+
   return new ResponseManager(
     builder.search,
     repository,
@@ -86,5 +91,23 @@ export function useResponseController(
   db: DB,
   mapper?: TemplateMap
 ): ResponseController {
-  return new ResponseController(log, useResponseService(db, mapper));
+  const responseValidator = createValidator<Response>(responseModel);
+  const commentValidator = new CommentValidator(responseCommentModel, check);
+  return new ResponseController(
+    log,
+    useResponseService(db, mapper),
+    responseValidator,
+    commentValidator,
+    ["time"],
+    ["rate", "usefulCount", "replyCount", "count", "score"],
+    generate,
+    "commentId",
+    "userId",
+    "author",
+    "id"
+  );
+}
+
+export function generate(): string {
+  return shortid.generate();
 }

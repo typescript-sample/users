@@ -21,7 +21,7 @@ import {
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlRateReactionRepository,
+  SqlReactionRepository,
   SqlRateRepository,
 } from "rate-query";
 import { Rater, RateRepository, RateService } from "rate-core";
@@ -129,7 +129,7 @@ export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater {
     infoModel,
     buildToSave
   );
-  const rateReactionRepository = new SqlRateReactionRepository(
+  const rateReactionRepository = new SqlReactionRepository(
     db,
     "ratereaction",
     rateReactionModel,

@@ -21,10 +21,10 @@ import {
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlRateReactionRepository,
+  SqlReactionRepository,
   SqlRateRepository,
 } from "rate-query";
-import { Rater, RateRepository, RateService } from "rate-core";
+import { Rater, RateService } from "rate-core";
 import {
   Cinema,
   CinemaFilter,
@@ -126,7 +126,7 @@ export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater {
     infoModel,
     buildToSave
   );
-  const rateReactionRepository = new SqlRateReactionRepository(
+  const rateReactionRepository = new SqlReactionRepository(
     db,
     "ratereaction",
     rateReactionModel,
