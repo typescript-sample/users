@@ -43,7 +43,7 @@
     "query-core": "^0.1.23",
     "query-mappers": "^0.0.3",
     "rate-core": "^0.0.6",
-    "rate-query": "^0.0.8",
+    "rate-query": "^0.2.0",
     "reaction-express": "^0.1.0",
     "reaction-query": "^0.0.1",
     "reflectx": "^0.0.10",

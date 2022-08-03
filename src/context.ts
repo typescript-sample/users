@@ -119,6 +119,10 @@ import {
   useJobController,
 } from "./jobs";
 
+import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
+import { RateCriteriaController } from './company-rate/rate-criteria-controller';
+import { useRateCriteriaController } from './company-rate';
+
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -178,7 +182,8 @@ export interface ApplicationContext {
   locationRate: RateController<Rate, RateFilter, Comment>;
   locationComment: RateCommentController<Comment>;
   response: ResponseController;
-  jobs:JobController
+  jobs:JobController;
+  rateCriteria: RateCriteriaController<RateCriteria, RateCriteriaFilter>;
 }
 
 export function useContext(
@@ -522,6 +527,7 @@ export function useContext(
   const response = useResponseController(logger.error, queryDB, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
+  const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
 
   return {
     health,
@@ -566,7 +572,8 @@ export function useContext(
     myitems,
     myitemsUpload,
     response,
-    jobs
+    jobs,
+    rateCriteria
   };
 }
 

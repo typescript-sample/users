@@ -270,4 +270,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/jobs/:id', ctx.jobs.update);
   app.patch('/jobs/:id', ctx.jobs.patch);
   app.delete('/jobs/:id', ctx.jobs.delete);
+
+  app.post('/company/rate-criteria/search', ctx.rateCriteria.search);
+  app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
+  app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.getRate);
+  app.post('/company/rate-criteria/rate/:id/:author', ctx.rateCriteria.rate);
 }

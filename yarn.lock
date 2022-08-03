@@ -4311,10 +4311,10 @@
   "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.0.6.tgz"
   "version" "0.0.6"
 
-"rate-query@^0.0.8":
-  "integrity" "sha512-7XTxtEO1cfDx4Sr6sV8spERj8rgB0Bs+RmVC7pcWcawoMFEAVEcq10ZiWk8N1IeoYvcW/0tsqwt1I27rHN1JYA=="
-  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.0.8.tgz"
-  "version" "0.0.8"
+"rate-query@^0.2.0":
+  "integrity" "sha512-F6myTsmCz/tR5pZX/DwKrzDLX57+Ye/MGcdA3L8XDM92+7/q1zq2LqVL/2LgdW/cRmdRVXr08yokbG91tuh1SQ=="
+  "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.2.0.tgz"
+  "version" "0.2.0"
 
 "raw-body@2.5.1":
   "integrity" "sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig=="
