@@ -37,7 +37,7 @@ export class MyProfileController extends UploadController {
   getMySettings(req: Request, res: Response) {
     const id = req.params['id'];
     if (!id || id.length === 0) {
-      res.status(400).end('id cannot be empty');
+      res.status(400).send('id cannot be empty');
     } else {
       this.service
         .getMySettings(id)
@@ -49,10 +49,10 @@ export class MyProfileController extends UploadController {
     const user: User = req.body;
     const id = req.params['id'];
     if (!id || id.length === 0) {
-      res.status(400).end('id cannot be empty');
+      res.status(400).send('id cannot be empty');
     } else {
       if (!user) {
-        res.status(400).end('data cannot be empty');
+        res.status(400).send('data cannot be empty');
         return;
       }
       if (!user.id) {
@@ -81,22 +81,22 @@ export class MyProfileController extends UploadController {
       }
       this.service
         .saveMyProfile(user)
-        .then((result) => res.status(200).json(result).end())
+        .then((result) => res.status(200).json(result).send())
         .catch((err) => handleError(err, res, this.log));
     }
   }
   saveMySettings(req: Request, res: Response) {
     const id = req.params['id'];
     if (!id || id.length === 0) {
-      res.status(400).end('id cannot be empty');
+      res.status(400).send('id cannot be empty');
     } else {
       const settings: UserSettings = req.body;
       if (!settings) {
-        res.status(400).end('data cannot be empty');
+        res.status(400).send('data cannot be empty');
       } else {
         this.service
           .saveMySettings(id, settings)
-          .then((result) => res.status(200).json(result).end())
+          .then((result) => res.status(200).json(result).send())
           .catch((err) => handleError(err, res, this.log));
       }
     }

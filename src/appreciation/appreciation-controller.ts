@@ -26,9 +26,9 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const appreciationId: AppreciationId = { id, author };
     this.appreciationService.load(appreciationId).then(appreciation => {
       if (appreciation) {
-        return res.status(200).json(appreciation).end();
+        return res.status(200).json(appreciation);
       } else {
-        return res.status(200).json({}).end();
+        return res.status(200).json({});
       }
     }).catch(err => handleError(err, res, this.log));
   }
@@ -37,7 +37,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const id = req.params.id;
     const author = req.params.author;
     this.appreciationService.getReplys(id, author).then(rep => {
-      return res.status(200).json(rep).end();
+      return res.status(200).json(rep);
     }).catch(err => handleError(err, res, this.log));
   }
 
@@ -47,7 +47,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const userId = req.params.userid;
     const reply: Reply = { id, author, userId, ...req.body };
     this.appreciationService.reply(reply).then(rep => {
-      return res.status(200).json(rep).end();
+      return res.status(200).json(rep);
     }).catch(err => handleError(err, res, this.log));
   }
 
@@ -56,7 +56,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const author = req.params.author;
     const userId = req.params.userid;
     this.appreciationService.removeReply(id, author, userId).then(reply => {
-      return res.status(200).json(reply).end();
+      return res.status(200).json(reply);
     }).catch(err => handleError(err, res, this.log));
   }
 
@@ -66,7 +66,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const userId = req.params.userid;
     const reply: Reply = { id, author, userId, ...req.body };
     this.appreciationService.updateReply(reply).then(rep => {
-      return res.status(200).json(rep).end();
+      return res.status(200).json(rep);
     }).catch(err => handleError(err, res, this.log));
   }
 
@@ -77,7 +77,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const author = req.params.author;
     const userId = req.params.userid;
     this.appreciationService.setUseful(id, author, userId).then(rs => {
-      return res.status(200).json(rs).end();
+      return res.status(200).json(rs);
     }).catch(err => handleError(err, res, this.log));
 
   }
@@ -86,14 +86,14 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     const id = req.params.id;
     const author = req.params.author;
     this.appreciationService.delete({ id, author }).then(rs => {
-      return res.status(200).json(rs).end();
+      return res.status(200).json(rs);
     }).catch(err => handleError(err, res, this.log));
   }
   update(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): void {
     const id = req.params.id;
     const author = req.params.author;
     this.appreciationService.update({ id, author, ...req.body }).then(rs => {
-      return res.status(200).json(rs).end();
+      return res.status(200).json(rs);
     }).catch(err => handleError(err, res, this.log));
   }
 }

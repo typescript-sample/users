@@ -14,14 +14,14 @@ export class ItemController extends ViewController<Item, string, ItemFilter> {
     const id = req.params['id'];
     const itemId = req.params['itemId'];
     this.itemQuery.saveItems(id,itemId).then(data => {
-      return res.status(200).json(data).end()
+      return res.status(200).json(data).send()
     })
     .catch(err=>console.log(err))
   }
   getSavedItems(req: Request, res: Response){
     const id = req.params['id'];
     this.itemQuery.getSavedItems(id).then(data => {
-      return res.status(200).json(data).end()
+      return res.status(200).json(data).send()
     })
     .catch(err=>console.log(err))
   }
