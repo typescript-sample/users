@@ -1,9 +1,8 @@
 import {
   Attributes,
   Filter,
-  Repository,
   ViewRepository,
-} from "./core";
+} from "onecore";
 
 import { Comment } from 'rate-core';
 import { ReactionService } from "reaction-express";
@@ -33,7 +32,6 @@ export interface ResponseFilter extends Filter {
 
 export interface ResponseRepository {
   load(id: string, author: string): Promise<Response | null>;
-  save(obj: Response, ctx?: any): Promise<number>;
   insert(obj: Response, ctx?: any): Promise<number>;
   update(obj: Response, ctx?: any): Promise<number>;
   delete(id: string, author: string, ctx?: any): Promise<number>;
@@ -91,42 +89,3 @@ export interface Info {
 export interface InfoRepository extends ViewRepository<Info, string> {
   save(obj: Info, ctx?: any): Promise<number>;
 }
-
-export const commentModel: Attributes = {
-  comment: {
-    length: 500,
-  },
-  time: {
-    type: "datetime",
-  },
-};
-export const responseCommentModel: Attributes = {
-  commentId: {
-    key: true,
-  },
-  id: {
-    required: true,
-    match: "equal",
-  },
-  author: {
-    required: true,
-    match: "equal",
-  },
-  userId: {
-    required: true,
-    match: "equal",
-  },
-  comment: {
-    length: 500,
-  },
-  time: {
-    type: "datetime",
-  },
-  updatedAt: {
-    type: "datetime",
-  },
-  histories: {
-    type: "array",
-    typeof: commentModel,
-  },
-};

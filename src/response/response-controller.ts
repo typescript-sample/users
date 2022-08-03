@@ -39,21 +39,6 @@ export class ResponseController extends ReactionController<
     this.updateResponse = this.updateResponse.bind(this);
   }
 
-  load(req: Req, res: Res) {
-    const id = req.params.id;
-    const author = req.params.author;
-    this.responseService
-      .getResponse(id, author)
-      .then((responses: any) => {
-        if (responses) {
-          return res.status(200).json(responses).end();
-        } else {
-          return res.status(200).json({}).end();
-        }
-      })
-      .catch((err: any) => handleError(err, res, this.log));
-  }
-
   response(req: Req, res: Res) {
     const response: Response = req.body;
     response.time = new Date();
