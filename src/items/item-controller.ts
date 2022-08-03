@@ -1,10 +1,10 @@
 import { Log, ViewController,Controller } from 'express-ext';
 import { Item, ItemFilter } from './item';
 import { Request, Response } from 'express';
-import { ItemService } from './item';
+import { ItemQuery } from './item';
 
 export class ItemController extends ViewController<Item, string, ItemFilter> {
-  constructor(log: Log, protected itemQuery: ItemService) {
+  constructor(log: Log, protected itemQuery: ItemQuery) {
     super(log, itemQuery);
     this.array = ['status'];
     this.savedItems=this.savedItems.bind(this)

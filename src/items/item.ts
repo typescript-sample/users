@@ -33,14 +33,10 @@ export interface ItemFilter extends Filter {
 export interface ItemRepository extends Repository<Item, string> {
   getItems(ids: string[]): Promise<Item[]>;
 }
-export interface ItemService extends Service<Item, string, ItemFilter> {
+export interface ItemQuery extends Query<Item, string, ItemFilter> {
   saveItems(id: string, itemId: string): Promise<number>;
   getSavedItems(id: string): Promise<Item[]>;
 }
-export interface ItemQuery extends Query<Item, string, ItemFilter> {
-  save(id: string): Promise<number>;
-}
-
 export const itemModel: Attributes = {
   id: {
     key: true,

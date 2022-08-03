@@ -1,6 +1,6 @@
-import { Log, Manager, Search } from 'onecore';
-import { DB, postgres, Query, SearchBuilder } from 'query-core';
-import { Item, ItemFilter, itemModel, ItemRepository, ItemService, SavedItemsRepository } from './item';
+import { Log, Search, ViewSearchManager } from 'onecore';
+import { DB, postgres, SearchBuilder } from 'query-core';
+import { Item, ItemFilter, itemModel, ItemRepository, ItemQuery, SavedItemsRepository } from './item';
 import { SaveItems, saveItemsModel } from './item';
 import { buildToSave } from 'pg-extension';
 import { ItemController } from './item-controller';
@@ -11,7 +11,7 @@ export { ItemController };
 import { SqlItemRepository } from './sql-item-repository';
 import { SqlSaveItemsRepository } from './sql-item-repository';
 
-export class ItemManager extends Manager<Item, string, ItemFilter> implements ItemService {
+export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
   constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedItemsRepository) {
     super(search, itemRepository);
   }
@@ -24,7 +24,6 @@ export class ItemManager extends Manager<Item, string, ItemFilter> implements It
       const newItem: SaveItems = { id, items: [itemId] };
       return this.saveItemsRepository.insert(newItem);
     }
-
   }
   async getSavedItems(id: string): Promise<Item[]> {
     const saveItems = await this.saveItemsRepository.load(id);
@@ -34,7 +33,7 @@ export class ItemManager extends Manager<Item, string, ItemFilter> implements It
     return this.itemRepository.getItems(saveItems.items);
   }
 }
-export function useItemService(db: DB): ItemService {
+export function useItemService(db: DB): ItemQuery {
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
   const repository = new SqlItemRepository(db, 'items');
   const saveItemRepository = new SqlSaveItemsRepository(db, 'save_items', saveItemsModel, buildToSave);
