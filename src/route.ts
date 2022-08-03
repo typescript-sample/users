@@ -56,7 +56,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/skills', ctx.skill.query);
   app.get('/interests', ctx.interest.query);
   app.get('/looking-for', ctx.lookingFor.query);
-  app.get('/companies', ctx.companyQuery.query);
+  app.get('/user-companies', ctx.companyQuery.query);
   app.get('/educations', ctx.educationQuery.query);
   app.get('/brands/', ctx.brand.query);
 
@@ -258,4 +258,16 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/companies/rates/comment/:id/:author/:userId', ctx.companyRate.comment);
   app.delete('/companies/rates/comment/:commentId/:author', ctx.companyRate.removeComment);
   app.put('/companies/rates/comment/:commentId/:id/:author/:userId', ctx.companyRate.updateComment);
+
+
+  app.get('/item/save-item/:id/:itemId', ctx.items.savedItems);
+  app.get('/item/save-item/:id/', ctx.items.getSavedItems);
+
+  app.get('/jobs/search', ctx.jobs.search);
+  app.post('/jobs/search', ctx.jobs.search);
+  app.get('/jobs/:id', ctx.jobs.load);
+  app.post('/jobs/', ctx.jobs.create);
+  app.put('/jobs/:id', ctx.jobs.update);
+  app.patch('/jobs/:id', ctx.jobs.patch);
+  app.delete('/jobs/:id', ctx.jobs.delete);
 }
