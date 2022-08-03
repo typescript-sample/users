@@ -20,10 +20,6 @@ export interface ShortRate {
     review: string;
 }
 
-export interface RateCriteriaId {
-    id: string;
-    author: string;
-}
 
 export interface RateCriteriaFilter extends Filter {
     id?: string;
