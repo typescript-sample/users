@@ -168,6 +168,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
+  app.get('/items/response/search/', ctx.response.search);
+  app.post('/items/response/search', ctx.response.search);
+  app.get('/items/response/comment/search/:id/:author', ctx.response.getComments);
+  app.post('/items/response/comment/search/:id/:author', ctx.response.getComments);
+  app.post('/items/response', ctx.response.response);
+  app.put('/items/response/:id/:author', ctx.response.updateResponse);
+  app.get('/items/response/:id/:author', ctx.response.load);
+  app.post('/items/response/useful/:id/:author/:userId', ctx.response.setUseful);
+  app.delete('/items/response/useful/:id/:author/:userId', ctx.response.removeUseful);
+  app.post('/items/response/comment/:id/:author/:userId', ctx.response.comment);
+  app.put('/items/response/comment/:commentId/:id/:author/:userId', ctx.response.updateComment);
+  app.delete('/items/response/comment/:commentId/:author', ctx.response.removeComment);
+
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
   app.get('/my-items/:id', ctx.myitems.load);
@@ -192,18 +205,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
   app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
 
-  app.get('/items/response/search', ctx.response.search);
-  app.post('/items/response/search', ctx.response.search);
-  app.get('/items/response/comment/search/:id/:author', ctx.response.getComments);
-  app.post('/items/response/comment/search/:id/:author', ctx.response.getComments);
-  app.post('/items/response', ctx.response.response);
-  app.put('/items/response/:id/:author', ctx.response.updateResponse);
-  app.get('/items/response/:id/:author', ctx.response.load);
-  app.post('/items/response/useful/:id/:author/:userId', ctx.response.setUseful);
-  app.delete('/items/response/useful/:id/:author/:userId', ctx.response.removeUseful);
-  app.post('/items/response/comment/:id/:author/:userId', ctx.response.comment);
-  app.put('/items/response/comment/:commentId/:id/:author/:userId', ctx.response.updateComment);
-  app.delete('/items/response/comment/:commentId/:author', ctx.response.removeComment);
 
   app.post('/comment/search', ctx.comment.search);
   app.get('/comment/search', ctx.comment.search);

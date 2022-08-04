@@ -19,7 +19,7 @@ import {
   ResponseFilter,
   ResponseService,
   responseModel,
-  ResponseRepository
+  ResponseRepository,
 } from "./response";
 import { ResponseController } from "./response-controller";
 // import { SqlResponseRepository } from "./sql-response-repository";
@@ -37,10 +37,7 @@ export * from "./response";
 
 export { ResponseController };
 
-
-export class ResponseManager
-  implements ResponseService
-{
+export class ResponseManager implements ResponseService {
   constructor(
     protected find: Search<Response, ResponseFilter>,
     public repository: ResponseRepository,
@@ -55,10 +52,15 @@ export class ResponseManager
     this.removeComment = this.removeComment.bind(this);
     this.updateComment = this.updateComment.bind(this);
   }
-  search(s: ResponseFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<Response>> {
+  search(
+    s: ResponseFilter,
+    limit?: number,
+    offset?: number | string,
+    fields?: string[]
+  ): Promise<SearchResult<Response>> {
     return this.find(s, limit, offset, fields);
   }
-  load(id: string, author: string): Promise<Response|null> {
+  load(id: string, author: string): Promise<Response | null> {
     return this.repository.load(id, author);
   }
   async response(response: Response): Promise<boolean> {
@@ -72,25 +74,23 @@ export class ResponseManager
     info.viewCount++;
     response.usefulCount = 0;
     await this.infoRepository.save(info);
-    await this.repository.update(response);
+    await this.repository.insert(response);
     return true;
   }
   getResponse(id: string, author: string): Promise<Response | null> {
     return this.repository.load(id, author);
   }
   updateResponse(response: Response): Promise<number> {
-    return this.repository
-      .load(response.id, response.author)
-      .then((exist) => {
-        if (exist) {
-          response.time
-            ? (response.time = response.time)
-            : (response.time = new Date());
-          return this.repository.update(response);
-        } else {
-          return 0;
-        }
-      });
+    return this.repository.load(response.id, response.author).then((exist) => {
+      if (exist) {
+        response.time
+          ? (response.time = response.time)
+          : (response.time = new Date());
+        return this.repository.update(response);
+      } else {
+        return 0;
+      }
+    });
   }
   setUseful(id: string, author: string, userId: string): Promise<number> {
     return this.responseReactionRepository.save(id, author, userId, 1);
@@ -115,11 +115,7 @@ export class ResponseManager
   getComment(id: string): Promise<Comment | null> {
     return this.responseCommentRepository.load(id);
   }
-  getComments(
-    id: string,
-    author: string,
-    limit?: number
-  ): Promise<Comment[]> {
+  getComments(id: string, author: string, limit?: number): Promise<Comment[]> {
     if (limit && limit > 0) {
       return this.responseCommentRepository.getComments(id, author, limit);
     }
@@ -174,11 +170,12 @@ export function useResponseService(
     db.driver,
     query
   );
-  const repository = new GenericRepository<Response, string, string> (
+  const repository = new GenericRepository<Response, string, string>(
     db,
     "item_response",
     responseModel,
-    'id', 'author'
+    "id",
+    "author"
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
