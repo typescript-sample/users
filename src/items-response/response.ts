@@ -1,6 +1,4 @@
 import { Attributes, Filter, ViewRepository } from "onecore";
-import { Comment } from "reaction-service";
-import { ReactionService } from "reaction-express";
 
 export interface ResponseId {
   id: string;
@@ -32,10 +30,8 @@ export interface ResponseRepository {
   delete(id: string, author: string, ctx?: any): Promise<number>;
 }
 
-export interface ResponseService
-  extends ReactionService<Response, ResponseFilter, Comment> {
+export interface ResponseService {
   response(response: Response): Promise<boolean>;
-  getResponse(id: string, author: string): Promise<Response | null>;
   updateResponse(response: Response): Promise<number>;
 }
 

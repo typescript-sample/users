@@ -168,18 +168,18 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
-  app.get('/items/response/search/', ctx.response.search);
-  app.post('/items/response/search', ctx.response.search);
-  app.get('/items/response/comment/search/:id/:author', ctx.response.getComments);
-  app.post('/items/response/comment/search/:id/:author', ctx.response.getComments);
-  app.post('/items/response', ctx.response.response);
-  app.put('/items/response/:id/:author', ctx.response.updateResponse);
-  app.get('/items/response/:id/:author', ctx.response.load);
-  app.post('/items/response/useful/:id/:author/:userId', ctx.response.setUseful);
-  app.delete('/items/response/useful/:id/:author/:userId', ctx.response.removeUseful);
-  app.post('/items/response/comment/:id/:author/:userId', ctx.response.comment);
-  app.put('/items/response/comment/:commentId/:id/:author/:userId', ctx.response.updateComment);
-  app.delete('/items/response/comment/:commentId/:author', ctx.response.removeComment);
+  app.get('/items/:id/response/search', ctx.itemReaction.search);
+  app.post('/items/:id/response/search', ctx.itemReaction.search);
+  app.get('/items/:id/response/:author', ctx.itemReaction.load);
+  app.put('/items/:id/response/:author', ctx.itemResponse.updateResponse);
+  app.post('/items/:id/response/:author', ctx.itemResponse.response);
+  app.get('/items/:id/response/:author/comment', ctx.itemReaction.getComments);
+  app.post('/items/:id/response/:author/comment', ctx.itemReaction.getComments);
+  app.post('/items/:id/response/:author/useful/:userId', ctx.itemReaction.setUseful);
+  app.delete('/items/:id/response/:author/useful/:userId', ctx.itemReaction.removeUseful);
+  app.post('/items/:id/response/:author/comment/:userId', ctx.itemReaction.comment);
+  app.put('/items/:id/response/:author/comment/:userId/:commentId', ctx.itemReaction.updateComment);
+  app.delete('/items/:id/response/:author/comment/:commentId', ctx.itemReaction.removeComment);
 
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);

@@ -3,8 +3,8 @@ import {
   InfoRepository,
   ReactionRepository,
   CommentRepository,
+  ShortComment,
 } from "reaction-query";
-import { ShortComment } from "reaction-service";
 import { SearchResult } from "onecore";
 import shortid from "shortid";
 import { Log } from "express-ext";
@@ -12,6 +12,15 @@ import { buildToSave } from "pg-extension";
 import { DB, GenericRepository, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import { check, createValidator } from "xvalidators";
+import {
+  rateReactionModel,
+  commentModel,
+  SqlInfoRepository,
+  SqlCommentRepository,
+  SqlReactionRepository,
+} from "reaction-query";
+import { Comment, CommentValidator } from "reaction-service";
+import { ReactionService, ReactionController } from "reaction-express";
 import {
   infoModel,
   Info,
@@ -22,46 +31,25 @@ import {
   ResponseRepository,
 } from "./response";
 import { ResponseController } from "./response-controller";
-// import { SqlResponseRepository } from "./sql-response-repository";
-import {
-  rateReactionModel,
-  SqlInfoRepository,
-  SqlCommentRepository,
-  SqlReactionRepository,
-  commentModel,
-} from "reaction-query";
-import { Comment, CommentValidator } from "reaction-service";
 
 export * from "./response-controller";
 export * from "./response";
 
 export { ResponseController };
 
+export function generate(): string {
+  return shortid.generate();
+}
+
+// Response
 export class ResponseManager implements ResponseService {
   constructor(
     protected find: Search<Response, ResponseFilter>,
     public repository: ResponseRepository,
-    private infoRepository: InfoRepository<Info>,
-    private responseCommentRepository: CommentRepository<Comment>,
-    private responseReactionRepository: ReactionRepository
+    private infoRepository: InfoRepository<Info>
   ) {
     this.response = this.response.bind(this);
     this.updateResponse = this.updateResponse.bind(this);
-    this.comment = this.comment.bind(this);
-    this.getComments = this.getComments.bind(this);
-    this.removeComment = this.removeComment.bind(this);
-    this.updateComment = this.updateComment.bind(this);
-  }
-  search(
-    s: ResponseFilter,
-    limit?: number,
-    offset?: number | string,
-    fields?: string[]
-  ): Promise<SearchResult<Response>> {
-    return this.find(s, limit, offset, fields);
-  }
-  load(id: string, author: string): Promise<Response | null> {
-    return this.repository.load(id, author);
   }
   async response(response: Response): Promise<boolean> {
     let info = await this.infoRepository.load(response.id);
@@ -77,9 +65,7 @@ export class ResponseManager implements ResponseService {
     await this.repository.insert(response);
     return true;
   }
-  getResponse(id: string, author: string): Promise<Response | null> {
-    return this.repository.load(id, author);
-  }
+
   updateResponse(response: Response): Promise<number> {
     return this.repository.load(response.id, response.author).then((exist) => {
       if (exist) {
@@ -91,6 +77,78 @@ export class ResponseManager implements ResponseService {
         return 0;
       }
     });
+  }
+}
+
+export function useResponseService(
+  db: DB,
+  mapper?: TemplateMap
+): ResponseService {
+  const query = useQuery("item_response", mapper, responseModel, true);
+  const builder = new SearchBuilder<Response, ResponseFilter>(
+    db.query,
+    "item_response",
+    responseModel,
+    db.driver,
+    query
+  );
+  const repository = new GenericRepository<Response, string, string>(
+    db,
+    "item_response",
+    responseModel,
+    "id",
+    "author"
+  );
+  const infoRepository = new SqlInfoRepository<Info>(
+    db,
+    "item_info",
+    infoModel,
+    buildToSave
+  );
+
+  return new ResponseManager(builder.search, repository, infoRepository);
+}
+
+export function useResponseController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): ResponseController {
+  const responseValidator = createValidator<Response>(responseModel);
+  return new ResponseController(
+    log,
+    useResponseService(db, mapper),
+    responseValidator
+  );
+}
+
+// Reaction
+export class ReactionManager
+  implements ReactionService<Response, ResponseFilter, Comment>
+{
+  constructor(
+    protected find: Search<Response, ResponseFilter>,
+    public repository: ResponseRepository,
+    private infoRepository: InfoRepository<Info>,
+    private responseCommentRepository: CommentRepository<Comment>,
+    private responseReactionRepository: ReactionRepository
+  ) {
+    this.load = this.load.bind(this);
+    this.comment = this.comment.bind(this);
+    this.getComments = this.getComments.bind(this);
+    this.removeComment = this.removeComment.bind(this);
+    this.updateComment = this.updateComment.bind(this);
+  }
+  search(
+    s: ResponseFilter,
+    limit?: number,
+    offset?: number | string,
+    fields?: string[]
+  ): Promise<SearchResult<Response>> {
+    return this.find(s, limit, offset, fields);
+  }
+  load(id: string, author: string): Promise<Response | null> {
+    return this.repository.load(id, author);
   }
   setUseful(id: string, author: string, userId: string): Promise<number> {
     return this.responseReactionRepository.save(id, author, userId, 1);
@@ -158,10 +216,10 @@ export class ResponseManager implements ResponseService {
   }
 }
 
-export function useResponseService(
+export function useResponseReactionService(
   db: DB,
   mapper?: TemplateMap
-): ResponseService {
+): ReactionService<Response, ResponseFilter, Comment> {
   const query = useQuery("item_response", mapper, responseModel, true);
   const builder = new SearchBuilder<Response, ResponseFilter>(
     db.query,
@@ -205,7 +263,7 @@ export function useResponseService(
     "id"
   );
 
-  return new ResponseManager(
+  return new ReactionManager(
     builder.search,
     repository,
     infoRepository,
@@ -214,17 +272,15 @@ export function useResponseService(
   );
 }
 
-export function useResponseController(
+export function useResponseReactionController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): ResponseController {
-  const responseValidator = createValidator<Response>(responseModel);
+): ReactionController<Response, ResponseFilter, Comment> {
   const commentValidator = new CommentValidator(commentModel, check);
-  return new ResponseController(
+  return new ReactionController(
     log,
-    useResponseService(db, mapper),
-    responseValidator,
+    useResponseReactionService(db, mapper),
     commentValidator,
     ["time"],
     ["rate", "usefulCount", "replyCount", "count", "score"],
@@ -236,6 +292,4 @@ export function useResponseController(
   );
 }
 
-export function generate(): string {
-  return shortid.generate();
-}
+

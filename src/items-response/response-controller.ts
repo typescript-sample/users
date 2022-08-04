@@ -1,46 +1,22 @@
 import { Request as Req, Response as Res } from "express";
 import { getStatusCode, handleError, Log } from "express-ext";
 import { Validator } from "onecore";
-import { Response, ResponseFilter, ResponseService } from "./response";
-import { Comment } from "reaction-service";
-import { ReactionController } from "reaction-express";
-export class ResponseController extends ReactionController<
-  Response,
-  ResponseFilter,
-  Comment
-> {
+import { Response, ResponseService } from "./response";
+
+export class ResponseController {
   constructor(
-    log: Log,
+    protected log: Log,
     protected responseService: ResponseService,
-    public validator: Validator<Response>,
-    commentValidator: Validator<Comment>,
-    dates: string[],
-    numbers: string[],
-    generate: () => string,
-    commentId?: string,
-    userId?: string,
-    author?: string,
-    id?: string
+    public validator: Validator<Response>
   ) {
-    super(
-      log,
-      responseService,
-      commentValidator,
-      dates,
-      numbers,
-      generate,
-      commentId,
-      userId,
-      author,
-      id
-    );
-    this.load = this.load.bind(this);
     this.response = this.response.bind(this);
     this.updateResponse = this.updateResponse.bind(this);
   }
 
   response(req: Req, res: Res) {
-    const response: Response = req.body;
+    const id = req.params.id;
+    const author = req.params.author;
+    const response: Response = { id, author, ...req.body };
     response.time = new Date();
     this.validator
       .validate(response)

@@ -6,7 +6,7 @@ import {
   initializeStatus,
   SqlAuthTemplateConfig,
   User,
-  useUserRepository
+  useUserRepository,
 } from "authen-service";
 import { compare } from "bcrypt";
 import { Comparator } from "bcrypt-plus";
@@ -19,14 +19,14 @@ import {
   ModelConfig,
   QueryController,
   resources,
-  useBuild
+  useBuild,
 } from "express-ext";
 import {
   deleteFile,
   GoogleStorageRepository,
   map,
   StorageConfig,
-  useBuildUrl
+  useBuildUrl,
 } from "google-storage";
 import { generateToken } from "jsonwebtoken-plus";
 import { MailConfig, MailService, Send } from "mail-core";
@@ -38,7 +38,7 @@ import {
   MailSender,
   PasswordService,
   PasswordTemplateConfig,
-  usePasswordRepository
+  usePasswordRepository,
 } from "password-service";
 import { CodeRepository, DB, StringService } from "pg-extension";
 import { createChecker } from "query-core";
@@ -55,62 +55,76 @@ import {
   SignupService,
   SignupTemplateConfig,
   useRepository,
-  Validator
+  Validator,
 } from "signup-service";
 import { createValidator } from "xvalidators";
 
 import {
   AppreciationController,
-  useAppreciationController
+  useAppreciationController,
 } from "./appreciation";
 import { ArticleController, useArticleController } from "./article";
 import {
-  CategoryController, useCompanyCategoryController, useFilmCategoryController, useItemCategoryController
+  CategoryController,
+  useCompanyCategoryController,
+  useFilmCategoryController,
+  useItemCategoryController,
 } from "./category";
 import {
   CinemaController,
-  useCinemaController, useCinemaRateCommentController, useCinemaRateController
+  useCinemaController,
+  useCinemaRateCommentController,
+  useCinemaRateController,
 } from "./cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
-  useCompanyController, useCompanyRateCommentController, useCompanyRateController
+  useCompanyController,
+  useCompanyRateCommentController,
+  useCompanyRateController,
 } from "./company";
 import {
   FilmController,
   useFilmController,
   useFilmRateCommentController,
-  useFilmRateController
+  useFilmRateController,
 } from "./film";
 import { ItemController, useItemController } from "./items";
-import { ResponseController, useResponseController } from "./items-response";
+import {
+  ResponseController,
+  useResponseController,
+  Response,
+  ResponseFilter,
+  useResponseReactionController,
+} from "./items-response";
+import { ReactionController } from "reaction-express";
+
 import {
   LocationController,
-  useLocationController, useLocationRateCommentController, useLocationRateController
+  useLocationController,
+  useLocationRateCommentController,
+  useLocationRateController,
 } from "./location";
 import {
   ArticleController as MyArticleController,
-  useMyArticleController
+  useMyArticleController,
 } from "./my-articles";
 import {
   MyItemController,
   useMyItemController,
-  useMyItemUploadController
+  useMyItemUploadController,
 } from "./my-items";
 import {
   MyProfileController,
   useMyProfileController,
-  UserSettings
+  UserSettings,
 } from "./my-profile";
 import { UserController, useUserController } from "./user";
 
-import {
-  JobController,
-  useJobController
-} from "./jobs";
+import { JobController, useJobController } from "./jobs";
 
-import { useRateCriteriaController } from './company-rate';
-import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
+import { useRateCriteriaController } from "./company-rate";
+import { RateCriteria, RateCriteriaFilter } from "./company-rate/rate-criteria";
 
 resources.createValidator = createValidator;
 
@@ -165,12 +179,13 @@ export interface ApplicationContext {
   items: ItemController;
   brand: QueryController<string[]>;
   itemCategory: CategoryController;
+  itemResponse: ResponseController;
+  itemReaction: ReactionController<Response, ResponseFilter, Comment>;
   myitems: MyItemController;
   myitemsUpload: MyItemUploadController;
   location: LocationController;
   locationRate: RateController<Rate, RateFilter, Comment>;
   locationComment: RateCommentController<Comment>;
-  response: ResponseController;
   jobs: JobController;
   rateCriteria: RateController<RateCriteria, RateCriteriaFilter, Comment>;
 }
@@ -473,6 +488,8 @@ export function useContext(
     mapper
   );
   const items = useItemController(logger.error, queryDB);
+  const itemResponse = useResponseController(logger.error, queryDB, mapper);
+  const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
   const brandService = new StringService(
     "brands",
@@ -513,7 +530,6 @@ export function useContext(
     conf.modelItem,
     mapper
   );
-  const response = useResponseController(logger.error, queryDB, mapper);
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
@@ -557,12 +573,13 @@ export function useContext(
     myarticles,
     items,
     itemCategory,
+    itemResponse,
+    itemReaction,
     brand,
     myitems,
     myitemsUpload,
-    response,
     jobs,
-    rateCriteria
+    rateCriteria,
   };
 }
 
