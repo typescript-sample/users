@@ -4,7 +4,6 @@ import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
-  CommentQuery,
   Info,
   infoModel,
   InfoRepository,
@@ -12,9 +11,9 @@ import {
   Comment,
   CommentFilter,
   RateFilter,
-  rateModel,
-} from "rate-core";
-import { CommentValidator, RateValidator } from "rate-core";
+  rateModel, CommentValidator, RateValidator, Rater, RateService
+} from "reaction-service";
+import { CommentQuery } from "reaction-query";
 import { RateCommentController, RateController } from "reaction-express";
 import {
   commentModel,
@@ -26,7 +25,6 @@ import {
 import {
   SqlRateRepository,
 } from "rate-query";
-import { Rater, RateService } from "rate-core";
 import {
   Location,
   LocationFilter,
@@ -103,7 +101,7 @@ export function useLocationController(
   return new LocationController(log, useLocationService(db, mapper));
 }
 
-export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater {
+export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
   const query = useQuery("location_rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -188,7 +186,7 @@ export function useLocationRateController(
 export function useLocationRateCommentService(
   db: DB,
   mapper?: TemplateMap
-): CommentQuery {
+): CommentQuery<Comment, CommentFilter> {
   const query = useQuery("location_comments", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,

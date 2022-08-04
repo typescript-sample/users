@@ -4,7 +4,6 @@ import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
-  CommentQuery,
   Info,
   infoModel,
   InfoRepository,
@@ -13,8 +12,11 @@ import {
   CommentFilter,
   RateFilter,
   rateModel,
-} from "rate-core";
-import { CommentValidator, RateValidator } from "rate-core";
+  CommentValidator,
+  RateValidator,
+  Rater, RateService
+} from "reaction-service";
+import { CommentQuery } from "reaction-query";
 import { RateCommentController, RateController } from "reaction-express";
 import {
   SqlRateRepository,
@@ -26,7 +28,6 @@ import {
   SqlCommentRepository,
   SqlReactionRepository
 } from "reaction-query";
-import { Rater, RateService } from "rate-core";
 import {
   Cinema,
   CinemaFilter,
@@ -100,7 +101,7 @@ export function useCinemaController(
   return new CinemaController(log, useCinemaService(db, mapper));
 }
 
-export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater {
+export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
   const query = useQuery("rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -185,7 +186,7 @@ export function useCinemaRateController(
 export function useCinemaRateCommentService(
   db: DB,
   mapper?: TemplateMap
-): CommentQuery {
+): CommentQuery<Comment, CommentFilter> {
   const query = useQuery("ratecomment", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,

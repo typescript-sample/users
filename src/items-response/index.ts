@@ -4,7 +4,7 @@ import {
   ReactionRepository,
   CommentRepository,
 } from "reaction-query";
-import { ShortComment } from "rate-core";
+import { ShortComment } from "reaction-service";
 import { SearchResult } from "onecore";
 import shortid from "shortid";
 import { Log } from "express-ext";
@@ -30,7 +30,7 @@ import {
   SqlReactionRepository,
   commentModel,
 } from "reaction-query";
-import { Comment, CommentValidator } from "rate-core";
+import { Comment, CommentValidator } from "reaction-service";
 
 export * from "./response-controller";
 export * from "./response";

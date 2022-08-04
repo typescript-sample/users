@@ -43,7 +43,7 @@ import {
 import { CodeRepository, DB, StringService } from "pg-extension";
 import { createChecker } from "query-core";
 import { TemplateMap } from "query-mappers";
-import { Comment, Rate, RateFilter } from "rate-core";
+import { Comment, Rate, RateFilter } from "reaction-service";
 import { RateCommentController, RateController } from "reaction-express";
 import { SendGridMailService } from "sendgrid-plus";
 import shortid from "shortid";

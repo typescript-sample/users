@@ -1,5 +1,5 @@
 import { Attributes, Filter, ViewRepository } from "onecore";
-import { Comment } from "rate-core";
+import { Comment } from "reaction-service";
 import { ReactionService } from "reaction-express";
 
 export interface ResponseId {

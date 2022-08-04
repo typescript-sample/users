@@ -4,7 +4,6 @@ import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
-  CommentQuery,
   Info,
   infoModel,
   InfoRepository,
@@ -13,8 +12,9 @@ import {
   CommentFilter,
   RateFilter,
   rateModel,
-} from "rate-core";
-import { CommentValidator, RateValidator } from "rate-core";
+  CommentValidator, RateValidator, Rater, RateService
+} from "reaction-service";
+import { CommentQuery } from "reaction-query";
 import { RateCommentController, RateController } from "reaction-express";
 import {
   SqlRateRepository,
@@ -26,7 +26,6 @@ import {
   SqlCommentRepository,
   SqlReactionRepository
 } from "reaction-query";
-import { Rater, RateRepository, RateService } from "rate-core";
 import {
   Company,
   CompanyFilter,
@@ -103,7 +102,7 @@ export function useCompanyController(
   return new CompanyController(log, useCompanyService(db, mapper));
 }
 
-export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater {
+export function useCompanyRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
   const query = useQuery("rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -188,7 +187,7 @@ export function useCompanyRateController(
 export function useCompanyRateCommentService(
   db: DB,
   mapper?: TemplateMap
-): CommentQuery {
+): CommentQuery<Comment, CommentFilter> {
   const query = useQuery("ratecomment", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,

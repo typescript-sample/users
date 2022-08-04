@@ -2,7 +2,7 @@ import { Request as Req, Response as Res } from "express";
 import { getStatusCode, handleError, Log } from "express-ext";
 import { Validator } from "onecore";
 import { Response, ResponseFilter, ResponseService } from "./response";
-import { Comment } from "rate-core";
+import { Comment } from "reaction-service";
 import { ReactionController } from "reaction-express";
 export class ResponseController extends ReactionController<
   Response,

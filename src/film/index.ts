@@ -21,9 +21,10 @@ import {
   Rater,
   CommentFilter,
   RateCommentQuery,
-  CommentQuery,
-} from "rate-core";
-import { rateModel, Rate, RateFilter, info10Model } from "rate-core";
+  rateModel, Rate, RateFilter, info10Model,
+  RateService, CommentValidator, RateValidator
+} from "reaction-service";
+import { CommentQuery } from "reaction-query";
 import {
   Film,
   FilmFilter,
@@ -34,8 +35,6 @@ import {
 import { FilmController } from "./film-controller";
 import { SqlFilmRepositoy } from "./sql-film-repository";
 import { RateController, RateCommentController } from "reaction-express";
-import { RateService } from "rate-core";
-import { CommentValidator, RateValidator } from "rate-core";
 import { check } from "xvalidators";
 
 export { FilmController };
@@ -174,7 +173,7 @@ export function useFilmController(
   );
 }
 
-export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater {
+export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
   const query = useQuery("rates_film", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -278,7 +277,7 @@ export function useFilmRateCommentService(
     "time",
     "id"
   );
-  return new CommentQuery(builder.search, rateCommentRepository);
+  return new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository);
 }
 
 export function useFilmRateCommentController(

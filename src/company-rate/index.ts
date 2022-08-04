@@ -3,8 +3,8 @@ import { ErrorMessage, Search } from "onecore";
 import { buildToSave } from "pg-extension";
 import { Attributes, DB, SearchBuilder, SearchResult } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import { CommentValidator, Info, infoModel, Comment, Rate, RateReactionRepository, RateCommentRepository, ShortComment } from 'rate-core';
-import { SqlRatesRepository } from "rate-query";
+import { CommentValidator, Info, infoModel, Comment, RateReactionRepository, RateCommentRepository, ShortComment } from 'reaction-service';
+import { SqlRateRepository, SqlRatesRepository } from "rate-query";
 import { RateController, RateService } from "reaction-express";
 import { commentModel, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from "reaction-query";
 import shortid from 'shortid';
@@ -158,7 +158,7 @@ export function useRateCriteriaService(db: DB, mapper?: TemplateMap): RateCriter
 
     const repository = new SqlRatesRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info', 
                         ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'],
-                        rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id', 'id', 'id', 'rate');
+                        rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id');
 
     const infoRepository = new SqlInfoRepository<Info>(db, 'company_rate_full_info', infoModel, buildToSave);
     const rateReactionRepository = new SqlReactionRepository(db, "ratereaction", rateReactionModel, "rates", "usefulCount", "author", "id");
