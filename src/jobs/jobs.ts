@@ -10,6 +10,8 @@ export interface JobFilter extends Filter {
     expiredAt?:Date;
     quantity?:number;
     applicantCount?: number;
+    requirements?:string;
+    benefit?:string;
 }
 export interface Job {
   id: string;
@@ -20,6 +22,8 @@ export interface Job {
   expiredAt:Date;
   quantity:number;
   applicantCount: number;
+  requirements:string;
+  benefit:string;
 }
 export interface JobRepository extends Repository<Job, string>{
 
@@ -30,6 +34,7 @@ export interface JobService extends Service<Job, string, JobFilter> {
 
 export const jobModel: Attributes = {
   id: {
+    key:true,
     length: 40,
   },
   title: {
