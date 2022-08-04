@@ -43,7 +43,8 @@ import {
 import { CodeRepository, DB, StringService } from "pg-extension";
 import { createChecker } from "query-core";
 import { TemplateMap } from "query-mappers";
-import { Comment, Rate, RateFilter } from "reaction-service";
+import { Rate, RateFilter } from "rate-core";
+import { Comment } from "reaction-service";
 import { RateCommentController, RateController } from "reaction-express";
 import { SendGridMailService } from "sendgrid-plus";
 import shortid from "shortid";
@@ -75,6 +76,7 @@ import {
   useCinemaController,
   useCinemaRateCommentController,
   useCinemaRateController,
+  useCinemaReactionController,
 } from "./cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
@@ -82,12 +84,14 @@ import {
   useCompanyController,
   useCompanyRateCommentController,
   useCompanyRateController,
+  useCompanyReactionController,
 } from "./company";
 import {
   FilmController,
   useFilmController,
   useFilmRateCommentController,
   useFilmRateController,
+  useFilmReactionController,
 } from "./film";
 import { ItemController, useItemController } from "./items";
 import {
@@ -104,6 +108,7 @@ import {
   useLocationController,
   useLocationRateCommentController,
   useLocationRateController,
+  useLocationReactionController,
 } from "./location";
 import {
   ArticleController as MyArticleController,
@@ -161,15 +166,18 @@ export interface ApplicationContext {
   article: ArticleController;
   myarticles: MyArticleController;
   cinema: CinemaController;
-  cinemaRate: RateController<Rate, RateFilter, Comment>;
+  cinemaRate: RateController<Rate>;
+  cinemaReaction: ReactionController<Rate, RateFilter, Comment>;
   cinemaComment: RateCommentController<Comment>;
   company: CompanyController;
-  companyRate: RateController<Rate, RateFilter, Comment>;
+  companyRate: RateController<Rate>;
+  companyReaction: ReactionController<Rate, RateFilter, Comment>;
   companyComment: RateCommentController<Comment>;
   companyCategory: CategoryController;
   comment: CommentController;
   film: FilmController;
-  filmRate: RateController<Rate, RateFilter, Comment>;
+  filmRate: RateController<Rate>;
+  filmReaction: ReactionController<Rate, RateFilter, Comment>;
   filmComment: RateCommentController<Comment>;
   filmCategory: CategoryController;
   director: QueryController<string[]>;
@@ -184,10 +192,11 @@ export interface ApplicationContext {
   myitems: MyItemController;
   myitemsUpload: MyItemUploadController;
   location: LocationController;
-  locationRate: RateController<Rate, RateFilter, Comment>;
+  locationRate: RateController<Rate>;
+  locationReaction: ReactionController<Rate, RateFilter, Comment>;
   locationComment: RateCommentController<Comment>;
   jobs: JobController;
-  rateCriteria: RateController<RateCriteria, RateCriteriaFilter, Comment>;
+  rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
 }
 
 export function useContext(
@@ -400,6 +409,7 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
+  const companyReaction = useCompanyReactionController(logger.error, queryDB, mapper);
   const companyComment = useCompanyRateCommentController(
     logger.error,
     mainDB,
@@ -413,6 +423,7 @@ export function useContext(
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
+  const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
   const cinemaComment = useCinemaRateCommentController(
     logger.error,
     queryDB,
@@ -473,6 +484,7 @@ export function useContext(
     mapper
   );
   const filmRate = useFilmRateController(logger.error, queryDB, mapper);
+  const filmReaction = useFilmReactionController(logger.error, queryDB, mapper);
   const filmComment = useFilmRateCommentController(
     logger.error,
     queryDB,
@@ -482,6 +494,7 @@ export function useContext(
 
   const location = useLocationController(logger.error, queryDB, mapper);
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
+  const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
   const locationComment = useLocationRateCommentController(
     logger.error,
     queryDB,
@@ -553,13 +566,16 @@ export function useContext(
     comment,
     cinema,
     cinemaRate,
+    cinemaReaction,
     cinemaComment,
     company,
     companyRate,
+    companyReaction,
     companyComment,
     companyCategory,
     film,
     filmRate,
+    filmReaction,
     filmComment,
     filmCategory,
     director,
@@ -568,6 +584,7 @@ export function useContext(
     country,
     location,
     locationRate,
+    locationReaction,
     locationComment,
     article,
     myarticles,

@@ -2,29 +2,40 @@ import shortid from "shortid";
 import { Log } from "express-ext";
 import { Manager, Search } from "onecore";
 import { buildToSave } from "pg-extension";
-import { DB, SearchBuilder } from "query-core";
+import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
-import {
-  SqlRateRepository,
-} from "rate-query";
+import { check } from "xvalidators";
 import {
   commentModel,
   InfoRepository,
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlReactionRepository
+  SqlReactionRepository,
 } from "reaction-query";
 import {
-  Info10,
   Comment,
-  Rater,
   CommentFilter,
-  RateCommentQuery,
-  rateModel, Rate, RateFilter, info10Model,
-  RateService, CommentValidator, RateValidator
+  CommentValidator,
+  ReactionService,
 } from "reaction-service";
+import {
+  RateController,
+  RateCommentController,
+  ReactionController,
+} from "reaction-express";
 import { CommentQuery } from "reaction-query";
+import {
+  Info10,
+  rateModel,
+  Rate,
+  RateFilter,
+  info10Model,
+  RateService,
+  RateValidator,
+} from "rate-core";
+import { SqlRateRepository } from "rate-query";
+
 import {
   Film,
   FilmFilter,
@@ -34,8 +45,8 @@ import {
 } from "./film";
 import { FilmController } from "./film-controller";
 import { SqlFilmRepositoy } from "./sql-film-repository";
-import { RateController, RateCommentController } from "reaction-express";
-import { check } from "xvalidators";
+
+
 
 export { FilmController };
 
@@ -173,7 +184,11 @@ export function useFilmController(
   );
 }
 
-export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
+// Rate
+export function useFilmReactionService(
+  db: DB,
+  mapper?: TemplateMap
+): ReactionService<Rate, RateFilter> {
   const query = useQuery("rates_film", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -182,24 +197,14 @@ export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater<Rate, Ra
     db.driver,
     query
   );
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
+
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(
+    db.query,
     "rates_film",
     rateModel,
-    buildToSave,
-    10,
-    "rates_film_info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
-  );
-  const infoRepository = new SqlInfoRepository<Info10>(
-    db,
-    "rates_film_info",
-    info10Model,
-    buildToSave
+    db.param,
+    "id",
+    "author"
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
@@ -222,26 +227,24 @@ export function useFilmRateService(db: DB, mapper?: TemplateMap): Rater<Rate, Ra
     "time",
     "id"
   );
-  return new RateService(
+  return new ReactionService<Rate, RateFilter>(
     builder.search,
     rateRepository,
-    infoRepository,
-    rateCommentRepository,
-    rateReactionRepository
+    rateReactionRepository,
+    rateCommentRepository
   );
 }
 
-export function useFilmRateController(
+export function useFilmReactionController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): RateController<Rate, RateFilter, Comment> {
+): ReactionController<Rate, RateFilter, Comment> {
   const rateValidator = new RateValidator(rateModel, check, 10);
   const commentValidator = new CommentValidator(commentModel, check);
-  return new RateController(
+  return new ReactionController(
     log,
-    useFilmRateService(db, mapper),
-    rateValidator,
+    useFilmReactionService(db, mapper),
     commentValidator,
     ["time"],
     ["rate", "usefulCount", "replyCount", "count", "score"],
@@ -253,10 +256,45 @@ export function useFilmRateController(
   );
 }
 
+export function useFilmRateController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): RateController<Rate> {
+  const rateRepository = new SqlRateRepository<Rate>(
+    db,
+    "rates_film",
+    rateModel,
+    buildToSave,
+    10,
+    "rates_film_info",
+    "rate",
+    "count",
+    "score",
+    "author",
+    "id"
+  );
+  const infoRepository = new SqlInfoRepository<Info10>(
+    db,
+    "rates_film_info",
+    info10Model,
+    buildToSave
+  );
+  const rateValidator = new RateValidator(rateModel, check, 10);
+  const rateService = new RateService(rateRepository, infoRepository);
+  return new RateController(
+    log,
+    rateService.rate,
+    rateValidator.validate,
+    "author",
+    "id"
+  );
+}
+
 export function useFilmRateCommentService(
   db: DB,
   mapper?: TemplateMap
-): RateCommentQuery {
+): CommentQuery<Comment, CommentFilter> {
   const query = useQuery("rates_film_comments", mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
@@ -277,7 +315,10 @@ export function useFilmRateCommentService(
     "time",
     "id"
   );
-  return new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository);
+  return new CommentQuery<Comment, CommentFilter>(
+    builder.search,
+    rateCommentRepository
+  );
 }
 
 export function useFilmRateCommentController(

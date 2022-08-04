@@ -4306,6 +4306,11 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
   "version" "1.2.1"
 
+"rate-core@^0.5.3":
+  "integrity" "sha512-iRg9bIqmp5U+DRMxirqlLtYONb2N/CvDt8FiHLEPyoWIzJa90wjfgPDNtwayYOifc+zXMYwS+nBQBL3Vdsyu6A=="
+  "resolved" "https://registry.npmjs.org/rate-core/-/rate-core-0.5.3.tgz"
+  "version" "0.5.3"
+
 "rate-query@^0.2.0":
   "integrity" "sha512-F6myTsmCz/tR5pZX/DwKrzDLX57+Ye/MGcdA3L8XDM92+7/q1zq2LqVL/2LgdW/cRmdRVXr08yokbG91tuh1SQ=="
   "resolved" "https://registry.npmjs.org/rate-query/-/rate-query-0.2.0.tgz"
@@ -4331,20 +4336,20 @@
     "minimist" "^1.2.0"
     "strip-json-comments" "~2.0.1"
 
-"reaction-express@^0.1.0":
-  "integrity" "sha512-C10qmOxZU8wcuuGKojqEJu4usKf3O8wPR6ozlbABQOAoRHvzfoN4yXJLb3iop96+7b/x5fTZF7fNYB23OjVsZg=="
-  "resolved" "https://registry.npmjs.org/reaction-express/-/reaction-express-0.1.0.tgz"
-  "version" "0.1.0"
+"reaction-express@^0.1.1":
+  "integrity" "sha512-V5AbSYfMLMycWOhW9YZ1DagpLNGqo7Erf+T/3utyPx/h67v++HYHfTKM1jVwD/XdCNjdsgEDNtIGUah/jAoMnA=="
+  "resolved" "https://registry.npmjs.org/reaction-express/-/reaction-express-0.1.1.tgz"
+  "version" "0.1.1"
 
-"reaction-query@^0.0.2":
-  "integrity" "sha512-yQBm2bic1T2w5vNn1Z7o5t3WPBcMdBvAFpAJ5TnDF53Kgusw9l9H4WYyuQRAIJQfDR99mfzImWd+zLQTWMgdoA=="
-  "resolved" "https://registry.npmjs.org/reaction-query/-/reaction-query-0.0.2.tgz"
-  "version" "0.0.2"
+"reaction-query@^0.0.3":
+  "integrity" "sha512-2MP/UPBPhmSqaGQ1DaHVLSmL2ylufKrweYR8KcRRZmgB90awf86JoRqJp7I83pIV5SlYEL7en19mexbeXaRccg=="
+  "resolved" "https://registry.npmjs.org/reaction-query/-/reaction-query-0.0.3.tgz"
+  "version" "0.0.3"
 
-"reaction-service@^0.5.0":
-  "integrity" "sha512-ND5oyKDtRliaByK7BbDkveDTkWPWVNQGfI67OmjHCCrlARDva5Abu45DDaFe4TwsUshi/W8c3GvqBIQA7dB4dw=="
-  "resolved" "https://registry.npmjs.org/reaction-service/-/reaction-service-0.5.0.tgz"
-  "version" "0.5.0"
+"reaction-service@^0.5.1":
+  "integrity" "sha512-sccK8x9GwxOMVD8lYJtTSBs0rQavZVcQlIwGtbQFIGyDyIf2M9VtzpgnzUFlQDu55Il0aooRQRST1gh/XlOt9Q=="
+  "resolved" "https://registry.npmjs.org/reaction-service/-/reaction-service-0.5.1.tgz"
+  "version" "0.5.1"
 
 "readable-stream@^2.0.0", "readable-stream@^2.0.1", "readable-stream@^2.0.2", "readable-stream@^2.1.5", "readable-stream@^2.2.2", "readable-stream@^2.3.6", "readable-stream@~2.3.6", "readable-stream@1 || 2":
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="

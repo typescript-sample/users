@@ -4,30 +4,35 @@ import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
-  Info,
-  infoModel,
-  InfoRepository,
-  Rate,
-  Comment,
-  CommentFilter,
-  RateFilter,
-  rateModel,
-  CommentValidator,
-  RateValidator,
-  Rater, RateService
-} from "reaction-service";
-import { CommentQuery } from "reaction-query";
-import { RateCommentController, RateController } from "reaction-express";
-import {
-  SqlRateRepository,
-} from "rate-query";
-import {
   commentModel,
+  InfoRepository,
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlReactionRepository
+  SqlReactionRepository,
 } from "reaction-query";
+import {
+  Comment,
+  CommentFilter,
+  CommentValidator,
+  ReactionService,
+} from "reaction-service";
+import {
+  RateController,
+  RateCommentController,
+  ReactionController,
+} from "reaction-express";
+import { CommentQuery } from "reaction-query";
+import {
+  Info,
+  rateModel,
+  Rate,
+  RateFilter,
+  infoModel,
+  RateService,
+  RateValidator,
+} from "rate-core";
+import { SqlRateRepository } from "rate-query";
 import {
   Cinema,
   CinemaFilter,
@@ -101,7 +106,48 @@ export function useCinemaController(
   return new CinemaController(log, useCinemaService(db, mapper));
 }
 
-export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
+// Rate
+export function useCinemaRateController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): RateController<Rate> {
+  const rateRepository = new SqlRateRepository<Rate>(
+    db,
+    "rates",
+    rateModel,
+    buildToSave,
+    10,
+    "info",
+    "rate",
+    "count",
+    "score",
+    "author",
+    "id"
+  );
+  const infoRepository = new SqlInfoRepository<Info>(
+    db,
+    "info",
+    infoModel,
+    buildToSave
+  );
+  const rateValidator = new RateValidator(rateModel, check, 5);
+  const rateService = new RateService(rateRepository, infoRepository);
+  // const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  return new RateController(
+    log,
+    rateService.rate,
+    rateValidator.validate,
+    "author",
+    "id"
+    // queryUrl
+  );
+}
+
+export function useCinemaReactionService(
+  db: DB,
+  mapper?: TemplateMap
+): ReactionService<Rate, RateFilter> {
   const query = useQuery("rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -123,12 +169,6 @@ export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater<Rate, 
     "author",
     "id"
   );
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    "info",
-    infoModel,
-    buildToSave
-  );
   const rateReactionRepository = new SqlReactionRepository(
     db,
     "ratereaction",
@@ -149,29 +189,24 @@ export function useCinemaRateService(db: DB, mapper?: TemplateMap): Rater<Rate, 
     "author",
     "id"
   );
-  // select id, imageurl as url from users;
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
-  return new RateService(
+
+  return new ReactionService<Rate, RateFilter>(
     builder.search,
     rateRepository,
-    infoRepository,
-    rateCommentRepository,
     rateReactionRepository,
-    queryUrl
+    rateCommentRepository
   );
 }
 
-export function useCinemaRateController(
+export function useCinemaReactionController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): RateController<Rate, RateFilter, Comment> {
-  const rateValidator = new RateValidator(rateModel, check, 5);
+): ReactionController<Rate, RateFilter, Comment> {
   const commentValidator = new CommentValidator(commentModel, check);
-  return new RateController(
+  return new ReactionController(
     log,
-    useCinemaRateService(db, mapper),
-    rateValidator,
+    useCinemaReactionService(db, mapper),
     commentValidator,
     ["time"],
     ["rate", "usefulCount", "replyCount", "count", "score"],

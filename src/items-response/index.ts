@@ -19,8 +19,8 @@ import {
   SqlCommentRepository,
   SqlReactionRepository,
 } from "reaction-query";
-import { Comment, CommentValidator } from "reaction-service";
-import { ReactionService, ReactionController } from "reaction-express";
+import { Comment, CommentValidator, ReactionService } from "reaction-service";
+import { ReactionController } from "reaction-express";
 import {
   infoModel,
   Info,
@@ -65,7 +65,6 @@ export class ResponseManager implements ResponseService {
     await this.repository.insert(response);
     return true;
   }
-
   updateResponse(response: Response): Promise<number> {
     return this.repository.load(response.id, response.author).then((exist) => {
       if (exist) {
@@ -123,103 +122,10 @@ export function useResponseController(
 }
 
 // Reaction
-export class ReactionManager
-  implements ReactionService<Response, ResponseFilter, Comment>
-{
-  constructor(
-    protected find: Search<Response, ResponseFilter>,
-    public repository: ResponseRepository,
-    private infoRepository: InfoRepository<Info>,
-    private responseCommentRepository: CommentRepository<Comment>,
-    private responseReactionRepository: ReactionRepository
-  ) {
-    this.load = this.load.bind(this);
-    this.comment = this.comment.bind(this);
-    this.getComments = this.getComments.bind(this);
-    this.removeComment = this.removeComment.bind(this);
-    this.updateComment = this.updateComment.bind(this);
-  }
-  search(
-    s: ResponseFilter,
-    limit?: number,
-    offset?: number | string,
-    fields?: string[]
-  ): Promise<SearchResult<Response>> {
-    return this.find(s, limit, offset, fields);
-  }
-  load(id: string, author: string): Promise<Response | null> {
-    return this.repository.load(id, author);
-  }
-  setUseful(id: string, author: string, userId: string): Promise<number> {
-    return this.responseReactionRepository.save(id, author, userId, 1);
-  }
-  removeUseful(id: string, author: string, userId: string): Promise<number> {
-    return this.responseReactionRepository.remove(id, author, userId);
-  }
-  comment(comment: Comment): Promise<number> {
-    return this.repository
-      .load(comment.id, comment.author)
-      .then((checkResponse) => {
-        if (!checkResponse) {
-          return 0;
-        } else {
-          comment.time
-            ? (comment.time = comment.time)
-            : (comment.time = new Date());
-          return this.responseCommentRepository.insert(comment);
-        }
-      });
-  }
-  getComment(id: string): Promise<Comment | null> {
-    return this.responseCommentRepository.load(id);
-  }
-  getComments(id: string, author: string, limit?: number): Promise<Comment[]> {
-    if (limit && limit > 0) {
-      return this.responseCommentRepository.getComments(id, author, limit);
-    }
-    return this.responseCommentRepository.getComments(id, author);
-  }
-  removeComment(commentId: string, userId: string): Promise<number> {
-    return this.responseCommentRepository.load(commentId).then((comment) => {
-      if (comment) {
-        if (userId === comment.author || userId === comment.userId) {
-          return this.responseCommentRepository.remove(
-            commentId,
-            comment.id,
-            comment.author
-          );
-        } else {
-          return -2;
-        }
-      } else {
-        return -1;
-      }
-    });
-  }
-  updateComment(comment: Comment): Promise<number> {
-    return this.responseCommentRepository
-      .load(comment.commentId)
-      .then((exist) => {
-        if (!exist) {
-          return 0;
-        } else {
-          comment.updatedAt = new Date();
-          const c: ShortComment = { comment: exist.comment, time: exist.time };
-          if (!comment.histories || comment.histories.length === 0) {
-            comment.histories = [c];
-          } else {
-            comment.histories.push(c);
-          }
-          return this.responseCommentRepository.update(comment);
-        }
-      });
-  }
-}
-
 export function useResponseReactionService(
   db: DB,
   mapper?: TemplateMap
-): ReactionService<Response, ResponseFilter, Comment> {
+): ReactionService<Response, ResponseFilter> {
   const query = useQuery("item_response", mapper, responseModel, true);
   const builder = new SearchBuilder<Response, ResponseFilter>(
     db.query,
@@ -234,12 +140,6 @@ export function useResponseReactionService(
     responseModel,
     "id",
     "author"
-  );
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    "item_info",
-    infoModel,
-    buildToSave
   );
   const responseReactionRepository = new SqlReactionRepository(
     db,
@@ -263,12 +163,11 @@ export function useResponseReactionService(
     "id"
   );
 
-  return new ReactionManager(
+  return new ReactionService<Response, ResponseFilter>(
     builder.search,
     repository,
-    infoRepository,
+    responseReactionRepository,
     responseCommentRepository,
-    responseReactionRepository
   );
 }
 
@@ -291,5 +190,3 @@ export function useResponseReactionController(
     "id"
   );
 }
-
-

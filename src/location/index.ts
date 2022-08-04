@@ -3,28 +3,37 @@ import { buildToSave, useUrlQuery } from "pg-extension";
 import { DB, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
-import {
-  Info,
-  infoModel,
-  InfoRepository,
-  Rate,
-  Comment,
-  CommentFilter,
-  RateFilter,
-  rateModel, CommentValidator, RateValidator, Rater, RateService
-} from "reaction-service";
-import { CommentQuery } from "reaction-query";
-import { RateCommentController, RateController } from "reaction-express";
+import { check } from "xvalidators";
 import {
   commentModel,
+  InfoRepository,
   rateReactionModel,
   SqlInfoRepository,
   SqlCommentRepository,
-  SqlReactionRepository
+  SqlReactionRepository,
 } from "reaction-query";
 import {
-  SqlRateRepository,
-} from "rate-query";
+  Comment,
+  CommentFilter,
+  CommentValidator,
+  ReactionService,
+} from "reaction-service";
+import {
+  RateController,
+  RateCommentController,
+  ReactionController,
+} from "reaction-express";
+import { CommentQuery } from "reaction-query";
+import {
+  Info,
+  rateModel,
+  Rate,
+  RateFilter,
+  infoModel,
+  RateService,
+  RateValidator,
+} from "rate-core";
+import { SqlRateRepository } from "rate-query";
 import {
   Location,
   LocationFilter,
@@ -34,7 +43,6 @@ import {
 } from "./location";
 import { LocationController } from "./location-controller";
 import { SqlLocationRepository } from "./sql-location-repository";
-import { check } from "xvalidators";
 export * from "./location-controller";
 export { LocationController };
 
@@ -101,7 +109,46 @@ export function useLocationController(
   return new LocationController(log, useLocationService(db, mapper));
 }
 
-export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater<Rate, RateFilter> {
+// Rate
+export function useLocationRateController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): RateController<Rate> {
+  const rateRepository = new SqlRateRepository<Rate>(
+    db,
+    "location_rates",
+    rateModel,
+    buildToSave,
+    5,
+    "location_info",
+    "rate",
+    "count",
+    "score",
+    "author",
+    "id"
+  );
+  const infoRepository = new SqlInfoRepository<Info>(
+    db,
+    "info",
+    infoModel,
+    buildToSave
+  );
+  const rateValidator = new RateValidator(rateModel, check, 5);
+  const rateService = new RateService(rateRepository, infoRepository);
+  return new RateController(
+    log,
+    rateService.rate,
+    rateValidator.validate,
+    "author",
+    "id"
+  );
+}
+
+export function useLocationReactionService(
+  db: DB,
+  mapper?: TemplateMap
+): ReactionService<Rate, RateFilter> {
   const query = useQuery("location_rates", mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
@@ -123,12 +170,6 @@ export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater<Rate
     "author",
     "id"
   );
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    "location_info",
-    infoModel,
-    buildToSave
-  );
   const rateReactionRepository = new SqlReactionRepository(
     db,
     "location_ratereaction",
@@ -149,29 +190,26 @@ export function useLocationRateService(db: DB, mapper?: TemplateMap): Rater<Rate
     "author",
     "id"
   );
-  // select id, imageurl as url from users;
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
-  return new RateService(
+
+  // const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  return new ReactionService<Rate, RateFilter>(
     builder.search,
     rateRepository,
-    infoRepository,
-    rateCommentRepository,
     rateReactionRepository,
-    queryUrl
+    rateCommentRepository,
+    // queryUrl
   );
 }
 
-export function useLocationRateController(
+export function useLocationReactionController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): RateController<Rate, RateFilter, Comment> {
-  const rateValidator = new RateValidator(rateModel, check, 5);
+): ReactionController<Rate, RateFilter, Comment> {
   const commentValidator = new CommentValidator(commentModel, check);
-  return new RateController(
+  return new ReactionController(
     log,
-    useLocationRateService(db, mapper),
-    rateValidator,
+    useLocationReactionService(db, mapper),
     commentValidator,
     ["time"],
     ["rate", "usefulCount", "replyCount", "count", "score"],

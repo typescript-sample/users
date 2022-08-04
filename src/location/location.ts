@@ -1,6 +1,6 @@
 import { Attributes, Filter, Service } from "onecore";
 import { Repository } from 'query-core';
-import { Info } from 'reaction-service';
+import { Info } from "rate-core";
 
 export interface LocationFilter extends Filter {
   id?: string;

@@ -12,6 +12,8 @@ export interface Response {
   time: Date;
   usefulCount: number;
   replyCount: number;
+  authorURL?: string;
+  rate: number;
 }
 
 export interface ResponseFilter extends Filter {
