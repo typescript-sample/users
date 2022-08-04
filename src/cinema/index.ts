@@ -1,6 +1,6 @@
 import { Log, Manager, Search } from "onecore";
 import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder } from "query-core";
+import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
@@ -144,6 +144,7 @@ export function useCinemaRateController(
   );
 }
 
+// Reaction
 export function useCinemaReactionService(
   db: DB,
   mapper?: TemplateMap
@@ -156,18 +157,13 @@ export function useCinemaReactionService(
     db.driver,
     query
   );
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
-    "rates",
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(
+    db.query,
+    "rates_film",
     rateModel,
-    buildToSave,
-    5,
-    "info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
+    db.param,
+    "id",
+    "author"
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
@@ -189,7 +185,6 @@ export function useCinemaReactionService(
     "author",
     "id"
   );
-
   return new ReactionService<Rate, RateFilter>(
     builder.search,
     rateRepository,
@@ -218,6 +213,7 @@ export function useCinemaReactionController(
   );
 }
 
+// Comment
 export function useCinemaRateCommentService(
   db: DB,
   mapper?: TemplateMap
@@ -256,6 +252,7 @@ export function useCinemaRateCommentController(
     useCinemaRateCommentService(db, mapper)
   );
 }
+
 export function generate(): string {
   return shortid.generate();
 }

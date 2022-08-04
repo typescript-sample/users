@@ -1,6 +1,6 @@
 import { Log, Manager, Search } from "onecore";
 import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder } from "query-core";
+import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import { check } from "xvalidators";
@@ -145,6 +145,7 @@ export function useLocationRateController(
   );
 }
 
+// Reaction
 export function useLocationReactionService(
   db: DB,
   mapper?: TemplateMap
@@ -157,18 +158,13 @@ export function useLocationReactionService(
     db.driver,
     query
   );
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(
+    db.query,
     "location_rates",
     rateModel,
-    buildToSave,
-    5,
-    "location_info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
+    db.param,
+    "id",
+    "author"
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
@@ -190,7 +186,6 @@ export function useLocationReactionService(
     "author",
     "id"
   );
-
   // const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
   return new ReactionService<Rate, RateFilter>(
     builder.search,
@@ -221,6 +216,7 @@ export function useLocationReactionController(
   );
 }
 
+// Comment
 export function useLocationRateCommentService(
   db: DB,
   mapper?: TemplateMap
@@ -259,6 +255,7 @@ export function useLocationRateCommentController(
     useLocationRateCommentService(db, mapper)
   );
 }
+
 export function generate(): string {
   return shortid.generate();
 }

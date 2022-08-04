@@ -1,6 +1,6 @@
 import { Log, Manager, Search } from "onecore";
 import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder } from "query-core";
+import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
@@ -145,6 +145,7 @@ export function useCompanyRateController(
   );
 }
 
+// Reaction
 export function useCompanyReactionService(
   db: DB,
   mapper?: TemplateMap
@@ -157,24 +158,13 @@ export function useCompanyReactionService(
     db.driver,
     query
   );
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
-    "rates",
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(
+    db.query,
+    "rates_company",
     rateModel,
-    buildToSave,
-    5,
-    "info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
-  );
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    "info",
-    infoModel,
-    buildToSave
+    db.param,
+    "id",
+    "author"
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
@@ -226,6 +216,7 @@ export function useCompanyReactionController(
   );
 }
 
+// Comment
 export function useCompanyRateCommentService(
   db: DB,
   mapper?: TemplateMap
@@ -264,6 +255,7 @@ export function useCompanyRateCommentController(
     useCompanyRateCommentService(db, mapper)
   );
 }
+
 export function generate(): string {
   return shortid.generate();
 }

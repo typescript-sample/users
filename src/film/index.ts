@@ -185,6 +185,42 @@ export function useFilmController(
 }
 
 // Rate
+export function useFilmRateController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): RateController<Rate> {
+  const rateRepository = new SqlRateRepository<Rate>(
+    db,
+    "rates_film",
+    rateModel,
+    buildToSave,
+    10,
+    "rates_film_info",
+    "rate",
+    "count",
+    "score",
+    "author",
+    "id"
+  );
+  const infoRepository = new SqlInfoRepository<Info10>(
+    db,
+    "rates_film_info",
+    info10Model,
+    buildToSave
+  );
+  const rateValidator = new RateValidator(rateModel, check, 10);
+  const rateService = new RateService(rateRepository, infoRepository);
+  return new RateController(
+    log,
+    rateService.rate,
+    rateValidator.validate,
+    "author",
+    "id"
+  );
+}
+
+// Reaction
 export function useFilmReactionService(
   db: DB,
   mapper?: TemplateMap
@@ -197,7 +233,6 @@ export function useFilmReactionService(
     db.driver,
     query
   );
-
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
     "rates_film",
@@ -240,7 +275,6 @@ export function useFilmReactionController(
   db: DB,
   mapper?: TemplateMap
 ): ReactionController<Rate, RateFilter, Comment> {
-  const rateValidator = new RateValidator(rateModel, check, 10);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(
     log,
@@ -256,41 +290,7 @@ export function useFilmReactionController(
   );
 }
 
-export function useFilmRateController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateController<Rate> {
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
-    "rates_film",
-    rateModel,
-    buildToSave,
-    10,
-    "rates_film_info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
-  );
-  const infoRepository = new SqlInfoRepository<Info10>(
-    db,
-    "rates_film_info",
-    info10Model,
-    buildToSave
-  );
-  const rateValidator = new RateValidator(rateModel, check, 10);
-  const rateService = new RateService(rateRepository, infoRepository);
-  return new RateController(
-    log,
-    rateService.rate,
-    rateValidator.validate,
-    "author",
-    "id"
-  );
-}
-
+// Comment
 export function useFilmRateCommentService(
   db: DB,
   mapper?: TemplateMap
