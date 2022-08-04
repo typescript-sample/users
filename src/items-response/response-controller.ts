@@ -46,12 +46,12 @@ export class ResponseController extends ReactionController<
       .validate(response)
       .then((errors) => {
         if (errors && errors.length > 0) {
-          res.status(getStatusCode(errors)).json(errors).end();
+          res.status(getStatusCode(errors)).json(errors).send();
         } else {
           this.responseService
             .response(response)
             .then((rs) => {
-              return res.status(200).json(rs).end();
+              return res.status(200).json(rs).send();
             })
             .catch((err) => handleError(err, res, this.log));
         }
@@ -67,12 +67,12 @@ export class ResponseController extends ReactionController<
       .validate(response)
       .then((errors) => {
         if (errors && errors.length > 0) {
-          res.status(getStatusCode(errors)).json(errors).end();
+          res.status(getStatusCode(errors)).json(errors).send();
         } else {
           this.responseService
             .updateResponse(response)
             .then((reply) => {
-              return res.status(200).json(reply).end();
+              return res.status(200).json(reply).send();
             })
             .catch((err) => handleError(err, res, this.log));
         }
