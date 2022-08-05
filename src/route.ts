@@ -136,13 +136,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/films/categories/:id', ctx.filmCategory.patch);
   app.delete('/films/categories/:id', ctx.filmCategory.delete);
 
-  app.post('/films', ctx.film.create);
+  // app.post('/films', ctx.film.create);
   app.get('/films/search', ctx.film.search);
   app.post('/films/search', ctx.film.search);
   app.get('/films/:id', ctx.film.load);
-  app.put('/films/:id', ctx.film.update);
-  app.patch('/films/:id', ctx.film.patch);
-  app.delete('/films/:id', ctx.film.delete);
+
+  // app.put('/films/:id', ctx.film.update);
+  // app.patch('/films/:id', ctx.film.patch);
+  // app.delete('/films/:id', ctx.film.delete);
 
 
   app.get('/films/:id/rates/search', ctx.filmReaction.search);
@@ -219,6 +220,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/locations/search", ctx.location.search);
   app.get("/locations/:id", ctx.location.load);
 
+
+  app.post("/backoffice/locations/search", ctx.backofficeLocation.search);
+  app.get("/backoffice/locations/search", ctx.backofficeLocation.search);
+  app.get("/backoffice/locations/:id", ctx.backofficeLocation.load);
+  app.post('/backoffice/locations', ctx.backofficeLocation.create);
+  app.put('/backoffice/locations/:id', ctx.backofficeLocation.update);
+  app.patch('/backoffice/locations/:id', ctx.backofficeLocation.patch);
+  app.delete('/backoffice/locations/:id', ctx.backofficeLocation.delete);
+
+  
+
   app.get('/locations/rates/search', ctx.locationReaction.search);
   app.get('/locations/rates/search/:id/:author', ctx.locationReaction.search);
   app.post('/locations/rates/search/:id/:author', ctx.locationReaction.search);
@@ -236,10 +248,16 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);
   app.get('/companies/:id', ctx.company.load);
-  app.post('/companies/', ctx.company.create);
-  app.put('/companies/:id', ctx.company.update);
-  app.patch('/companies/:id', ctx.company.patch);
-  app.delete('/companies/:id', ctx.company.delete);
+  
+
+
+  app.post('/backoffice/companies/search', ctx.backofficeCompany.search);
+  app.get('/backoffice/companies/search', ctx.backofficeCompany.search);
+  app.get('/backoffice/companies/:id', ctx.backofficeCompany.load);
+  app.post('/backoffice/companies/', ctx.backofficeCompany.create);
+  app.put('/backoffice/companies/:id', ctx.backofficeCompany.update);
+  app.patch('/backoffice/companies/:id', ctx.backofficeCompany.patch);
+  app.delete('/backoffice/companies/:id', ctx.backofficeCompany.delete);
 
   app.get('/companies/categories/search', ctx.companyCategory.search);
   app.get('/companies/categories/:id', ctx.companyCategory.load);
@@ -267,13 +285,31 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/jobs/search', ctx.jobs.search);
   app.post('/jobs/search', ctx.jobs.search);
   app.get('/jobs/:id', ctx.jobs.load);
-  app.post('/jobs/', ctx.jobs.create);
-  app.put('/jobs/:id', ctx.jobs.update);
-  app.patch('/jobs/:id', ctx.jobs.patch);
-  app.delete('/jobs/:id', ctx.jobs.delete);
+  // app.post('/jobs/', ctx.jobs.create);
+  // app.put('/jobs/:id', ctx.jobs.update);
+  // app.patch('/jobs/:id', ctx.jobs.patch);
+  // app.delete('/jobs/:id', ctx.jobs.delete);
 
   app.post('/company/rate-criteria/search', ctx.rateCriteria.search);
   app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
   app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.load);
   // app.post('/company/rate-criteria/rate/:id/:author', ctx.rateCriteria.rate);
+
+  app.post('/backoffice/film', ctx.backOfficeFilm.create);
+  app.get('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.post('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.get('/backoffice/film/:id', ctx.backOfficeFilm.load);
+  app.put('/backoffice/film/:id', ctx.backOfficeFilm.update);
+  app.patch('/backoffice/film/:id', ctx.backOfficeFilm.patch);
+  app.delete('/backoffice/film/:id', ctx.backOfficeFilm.delete);
+
+
+
+  app.get('/backoffice/job/search', ctx.jobs.search);
+  app.post('/backoffice/job/search', ctx.jobs.search);
+  app.get('/backoffice/job/:id', ctx.jobs.load);
+  app.post('/backoffice/job/', ctx.jobs.create);
+  app.put('/backoffice/job/:id', ctx.jobs.update);
+  app.patch('/backoffice/job/:id', ctx.jobs.patch);
+  app.delete('/backoffice/job/:id', ctx.jobs.delete);
 }
