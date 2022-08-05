@@ -136,13 +136,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/films/categories/:id', ctx.filmCategory.patch);
   app.delete('/films/categories/:id', ctx.filmCategory.delete);
 
-  app.post('/films', ctx.film.create);
+  // app.post('/films', ctx.film.create);
   app.get('/films/search', ctx.film.search);
   app.post('/films/search', ctx.film.search);
   app.get('/films/:id', ctx.film.load);
-  app.put('/films/:id', ctx.film.update);
-  app.patch('/films/:id', ctx.film.patch);
-  app.delete('/films/:id', ctx.film.delete);
+
+  // app.put('/films/:id', ctx.film.update);
+  // app.patch('/films/:id', ctx.film.patch);
+  // app.delete('/films/:id', ctx.film.delete);
 
   app.get('/films/rates/search', ctx.filmReaction.search);
   app.post('/films/rates/search', ctx.filmReaction.search);
@@ -273,4 +274,12 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
   app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.load);
   // app.post('/company/rate-criteria/rate/:id/:author', ctx.rateCriteria.rate);
+
+  app.post('/backoffice/film', ctx.backOfficeFilm.create);
+  app.get('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.post('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.get('/backoffice/film/:id', ctx.backOfficeFilm.load);
+  app.put('/backoffice/film/:id', ctx.backOfficeFilm.update);
+  app.patch('/backoffice/film/:id', ctx.backOfficeFilm.patch);
+  app.delete('/backoffice/film/:id', ctx.backOfficeFilm.delete);
 }

@@ -130,6 +130,10 @@ import { JobController, useJobController } from "./jobs";
 
 import { useRateCriteriaController } from "./company-rate";
 import { RateCriteria, RateCriteriaFilter } from "./company-rate/rate-criteria";
+import {
+  BackOfficeFilmController,
+  useBackOfficeFilmController
+} from "./backoffice-film";
 
 resources.createValidator = createValidator;
 
@@ -176,6 +180,7 @@ export interface ApplicationContext {
   companyCategory: CategoryController;
   comment: CommentController;
   film: FilmController;
+  backOfficeFilm: BackOfficeFilmController;
   filmRate: RateController<Rate>;
   filmReaction: ReactionController<Rate, RateFilter, Comment>;
   filmComment: RateCommentController<Comment>;
@@ -483,6 +488,15 @@ export function useContext(
     countryService.save,
     mapper
   );
+  const backOfficeFilm = useBackOfficeFilmController(
+    logger.error,
+    queryDB,
+    directorService.save,
+    castService.save,
+    productionService.save,
+    countryService.save,
+    mapper
+  );
   const filmRate = useFilmRateController(logger.error, queryDB, mapper);
   const filmReaction = useFilmReactionController(logger.error, queryDB, mapper);
   const filmComment = useFilmRateCommentController(
@@ -597,6 +611,7 @@ export function useContext(
     myitemsUpload,
     jobs,
     rateCriteria,
+    backOfficeFilm
   };
 }
 

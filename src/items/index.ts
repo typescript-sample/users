@@ -12,13 +12,17 @@ import { SqlItemRepository } from './sql-item-repository';
 import { SqlSaveItemsRepository } from './sql-item-repository';
 
 export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
-  constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedItemsRepository) {
+  constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedItemsRepository, public max: number) {
     super(search, itemRepository);
   }
   async saveItems(id: string, itemId: string): Promise<number> {
     const item = await this.saveItemsRepository.load(id);
     if (item) {
+      
       item.items.push(itemId);
+      if (item.items.length > this.max) {
+        item.items.shift()
+      }
       return this.saveItemsRepository.update(item);
     } else {
       const newItem: SaveItems = { id, items: [itemId] };
@@ -34,10 +38,11 @@ export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> imp
   }
 }
 export function useItemService(db: DB): ItemQuery {
+  const savedItemMax=50
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
   const repository = new SqlItemRepository(db, 'items');
   const saveItemRepository = new SqlSaveItemsRepository(db, 'save_items', saveItemsModel, buildToSave);
-  return new ItemManager(builder.search, repository, saveItemRepository);
+  return new ItemManager(builder.search, repository, saveItemRepository,savedItemMax);
 }
 export function useItemController(log: Log, db: DB): ItemController {
   return new ItemController(log, useItemService(db));
