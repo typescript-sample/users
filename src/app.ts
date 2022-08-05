@@ -22,6 +22,7 @@ const app = express();
 
 app.use(allow(conf.allow), json(), cookieParser(), middleware.log);
 const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/query.xml']);
+// const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/job.xml']);
 const db = log(new PoolManager(new Pool(conf.db.user)), true, logger, 'postgres');
 const pool = new Pool(conf.db.query);
 const queryDB = new PoolManager(pool);

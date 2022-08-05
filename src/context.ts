@@ -111,6 +111,10 @@ import {
   useLocationReactionController,
 } from "./location";
 import {
+  BackOfficeLocationController,
+  useBackOfficeLocationController
+} from "./backoffice-location";
+import {
   ArticleController as MyArticleController,
   useMyArticleController,
 } from "./my-articles";
@@ -127,6 +131,7 @@ import {
 import { UserController, useUserController } from "./user";
 
 import { JobController, useJobController } from "./jobs";
+import { BackOfficeJobController, useBackOfficeJobController } from "./backoffice-job";
 
 import { useRateCriteriaController } from "./company-rate";
 import { RateCriteria, RateCriteriaFilter } from "./company-rate/rate-criteria";
@@ -134,6 +139,10 @@ import {
   BackOfficeFilmController,
   useBackOfficeFilmController
 } from "./backoffice-film";
+import {
+  BackOfficeCompanyController,
+  useBackOfficeCompanyController
+} from "./backoffice-company";
 
 resources.createValidator = createValidator;
 
@@ -174,6 +183,7 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController<Rate, RateFilter, Comment>;
   cinemaComment: RateCommentController<Comment>;
   company: CompanyController;
+  backofficeCompany: BackOfficeCompanyController;
   companyRate: RateController<Rate>;
   companyReaction: ReactionController<Rate, RateFilter, Comment>;
   companyComment: RateCommentController<Comment>;
@@ -197,10 +207,12 @@ export interface ApplicationContext {
   myitems: MyItemController;
   myitemsUpload: MyItemUploadController;
   location: LocationController;
+  backofficeLocation: BackOfficeLocationController;
   locationRate: RateController<Rate>;
   locationReaction: ReactionController<Rate, RateFilter, Comment>;
   locationComment: RateCommentController<Comment>;
   jobs: JobController;
+  backofficeJob: BackOfficeJobController;
   rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
 }
 
@@ -413,6 +425,7 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
+  const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
   const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
   const companyReaction = useCompanyReactionController(logger.error, queryDB, mapper);
   const companyComment = useCompanyRateCommentController(
@@ -507,6 +520,7 @@ export function useContext(
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
   const location = useLocationController(logger.error, queryDB, mapper);
+  const backofficeLocation = useBackOfficeLocationController(logger.error, queryDB, mapper);
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
   const locationComment = useLocationRateCommentController(
@@ -559,6 +573,7 @@ export function useContext(
   );
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
+  const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
   const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
 
   return {
@@ -611,7 +626,10 @@ export function useContext(
     myitemsUpload,
     jobs,
     rateCriteria,
-    backOfficeFilm
+    backOfficeFilm,
+    backofficeCompany,
+    backofficeJob,
+    backofficeLocation
   };
 }
 
