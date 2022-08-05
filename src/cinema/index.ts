@@ -159,7 +159,7 @@ export function useCinemaReactionService(
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    "rates_film",
+    "rates_cinema",
     rateModel,
     db.param,
     "id",

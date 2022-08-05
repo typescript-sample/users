@@ -58,11 +58,12 @@ export class ResponseManager implements ResponseService {
         id: response.id,
         viewCount: 0,
       };
+      await this.repository.insert(response);
     }
     info.viewCount++;
     response.usefulCount = 0;
+    await this.repository.update(response);
     await this.infoRepository.save(info);
-    await this.repository.insert(response);
     return true;
   }
   updateResponse(response: Response): Promise<number> {
@@ -167,7 +168,7 @@ export function useResponseReactionService(
     builder.search,
     repository,
     responseReactionRepository,
-    responseCommentRepository,
+    responseCommentRepository
   );
 }
 
