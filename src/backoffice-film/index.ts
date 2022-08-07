@@ -1,17 +1,17 @@
 
-import { Log } from "express-ext";
-import { Manager, Mapper, Search } from "onecore";
-import { DB, SearchBuilder } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
+import { Log } from 'express-ext';
+import { Manager, Search } from 'onecore';
+import { DB, SearchBuilder } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Film,
   FilmFilter,
   filmModel,
   FilmRepository,
   FilmService
-} from "./film";
-import { BackOfficeFilmController } from "./film-controller";
-import { SqlFilmRepositoy } from "./sql-film-repository";
+} from './film';
+import { BackOfficeFilmController } from './film-controller';
+import { SqlFilmRepositoy } from './sql-film-repository';
 
 export { BackOfficeFilmController };
 
@@ -84,15 +84,15 @@ export function useFilmService(
   saveCountries: (values: string[]) => Promise<number>,
   mapper?: TemplateMap
 ): FilmService {
-  const query = useQuery("film", mapper, filmModel, true);
+  const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
-    "films",
+    'films',
     filmModel,
     db.driver,
     query
   );
-  const repository = new SqlFilmRepositoy(db, "films");
+  const repository = new SqlFilmRepositoy(db, 'films');
 
   return new FilmManager(
     builder.search,

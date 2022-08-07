@@ -1,6 +1,6 @@
 import { Attributes, Statement } from 'pg-extension';
 import { buildToInsert, buildToUpdate, DB, Repository } from 'query-core';
-import { Appreciation, AppreciationId, appreciationModel, AppreciationRepository, Reply } from './appreciation';
+import { Appreciation, AppreciationId, appreciationModel, AppreciationRepository } from './appreciation';
 
 export class SqlAppreciationRepository extends Repository<Appreciation, AppreciationId> implements AppreciationRepository {
   constructor(db: DB, table: string, protected buildToSave: <T>(obj: T, table: string, attrs: Attributes, ver?: string, buildParam?: (i: number) => string, i?: number) => Statement | undefined) {
@@ -22,27 +22,28 @@ export class SqlAppreciationRepository extends Repository<Appreciation, Apprecia
   }
 
   insert(obj: Appreciation, ctx?: any): Promise<number> {
-    obj.time=obj.updateAt=new Date
+    obj.time = new Date();
+    obj.updateAt = new Date();
     const stmt = buildToInsert(obj, this.table, appreciationModel, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
-    return this.exec(stmt.query,stmt.params);
+    return this.exec(stmt.query, stmt.params);
   }
-  
+
   update(obj: Appreciation, ctx?: any): Promise<number> {
     return this.getAppreciation(obj.id, obj.author).then((a: Appreciation | null) => {
       if (!a) { return Promise.resolve(-1); }
       obj.updateAt = new Date;
-      const histories=a.histories?a.histories:[]
-      histories.push( { review: a.review, time: a.time,title:a.title })
-      obj.histories = histories
+      const histories = a.histories ? a.histories : [];
+      histories.push( { review: a.review, time: a.time, title: a.title });
+      obj.histories = histories;
       const stmt = buildToUpdate(obj, 'appreciation', appreciationModel, this.param);
       if (!stmt) {
-        return Promise.resolve(-1); 
+        return Promise.resolve(-1);
       }
-      return this.exec(stmt.query, stmt.params)
-    })
+      return this.exec(stmt.query, stmt.params);
+    });
   }
   getAppreciation(id: string, author: string, ctx?: any): Promise<Appreciation | null> {
     return this.query<Appreciation>(`select * from ${this.table} where id = ${this.param(1)} and author = ${this.param(2)}`, [id, author], this.map, undefined, ctx).then(appreciation => {
@@ -64,12 +65,12 @@ export class SqlAppreciationRepository extends Repository<Appreciation, Apprecia
         { query: q, params: [id.id, id.author] }
       ];
       return this.execBatch(stmts, true).catch(err => {
-        console.log('first', err)
-        return 0
+        console.log('first', err);
+        return 0;
       });
     } catch (err) {
-      console.log('err', err)
-      return 0
+      console.log('err', err);
+      return 0;
     }
 
   }

@@ -3,10 +3,10 @@ import { DB, postgres, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from './article';
 import { ArticleController } from './article-controller';
+import { SqlArticleRepository } from './sql-article-repository';
+
 export * from './article';
 export { ArticleController };
-
-import { SqlArticleRepository } from './sql-article-repository';
 
 export class ArticleManager extends ViewManager<Article, string> implements ArticleService {
   constructor(repository: ArticleRepository) {

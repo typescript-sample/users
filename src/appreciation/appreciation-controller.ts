@@ -17,7 +17,7 @@ export class AppreciationController extends Controller<Appreciation, Appreciatio
     this.removeReply = this.removeReply.bind(this);
     this.updateReply = this.updateReply.bind(this);
     this.setUseful = this.setUseful.bind(this);
-    this.getReplys = this.getReplys.bind(this)
+    this.getReplys = this.getReplys.bind(this);
   }
 
   load(req: Request, res: Response) {

@@ -1,6 +1,5 @@
-import { Attributes, Filter, Service } from 'onecore';
-import { Repository } from 'query-core';
-import { Info10 } from "rate-core";
+import { Attributes, Filter, Repository, Service } from 'onecore';
+import { Info10 } from 'rate-core';
 
 export interface FilmFilter extends Filter {
   filmId?: string;
@@ -11,7 +10,7 @@ export interface FilmFilter extends Filter {
   status?: string;
   categories?: string[];
   directors?: string[];
-  filmcast? : string[];
+  filmcast?: string[];
   productions?: string[];
   countries?: string[];
 }
@@ -25,7 +24,7 @@ export interface Film {
   trailerUrl?: string;
   categories?: string[];
   directors?: string[];
-  filmcast? : string[];
+  filmcast?: string[];
   productions?: string[];
   countries?: string[];
   info?: Info10;
