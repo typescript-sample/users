@@ -1,5 +1,4 @@
-import { Attributes, Filter, Service } from 'onecore';
-import { Repository } from 'query-core';
+import { Attributes, Filter, Repository, Service } from 'onecore';
 import { Info10 } from 'rate-core';
 
 export interface FilmFilter extends Filter {
