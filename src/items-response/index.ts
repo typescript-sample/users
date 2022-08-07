@@ -3,16 +3,16 @@ import { Search } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, GenericRepository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { ReactionController } from 'reaction-express';
-import { InfoRepository } from 'reaction-query';
+import { Comment, CommentValidator, ReactionService } from 'review-reaction';
+import { ReactionController } from 'review-reaction-express';
+import { InfoRepository } from 'review-reaction-query';
 import {
   commentModel,
   rateReactionModel,
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from 'reaction-query';
-import { Comment, CommentValidator, ReactionService } from 'reaction-service';
+} from 'review-reaction-query';
 import shortid from 'shortid';
 import { check, createValidator } from 'xvalidators';
 import {

@@ -1,5 +1,5 @@
 import { Attributes, Filter, SearchResult } from 'onecore';
-import { Comment } from 'reaction-service';
+import { Comment } from 'review-reaction';
 
 export interface RateCriteria {
   id: string;

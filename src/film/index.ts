@@ -14,10 +14,16 @@ import {
 } from 'rate-core';
 import { SqlRateRepository } from 'rate-query';
 import {
+  Comment,
+  CommentFilter,
+  CommentValidator,
+  ReactionService,
+} from 'review-reaction';
+import {
   RateCommentController,
   RateController,
   ReactionController,
-} from 'reaction-express';
+} from 'review-reaction-express';
 import {
   commentModel,
   InfoRepository,
@@ -25,14 +31,8 @@ import {
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from 'reaction-query';
-import { CommentQuery } from 'reaction-query';
-import {
-  Comment,
-  CommentFilter,
-  CommentValidator,
-  ReactionService,
-} from 'reaction-service';
+} from 'review-reaction-query';
+import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
 

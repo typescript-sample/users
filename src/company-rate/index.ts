@@ -5,7 +5,13 @@ import { Attributes, DB, SearchBuilder, SearchResult } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Info, infoModel } from 'rate-core';
 import { SqlRatesRepository } from 'rate-query';
-import { ReactionController } from 'reaction-express';
+import {
+  CommentRepository,
+  CommentValidator,
+  ReactionRepository,
+  ShortComment,
+} from 'review-reaction';
+import { ReactionController } from 'review-reaction-express';
 import {
   Comment,
   commentModel,
@@ -14,13 +20,7 @@ import {
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from 'reaction-query';
-import {
-  CommentRepository,
-  CommentValidator,
-  ReactionRepository,
-  ShortComment,
-} from 'reaction-service';
+} from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
 import {
