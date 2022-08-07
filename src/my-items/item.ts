@@ -1,6 +1,6 @@
-import { fileUploadGalleryModel } from '../my-profile';
 import { UploadData, UploadGallery, UploadInfo } from 'one-storage';
 import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
 
 export interface Item {
   id: string;

@@ -72,11 +72,11 @@ export class MyProfileController extends UploadController {
         this.saveLookingFor(user.lookingFor);
       }
       if (this.saveEducation && user.educations) {
-        const listSchool= user.educations.map(e=>e.school)
-        this.saveEducation(listSchool); 
+        const listSchool = user.educations.map(e => e.school);
+        this.saveEducation(listSchool);
       }
       if (this.saveCompany && user.companies) {
-        const listCompanyName= user.companies.map(c=>c.name)
+        const listCompanyName = user.companies.map(c => c.name);
         this.saveCompany(listCompanyName);
       }
       this.service

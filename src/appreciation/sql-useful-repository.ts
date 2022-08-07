@@ -1,6 +1,6 @@
+import { Attribute, Attributes, Statement, StringMap } from "pg-extension";
 import { DB, metadata, Repository } from 'query-core';
 import { Useful, UsefulId, usefulModel, UsefulRepository } from './appreciation';
-import { Attribute, Attributes, Statement, StringMap } from "pg-extension";
 
 export class SqlUsefulRepository implements UsefulRepository {
     constructor(protected db: DB, protected table: string, protected attributes: Attributes,

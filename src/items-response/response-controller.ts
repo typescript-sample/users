@@ -1,7 +1,7 @@
-import { Request as Req, Response as Res } from "express";
-import { getStatusCode, handleError, Log } from "express-ext";
-import { Validator } from "onecore";
-import { Response, ResponseService } from "./response";
+import { Request as Req, Response as Res } from 'express';
+import { getStatusCode, handleError, Log } from 'express-ext';
+import { Validator } from 'onecore';
+import { Response, ResponseService } from './response';
 
 export class ResponseController {
   constructor(

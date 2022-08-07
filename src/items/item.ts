@@ -1,7 +1,6 @@
-import { fileUploadGalleryModel } from '../my-profile';
 import { UploadInfo } from 'one-storage';
-import { Attributes, DateRange, Filter, NumberRange, Query, Repository, Service } from 'onecore';
-import { StringService } from 'pg-extension';
+import { Attributes, DateRange, Filter, NumberRange, Query, Repository } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
 
 export interface Item {
   id: string;
@@ -27,7 +26,7 @@ export interface ItemFilter extends Filter {
   status?: string;
   description?: string;
   categories?: string[];
-  sortItem:string;
+  sortItem: string;
 }
 
 export interface ItemRepository extends Repository<Item, string> {
@@ -91,6 +90,6 @@ export const saveItemsModel: Attributes = {
     length: 40
   },
   items: {
-    type:'strings'
+    type: 'strings'
   }
 };

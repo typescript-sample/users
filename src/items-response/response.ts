@@ -1,4 +1,4 @@
-import { Attributes, Filter, ViewRepository } from "onecore";
+import { Attributes, Filter, ViewRepository } from 'onecore';
 
 export interface ResponseId {
   id: string;
@@ -41,26 +41,26 @@ export const responseModel: Attributes = {
   id: {
     key: true,
     required: true,
-    match: "equal",
+    match: 'equal',
   },
   author: {
     key: true,
     required: true,
-    match: "equal",
+    match: 'equal',
   },
   description: {},
   time: {
-    type: "datetime",
+    type: 'datetime',
   },
   review: {
     q: true,
   },
   usefulCount: {
-    type: "integer",
+    type: 'integer',
     min: 0,
   },
   replyCount: {
-    type: "integer",
+    type: 'integer',
     min: 0,
   },
 };
@@ -70,7 +70,7 @@ export const infoModel: Attributes = {
     key: true,
   },
   viewCount: {
-    type: "number",
+    type: 'number',
   },
 };
 
