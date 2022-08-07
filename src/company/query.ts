@@ -16,7 +16,7 @@ export function buildQuery(s: CompanyFilter): Statement {
   }
   if (s.status && s.status.length > 0) {
     where.push(`status ilike $${i++}`);
-    params.push("%" + s.status + "%");
+    params.push('%' + s.status + '%');
   }
   if (s.description && s.description.length > 0) {
     where.push(`description ilike $${i++}`);

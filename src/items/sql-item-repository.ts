@@ -1,7 +1,7 @@
 import { params } from 'pg-extension';
 import { Attributes, DB, Repository, Statement } from 'query-core';
 import { Item, itemModel, ItemRepository } from './item';
-import { SavedItemsRepository, SaveItems, saveItemsModel } from './item';
+import { SavedItemsRepository, SaveItems } from './item';
 
 export class SqlItemRepository extends Repository<Item, string> implements ItemRepository {
   constructor(db: DB, table: string) {
@@ -16,7 +16,6 @@ export class SqlItemRepository extends Repository<Item, string> implements ItemR
   }
 }
 
-// tslint:disable-next-line:max-classes-per-file
 export class SqlSaveItemsRepository extends Repository<SaveItems, string> implements SavedItemsRepository {
   constructor(db: DB, table: string, attributes: Attributes, protected buildToSave: <T>(obj: T, table: string, attrs: Attributes, ver?: string, buildParam?: (i: number) => string, i?: number) => Statement|undefined) {
     super(db, table, attributes);

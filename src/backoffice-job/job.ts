@@ -2,30 +2,30 @@ import { Attributes, Filter, Service } from 'onecore';
 import { Repository } from 'query-core';
 
 export interface JobFilter extends Filter {
-    id?: string;
-    title?: string;
-    description?: string;
-    skill?:string[];
-    publishedAt?:Date;
-    expiredAt?:Date;
-    quantity?:number;
-    applicantCount?: number;
-    requirements?:string;
-    benefit?:string;
+  id?: string;
+  title?: string;
+  description?: string;
+  skill?: string[];
+  publishedAt?: Date;
+  expiredAt?: Date;
+  quantity?: number;
+  applicantCount?: number;
+  requirements?: string;
+  benefit?: string;
 }
 export interface Job {
   id: string;
   title: string;
   description: string;
-  skill?:string[];
-  publishedAt:Date;
-  expiredAt:Date;
-  quantity:number;
+  skill?: string[];
+  publishedAt: Date;
+  expiredAt: Date;
+  quantity: number;
   applicantCount: number;
-  requirements:string;
-  benefit:string;
+  requirements: string;
+  benefit: string;
 }
-export interface JobRepository extends Repository<Job, string>{
+export interface JobRepository extends Repository<Job, string> {
 
 }
 export interface JobService extends Service<Job, string, JobFilter> {
@@ -34,14 +34,14 @@ export interface JobService extends Service<Job, string, JobFilter> {
 
 export const jobModel: Attributes = {
   id: {
-    key:true,
+    key: true,
     length: 40,
   },
   title: {
-    length:120
+    length: 120
   },
   description: {
-    length:1000
+    length: 1000
   },
   publishedAt: {
     type: 'datetime'
@@ -49,13 +49,13 @@ export const jobModel: Attributes = {
   expiredAt: {
     type: 'datetime'
   },
-  skill:{
-    type:'primitives'
+  skill: {
+    type: 'primitives'
   },
   quantity: {
-    type:'number'
+    type: 'number'
   },
   applicantCount: {
-    type:'number'
+    type: 'number'
   },
 };

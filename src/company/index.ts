@@ -1,55 +1,55 @@
-import { Log, Manager, Search } from "onecore";
-import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
-import shortid from "shortid";
+import { Log, Manager, Search } from 'onecore';
+import { buildToSave, useUrlQuery } from 'pg-extension';
+import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
+import {
+  Info,
+  infoModel,
+  Rate,
+  RateFilter,
+  rateModel,
+  RateService,
+  RateValidator,
+} from 'rate-core';
+import { SqlRateRepository } from 'rate-query';
+import {
+  RateCommentController,
+  RateController,
+  ReactionController,
+} from 'reaction-express';
 import {
   commentModel,
   InfoRepository,
   rateReactionModel,
-  SqlInfoRepository,
   SqlCommentRepository,
+  SqlInfoRepository,
   SqlReactionRepository,
-} from "reaction-query";
+} from 'reaction-query';
+import { CommentQuery } from 'reaction-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from "reaction-service";
-import {
-  RateController,
-  RateCommentController,
-  ReactionController,
-} from "reaction-express";
-import { CommentQuery } from "reaction-query";
-import {
-  Info,
-  rateModel,
-  Rate,
-  RateFilter,
-  infoModel,
-  RateService,
-  RateValidator,
-} from "rate-core";
-import { SqlRateRepository } from "rate-query";
+} from 'reaction-service';
+import shortid from 'shortid';
+import { check } from 'xvalidators';
 import {
   Company,
   CompanyFilter,
   companyModel,
   CompanyRepository,
   CompanyService,
-} from "./company";
-import { CompanyController } from "./company-controller";
-import { SqlCompanyRepository } from "./sql-company-repository";
-import { check } from "xvalidators";
-export * from "./company-controller";
+} from './company';
+import { CompanyController } from './company-controller';
+import { SqlCompanyRepository } from './sql-company-repository';
+
+export * from './company-controller';
 export { CompanyController };
 
 export class CompanyManager
   extends Manager<Company, string, CompanyFilter>
-  implements CompanyService
-{
+  implements CompanyService {
   constructor(
     search: Search<Company, CompanyFilter>,
     repository: CompanyRepository,
@@ -57,7 +57,6 @@ export class CompanyManager
   ) {
     super(search, repository);
   }
-
   load(id: string): Promise<Company | null> {
     return this.repository.load(id).then((company) => {
       if (!company) {
@@ -65,9 +64,9 @@ export class CompanyManager
       } else {
         return this.infoRepository.load(id).then((info) => {
           if (info) {
-            delete (info as any)["id"];
-            delete (info as any)["count"];
-            delete (info as any)["score"];
+            delete (info as any)['id'];
+            delete (info as any)['count'];
+            delete (info as any)['score'];
             company.info = info;
           }
           console.log({ company });
@@ -83,18 +82,18 @@ export function useCompanyService(
   db: DB,
   mapper?: TemplateMap
 ): CompanyService {
-  const query = useQuery("company", mapper, companyModel, true);
+  const query = useQuery('company', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(
     db.query,
-    "company",
+    'company',
     companyModel,
     db.driver,
     query
   );
-  const repository = new SqlCompanyRepository(db, "companies");
+  const repository = new SqlCompanyRepository(db, 'companies');
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "info",
+    'info',
     infoModel,
     buildToSave
   );
@@ -117,20 +116,20 @@ export function useCompanyRateController(
 ): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    "company_rates",
+    'company_rates',
     rateModel,
     buildToSave,
     5,
-    "company_info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
+    'company_info',
+    'rate',
+    'count',
+    'score',
+    'author',
+    'id'
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "info",
+    'info',
     infoModel,
     buildToSave
   );
@@ -140,8 +139,8 @@ export function useCompanyRateController(
     log,
     rateService.rate,
     rateValidator.validate,
-    "author",
-    "id"
+    'author',
+    'id'
   );
 }
 
@@ -150,44 +149,44 @@ export function useCompanyReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery("rates", mapper, rateModel, true);
+  const query = useQuery('rates', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    "rates",
+    'rates',
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    "rates_company",
+    'rates_company',
     rateModel,
     db.param,
-    "id",
-    "author"
+    'id',
+    'author'
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    "ratereaction",
+    'ratereaction',
     rateReactionModel,
-    "rates",
-    "usefulCount",
-    "author",
-    "id"
+    'rates',
+    'usefulCount',
+    'author',
+    'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "rate_comments",
+    'rate_comments',
     commentModel,
-    "rates",
-    "id",
-    "author",
-    "replyCount",
-    "author",
-    "id"
+    'rates',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'id'
   );
   // select id, imageurl as url from users;
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   return new ReactionService<Rate, RateFilter>(
     builder.search,
     rateRepository,
@@ -206,13 +205,13 @@ export function useCompanyReactionController(
     log,
     useCompanyReactionService(db, mapper),
     commentValidator,
-    ["time"],
-    ["rate", "usefulCount", "replyCount", "count", "score"],
+    ['time'],
+    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate,
-    "commentId",
-    "userId",
-    "author",
-    "id"
+    'commentId',
+    'userId',
+    'author',
+    'id'
   );
 }
 
@@ -221,27 +220,27 @@ export function useCompanyRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery("ratecomment", mapper, commentModel, true);
+  const query = useQuery('ratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    "rate_comments",
+    'rate_comments',
     commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "rate_comments",
+    'rate_comments',
     commentModel,
-    "rates",
-    "id",
-    "author",
-    "replyCount",
-    "author",
-    "time",
-    "id"
+    'rates',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'time',
+    'id'
   );
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 

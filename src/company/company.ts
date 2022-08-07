@@ -1,6 +1,5 @@
-import { Attributes, Filter, Service, NumberRange } from "onecore";
-import { Repository } from "query-core";
-import { Info } from "rate-core";
+import { Attributes, Filter, NumberRange, Repository, Service } from 'onecore';
+import { Info } from 'rate-core';
 
 export interface Company {
   id: string;
@@ -25,13 +24,16 @@ export interface CompanyFilter extends Filter {
   categories?: string[];
   info?: Info;
 }
-export interface CompanyRepository extends Repository<Company, string> {}
-export interface CompanyService
-  extends Service<Company, string, CompanyFilter> {}
+export interface CompanyRepository extends Repository<Company, string> {
+
+}
+export interface CompanyService extends Service<Company, string, CompanyFilter> {
+
+}
 export const companyModel: Attributes = {
   id: {
     key: true,
-    match: "equal",
+    match: 'equal',
   },
   name: {
     length: 120,
@@ -40,19 +42,19 @@ export const companyModel: Attributes = {
     length: 1000,
   },
   size: {
-    type: "number",
+    type: 'number',
   },
   address: {
     length: 255,
   },
   status: {
-    match: "equal",
+    match: 'equal',
     length: 1,
   },
   establishedAt: {
-    type: "datetime",
+    type: 'datetime',
   },
   categories: {
-    type: "strings",
+    type: 'strings',
   },
 };

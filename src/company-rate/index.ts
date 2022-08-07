@@ -1,28 +1,11 @@
-import { Log } from "express-ext";
-import { ErrorMessage, Search } from "onecore";
-import { buildToSave } from "pg-extension";
-import { Attributes, DB, SearchBuilder, SearchResult } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
-import {
-  CommentRepository,
-  CommentValidator,
-  ReactionRepository,
-  ShortComment,
-} from "reaction-service";
-import {
-  Info,
-  rateModel,
-  Rate,
-  RateFilter,
-  infoModel,
-  RateValidator,
-} from "rate-core";
-import { SqlRateRepository, SqlRatesRepository } from "rate-query";
-import {
-  RateController,
-  RateService,
-  ReactionController,
-} from "reaction-express";
+import { Log } from 'express-ext';
+import { ErrorMessage, Search } from 'onecore';
+import { buildToSave } from 'pg-extension';
+import { Attributes, DB, SearchBuilder, SearchResult } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
+import { Info, infoModel } from 'rate-core';
+import { SqlRatesRepository } from 'rate-query';
+import { ReactionController } from 'reaction-express';
 import {
   Comment,
   commentModel,
@@ -31,9 +14,15 @@ import {
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from "reaction-query";
-import shortid from "shortid";
-import { check } from "xvalidators";
+} from 'reaction-query';
+import {
+  CommentRepository,
+  CommentValidator,
+  ReactionRepository,
+  ShortComment,
+} from 'reaction-service';
+import shortid from 'shortid';
+import { check } from 'xvalidators';
 import {
   RateCriteria,
   RateCriteriaFilter,
@@ -42,7 +31,7 @@ import {
   RateCriteriaService,
   RateFullInfo,
   ShortRate,
-} from "./rate-criteria";
+} from './rate-criteria';
 
 export interface URL {
   id: string;
@@ -207,10 +196,10 @@ export function useRateCriteriaService(
   db: DB,
   mapper?: TemplateMap
 ): RateCriteriaService {
-  const query = useQuery("company_rate", mapper, rateCriteriaModel, true);
+  const query = useQuery('company_rate', mapper, rateCriteriaModel, true);
   const builder = new SearchBuilder<RateCriteria, RateCriteriaFilter>(
     db.query,
-    "company_rate",
+    'company_rate',
     rateCriteriaModel,
     db.driver,
     query
@@ -218,50 +207,50 @@ export function useRateCriteriaService(
 
   const repository = new SqlRatesRepository<RateCriteria>(
     db,
-    "company_rate",
-    "company_rate_full_info",
+    'company_rate',
+    'company_rate_full_info',
     [
-      "company_rate_info01",
-      "company_rate_info02",
-      "company_rate_info03",
-      "company_rate_info04",
-      "company_rate_info05",
+      'company_rate_info01',
+      'company_rate_info02',
+      'company_rate_info03',
+      'company_rate_info04',
+      'company_rate_info05',
     ],
     rateCriteriaModel,
     buildToSave,
     5,
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
+    'rate',
+    'count',
+    'score',
+    'author',
+    'id'
   );
 
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "company_rate_full_info",
+    'company_rate_full_info',
     infoModel,
     buildToSave
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    "ratereaction",
+    'ratereaction',
     rateReactionModel,
-    "rates",
-    "usefulCount",
-    "author",
-    "id"
+    'rates',
+    'usefulCount',
+    'author',
+    'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "rate_comments",
+    'rate_comments',
     commentModel,
-    "rates",
-    "id",
-    "author",
-    "replyCount",
-    "author",
-    "id"
+    'rates',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'id'
   );
   return new RateCriteriaManager(
     builder.search,
@@ -283,13 +272,13 @@ export function useRateCriteriaController(
     log,
     useRateCriteriaService(db, mapper),
     commentValidator,
-    ["dates"],
-    ["rate", "usefulCount", "replyCount", "count", "score"],
+    ['dates'],
+    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate,
-    "commentId",
-    "userId",
-    "author",
-    "id"
+    'commentId',
+    'userId',
+    'author',
+    'id'
   );
 }
 
@@ -316,16 +305,18 @@ function compare(s1: string, s2: string): number {
 export class RateCriteriaValidator {
   constructor(
     protected attributes: Attributes,
-    protected check: (obj: any, attributes: Attributes) => ErrorMessage[],
+    valid: (obj: any, attributes: Attributes) => ErrorMessage[],
     protected max: number
   ) {
+    this.check = valid;
     this.validate = this.validate.bind(this);
   }
+  protected check: (obj: any, attributes: Attributes) => ErrorMessage[];
   validate(rateCriteria: RateCriteria): Promise<ErrorMessage[]> {
     const errs = this.check(rateCriteria, this.attributes);
-    for (let i in rateCriteria.rates) {
+    for (const i in rateCriteria.rates) {
       if (rateCriteria.rates[i] > this.max) {
-        const err = createError("rate", "max", this.max);
+        const err = createError('rate', 'max', this.max);
         if (errs) {
           errs.push(err);
           return Promise.resolve(errs);
@@ -343,7 +334,7 @@ function createError(
   param?: string | number | Date
 ): ErrorMessage {
   if (!code) {
-    code = "string";
+    code = 'string';
   }
   const error: ErrorMessage = { field, code };
   if (param) {
