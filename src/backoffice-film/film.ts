@@ -1,5 +1,4 @@
-import { Attributes, Filter, Repository, Service } from 'onecore';
-import { Info10 } from 'rate-core';
+import { Attributes, Filter, Info10, Repository, Service } from 'onecore';
 
 export interface FilmFilter extends Filter {
   filmId?: string;

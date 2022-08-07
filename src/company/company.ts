@@ -1,5 +1,4 @@
-import { Attributes, Filter, NumberRange, Repository, Service } from 'onecore';
-import { Info } from 'rate-core';
+import { Attributes, Filter, Info, NumberRange, Repository, Service } from 'onecore';
 
 export interface Company {
   id: string;
