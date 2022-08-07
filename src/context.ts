@@ -45,6 +45,7 @@ import { createChecker } from 'query-core';
 import { TemplateMap } from 'query-mappers';
 import { Rate, RateFilter } from 'rate-core';
 import { RateCommentController, RateController } from 'reaction-express';
+import { ReactionController } from 'reaction-express';
 import { Comment } from 'reaction-service';
 import { SendGridMailService } from 'sendgrid-plus';
 import shortid from 'shortid';
@@ -59,13 +60,24 @@ import {
   Validator,
 } from 'signup-service';
 import { createValidator } from 'xvalidators';
-
-import { ReactionController } from 'reaction-express';
 import {
   AppreciationController,
   useAppreciationController,
 } from './appreciation';
 import { ArticleController, useArticleController } from './article';
+import {
+  BackOfficeCompanyController,
+  useBackOfficeCompanyController
+} from './backoffice-company';
+import {
+  BackOfficeFilmController,
+  useBackOfficeFilmController
+} from './backoffice-film';
+import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
+import {
+  BackOfficeLocationController,
+  useBackOfficeLocationController
+} from './backoffice-location';
 import {
   CategoryController,
   useCompanyCategoryController,
@@ -87,6 +99,8 @@ import {
   useCompanyRateController,
   useCompanyReactionController,
 } from './company';
+import { useRateCriteriaController } from './company-rate';
+import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
 import {
   FilmController,
   useFilmController,
@@ -102,11 +116,7 @@ import {
   useResponseController,
   useResponseReactionController,
 } from './items-response';
-
-import {
-  BackOfficeLocationController,
-  useBackOfficeLocationController
-} from './backoffice-location';
+import { JobController, useJobController } from './job';
 import {
   LocationController,
   useLocationController,
@@ -129,20 +139,6 @@ import {
   UserSettings,
 } from './my-profile';
 import { UserController, useUserController } from './user';
-
-import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
-import { JobController, useJobController } from './jobs';
-
-import {
-  BackOfficeCompanyController,
-  useBackOfficeCompanyController
-} from './backoffice-company';
-import {
-  BackOfficeFilmController,
-  useBackOfficeFilmController
-} from './backoffice-film';
-import { useRateCriteriaController } from './company-rate';
-import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
 
 resources.createValidator = createValidator;
 
