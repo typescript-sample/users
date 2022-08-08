@@ -1,6 +1,6 @@
 import { Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Category,
@@ -10,7 +10,6 @@ import {
   CategoryService,
 } from './category';
 import { CategoryController } from './category-controller';
-import { SqlCategoryRepositoy } from './sql-category-repository';
 
 export { CategoryController };
 
@@ -38,7 +37,7 @@ export function useItemCategoryService(
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, 'item_categories');
+  const repository = new Repository<Category, string>(db, 'item_categories',categoryModel);
   return new CategoryManager(builder.search, repository);
 }
 export function useItemCategoryController(
@@ -62,7 +61,7 @@ export function useFilmCategoryService(
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, 'film_categories');
+  const repository = new  Repository<Category, string>(db, 'film_categories',categoryModel);
   return new CategoryManager(builder.search, repository);
 }
 export function useFilmCategoryController(
@@ -86,7 +85,7 @@ export function useCompanyCategoryService(
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, 'company_categories');
+  const repository = new  Repository<Category, string>(db, 'company_categories',categoryModel);
   return new CategoryManager(builder.search, repository);
 }
 export function useCompanyCategoryController(

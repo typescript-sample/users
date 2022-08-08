@@ -4277,10 +4277,10 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"query-core@^0.1.23":
-  "integrity" "sha512-7iSHA1bwB0PSG2uNyECtIqVfWgM5Pu8fB1Cu4W+sdzZpuI83cgE/3cH5zCFDoJaiCJMi8EQXbgwkoDDOKlzkrA=="
-  "resolved" "https://registry.npmjs.org/query-core/-/query-core-0.1.23.tgz"
-  "version" "0.1.23"
+"query-core@^0.1.25":
+  "integrity" "sha512-zm7yZyxxtALL3rvTf5chIwvpDIQ0L1D1bp/Iz6Gyu4KKS11XPxAIwJZNQcilooi9Tj4gKsaDK5TrZLpTd7s+1w=="
+  "resolved" "https://registry.npmjs.org/query-core/-/query-core-0.1.25.tgz"
+  "version" "0.1.25"
 
 "query-mappers@^0.0.3":
   "integrity" "sha512-PMX6NNj3xLqUPplcwTMKjJBOA9a42DxZJ9BOhWJr0v6JdqeaZlv9VzkWghAgkZPygbpthRErn2HyRDzGuftT9g=="
