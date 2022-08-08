@@ -1,5 +1,4 @@
-import { Attributes, Filter, Service } from "onecore";
-import { Repository } from 'query-core';
+import { Attributes, Filter, Repository, Service } from 'onecore';
 
 export interface LocationFilter extends Filter {
   id?: string;
@@ -23,7 +22,6 @@ export interface Location {
   coverURL?: string;
 }
 
-
 export interface LocationRepository extends Repository<Location, string> {}
 
 export interface LocationService
@@ -40,23 +38,22 @@ export const locationModel: Attributes = {
     q: true,
   },
   type: {
-    match: "equal",
+    match: 'equal',
     required: true,
   },
   description: {
     q: true,
   },
   status: {
-    match: "equal",
+    match: 'equal',
     length: 1,
   },
   latitude: {
-    type: "number",
+    type: 'number',
   },
   longitude: {
-    type: "number",
+    type: 'number',
   },
   imageURL: {},
   coverURL: {},
 };
-

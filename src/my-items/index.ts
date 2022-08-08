@@ -1,6 +1,6 @@
 import { StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
-import { BuildUrl, Delete, Generate, Log, Manager, Search } from 'onecore';
+import { BuildUrl, Delete, Generate, Log, Search } from 'onecore';
 import { DB, postgres, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
@@ -56,7 +56,6 @@ export class ItemManager extends GenericSearchStorageService<Item, string, ItemF
     }
     return (this.repository.patch ? this.repository.patch(item, ctx) : Promise.resolve(-1));
   }
-
 }
 
 export function useMyItemService(db: DB, storage: StorageRepository, save: (values: string[]) => Promise<number>, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],

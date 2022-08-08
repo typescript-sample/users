@@ -1,5 +1,4 @@
-import { Attributes, DateRange, Filter, Repository, Service } from 'onecore';
-import { SearchResult } from 'query-core';
+import { Attributes, Filter, Repository, Service } from 'onecore';
 
 export interface AppreciationFilter extends Filter {
   id?: string;
@@ -9,7 +8,6 @@ export interface AppreciationFilter extends Filter {
   createAt?: Date;
   replyCount?: number;
 }
-
 export interface AppreciationId {
   id: string;
   author: string;
@@ -22,13 +20,13 @@ export interface Appreciation {
   time: Date;
   updateAt: Date;
   histories?: Histories[];
-  replyCount?:number
+  replyCount?: number;
 }
 
 export interface Histories {
   time: Date;
   review: string;
-  title:string;
+  title: string;
 }
 export interface AppreciationRepository extends Repository<Appreciation, AppreciationId> {
   getAppreciation(id: string, author: string): Promise<Appreciation | null>;
@@ -41,8 +39,6 @@ export interface AppreciationService extends Service<Appreciation, AppreciationI
   updateReply(reply: Reply): Promise<number>;
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   getReplys(id: string, author: string, ctx?: any): Promise<Reply[]>;
-  // usefulAppreciation(obj: UsefulFilter): Promise<number>;
-  // searchWithReply(s: AppreciationFilter, userId?: string, limit?: number, offset?: string | number, fields?: string[]): Promise<SearchResult<Appreciation>>;
 }
 
 export const appreciationModel: Attributes = {
@@ -65,19 +61,17 @@ export const appreciationModel: Attributes = {
   time: {
     type: 'datetime'
   },
-  updateAt:{
+  updateAt: {
     type: 'datetime'
   },
-  histories:{
+  histories: {
 
   },
-  replyCount:{
+  replyCount: {
     type: 'integer',
     min: 0
   }
 };
-
-//////////
 
 export interface ReplyFilter extends Filter {
   id?: string;

@@ -1,5 +1,5 @@
-import { Storage } from "@google-cloud/storage";
-import { AuthenticationController } from "authen-express";
+import { Storage } from '@google-cloud/storage';
+import { AuthenticationController } from 'authen-express';
 import {
   Authenticator,
   CodeMailSender,
@@ -7,9 +7,9 @@ import {
   SqlAuthTemplateConfig,
   User,
   useUserRepository,
-} from "authen-service";
-import { compare } from "bcrypt";
-import { Comparator } from "bcrypt-plus";
+} from 'authen-service';
+import { compare } from 'bcrypt';
+import { Comparator } from 'bcrypt-plus';
 import {
   HealthController,
   LogController,
@@ -20,35 +20,35 @@ import {
   QueryController,
   resources,
   useBuild,
-} from "express-ext";
+} from 'express-ext';
 import {
   deleteFile,
   GoogleStorageRepository,
   map,
   StorageConfig,
   useBuildUrl,
-} from "google-storage";
-import { generateToken } from "jsonwebtoken-plus";
-import { MailConfig, MailService, Send } from "mail-core";
-import { MyItemUploadController } from "my-items/item-controller";
-import nodemailer from "nodemailer";
-import { ModelConf, StorageConf } from "one-storage";
-import { PasswordController } from "password-express";
+} from 'google-storage';
+import { generateToken } from 'jsonwebtoken-plus';
+import { MailConfig, MailService, Send } from 'mail-core';
+import { MyItemUploadController } from 'my-items/item-controller';
+import nodemailer from 'nodemailer';
+import { ModelConf, StorageConf } from 'one-storage';
+import { PasswordController } from 'password-express';
 import {
   MailSender,
   PasswordService,
   PasswordTemplateConfig,
   usePasswordRepository,
-} from "password-service";
-import { CodeRepository, DB, StringService } from "pg-extension";
-import { createChecker } from "query-core";
-import { TemplateMap } from "query-mappers";
-import { Rate, RateFilter } from "rate-core";
-import { Comment } from "reaction-service";
-import { RateCommentController, RateController } from "reaction-express";
-import { SendGridMailService } from "sendgrid-plus";
-import shortid from "shortid";
-import { SignupController } from "signup-express";
+} from 'password-service';
+import { CodeRepository, DB, StringService } from 'pg-extension';
+import { createChecker } from 'query-core';
+import { TemplateMap } from 'query-mappers';
+import { Rate, RateFilter } from 'rate-core';
+import { Comment } from 'review-reaction';
+import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
+import { SendGridMailService } from 'sendgrid-plus';
+import shortid from 'shortid';
+import { SignupController } from 'signup-express';
 import {
   initStatus,
   Signup,
@@ -57,20 +57,32 @@ import {
   SignupTemplateConfig,
   useRepository,
   Validator,
-} from "signup-service";
-import { createValidator } from "xvalidators";
-
+} from 'signup-service';
+import { createValidator } from 'xvalidators';
 import {
   AppreciationController,
   useAppreciationController,
-} from "./appreciation";
-import { ArticleController, useArticleController } from "./article";
+} from './appreciation';
+import { ArticleController, useArticleController } from './article';
+import {
+  BackOfficeCompanyController,
+  useBackOfficeCompanyController
+} from './backoffice-company';
+import {
+  BackOfficeFilmController,
+  useBackOfficeFilmController
+} from './backoffice-film';
+import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
+import {
+  BackOfficeLocationController,
+  useBackOfficeLocationController
+} from './backoffice-location';
 import {
   CategoryController,
   useCompanyCategoryController,
   useFilmCategoryController,
   useItemCategoryController,
-} from "./category";
+} from './category';
 import {
   CinemaController,
   useCinemaController,
@@ -89,64 +101,47 @@ import {
   useCompanyRateCommentController,
   useCompanyRateController,
   useCompanyReactionController,
-} from "./company";
+} from './company';
+import { useRateCriteriaController } from './company-rate';
+import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
 import {
   FilmController,
   useFilmController,
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
-} from "./film";
-import { ItemController, useItemController } from "./items";
+} from './film';
+import { ItemController, useItemController } from './items';
 import {
-  ResponseController,
-  useResponseController,
   Response,
+  ResponseController,
   ResponseFilter,
+  useResponseController,
   useResponseReactionController,
-} from "./items-response";
-import { ReactionController } from "reaction-express";
-
+} from './items-response';
+import { JobController, useJobController } from './job';
 import {
   LocationController,
   useLocationController,
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
-} from "./location";
-import {
-  BackOfficeLocationController,
-  useBackOfficeLocationController
-} from "./backoffice-location";
+} from './location';
 import {
   ArticleController as MyArticleController,
   useMyArticleController,
-} from "./my-articles";
+} from './my-articles';
 import {
   MyItemController,
   useMyItemController,
   useMyItemUploadController,
-} from "./my-items";
+} from './my-items';
 import {
   MyProfileController,
   useMyProfileController,
   UserSettings,
-} from "./my-profile";
-import { UserController, useUserController } from "./user";
-
-import { JobController, useJobController } from "./jobs";
-import { BackOfficeJobController, useBackOfficeJobController } from "./backoffice-job";
-
-import { useRateCriteriaController } from "./company-rate";
-import { RateCriteria, RateCriteriaFilter } from "./company-rate/rate-criteria";
-import {
-  BackOfficeFilmController,
-  useBackOfficeFilmController
-} from "./backoffice-film";
-import {
-  BackOfficeCompanyController,
-  useBackOfficeCompanyController
-} from "./backoffice-company";
+} from './my-profile';
+import { UserController, useUserController } from './user';
 
 resources.createValidator = createValidator;
 
@@ -247,7 +242,7 @@ export function useContext(
   );
   const verifiedCodeRepository = new CodeRepository<string>(
     mainDB,
-    "authencodes"
+    'authencodes'
   );
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(
     queryDB,
@@ -282,11 +277,11 @@ export function useContext(
     conf.signup.template.body,
     conf.signup.template.subject
   );
-  const passcodeRepository = new CodeRepository<string>(mainDB, "signupcodes");
+  const passcodeRepository = new CodeRepository<string>(mainDB, 'signupcodes');
   const signupRepository = useRepository<string, Signup>(
     mainDB,
-    "users",
-    "passwords",
+    'users',
+    'passwords',
     conf.signup.userStatus,
     conf.signup.fields,
     conf.signup.maxPasswordAge,
@@ -314,7 +309,7 @@ export function useContext(
     conf.password.templates.reset.body,
     conf.password.templates.reset.subject
   );
-  const codeRepository = new CodeRepository<string>(mainDB, "passwordcodes");
+  const codeRepository = new CodeRepository<string>(mainDB, 'passwordcodes');
   const passwordRepository = usePasswordRepository<string>(
     mainDB,
     conf.password.db,
@@ -336,59 +331,59 @@ export function useContext(
   const user = useUserController(logger.error, mainDB);
 
   const skillService = new StringService(
-    "skills",
-    "skill",
+    'skills',
+    'skill',
     queryDB.query,
     queryDB.exec
   );
   const skill = new QueryController<string[]>(
     logger.error,
     skillService.load,
-    "keyword"
+    'keyword'
   );
   const interestService = new StringService(
-    "interests",
-    "interest",
+    'interests',
+    'interest',
     queryDB.query,
     queryDB.exec
   );
   const interest = new QueryController<string[]>(
     logger.error,
     interestService.load,
-    "keyword"
+    'keyword'
   );
   const lookingForService = new StringService(
-    "searchs",
-    "item",
+    'searchs',
+    'item',
     queryDB.query,
     queryDB.exec
   );
   const lookingFor = new QueryController<string[]>(
     logger.error,
     interestService.load,
-    "keyword"
+    'keyword'
   );
   const companyService = new StringService(
-    "user_companies",
-    "company",
+    'user_companies',
+    'company',
     queryDB.query,
     queryDB.exec
   );
   const companyQuery = new QueryController<string[]>(
     logger.error,
     companyService.load,
-    "keyword"
+    'keyword'
   );
   const educationService = new StringService(
-    "educations",
-    "school",
+    'educations',
+    'school',
     queryDB.query,
     queryDB.exec
   );
   const educationQuery = new QueryController<string[]>(
     logger.error,
     educationService.load,
-    "keyword"
+    'keyword'
   );
   const appreciation = useAppreciationController(logger.error, mainDB);
   // const appreciationReply = useAppreciationReplyController(
@@ -455,48 +450,48 @@ export function useContext(
   );
 
   const directorService = new StringService(
-    "film_directors",
-    "director",
+    'film_directors',
+    'director',
     queryDB.query,
     queryDB.exec
   );
   const director = new QueryController<string[]>(
     logger.error,
     directorService.load,
-    "keyword"
+    'keyword'
   );
   const castService = new StringService(
-    "film_cast",
-    "actor",
+    'film_cast',
+    'actor',
     queryDB.query,
     queryDB.exec
   );
   const cast = new QueryController<string[]>(
     logger.error,
     castService.load,
-    "keyword"
+    'keyword'
   );
   const productionService = new StringService(
-    "film_productions",
-    "production",
+    'film_productions',
+    'production',
     queryDB.query,
     queryDB.exec
   );
   const production = new QueryController<string[]>(
     logger.error,
     productionService.load,
-    "keyword"
+    'keyword'
   );
   const countryService = new StringService(
-    "film_countries",
-    "country",
+    'film_countries',
+    'country',
     queryDB.query,
     queryDB.exec
   );
   const country = new QueryController<string[]>(
     logger.error,
     countryService.load,
-    "keyword"
+    'keyword'
   );
   const film = useFilmController(
     logger.error,
@@ -539,15 +534,15 @@ export function useContext(
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
   const brandService = new StringService(
-    "brands",
-    "brand",
+    'brands',
+    'brand',
     queryDB.query,
     queryDB.exec
   );
   const brand = new QueryController<string[]>(
     logger.error,
     brandService.load,
-    "keyword"
+    'keyword'
   );
   const myitems = useMyItemController(
     logger.error,
@@ -647,7 +642,7 @@ export function hasTwoFactors(userId: string): Promise<boolean> {
   return Promise.resolve(false);
 }
 export function useSend(conf: MailConfig): Send {
-  if (conf.provider === "sendgrid") {
+  if (conf.provider === 'sendgrid') {
     return new SendGridMailService(conf.key).send;
   } else {
     const transporter = nodemailer.createTransport(conf.smtp);

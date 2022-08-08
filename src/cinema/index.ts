@@ -1,55 +1,54 @@
-import { Log, Manager, Search } from "onecore";
-import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
-import shortid from "shortid";
+import { Log, Manager, Search } from 'onecore';
+import { buildToSave, useUrlQuery } from 'pg-extension';
+import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
-  commentModel,
-  InfoRepository,
-  rateReactionModel,
-  SqlInfoRepository,
-  SqlCommentRepository,
-  SqlReactionRepository,
-} from "reaction-query";
+  Info,
+  infoModel,
+  Rate,
+  RateFilter,
+  rateModel,
+  RateService,
+  RateValidator,
+} from 'rate-core';
+import { SqlRateRepository } from 'rate-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from "reaction-service";
+} from 'review-reaction';
 import {
-  RateController,
   RateCommentController,
+  RateController,
   ReactionController,
-} from "reaction-express";
-import { CommentQuery } from "reaction-query";
+} from 'review-reaction-express';
 import {
-  Info,
-  rateModel,
-  Rate,
-  RateFilter,
-  infoModel,
-  RateService,
-  RateValidator,
-} from "rate-core";
-import { SqlRateRepository } from "rate-query";
+  commentModel,
+  InfoRepository,
+  rateReactionModel,
+  SqlCommentRepository,
+  SqlInfoRepository,
+  SqlReactionRepository,
+} from 'review-reaction-query';
+import { CommentQuery } from 'review-reaction-query';
+import shortid from 'shortid';
+import { check } from 'xvalidators';
 import {
   Cinema,
   CinemaFilter,
   cinemaModel,
   CinemaRepository,
   CinemaService,
-} from "./cinema";
-import { CinemaController } from "./cinema-controller";
-import { SqlCinemaRepository } from "./sql-cinema-repository";
-import { check } from "xvalidators";
+} from './cinema';
+import { CinemaController } from './cinema-controller';
+import { SqlCinemaRepository } from './sql-cinema-repository';
 
 export { CinemaController };
 
 export class CinemaManager
   extends Manager<Cinema, string, CinemaFilter>
-  implements CinemaService
-{
+  implements CinemaService {
   constructor(
     search: Search<Cinema, CinemaFilter>,
     repository: CinemaRepository,
@@ -65,13 +64,11 @@ export class CinemaManager
       } else {
         return this.infoRepository.load(id).then((info) => {
           if (info) {
-            delete (info as any)["id"];
-            delete (info as any)["count"];
-            delete (info as any)["score"];
+            delete (info as any)['id'];
+            delete (info as any)['count'];
+            delete (info as any)['score'];
             cinema.info = info;
           }
-          console.log({ cinema });
-
           return cinema;
         });
       }
@@ -80,18 +77,18 @@ export class CinemaManager
 }
 
 export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
-  const query = useQuery("cinema", mapper, cinemaModel, true);
+  const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(
     db.query,
-    "cinema",
+    'cinema',
     cinemaModel,
     db.driver,
     query
   );
-  const repository = new SqlCinemaRepository(db, "cinema");
+  const repository = new SqlCinemaRepository(db, 'cinema');
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "info",
+    'info',
     infoModel,
     buildToSave
   );
@@ -114,20 +111,20 @@ export function useCinemaRateController(
 ): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    "rates",
+    'rates',
     rateModel,
     buildToSave,
     10,
-    "info",
-    "rate",
-    "count",
-    "score",
-    "author",
-    "id"
+    'info',
+    'rate',
+    'count',
+    'score',
+    'author',
+    'id'
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    "info",
+    'info',
     infoModel,
     buildToSave
   );
@@ -138,8 +135,8 @@ export function useCinemaRateController(
     log,
     rateService.rate,
     rateValidator.validate,
-    "author",
-    "id"
+    'author',
+    'id'
     // queryUrl
   );
 }
@@ -149,41 +146,41 @@ export function useCinemaReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery("rates", mapper, rateModel, true);
+  const query = useQuery('rates', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    "rates",
+    'rates',
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    "rates_film",
+    'rates_cinema',
     rateModel,
     db.param,
-    "id",
-    "author"
+    'id',
+    'author'
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    "ratereaction",
+    'ratereaction',
     rateReactionModel,
-    "rates",
-    "usefulCount",
-    "author",
-    "id"
+    'rates',
+    'usefulCount',
+    'author',
+    'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "rate_comments",
+    'rate_comments',
     commentModel,
-    "rates",
-    "id",
-    "author",
-    "replyCount",
-    "author",
-    "id"
+    'rates',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'id'
   );
   return new ReactionService<Rate, RateFilter>(
     builder.search,
@@ -203,13 +200,13 @@ export function useCinemaReactionController(
     log,
     useCinemaReactionService(db, mapper),
     commentValidator,
-    ["time"],
-    ["rate", "usefulCount", "replyCount", "count", "score"],
+    ['time'],
+    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate,
-    "commentId",
-    "userId",
-    "author",
-    "id"
+    'commentId',
+    'userId',
+    'author',
+    'id'
   );
 }
 
@@ -218,27 +215,27 @@ export function useCinemaRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery("ratecomment", mapper, commentModel, true);
+  const query = useQuery('ratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    "rate_comments",
+    'rate_comments',
     commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    "rate_comments",
+    'rate_comments',
     commentModel,
-    "rates",
-    "id",
-    "author",
-    "replyCount",
-    "author",
-    "time",
-    "id"
+    'rates',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'time',
+    'id'
   );
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 

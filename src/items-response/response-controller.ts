@@ -1,7 +1,7 @@
-import { Request as Req, Response as Res } from "express";
-import { getStatusCode, handleError, Log } from "express-ext";
-import { Validator } from "onecore";
-import { Response, ResponseService } from "./response";
+import { Request as Req, Response as Res } from 'express';
+import { getStatusCode, handleError, Log } from 'express-ext';
+import { Validator } from 'onecore';
+import { Response, ResponseService } from './response';
 
 export class ResponseController {
   constructor(
@@ -9,11 +9,11 @@ export class ResponseController {
     protected responseService: ResponseService,
     public validator: Validator<Response>
   ) {
-    this.response = this.response.bind(this);
-    this.updateResponse = this.updateResponse.bind(this);
+    this.reply = this.reply.bind(this);
+    this.updateReply = this.updateReply.bind(this);
   }
 
-  response(req: Req, res: Res) {
+  reply(req: Req, res: Res) {
     const id = req.params.id;
     const author = req.params.author;
     const response: Response = { id, author, ...req.body };
@@ -35,7 +35,7 @@ export class ResponseController {
       .catch((err) => handleError(err, res, this.log));
   }
 
-  updateResponse(req: Req, res: Res) {
+  updateReply(req: Req, res: Res) {
     const id = req.params.id;
     const author = req.params.author;
     const response: Response = { id, author, ...req.body };

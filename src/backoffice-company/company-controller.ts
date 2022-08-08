@@ -5,5 +5,4 @@ export class BackOfficeCompanyController extends Controller<Company, string, Com
   constructor(log: Log, companyService: CompanyService) {
     super(log, companyService);
   }
-  
 }

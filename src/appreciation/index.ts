@@ -1,5 +1,5 @@
 import { Build, Log } from 'express-ext';
-import { Manager, Search, SearchResult } from 'onecore';
+import { Manager, Search } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -27,8 +27,8 @@ export class AppreciationManager extends Manager<Appreciation, AppreciationId, A
   }
 
   async getReplys(id: string, author: string, ctx?: any): Promise<Reply[]> {
-    const data = await this.replyRepository.getReplys(id, author)
-    return data
+    const data = await this.replyRepository.getReplys(id, author);
+    return data;
   }
 
   async reply(reply: Reply): Promise<boolean> {

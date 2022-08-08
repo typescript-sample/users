@@ -18,14 +18,14 @@ export interface Work {
   name: string;
   position: string;
   description: string;
-  item: Object[];
+  item: string[];
   from: Date;
   to: Date;
 }
 
 export interface Company {
-  id?: string
-  name: string
+  id?: string;
+  name: string;
   position: string;
   descrition: string;
   from: Date;
@@ -47,9 +47,9 @@ export interface User {
   phone?: string;
   dateOfBirth?: string;
   links?: Social;
-  works:Work[];
-  companies:Company[];
-  educations:Education[];
+  works: Work[];
+  companies: Company[];
+  educations: Education[];
 }
 
 export interface Social {

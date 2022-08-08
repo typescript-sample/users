@@ -1,6 +1,4 @@
-import { Attributes, Filter, Service } from "onecore";
-import { Repository } from "query-core";
-import { Info } from "rate-core";
+import { Attributes, Filter, Info, Repository, Service } from 'onecore';
 
 export interface CinemaFilter extends Filter {
   id?: string;
@@ -57,7 +55,7 @@ export const cinemaModel: Attributes = {
   id: {
     key: true,
     length: 40,
-    match: "equal",
+    match: 'equal',
   },
   name: {
     length: 255,
@@ -80,17 +78,17 @@ export const cinemaModel: Attributes = {
   imageUrl: {},
   createdBy: {},
   createdAt: {
-    column: "createdat",
-    type: "datetime",
+    column: 'createdat',
+    type: 'datetime',
   },
   updatedBy: {},
   updatedAt: {
-    column: "createdat",
-    type: "datetime",
+    column: 'createdat',
+    type: 'datetime',
   },
   gallery: {
-    column: "gallery",
-    type: "array",
+    column: 'gallery',
+    type: 'array',
     typeof: galleryModel,
   },
   coverUrl: {},

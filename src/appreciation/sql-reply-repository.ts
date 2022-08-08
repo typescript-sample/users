@@ -10,8 +10,6 @@ export class SqlReplyRepository extends Repository<Reply, ReplyId> implements Re
     this.removeReply = this.removeReply.bind(this);
   }
   save(obj: Reply, ctx?: any): Promise<number> {
-    console.log({ obj });
-
     const stmt = this.buildToSave(obj, this.table, this.attributes);
     if (stmt) {
       console.log(stmt.query);
@@ -20,13 +18,11 @@ export class SqlReplyRepository extends Repository<Reply, ReplyId> implements Re
       return Promise.resolve(0);
     }
   }
-
   getReplys(id: string, author: string, ctx?: any): Promise<Reply[]> {
     return this.query<Reply>(`select * from ${this.table} where id = ${this.param(1)} and author = ${this.param(2)}`, [id, author], this.map, undefined, ctx).then(rep => {
       return rep && rep.length > 0 ? rep : [];
     });
   }
-
   getReply(id: string, author: string, userId: string, ctx?: any): Promise<Reply | null> {
     return this.query<Reply>(`select * from ${this.table} where id = ${this.param(1)} and author = ${this.param(2)} and userId = ${this.param(3)}`, [id, author, userId], this.map, undefined, ctx).then(rep => {
       return rep && rep.length > 0 ? rep[0] : null;

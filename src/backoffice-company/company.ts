@@ -1,5 +1,4 @@
-import { Attributes, Filter, Service, NumberRange } from "onecore";
-import { Repository } from "query-core";
+import { Attributes, Filter, NumberRange, Repository, Service } from 'onecore';
 
 export interface Company {
   id: string;
@@ -29,7 +28,7 @@ export interface CompanyService extends Service<Company, string, CompanyFilter> 
 export const companyModel: Attributes = {
   id: {
     key: true,
-    match: "equal",
+    match: 'equal',
   },
   name: {
     length: 120,
@@ -38,19 +37,19 @@ export const companyModel: Attributes = {
     length: 1000,
   },
   size: {
-    type: "number",
+    type: 'number',
   },
   address: {
     length: 255,
   },
   status: {
-    match: "equal",
+    match: 'equal',
     length: 1,
   },
   establishedAt: {
-    type: "datetime",
+    type: 'datetime',
   },
   categories: {
-    type: "strings",
+    type: 'strings',
   },
 };

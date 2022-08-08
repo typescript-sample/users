@@ -1,31 +1,23 @@
-import { Log, Manager, Search } from "onecore";
-import { DB, SearchBuilder } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
-import shortid from "shortid";
+import { Log, Manager, Search } from 'onecore';
+import { DB, SearchBuilder } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Company,
   CompanyFilter,
   companyModel,
   CompanyRepository,
   CompanyService,
-} from "./company";
-import { BackOfficeCompanyController } from "./company-controller";
-import { SqlCompanyRepository } from "./sql-company-repository";
-export * from "./company-controller";
+} from './company';
+import { BackOfficeCompanyController } from './company-controller';
+import { SqlCompanyRepository } from './sql-company-repository';
+export * from './company-controller';
 export { BackOfficeCompanyController };
 
-export class CompanyManager
-  extends Manager<Company, string, CompanyFilter>
-  implements CompanyService
-{
-  constructor(
-    search: Search<Company, CompanyFilter>,
-    repository: CompanyRepository
-  ) {
+export class CompanyManager extends Manager<Company, string, CompanyFilter> implements CompanyService {
+  constructor(search: Search<Company, CompanyFilter>, repository: CompanyRepository) {
     super(search, repository);
   }
 }
-
 
 export function useBackOfficeCompanyService(db: DB, mapper?: TemplateMap): CompanyService {
   const queryCompany = useQuery('companies', mapper, companyModel, true);

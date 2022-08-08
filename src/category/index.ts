@@ -1,23 +1,22 @@
-import { Log } from "express-ext";
-import { Manager, Mapper, Search } from "onecore";
-import { DB, SearchBuilder } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
+import { Log } from 'express-ext';
+import { Manager, Search } from 'onecore';
+import { DB, SearchBuilder } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Category,
   CategoryFilter,
   categoryModel,
   CategoryRepository,
   CategoryService,
-} from "./category";
-import { CategoryController } from "./category-controller";
-import { SqlCategoryRepositoy } from "./sql-category-repository";
+} from './category';
+import { CategoryController } from './category-controller';
+import { SqlCategoryRepositoy } from './sql-category-repository';
 
 export { CategoryController };
 
 export class CategoryManager
   extends Manager<Category, string, CategoryFilter>
-  implements CategoryService
-{
+  implements CategoryService {
   constructor(
     search: Search<Category, CategoryFilter>,
     repository: CategoryRepository
@@ -31,15 +30,15 @@ export function useItemCategoryService(
   db: DB,
   mapper?: TemplateMap
 ): CategoryService {
-  const query = useQuery("item_categories", mapper, categoryModel, true);
+  const query = useQuery('item_categories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    "item_categories",
+    'item_categories',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, "item_categories");
+  const repository = new SqlCategoryRepositoy(db, 'item_categories');
   return new CategoryManager(builder.search, repository);
 }
 export function useItemCategoryController(
@@ -55,15 +54,15 @@ export function useFilmCategoryService(
   db: DB,
   mapper?: TemplateMap
 ): CategoryService {
-  const query = useQuery("film_categories", mapper, categoryModel, true);
+  const query = useQuery('film_categories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    "film_categories",
+    'film_categories',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, "film_categories");
+  const repository = new SqlCategoryRepositoy(db, 'film_categories');
   return new CategoryManager(builder.search, repository);
 }
 export function useFilmCategoryController(
@@ -79,15 +78,15 @@ export function useCompanyCategoryService(
   db: DB,
   mapper?: TemplateMap
 ): CategoryService {
-  const query = useQuery("company_categories", mapper, categoryModel, true);
+  const query = useQuery('company_categories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    "company_categories",
+    'company_categories',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new SqlCategoryRepositoy(db, "company_categories");
+  const repository = new SqlCategoryRepositoy(db, 'company_categories');
   return new CategoryManager(builder.search, repository);
 }
 export function useCompanyCategoryController(
