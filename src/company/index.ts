@@ -82,10 +82,10 @@ export function useCompanyService(
   db: DB,
   mapper?: TemplateMap
 ): CompanyService {
-  const query = useQuery('company', mapper, companyModel, true);
+  const query = useQuery('companies', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(
     db.query,
-    'company',
+    'companies',
     companyModel,
     db.driver,
     query
@@ -93,7 +93,7 @@ export function useCompanyService(
   const repository = new SqlCompanyRepository(db, 'companies');
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    'info',
+    'info_company',
     infoModel,
     buildToSave
   );
@@ -116,7 +116,7 @@ export function useCompanyRateController(
     rateModel,
     buildToSave,
     5,
-    'company_info',
+    'info_company',
     'rate',
     'count',
     'score',
@@ -125,7 +125,7 @@ export function useCompanyRateController(
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    'info',
+    'info_company',
     infoModel,
     buildToSave
   );
@@ -145,10 +145,10 @@ export function useCompanyReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery('rates', mapper, rateModel, true);
+  const query = useQuery('rates_company', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    'rates',
+    'rates_company',
     rateModel,
     db.driver,
     query
@@ -163,7 +163,7 @@ export function useCompanyReactionService(
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    'ratereaction',
+    'ratereaction_company',
     rateReactionModel,
     'rates',
     'usefulCount',
@@ -172,9 +172,9 @@ export function useCompanyReactionService(
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'rate_comments',
+    'rate_comments_company',
     commentModel,
-    'rates',
+    'rates_company',
     'id',
     'author',
     'replyCount',
@@ -228,7 +228,7 @@ export function useCompanyRateCommentService(
     db,
     'rate_comments',
     commentModel,
-    'rates',
+    'rates_company',
     'id',
     'author',
     'replyCount',
