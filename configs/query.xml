@@ -501,7 +501,7 @@
     </if>   
     from rates_company r
     <if test="userId != null">
-      left join ratereaction u 
+      left join ratereaction_company u 
         on u.id = r.id
         and u.author = r.author
         and u.userId = #{userId}
@@ -531,7 +531,7 @@
     </if>
   </select>
 
-  <select id="reply">
+  <select id="reply_company">
     select *
     from reply_company
     where
@@ -565,7 +565,7 @@
     </if>
   </select>
 
-  <select id="info">
+  <select id="info_company">
     select * from info_company
     <if test="id != null">
       id = #{id} and
@@ -579,7 +579,7 @@
     </if>
   </select>
 
-  <select id="ratereaction">
+  <select id="ratereaction_company">
     select *
     from ratereaction_company
     where
@@ -604,7 +604,7 @@
     </if>
   </select>
 
-  <select id="ratecomment">
+  <select id="rate_comments_company">
     select *
     from rate_comments_company
     where
