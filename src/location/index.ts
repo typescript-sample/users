@@ -1,4 +1,4 @@
-import { Log, Manager, Search } from 'onecore';
+import { Log, Manager, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -39,19 +39,19 @@ import {
   LocationFilter,
   locationModel,
   LocationRepository,
-  LocationService,
+  LocationQuery,
 } from './location';
 import { LocationController } from './location-controller';
 import { SqlLocationRepository } from './sql-location-repository';
 export * from './location-controller';
 export { LocationController };
 
-export class LocationManager
-  extends Manager<Location, string, LocationFilter>
-  implements LocationService {
+export class LocationService
+  extends ViewSearchManager<Location, string, LocationFilter>
+  implements LocationQuery {
   constructor(
     search: Search<Location, LocationFilter>,
-    repository: LocationRepository,
+    protected repository: LocationRepository,
     private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
@@ -78,7 +78,7 @@ export class LocationManager
 export function useLocationService(
   db: DB,
   mapper?: TemplateMap
-): LocationService {
+): LocationQuery {
   const query = useQuery('locations', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(
     db.query,
@@ -94,7 +94,7 @@ export function useLocationService(
     infoModel,
     buildToSave
   );
-  return new LocationManager(builder.search, repository, infoRepository);
+  return new LocationService(builder.search, repository, infoRepository);
 }
 
 export function useLocationController(

@@ -1,4 +1,4 @@
-import { Attributes, Filter, Info, Repository, Service } from 'onecore';
+import { Attributes, Filter, Info, Query, Repository, Service } from 'onecore';
 
 export interface LocationFilter extends Filter {
   id?: string;
@@ -26,7 +26,7 @@ export interface Location {
 
 export interface LocationRepository extends Repository<Location, string> {}
 
-export interface LocationService extends Service<Location, string, LocationFilter> {
+export interface LocationQuery extends Query<Location, string, LocationFilter> {
 
 }
 

@@ -1,8 +1,8 @@
-import { Controller, Log } from 'express-ext';
-import { Cinema, CinemaFilter, CinemaService } from './cinema';
+import { Controller, Log, ViewController } from 'express-ext';
+import { Cinema, CinemaFilter, CinemaQuery } from './cinema';
 
-export class CinemaController extends Controller<Cinema, string, CinemaFilter> {
-  constructor(log: Log, cinemaService: CinemaService) {
+export class CinemaController extends ViewController<Cinema, string, CinemaFilter> {
+  constructor(log: Log, cinemaService: CinemaQuery) {
     super(log, cinemaService);
   }
 }

@@ -41,7 +41,7 @@ import {
   FilmFilter,
   filmModel,
   FilmRepository,
-  FilmService,
+  FilmQuery,
 } from './film';
 import { FilmController } from './film-controller';
 import { SqlFilmRepositoy } from './sql-film-repository';
@@ -50,9 +50,9 @@ import { SqlFilmRepositoy } from './sql-film-repository';
 
 export { FilmController };
 
-export class FilmQuery
+export class FilmService
   extends ViewSearchManager<Film, string, FilmFilter>
-  implements FilmService {
+  implements FilmQuery {
   constructor(
     search: Search<Film, FilmFilter>,
     protected repository: FilmRepository,
@@ -79,7 +79,7 @@ export class FilmQuery
 export function useFilmService(
   db: DB,
   mapper?: TemplateMap
-): FilmService {
+): FilmQuery {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
@@ -95,7 +95,7 @@ export function useFilmService(
     info10Model,
     buildToSave
   );
-  return new FilmQuery(
+  return new FilmService(
     builder.search,
     repository,
     infoRepository

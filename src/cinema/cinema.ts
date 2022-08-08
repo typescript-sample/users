@@ -1,4 +1,4 @@
-import { Attributes, Filter, Info, Repository, Service } from 'onecore';
+import { Attributes, Filter, Info, Query, Repository, Service } from 'onecore';
 
 export interface CinemaFilter extends Filter {
   id?: string;
@@ -40,7 +40,7 @@ export interface Cinema {
 
 export interface CinemaRepository extends Repository<Cinema, string> {}
 
-export interface CinemaService extends Service<Cinema, string, CinemaFilter> {}
+export interface CinemaQuery extends Query<Cinema, string, CinemaFilter> {}
 
 export const galleryModel: Attributes = {
   url: {

@@ -112,14 +112,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
 
 
-  app.get('/backoffice/cinemas/search', ctx.cinema.search);
-  app.post('/backoffice/cinemas/search', ctx.cinema.search);
-  app.get('/backoffice/cinemas', ctx.cinema.search);
-  app.post('/backoffice/cinemas', ctx.cinema.create);
-  app.get('/backoffice/cinemas/:id', ctx.cinema.load);
-  app.put('/backoffice/cinemas/:id', ctx.cinema.update);
-  app.patch('/backoffice/cinemas/:id', ctx.cinema.patch);
-  app.delete('/backoffice/cinemas/:id', ctx.cinema.delete);
+  app.get('/backoffice/cinemas/search', ctx.backofficeCinema.search);
+  app.post('/backoffice/cinemas/search', ctx.backofficeCinema.search);
+  app.get('/backoffice/cinemas', ctx.backofficeCinema.search);
+  app.post('/backoffice/cinemas', ctx.backofficeCinema.create);
+  app.get('/backoffice/cinemas/:id', ctx.backofficeCinema.load);
+  app.put('/backoffice/cinemas/:id', ctx.backofficeCinema.update);
+  app.patch('/backoffice/cinemas/:id', ctx.backofficeCinema.patch);
+  app.delete('/backoffice/cinemas/:id', ctx.backofficeCinema.delete);
 
 
   app.get('/cinema/rates/search', ctx.cinemaReaction.search);
