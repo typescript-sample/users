@@ -1,13 +1,14 @@
-import { Log, Search, ViewSearchManager } from 'onecore';
+import { Log, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, SearchBuilder } from 'query-core';
 import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, SavedItemsRepository } from './item';
-import { ItemController } from './item-controller';
+import { ItemController, SavedController } from './item-controller';
 import { buildQuery } from './query';
 import { SqlItemRepository } from './sql-item-repository';
 
 export * from './item';
 export { ItemController };
+export { SavedController };
 
 export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
   constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedItemsRepository, public max: number) {
@@ -37,13 +38,17 @@ export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> imp
     return this.itemRepository.getItems(items);
   }
 }
-export function useItemService(db: DB): ItemQuery {
+export function useItemController(log: Log, db: DB): ItemController {
   const savedItemMax = 50;
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
   const repository = new SqlItemRepository(db, 'items');
   const saveItemRepository = new ArrayRepository<string, string>(db.query, db.exec, 'save_items', 'items', 'id');
-  return new ItemManager(builder.search, repository, saveItemRepository, savedItemMax);
+  const service = new ItemManager(builder.search, repository, saveItemRepository, savedItemMax);
+  return new ItemController(log, service);
 }
-export function useItemController(log: Log, db: DB): ItemController {
-  return new ItemController(log, useItemService(db));
+export function useSavedController(log: Log, db: DB): SavedController<Item> {
+  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'save_items', 'items', 'id');
+  const repository = new SqlItemRepository(db, 'items');
+  const service = new SavedService(savedRepository, repository.getItems, 50);
+  return new SavedController<Item>(log, service, 'itemId', 'id');
 }

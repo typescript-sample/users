@@ -111,7 +111,7 @@ import {
   useFilmRateController,
   useFilmReactionController,
 } from './film';
-import { ItemController, useItemController } from './items';
+import { Item, ItemController, useItemController } from './items';
 import {
   Response,
   ResponseController,
@@ -143,6 +143,7 @@ import {
 } from './my-profile';
 import { UserController, useUserController } from './user';
 
+import {useSavedController, SavedController} from './items'
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -214,6 +215,7 @@ export interface ApplicationContext {
   jobs: JobController;
   backofficeJob: BackOfficeJobController;
   rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  saveItem: SavedController<Item>;
 }
 
 export function useContext(
@@ -448,6 +450,7 @@ export function useContext(
     queryDB,
     mapper
   );
+  const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
     'film_directors',
@@ -627,7 +630,8 @@ export function useContext(
     backofficeCompany,
     backofficeJob,
     backofficeLocation,
-    backofficeCinema
+    backofficeCinema,
+    saveItem
   };
 }
 

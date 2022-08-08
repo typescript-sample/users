@@ -12,6 +12,8 @@ export interface FilmFilter extends Filter {
   casts?: string[];
   productions?: string[];
   countries?: string[];
+  language?:string;
+  writer?:string[];
 }
 
 export interface Film {
@@ -27,6 +29,8 @@ export interface Film {
   productions?: string[];
   countries?: string[];
   info?: Info10;
+  language?:string;
+  writer?:string[];
 }
 
 export interface FilmRepository extends ViewRepository<Film, string> {
@@ -71,6 +75,12 @@ export const filmModel: Attributes = {
   },
   countries: {
     type: 'strings',
+  },
+  language:{
+    type:'string'
+  },
+  writer:{
+    type:'strings'
   },
   createdBy: {},
   createdAt: {
