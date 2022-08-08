@@ -1,4 +1,4 @@
-import { Log, Manager, Search,ViewSearchManager } from 'onecore';
+import { Log, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';

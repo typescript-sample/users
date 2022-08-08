@@ -1,4 +1,4 @@
-import { Attributes, Filter, Query, Repository, Service } from 'onecore';
+import { Attributes, Filter, Query, Repository } from 'onecore';
 
 export interface JobFilter extends Filter {
     id?: string;
