@@ -4051,10 +4051,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.6":
-  "integrity" "sha512-Q535siPxCu/7N79+6HDryMJhFRwl9OwIerhL+Hb1g8qnfeboDtIOW6VwqFYN67R3+CyEIP+GyavOYTWWdm2xhg=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.6.tgz"
-  "version" "0.1.6"
+"pg-extension@^0.1.8":
+  "integrity" "sha512-mgqfZ38R37mftal9kgFCWTEuIRkV7TnS23OUQEWVZMewSRkLHg4pCiuxFL8Wlu5zi05JsA7NahdiHNjHuN5OiQ=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.8.tgz"
+  "version" "0.1.8"
   dependencies:
     "pg" "^8.6.0"
 

@@ -1,7 +1,7 @@
 import { params } from 'pg-extension';
 import { Attributes, DB, Repository, Statement } from 'query-core';
 import { Item, itemModel, ItemRepository } from './item';
-import { SavedItemsRepository, SaveItems } from './item';
+import { SavedItemsRepository } from './item';
 
 export class SqlItemRepository extends Repository<Item, string> implements ItemRepository {
   constructor(db: DB, table: string) {
@@ -16,12 +16,12 @@ export class SqlItemRepository extends Repository<Item, string> implements ItemR
   }
 }
 
-export class SqlSaveItemsRepository extends Repository<SaveItems, string> implements SavedItemsRepository {
+export class SqlSaveItemsRepository extends Repository<any, string> implements SavedItemsRepository {
   constructor(db: DB, table: string, attributes: Attributes, protected buildToSave: <T>(obj: T, table: string, attrs: Attributes, ver?: string, buildParam?: (i: number) => string, i?: number) => Statement|undefined) {
     super(db, table, attributes);
   }
-  save(obj: SaveItems): Promise<number> {
-    const stmt = this.buildToSave<SaveItems>(obj, this.table, this.attributes);
+  save(obj: any): Promise<number> {
+    const stmt = this.buildToSave(obj, this.table, this.attributes);
     if (stmt) {
       return this.exec(stmt.query, stmt.params);
     } else {

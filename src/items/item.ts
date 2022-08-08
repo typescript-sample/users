@@ -76,20 +76,8 @@ export const itemModel: Attributes = {
     typeof: fileUploadGalleryModel,
   },
 };
-export interface SaveItems {
-  id: string;
-  items: string[];
+export interface SavedItemsRepository {
+  load(id: string, ctx?: any): Promise<string[]|null>;
+  insert(id: string, arr: string[]): Promise<number>;
+  update(id: string, arr: string[]): Promise<number>;
 }
-export interface SavedItemsRepository extends Repository<SaveItems, string> {
-  save(obj: SaveItems): Promise<number>;
-}
-
-export const saveItemsModel: Attributes = {
-  id: {
-    key: true,
-    length: 40
-  },
-  items: {
-    type: 'strings'
-  }
-};

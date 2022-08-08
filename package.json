@@ -39,7 +39,7 @@
     "password-express": "^0.0.2",
     "password-service": "^0.0.3",
     "pg": "^8.7.3",
-    "pg-extension": "^0.1.6",
+    "pg-extension": "^0.1.8",
     "query-core": "^0.1.23",
     "query-mappers": "^0.0.3",
     "rate-core": "^0.5.3",
