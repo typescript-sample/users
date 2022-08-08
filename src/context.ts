@@ -17,9 +17,10 @@ import {
   Middleware,
   MiddlewareController,
   ModelConfig,
-  QueryController,
+  ItemController as ItemsController,
   resources,
   useBuild,
+  SavedController,
 } from 'express-ext';
 import {
   deleteFile,
@@ -143,7 +144,8 @@ import {
 } from './my-profile';
 import { UserController, useUserController } from './user';
 
-import {useSavedController, SavedController} from './items'
+import {useSavedController} from './items'
+import { Request, Response as Res } from 'express';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -160,6 +162,9 @@ export interface Config {
   modelAppreciation: ModelConfig;
   modelItem: ModelConf;
 }
+export interface QueryController {
+  search(req: Request, res: Res): void;
+}
 export interface ApplicationContext {
   health: HealthController;
   log: LogController;
@@ -169,11 +174,11 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: UserController;
-  skill: QueryController<string[]>;
-  interest: QueryController<string[]>;
-  lookingFor: QueryController<string[]>;
-  educationQuery: QueryController<string[]>;
-  companyQuery: QueryController<string[]>;
+  skill: ItemsController<string[]>;
+  interest: ItemsController<string[]>;
+  lookingFor: ItemsController<string[]>;
+  educationQuery: ItemsController<string[]>;
+  companyQuery: ItemsController<string[]>;
   appreciation: AppreciationController;
   // appreciationReply: ReplyController;
   article: ArticleController;
@@ -196,12 +201,12 @@ export interface ApplicationContext {
   filmReaction: ReactionController<Rate, RateFilter, Comment>;
   filmComment: RateCommentController<Comment>;
   filmCategory: CategoryController;
-  director: QueryController<string[]>;
-  cast: QueryController<string[]>;
-  production: QueryController<string[]>;
-  country: QueryController<string[]>;
+  director: ItemsController<string[]>;
+  cast: ItemsController<string[]>;
+  production: ItemsController<string[]>;
+  country: ItemsController<string[]>;
   items: ItemController;
-  brand: QueryController<string[]>;
+  brand: ItemsController<string[]>;
   itemCategory: CategoryController;
   itemResponse: ResponseController;
   itemReaction: ReactionController<Response, ResponseFilter, Comment>;
@@ -338,7 +343,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const skill = new QueryController<string[]>(
+  const skill = new ItemsController<string[]>(
     logger.error,
     skillService.load,
     'keyword'
@@ -349,7 +354,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const interest = new QueryController<string[]>(
+  const interest = new ItemsController<string[]>(
     logger.error,
     interestService.load,
     'keyword'
@@ -360,7 +365,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const lookingFor = new QueryController<string[]>(
+  const lookingFor = new ItemsController<string[]>(
     logger.error,
     interestService.load,
     'keyword'
@@ -371,7 +376,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const companyQuery = new QueryController<string[]>(
+  const companyQuery = new ItemsController<string[]>(
     logger.error,
     companyService.load,
     'keyword'
@@ -382,7 +387,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const educationQuery = new QueryController<string[]>(
+  const educationQuery = new ItemsController<string[]>(
     logger.error,
     educationService.load,
     'keyword'
@@ -458,7 +463,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const director = new QueryController<string[]>(
+  const director = new ItemsController<string[]>(
     logger.error,
     directorService.load,
     'keyword'
@@ -469,7 +474,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const cast = new QueryController<string[]>(
+  const cast = new ItemsController<string[]>(
     logger.error,
     castService.load,
     'keyword'
@@ -480,7 +485,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const production = new QueryController<string[]>(
+  const production = new ItemsController<string[]>(
     logger.error,
     productionService.load,
     'keyword'
@@ -491,7 +496,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const country = new QueryController<string[]>(
+  const country = new ItemsController<string[]>(
     logger.error,
     countryService.load,
     'keyword'
@@ -538,7 +543,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const brand = new QueryController<string[]>(
+  const brand = new ItemsController<string[]>(
     logger.error,
     brandService.load,
     'keyword'

@@ -1,6 +1,5 @@
 import { Log, Manager, Search } from "onecore";
-import { buildToSave, useUrlQuery } from "pg-extension";
-import { DB, SearchBuilder, SqlLoadRepository } from "query-core";
+import { DB, Repository, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
 import {
@@ -11,7 +10,6 @@ import {
   CinemaService,
 } from "./cinema";
 import { BackOfficeCinemaController } from "./cinema-controller";
-import { SqlCinemaRepository } from "./sql-cinema-repository";
 
 export { BackOfficeCinemaController };
 
@@ -37,7 +35,7 @@ export function useBackOfficeCinemaService(db: DB, mapper?: TemplateMap): Cinema
     db.driver,
     query
   );
-  const repository = new SqlCinemaRepository(db, "cinema");
+  const repository = new Repository<Cinema, string>(db, "cinema", cinemaModel);
   return new CinemaManager(builder.search, repository);
 }
 

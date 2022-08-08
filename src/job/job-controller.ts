@@ -1,7 +1,7 @@
-import { Controller, Log, ViewController } from 'express-ext';
+import { Controller, Log, QueryController } from 'express-ext';
 import { Job, JobFilter, JobQuery} from './job';
 
-export class JobController extends ViewController<Job, string, JobFilter> {
+export class JobController extends QueryController<Job, string, JobFilter> {
   constructor(log: Log, jobService: JobQuery) {
     super(log, jobService);
   }

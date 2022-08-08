@@ -1,7 +1,7 @@
-import { Controller, Log, ViewController } from 'express-ext';
+import { Log, QueryController } from 'express-ext';
 import { Location, LocationFilter, LocationQuery } from './location';
 
-export class LocationController extends ViewController<Location, string, LocationFilter> {
+export class LocationController extends QueryController<Location, string, LocationFilter> {
   constructor(log: Log, public locationService: LocationQuery) {
     super(log, locationService);
   }

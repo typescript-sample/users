@@ -1,14 +1,14 @@
+import { SavedController } from 'express-ext';
 import { Log, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, SearchBuilder } from 'query-core';
 import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, SavedItemsRepository } from './item';
-import { ItemController, SavedController } from './item-controller';
+import { ItemController } from './item-controller';
 import { buildQuery } from './query';
 import { SqlItemRepository } from './sql-item-repository';
 
 export * from './item';
 export { ItemController };
-export { SavedController };
 
 export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
   constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedItemsRepository, public max: number) {

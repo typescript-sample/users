@@ -1,10 +1,9 @@
 import { Log } from 'express-ext';
 import { Manager, Search,ViewSearchManager } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Job, JobFilter, jobModel, JobRepository, JobQuery } from './job';
 import { JobController } from './job-controller';
-import { SqlJobRepositoy } from './job-responsitory';
 
 export { JobController };
 
@@ -16,7 +15,7 @@ export class JobService extends ViewSearchManager<Job, string, JobFilter> implem
 export function useJobService(db: DB, mapper?: TemplateMap): JobQuery {
   const query = useQuery('jobs', mapper, jobModel, true);
   const builder = new SearchBuilder<Job, JobFilter>(db.query, 'jobs', jobModel, db.driver, query);
-  const repository = new SqlJobRepositoy(db);
+  const repository = new Repository<Job, string>(db, 'jobs', jobModel);
   return new JobService(builder.search, repository);
 
 }
