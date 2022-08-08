@@ -1,4 +1,4 @@
-import { Attributes, Filter, Info10, Repository, Service } from 'onecore';
+import { Attributes, Filter, Info10, ViewRepository, ViewService } from 'onecore';
 
 export interface FilmFilter extends Filter {
   filmId?: string;
@@ -29,9 +29,9 @@ export interface Film {
   info?: Info10;
 }
 
-export interface FilmRepository extends Repository<Film, string> {
+export interface FilmRepository extends ViewRepository<Film, string> {
 }
-export interface FilmService extends Service<Film, string, FilmFilter> {
+export interface FilmService extends ViewService<Film, string> {
 }
 
 export const filmModel: Attributes = {

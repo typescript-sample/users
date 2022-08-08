@@ -496,10 +496,6 @@ export function useContext(
   const film = useFilmController(
     logger.error,
     queryDB,
-    directorService.save,
-    castService.save,
-    productionService.save,
-    countryService.save,
     mapper
   );
   const backOfficeFilm = useBackOfficeFilmController(
