@@ -78,6 +78,10 @@ import {
   useCinemaRateController,
   useCinemaReactionController,
 } from "./cinema";
+import {
+  BackOfficeCinemaController,
+  useBackOfficeCinemaController
+} from "./backoffice-cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
@@ -179,6 +183,7 @@ export interface ApplicationContext {
   article: ArticleController;
   myarticles: MyArticleController;
   cinema: CinemaController;
+  backofficeCinema: BackOfficeCinemaController;
   cinemaRate: RateController<Rate>;
   cinemaReaction: ReactionController<Rate, RateFilter, Comment>;
   cinemaComment: RateCommentController<Comment>;
@@ -440,6 +445,7 @@ export function useContext(
   );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
+  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
   const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
   const cinemaComment = useCinemaRateCommentController(
@@ -629,7 +635,8 @@ export function useContext(
     backOfficeFilm,
     backofficeCompany,
     backofficeJob,
-    backofficeLocation
+    backofficeLocation,
+    backofficeCinema
   };
 }
 

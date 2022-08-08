@@ -79,33 +79,15 @@ export class CompanyManager
   }
 }
 
-export function useCompanyService(
-  db: DB,
-  mapper?: TemplateMap
-): CompanyService {
+export function useCompanyService( db: DB, mapper?: TemplateMap ): CompanyService {
   const query = useQuery("company", mapper, companyModel, true);
-  const builder = new SearchBuilder<Company, CompanyFilter>(
-    db.query,
-    "company",
-    companyModel,
-    db.driver,
-    query
-  );
+  const builder = new SearchBuilder<Company, CompanyFilter>( db.query, "company", companyModel, db.driver, query );
   const repository = new SqlCompanyRepository(db, "companies");
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    "info",
-    infoModel,
-    buildToSave
-  );
+  const infoRepository = new SqlInfoRepository<Info>( db, "info", infoModel,  buildToSave );
   return new CompanyManager(builder.search, repository, infoRepository);
 }
 
-export function useCompanyController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): CompanyController {
+export function useCompanyController( log: Log, db: DB, mapper?: TemplateMap ): CompanyController {
   return new CompanyController(log, useCompanyService(db, mapper));
 }
 
