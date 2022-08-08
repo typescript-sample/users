@@ -126,6 +126,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/cinema/rates/comment/:id/:author/:userId', ctx.cinemaReaction.comment);
   app.delete('/cinema/rates/comment/:commentId/:author', ctx.cinemaReaction.removeComment);
   app.put('/cinema/rates/comment/:commentId/:id/:author/:userId', ctx.cinemaReaction.updateComment);
+  
+  //rate-criteria
+  app.post('/company/rates/search', ctx.criteriaReaction.search);
+  app.post('/company/rates/search/:id/:author', ctx.criteriaReaction.search);
+  app.get('/company/rates/comment/search', ctx.criteriaComment.search);
+  app.post('/company/rates/comment/search', ctx.criteriaComment.search);
+  app.post('/company/rates/:id/:author', ctx.criteriaReaction.load);
+  app.post('/company/rates/rate/:id/:author', ctx.criteriaRate.rate);
+  app.post('/company/rates/:id/:author/useful/:userId', ctx.criteriaReaction.setUseful);
+  app.delete('/company/rates/:id/:author/useful/:userId', ctx.criteriaReaction.removeUseful);
+  app.post('/company/rates/:id/:author/comment/:userId', ctx.criteriaReaction.comment);
+  app.put('/company/rates/:id/:author/comment/:userId/:commentId', ctx.criteriaReaction.updateComment);
+  app.delete('/company/rates/:author/comment/:commentId', ctx.criteriaReaction.removeComment);
 
   app.get('/films/categories/search', ctx.filmCategory.search);
   app.post('/films/categories/', ctx.filmCategory.create);
@@ -276,11 +289,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   // app.put('/jobs/:id', ctx.jobs.update);
   // app.patch('/jobs/:id', ctx.jobs.patch);
   // app.delete('/jobs/:id', ctx.jobs.delete);
-
-  app.post('/company/rate-criteria/search', ctx.rateCriteria.search);
-  app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
-  app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.load);
-  // app.post('/company/rate-criteria/rate/:id/:author', ctx.rateCriteria.rate);
 
   app.post('/backoffice/film', ctx.backOfficeFilm.create);
   app.get('/backoffice/film/search', ctx.backOfficeFilm.search);

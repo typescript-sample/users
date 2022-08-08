@@ -41,7 +41,6 @@ export interface RateCriteriaService {
   search(s: RateCriteriaFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<RateCriteria>>;
   load(id: string, author: string): Promise<RateCriteria | null>;
   rate(rate: RateCriteria): Promise<number>;
-
   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
   comment(comment: Comment): Promise<number>;
@@ -56,6 +55,11 @@ export interface RateFullInfo {
   rate: number;
   count: number;
   score: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
 }
 
 export const rateFullInfoModel: Attributes = {
@@ -69,6 +73,21 @@ export const rateFullInfoModel: Attributes = {
     type: 'integer',
   },
   score: {
+    type: 'number',
+  },
+  rate1:{
+    type: 'number',
+  },
+  rate2:{
+    type: 'number',
+  },
+  rate3:{
+    type: 'number',
+  },
+  rate4:{
+    type: 'number',
+  },
+  rate5:{
     type: 'number',
   }
 };

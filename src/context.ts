@@ -98,7 +98,7 @@ import {
   useCompanyRateController,
   useCompanyReactionController,
 } from './company';
-import { useRateCriteriaController } from './company-rate';
+import { useRateCriteriaCommentController, useRateCriteriaController, useRateCriteriaReactionController } from './company-rate';
 import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
 import {
   FilmController,
@@ -208,7 +208,9 @@ export interface ApplicationContext {
   locationComment: RateCommentController<Comment>;
   jobs: JobController;
   backofficeJob: BackOfficeJobController;
-  rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  criteriaReaction: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  criteriaRate: RateController<RateCriteria>;
+  criteriaComment: RateCommentController<Comment>;
 }
 
 export function useContext(
@@ -523,6 +525,7 @@ export function useContext(
     queryDB,
     mapper
   );
+
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
@@ -569,7 +572,11 @@ export function useContext(
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
-  const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
+
+  //company-rate
+  const criteriaRate = useRateCriteriaController(logger.error, queryDB, mapper);
+  const criteriaReaction = useRateCriteriaReactionController(logger.error, queryDB, mapper);
+  const criteriaComment = useRateCriteriaCommentController(logger.error, queryDB, mapper);
 
   return {
     health,
@@ -620,7 +627,9 @@ export function useContext(
     myitems,
     myitemsUpload,
     jobs,
-    rateCriteria,
+    criteriaRate,
+    criteriaReaction,
+    criteriaComment,
     backOfficeFilm,
     backofficeCompany,
     backofficeJob,
