@@ -1,13 +1,11 @@
 import { Log, Manager, Search } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Comment, CommentFilter, commentModel, CommentRepository, CommentService } from './comment';
 import { CommentController } from './comment-controller';
 import { buildQuery } from './query';
 export * from './comment';
 export { CommentController };
-
-import { SqlCommentRepositoy } from './sql-comment-repository';
 
 export class CommentManager extends Manager<Comment, string, CommentFilter> implements CommentService {
   constructor(search: Search<Comment, CommentFilter>, repository: CommentRepository) {
@@ -18,7 +16,7 @@ export class CommentManager extends Manager<Comment, string, CommentFilter> impl
 export function useCommentService(db: DB, mapper?: TemplateMap): CommentService {
   const queryComment = useQuery('comment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'comments', commentModel, db.driver, buildQuery);
-  const repository = new SqlCommentRepositoy(db);
+  const repository = new Repository<Comment, string>(db,'comments', commentModel);
   return new CommentManager(builder.search, repository);
 }
 export function useCommentController(log: Log, db: DB, mapper?: TemplateMap): CommentController {

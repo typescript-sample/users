@@ -81,7 +81,7 @@
 
   <select id="article">
     select * 
-    from articles
+    from article
     where
     <if test="id != null">
       id in (#{id}) and

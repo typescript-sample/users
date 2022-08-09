@@ -17,9 +17,10 @@ import {
   Middleware,
   MiddlewareController,
   ModelConfig,
-  QueryController,
+  ItemController as ItemsController,
   resources,
   useBuild,
+  SavedController,
 } from 'express-ext';
 import {
   deleteFile,
@@ -67,16 +68,16 @@ import { ArticleController, useArticleController } from './article';
 import {
   BackOfficeCompanyController,
   useBackOfficeCompanyController
-} from './backoffice-company';
+} from './backoffice/company';
 import {
   BackOfficeFilmController,
   useBackOfficeFilmController
-} from './backoffice-film';
-import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
+} from './backoffice/film';
+import { BackOfficeJobController, useBackOfficeJobController } from './backoffice/job';
 import {
   BackOfficeLocationController,
   useBackOfficeLocationController
-} from './backoffice-location';
+} from './backoffice/location';
 import {
   CategoryController,
   useCompanyCategoryController,
@@ -93,7 +94,7 @@ import {
 import {
   BackOfficeCinemaController,
   useBackOfficeCinemaController
-} from "./backoffice-cinema";
+} from "./backoffice/cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
@@ -111,7 +112,7 @@ import {
   useFilmRateController,
   useFilmReactionController,
 } from './film';
-import { ItemController, useItemController } from './items';
+import { Item, ItemController, useItemController } from './items';
 import {
   Response,
   ResponseController,
@@ -143,6 +144,8 @@ import {
 } from './my-profile';
 import { UserController, useUserController } from './user';
 
+import {useSavedController} from './items'
+import { Request, Response as Res } from 'express';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -159,6 +162,9 @@ export interface Config {
   modelAppreciation: ModelConfig;
   modelItem: ModelConf;
 }
+export interface QueryController {
+  search(req: Request, res: Res): void;
+}
 export interface ApplicationContext {
   health: HealthController;
   log: LogController;
@@ -168,11 +174,11 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: UserController;
-  skill: QueryController<string[]>;
-  interest: QueryController<string[]>;
-  lookingFor: QueryController<string[]>;
-  educationQuery: QueryController<string[]>;
-  companyQuery: QueryController<string[]>;
+  skill: ItemsController<string[]>;
+  interest: ItemsController<string[]>;
+  lookingFor: ItemsController<string[]>;
+  educationQuery: ItemsController<string[]>;
+  companyQuery: ItemsController<string[]>;
   appreciation: AppreciationController;
   // appreciationReply: ReplyController;
   article: ArticleController;
@@ -195,12 +201,12 @@ export interface ApplicationContext {
   filmReaction: ReactionController<Rate, RateFilter, Comment>;
   filmComment: RateCommentController<Comment>;
   filmCategory: CategoryController;
-  director: QueryController<string[]>;
-  cast: QueryController<string[]>;
-  production: QueryController<string[]>;
-  country: QueryController<string[]>;
+  director: ItemsController<string[]>;
+  cast: ItemsController<string[]>;
+  production: ItemsController<string[]>;
+  country: ItemsController<string[]>;
   items: ItemController;
-  brand: QueryController<string[]>;
+  brand: ItemsController<string[]>;
   itemCategory: CategoryController;
   itemResponse: ResponseController;
   itemReaction: ReactionController<Response, ResponseFilter, Comment>;
@@ -214,6 +220,7 @@ export interface ApplicationContext {
   jobs: JobController;
   backofficeJob: BackOfficeJobController;
   rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  saveItem: SavedController<Item>;
 }
 
 export function useContext(
@@ -331,34 +338,34 @@ export function useContext(
   const user = useUserController(logger.error, mainDB);
 
   const skillService = new StringService(
-    'skills',
+    'skill',
     'skill',
     queryDB.query,
     queryDB.exec
   );
-  const skill = new QueryController<string[]>(
+  const skill = new ItemsController<string[]>(
     logger.error,
     skillService.load,
     'keyword'
   );
   const interestService = new StringService(
-    'interests',
+    'interest',
     'interest',
     queryDB.query,
     queryDB.exec
   );
-  const interest = new QueryController<string[]>(
+  const interest = new ItemsController<string[]>(
     logger.error,
     interestService.load,
     'keyword'
   );
   const lookingForService = new StringService(
-    'searchs',
+    'search',
     'item',
     queryDB.query,
     queryDB.exec
   );
-  const lookingFor = new QueryController<string[]>(
+  const lookingFor = new ItemsController<string[]>(
     logger.error,
     interestService.load,
     'keyword'
@@ -369,7 +376,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const companyQuery = new QueryController<string[]>(
+  const companyQuery = new ItemsController<string[]>(
     logger.error,
     companyService.load,
     'keyword'
@@ -380,7 +387,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const educationQuery = new QueryController<string[]>(
+  const educationQuery = new ItemsController<string[]>(
     logger.error,
     educationService.load,
     'keyword'
@@ -448,6 +455,7 @@ export function useContext(
     queryDB,
     mapper
   );
+  const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
     'film_directors',
@@ -455,7 +463,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const director = new QueryController<string[]>(
+  const director = new ItemsController<string[]>(
     logger.error,
     directorService.load,
     'keyword'
@@ -466,7 +474,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const cast = new QueryController<string[]>(
+  const cast = new ItemsController<string[]>(
     logger.error,
     castService.load,
     'keyword'
@@ -477,7 +485,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const production = new QueryController<string[]>(
+  const production = new ItemsController<string[]>(
     logger.error,
     productionService.load,
     'keyword'
@@ -488,7 +496,7 @@ export function useContext(
     queryDB.query,
     queryDB.exec
   );
-  const country = new QueryController<string[]>(
+  const country = new ItemsController<string[]>(
     logger.error,
     countryService.load,
     'keyword'
@@ -530,12 +538,12 @@ export function useContext(
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
   const brandService = new StringService(
-    'brands',
+    'brand',
     'brand',
     queryDB.query,
     queryDB.exec
   );
-  const brand = new QueryController<string[]>(
+  const brand = new ItemsController<string[]>(
     logger.error,
     brandService.load,
     'keyword'
@@ -627,7 +635,8 @@ export function useContext(
     backofficeCompany,
     backofficeJob,
     backofficeLocation,
-    backofficeCinema
+    backofficeCinema,
+    saveItem
   };
 }
 

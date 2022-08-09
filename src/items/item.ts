@@ -30,11 +30,8 @@ export interface ItemFilter extends Filter {
 }
 
 export interface ItemRepository extends Repository<Item, string> {
-  getItems(ids: string[]): Promise<Item[]>;
 }
 export interface ItemQuery extends Query<Item, string, ItemFilter> {
-  saveItems(id: string, itemId: string): Promise<number>;
-  getSavedItems(id: string): Promise<Item[]>;
 }
 export const itemModel: Attributes = {
   id: {
@@ -75,21 +72,4 @@ export const itemModel: Attributes = {
     type: 'array',
     typeof: fileUploadGalleryModel,
   },
-};
-export interface SaveItems {
-  id: string;
-  items: string[];
-}
-export interface SavedItemsRepository extends Repository<SaveItems, string> {
-  save(obj: SaveItems): Promise<number>;
-}
-
-export const saveItemsModel: Attributes = {
-  id: {
-    key: true,
-    length: 40
-  },
-  items: {
-    type: 'strings'
-  }
 };

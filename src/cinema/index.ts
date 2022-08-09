@@ -1,6 +1,6 @@
-import { Log, Manager, Search } from 'onecore';
+import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -39,19 +39,18 @@ import {
   CinemaFilter,
   cinemaModel,
   CinemaRepository,
-  CinemaService,
+  CinemaQuery,
 } from './cinema';
 import { CinemaController } from './cinema-controller';
-import { SqlCinemaRepository } from './sql-cinema-repository';
 
 export { CinemaController };
 
-export class CinemaManager
-  extends Manager<Cinema, string, CinemaFilter>
-  implements CinemaService {
+export class CinemaService
+  extends ViewSearchManager<Cinema, string, CinemaFilter>
+  implements CinemaQuery {
   constructor(
     search: Search<Cinema, CinemaFilter>,
-    repository: CinemaRepository,
+    protected repository: CinemaRepository,
     private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
@@ -76,7 +75,7 @@ export class CinemaManager
   }
 }
 
-export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
+export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaQuery {
   const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(
     db.query,
@@ -85,14 +84,14 @@ export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
     db.driver,
     query
   );
-  const repository = new SqlCinemaRepository(db, 'cinema');
+  const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const infoRepository = new SqlInfoRepository<Info>(
     db,
     'info',
     infoModel,
     buildToSave
   );
-  return new CinemaManager(builder.search, repository, infoRepository);
+  return new CinemaService(builder.search, repository, infoRepository);
 }
 
 export function useCinemaController(

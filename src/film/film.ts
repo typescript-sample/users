@@ -1,4 +1,4 @@
-import { Attributes, Filter, Info10, ViewRepository, ViewService } from 'onecore';
+import { Attributes, Filter, Info10, Query, ViewRepository } from 'onecore';
 
 export interface FilmFilter extends Filter {
   filmId?: string;
@@ -9,9 +9,11 @@ export interface FilmFilter extends Filter {
   status?: string;
   categories?: string[];
   directors?: string[];
-  filmcast?: string[];
+  casts?: string[];
   productions?: string[];
   countries?: string[];
+  language?:string;
+  writer?:string[];
 }
 
 export interface Film {
@@ -23,15 +25,17 @@ export interface Film {
   trailerUrl?: string;
   categories?: string[];
   directors?: string[];
-  filmcast?: string[];
+  casts?: string[];
   productions?: string[];
   countries?: string[];
   info?: Info10;
+  language?:string;
+  writer?:string[];
 }
 
 export interface FilmRepository extends ViewRepository<Film, string> {
 }
-export interface FilmService extends ViewService<Film, string> {
+export interface FilmQuery extends Query<Film, string,FilmFilter> {
 }
 
 export const filmModel: Attributes = {
@@ -54,23 +58,29 @@ export const filmModel: Attributes = {
     length: 300
   },
   categories: {
-    type: 'primitives',
+    type: 'strings',
   },
   status: {
     match: 'equal',
     length: 1
   },
   directors: {
-    type: 'primitives',
+    type: 'strings',
   },
-  filmcast: {
-    type: 'primitives',
+  casts: {
+    type: 'strings',
   },
   productions: {
-    type: 'primitives',
+    type: 'strings',
   },
   countries: {
-    type: 'primitives',
+    type: 'strings',
+  },
+  language:{
+    type:'string'
+  },
+  writer:{
+    type:'strings'
   },
   createdBy: {},
   createdAt: {

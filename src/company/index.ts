@@ -1,6 +1,6 @@
-import { Log, Manager, Search } from 'onecore';
+import { Log, Manager, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -39,20 +39,19 @@ import {
   CompanyFilter,
   companyModel,
   CompanyRepository,
-  CompanyService,
+  CompanyQuery,
 } from './company';
 import { CompanyController } from './company-controller';
-import { SqlCompanyRepository } from './sql-company-repository';
 
 export * from './company-controller';
 export { CompanyController };
 
-export class CompanyManager
-  extends Manager<Company, string, CompanyFilter>
-  implements CompanyService {
+export class CompanyService
+  extends ViewSearchManager<Company, string, CompanyFilter>
+  implements CompanyQuery {
   constructor(
     search: Search<Company, CompanyFilter>,
-    repository: CompanyRepository,
+    protected repository: CompanyRepository,
     private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
@@ -81,7 +80,7 @@ export class CompanyManager
 export function useCompanyService(
   db: DB,
   mapper?: TemplateMap
-): CompanyService {
+): CompanyQuery {
   const query = useQuery('companies', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(
     db.query,
@@ -90,14 +89,14 @@ export function useCompanyService(
     db.driver,
     query
   );
-  const repository = new SqlCompanyRepository(db, 'companies');
+  const repository = new Repository<Company, string>(db, 'companies', companyModel);
   const infoRepository = new SqlInfoRepository<Info>(
     db,
     'info_company',
     infoModel,
     buildToSave
   );
-  return new CompanyManager(builder.search, repository, infoRepository);
+  return new CompanyService(builder.search, repository, infoRepository);
 }
 
 export function useCompanyController( log: Log, db: DB, mapper?: TemplateMap ): CompanyController {

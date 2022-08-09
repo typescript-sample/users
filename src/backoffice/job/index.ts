@@ -15,8 +15,8 @@ export class JobManager extends Manager<Job, string, JobFilter> implements JobSe
   }
 }
 export function useBackOfficeJobService(db: DB, mapper?: TemplateMap): JobService {
-  const query = useQuery('jobs', mapper, jobModel, true);
-  const builder = new SearchBuilder<Job, JobFilter>(db.query, 'jobs', jobModel, db.driver, query);
+  const query = useQuery('job', mapper, jobModel, true);
+  const builder = new SearchBuilder<Job, JobFilter>(db.query, 'job', jobModel, db.driver, query);
   const repository = new SqlJobRepositoy(db);
   return new JobManager(builder.search, repository);
 }

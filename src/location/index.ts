@@ -1,6 +1,6 @@
-import { Log, Manager, Search } from 'onecore';
+import { Log, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -39,19 +39,18 @@ import {
   LocationFilter,
   locationModel,
   LocationRepository,
-  LocationService,
+  LocationQuery,
 } from './location';
 import { LocationController } from './location-controller';
-import { SqlLocationRepository } from './sql-location-repository';
 export * from './location-controller';
 export { LocationController };
 
-export class LocationManager
-  extends Manager<Location, string, LocationFilter>
-  implements LocationService {
+export class LocationService
+  extends ViewSearchManager<Location, string, LocationFilter>
+  implements LocationQuery {
   constructor(
     search: Search<Location, LocationFilter>,
-    repository: LocationRepository,
+    protected repository: LocationRepository,
     private infoRepository: InfoRepository<Info>
   ) {
     super(search, repository);
@@ -75,34 +74,28 @@ export class LocationManager
   }
 }
 
-export function useLocationService(
-  db: DB,
-  mapper?: TemplateMap
-): LocationService {
-  const query = useQuery('locations', mapper, locationModel, true);
-  const builder = new SearchBuilder<Location, LocationFilter>(
-    db.query,
-    'locations',
-    locationModel,
-    db.driver,
-    query
-  );
-  const repository = new SqlLocationRepository(db, 'locations');
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    'location_info',
-    infoModel,
-    buildToSave
-  );
-  return new LocationManager(builder.search, repository, infoRepository);
-}
-
 export function useLocationController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
 ): LocationController {
-  return new LocationController(log, useLocationService(db, mapper));
+  const query = useQuery('location', mapper, locationModel, true);
+  const builder = new SearchBuilder<Location, LocationFilter>(
+    db.query,
+    'location',
+    locationModel,
+    db.driver,
+    query
+  );
+  const repository = new Repository<Location, string>(db, 'location', locationModel);
+  const infoRepository = new SqlInfoRepository<Info>(
+    db,
+    'locationinfo',
+    infoModel,
+    buildToSave
+  );
+  const service= new LocationService(builder.search, repository, infoRepository);
+  return new LocationController(log, service);
 }
 
 // Rate
@@ -113,11 +106,11 @@ export function useLocationRateController(
 ): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    'location_rates',
+    'locationrates',
     rateModel,
     buildToSave,
     5,
-    'location_info',
+    'locationinfo',
     'rate',
     'count',
     'score',
@@ -145,17 +138,17 @@ export function useLocationReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery('location_rates', mapper, rateModel, true);
+  const query = useQuery('locationrates', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    'location_rates',
+    'locationrates',
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    'location_rates',
+    'locationrates',
     rateModel,
     db.param,
     'id',
@@ -163,18 +156,18 @@ export function useLocationReactionService(
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    'location_rate_reactions',
+    'locationratereactions',
     rateReactionModel,
-    'location_rates',
+    'locationrates',
     'usefulCount',
     'author',
     'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'location_comments',
+    'locationcomments',
     commentModel,
-    'location_rates',
+    'locationrates',
     'id',
     'author',
     'replyCount',
@@ -216,19 +209,19 @@ export function useLocationRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery('location_comments', mapper, commentModel, true);
+  const query = useQuery('locationcomments', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    'location_comments',
+    'locationcomments',
     commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'location_comments',
+    'locationcomments',
     commentModel,
-    'location_rates',
+    'locationrates',
     'id',
     'author',
     'replyCount',
