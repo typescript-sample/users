@@ -9,9 +9,11 @@ export interface FilmFilter extends Filter {
   status?: string;
   categories?: string[];
   directors?: string[];
-  filmcast?: string[];
+  casts?: string[];
   productions?: string[];
   countries?: string[];
+  language?:string;
+  writer?:string[];
 }
 
 export interface Film {
@@ -23,10 +25,12 @@ export interface Film {
   trailerUrl?: string;
   categories?: string[];
   directors?: string[];
-  filmcast?: string[];
+  casts?: string[];
   productions?: string[];
   countries?: string[];
   info?: Info10;
+  language?:string;
+  writer?:string[];
 }
 
 export interface FilmRepository extends Repository<Film, string> {
@@ -63,7 +67,7 @@ export const filmModel: Attributes = {
   directors: {
     type: 'primitives',
   },
-  filmcast: {
+  casts: {
     type: 'primitives',
   },
   productions: {
@@ -71,6 +75,12 @@ export const filmModel: Attributes = {
   },
   countries: {
     type: 'primitives',
+  },
+  language:{
+    type:'string'
+  },
+  writer:{
+    type:'strings'
   },
   createdBy: {},
   createdAt: {

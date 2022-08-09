@@ -31,8 +31,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -46,8 +46,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -61,8 +61,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -88,12 +88,12 @@ export function useBackOfficeFilmController(
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
-    'films',
+    'film',
     filmModel,
     db.driver,
     query
   );
-  const repository = new Repository<Film, string>(db, 'films',filmModel);
+  const repository = new Repository<Film, string>(db, 'film',filmModel);
   const service = new FilmManager(
     builder.search,
     repository,

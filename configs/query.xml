@@ -42,9 +42,9 @@
     </if>
   </select>
 
-  <select id="items">
+  <select id="item">
         select *
-    from items
+    from item
     where
     <if test="id != null">
         id = (#{id}) and
@@ -81,7 +81,7 @@
 
   <select id="article">
     select * 
-    from articles
+    from article
     where
     <if test="id != null">
       id in (#{id}) and
@@ -364,8 +364,8 @@
     <if test="directors != null" array="skip">
       directors && #{directors} and
     </if>
-    <if test="cast != null" array="skip">
-      cast && #{cast} and
+    <if test="casts != null" array="skip">
+      casts && #{casts} and
     </if>
     <if test="productions != null" array="skip">
       productions && #{productions} and
@@ -382,8 +382,8 @@
     1 = 1
   </select>
 
-  <select id="rates_film_info">
-    select * from rates_film_info
+  <select id="filmrateinfo">
+    select * from filmrateinfo
     <if test="id != null">
       id = #{id} and
     </if>
@@ -402,7 +402,7 @@
     </if>
   </select>
 
-  <select id="rates_film">
+  <select id="filmrate">
     select r.*
     <if test="userId != null">
       ,
@@ -412,7 +412,7 @@
       end
         as disable
     </if>   
-    from rates_film r
+    from filmrate r
     <if test="userId != null">
       left join rates_film_reaction rfr
         on rfr.id = r.id
@@ -486,9 +486,9 @@
     </if>
   </select>
 
-  <select id="rates_film_reaction">
+  <select id="filmratereaction">
     select *
-    from rates_film_reaction
+    from filmratereaction
     where
     <if test="id != null">
       id = #{id} and
@@ -511,9 +511,9 @@
     </if>
   </select>
 
-  <select id="rates_film_comments">
+  <select id="filmratecomment">
     select *
-    from rates_film_comments
+    from filmratecomment
     where
     <if test="commentId != null">
       commentId = #{commentId} and
@@ -549,7 +549,7 @@
 
   <select id="comment">
     select * 
-    from comments 
+    from comment
     where 
     <if test="id != null">
       id = #{id} and 
