@@ -106,7 +106,7 @@ export function useLocationRateController(
 ): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    'locationrates',
+    'locationrate',
     rateModel,
     buildToSave,
     5,
@@ -138,17 +138,17 @@ export function useLocationReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery('locationrates', mapper, rateModel, true);
+  const query = useQuery('locationrate', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    'locationrates',
+    'locationrate',
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    'locationrates',
+    'locationrate',
     rateModel,
     db.param,
     'id',
@@ -156,18 +156,18 @@ export function useLocationReactionService(
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    'locationratereactions',
+    'locationratereaction',
     rateReactionModel,
-    'locationrates',
+    'locationrate',
     'usefulCount',
     'author',
     'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'locationcomments',
+    'locationcomment',
     commentModel,
-    'locationrates',
+    'locationrate',
     'id',
     'author',
     'replyCount',
@@ -209,19 +209,19 @@ export function useLocationRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery('locationcomments', mapper, commentModel, true);
+  const query = useQuery('locationcomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    'locationcomments',
+    'locationcomment',
     commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'locationcomments',
+    'locationcomment',
     commentModel,
-    'locationrates',
+    'locationrate',
     'id',
     'author',
     'replyCount',
