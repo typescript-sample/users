@@ -104,13 +104,10 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/my-articles/:id', ctx.myarticles.delete);
   app.delete('/my-articles/userId', ctx.myarticles.delete);
 
-
   app.get('/cinema/search', ctx.cinema.search);
   app.post('/cinema/search', ctx.cinema.search);
   app.get('/cinema', ctx.cinema.search);
   app.get('/cinema/:id', ctx.cinema.load);
-
-
 
   app.get('/backoffice/cinemas/search', ctx.backofficeCinema.search);
   app.post('/backoffice/cinemas/search', ctx.backofficeCinema.search);
@@ -120,7 +117,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/cinemas/:id', ctx.backofficeCinema.update);
   app.patch('/backoffice/cinemas/:id', ctx.backofficeCinema.patch);
   app.delete('/backoffice/cinemas/:id', ctx.backofficeCinema.delete);
-
 
   app.get('/cinema/rates/search', ctx.cinemaReaction.search);
   app.post('/cinema/rates/search', ctx.cinemaReaction.search);

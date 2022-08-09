@@ -67,9 +67,9 @@ export class CompanyService extends ViewSearchManager<Company, string, CompanyFi
 }
 
 export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): CompanyController {
-  const query = useQuery('companies', mapper, companyModel, true);
-  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'companies', companyModel, db.driver, query);
-  const repository = new Repository<Company, string>(db, 'companies', companyModel);
+  const query = useQuery('company', mapper, companyModel, true);
+  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, db.driver, query);
+  const repository = new Repository<Company, string>(db, 'company', companyModel);
   const infoRepository = new SqlInfoRepository<Info>(db, 'companyratefullinfo', infoModel, buildToSave);
   const service = new CompanyService(builder.search, repository, infoRepository);
   return new CompanyController(log, service);

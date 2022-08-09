@@ -68,16 +68,16 @@ import { ArticleController, useArticleController } from './article';
 import {
   BackOfficeCompanyController,
   useBackOfficeCompanyController
-} from './backoffice-company';
+} from './backoffice/company';
 import {
   BackOfficeFilmController,
   useBackOfficeFilmController
 } from './backoffice/film';
-import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
+import { BackOfficeJobController, useBackOfficeJobController } from './backoffice/job';
 import {
   BackOfficeLocationController,
   useBackOfficeLocationController
-} from './backoffice-location';
+} from './backoffice/location';
 import {
   CategoryController,
   useCompanyCategoryController,
@@ -94,7 +94,7 @@ import {
 import {
   BackOfficeCinemaController,
   useBackOfficeCinemaController
-} from "./backoffice-cinema";
+} from "./backoffice/cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
@@ -448,7 +448,7 @@ export function useContext(
   const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
-    'film_directors',
+    'filmdirector',
     'director',
     queryDB.query,
     queryDB.exec
@@ -459,7 +459,7 @@ export function useContext(
     'keyword'
   );
   const castService = new StringService(
-    'film_cast',
+    'filmcast',
     'actor',
     queryDB.query,
     queryDB.exec
@@ -470,7 +470,7 @@ export function useContext(
     'keyword'
   );
   const productionService = new StringService(
-    'film_productions',
+    'filmproduction',
     'production',
     queryDB.query,
     queryDB.exec
@@ -481,7 +481,7 @@ export function useContext(
     'keyword'
   );
   const countryService = new StringService(
-    'film_countries',
+    'filmcountry',
     'country',
     queryDB.query,
     queryDB.exec
