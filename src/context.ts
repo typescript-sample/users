@@ -72,7 +72,7 @@ import {
 import {
   BackOfficeFilmController,
   useBackOfficeFilmController
-} from './backoffice-film';
+} from './backoffice/film';
 import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
 import {
   BackOfficeLocationController,

@@ -74,10 +74,11 @@ export class LocationService
   }
 }
 
-export function useLocationService(
+export function useLocationController(
+  log: Log,
   db: DB,
   mapper?: TemplateMap
-): LocationQuery {
+): LocationController {
   const query = useQuery('location', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(
     db.query,
@@ -93,15 +94,8 @@ export function useLocationService(
     infoModel,
     buildToSave
   );
-  return new LocationService(builder.search, repository, infoRepository);
-}
-
-export function useLocationController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): LocationController {
-  return new LocationController(log, useLocationService(db, mapper));
+  const service= new LocationService(builder.search, repository, infoRepository);
+  return new LocationController(log, service);
 }
 
 // Rate

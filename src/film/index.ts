@@ -1,5 +1,5 @@
 import { Log } from 'express-ext';
-import { Manager, Search, ViewSearchManager } from 'onecore';
+import { Search, ViewSearchManager } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -73,10 +73,11 @@ export class FilmService
     });
   }
 }
-export function useFilmService(
+export function useFilmController(
+  log: Log,
   db: DB,
   mapper?: TemplateMap
-): FilmQuery {
+): FilmController {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
@@ -92,23 +93,15 @@ export function useFilmService(
     info10Model,
     buildToSave
   );
-  return new FilmService(
+  const service = new FilmService(
     builder.search,
     repository,
     infoRepository
   );
-}
-export function useFilmController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): FilmController {
+
   return new FilmController(
     log,
-    useFilmService(
-      db,
-      mapper
-    )
+    service
   );
 }
 

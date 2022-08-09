@@ -12,12 +12,6 @@ export class JobService extends ViewSearchManager<Job, string, JobFilter> implem
     super(search, repository);
   }
 }
-// export function useJobService(db: DB, mapper?: TemplateMap): JobQuery {
-//   const query = useQuery('jobs', mapper, jobModel, true);
-//   const builder = new SearchBuilder<Job, JobFilter>(db.query, 'jobs', jobModel, db.driver, query);
-//   const repository = new Repository<Job, string>(db, 'jobs', jobModel);
-//   return new JobService(builder.search, repository);
-// }
 export function useJobController(log: Log, db: DB, mapper?: TemplateMap): JobController {
   const query = useQuery('job', mapper, jobModel, true);
   const builder = new SearchBuilder<Job, JobFilter>(db.query, 'job', jobModel, db.driver, query);

@@ -12,14 +12,12 @@ export class LocationManager extends Manager<Location, string, LocationFilter> i
   }
 }
 
-export function useBackOfficeLocationService( db: DB, mapper?: TemplateMap ): LocationService {
+export function useBackOfficeLocationController( log: Log, db: DB, mapper?: TemplateMap ): BackOfficeLocationController {
   const query = useQuery('location', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(  db.query, 'location',  locationModel, db.driver, query );
   const repository = new Repository<Location, string>(db,'location' , locationModel);
-  return new LocationManager(builder.search, repository);
-}
-export function useBackOfficeLocationController( log: Log, db: DB, mapper?: TemplateMap ): BackOfficeLocationController {
-  return new BackOfficeLocationController(log, useBackOfficeLocationService(db, mapper));
+  const service=new LocationManager(builder.search, repository);
+  return new BackOfficeLocationController(log, service);
 }
 
 export function generate(): string {
