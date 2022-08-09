@@ -1,4 +1,4 @@
-import { Attributes, Filter, Info, Query, Repository, Service } from 'onecore';
+import { Attributes, Filter, Info, Query, Repository } from 'onecore';
 
 export interface CinemaFilter extends Filter {
   id?: string;

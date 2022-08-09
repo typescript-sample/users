@@ -1,7 +1,7 @@
 import { Log } from 'express-ext';
 import { Manager, Search, ViewSearchManager } from 'onecore';
 import { buildToSave } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info10,
@@ -44,9 +44,6 @@ import {
   FilmQuery,
 } from './film';
 import { FilmController } from './film-controller';
-import { SqlFilmRepositoy } from './sql-film-repository';
-
-
 
 export { FilmController };
 
@@ -88,7 +85,7 @@ export function useFilmService(
     db.driver,
     query
   );
-  const repository = new SqlFilmRepositoy(db, 'films');
+  const repository = new Repository<Film, string>(db, 'films', filmModel);
   const infoRepository = new SqlInfoRepository<Info10>(
     db,
     'rates_film_info',

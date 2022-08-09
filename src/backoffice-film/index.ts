@@ -1,7 +1,7 @@
 
 import { Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Film,
@@ -11,7 +11,6 @@ import {
   FilmService
 } from './film';
 import { BackOfficeFilmController } from './film-controller';
-import { SqlFilmRepositoy } from './sql-film-repository';
 
 export { BackOfficeFilmController };
 
@@ -92,7 +91,7 @@ export function useFilmService(
     db.driver,
     query
   );
-  const repository = new SqlFilmRepositoy(db, 'films');
+  const repository = new Repository<Film, string>(db, 'films',filmModel);
 
   return new FilmManager(
     builder.search,

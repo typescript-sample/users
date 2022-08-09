@@ -1,6 +1,6 @@
-import { Log, Manager, Search,ViewSearchManager } from 'onecore';
+import { Log, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -42,7 +42,6 @@ import {
   LocationQuery,
 } from './location';
 import { LocationController } from './location-controller';
-import { SqlLocationRepository } from './sql-location-repository';
 export * from './location-controller';
 export { LocationController };
 
@@ -87,7 +86,7 @@ export function useLocationService(
     db.driver,
     query
   );
-  const repository = new SqlLocationRepository(db, 'locations');
+  const repository = new Repository<Location, string>(db, 'locations', locationModel);
   const infoRepository = new SqlInfoRepository<Info>(
     db,
     'location_info',

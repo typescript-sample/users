@@ -1,8 +1,7 @@
 import { Log, ViewManager } from 'onecore';
-import { DB, postgres, SearchBuilder } from 'query-core';
+import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap } from 'query-mappers';
 import { buildQuery } from './query';
-import { SqlUserRepository } from './sql-user-repository';
 import {
   User,
   UserFilter,
@@ -31,7 +30,7 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserC
     postgres,
     buildQuery
   );
-  const repository = new SqlUserRepository(db);
+  const repository = new Repository<User, string>(db, 'users', userModel);
   const service = new UserManager(repository);
   return new UserController(log, builder.search, service);
 }

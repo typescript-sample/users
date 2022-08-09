@@ -1,5 +1,5 @@
 import { Log, Manager, Search } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Company,
@@ -9,7 +9,6 @@ import {
   CompanyService,
 } from './company';
 import { BackOfficeCompanyController } from './company-controller';
-import { SqlCompanyRepository } from './sql-company-repository';
 export * from './company-controller';
 export { BackOfficeCompanyController };
 
@@ -22,7 +21,7 @@ export class CompanyManager extends Manager<Company, string, CompanyFilter> impl
 export function useBackOfficeCompanyService(db: DB, mapper?: TemplateMap): CompanyService {
   const queryCompany = useQuery('companies', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'companies', companyModel,  db.driver, queryCompany);
-  const repository = new SqlCompanyRepository(db);
+  const repository = new Repository<Company, string>(db, 'companies', companyModel);
   return new CompanyManager(builder.search, repository );
 }
 export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeCompanyController {

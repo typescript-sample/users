@@ -1,7 +1,7 @@
 
 import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -40,7 +40,6 @@ import {
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
 import { CompanyController } from './company-controller';
-import { SqlCompanyRepository } from './sql-company-repository';
 
 export * from './company-controller';
 export { CompanyController };
@@ -87,7 +86,7 @@ export function useCompanyService(
     db.driver,
     query
   );
-  const repository = new SqlCompanyRepository(db, 'companies');
+  const repository = new Repository<Company, string>(db, 'companies', companyModel);
   const infoRepository = new SqlInfoRepository<Info>(
     db,
     'info_company',

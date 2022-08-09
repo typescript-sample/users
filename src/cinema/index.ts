@@ -1,6 +1,6 @@
-import { Log, Manager, Search, ViewSearchManager } from 'onecore';
+import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -42,7 +42,6 @@ import {
   CinemaQuery,
 } from './cinema';
 import { CinemaController } from './cinema-controller';
-import { SqlCinemaRepository } from './sql-cinema-repository';
 
 export { CinemaController };
 
@@ -85,7 +84,7 @@ export function useCinemaService(db: DB, mapper?: TemplateMap): CinemaQuery {
     db.driver,
     query
   );
-  const repository = new SqlCinemaRepository(db, 'cinema');
+  const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const infoRepository = new SqlInfoRepository<Info>(
     db,
     'info',
