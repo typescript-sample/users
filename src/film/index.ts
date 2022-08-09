@@ -93,15 +93,15 @@ export function useFilmController(
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
-    'films',
+    'film',
     filmModel,
     db.driver,
     query
   );
-  const repository = new Repository<Film, string>(db, 'films', filmModel);
+  const repository = new Repository<Film, string>(db, 'film', filmModel);
   const infoRepository = new SqlInfoRepository<Info10>(
     db,
-    'rates_film_info',
+    'filmrateinfo',
     info10Model,
     buildToSave
   );
@@ -125,11 +125,11 @@ export function useFilmRateController(
 ): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(
     db,
-    'rates_film',
+    'filmrate',
     rateModel,
     buildToSave,
     10,
-    'rates_film_info',
+    'filmrateinfo',
     'rate',
     'count',
     'score',
@@ -138,7 +138,7 @@ export function useFilmRateController(
   );
   const infoRepository = new SqlInfoRepository<Info10>(
     db,
-    'rates_film_info',
+    'filmrateinfo',
     info10Model,
     buildToSave
   );
@@ -158,17 +158,17 @@ export function useFilmReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Rate, RateFilter> {
-  const query = useQuery('rates_film', mapper, rateModel, true);
+  const query = useQuery('filmrate', mapper, rateModel, true);
   const builder = new SearchBuilder<Rate, RateFilter>(
     db.query,
-    'rates_film',
+    'filmrate',
     rateModel,
     db.driver,
     query
   );
   const rateRepository = new SqlLoadRepository<Rate, string, string>(
     db.query,
-    'rates_film',
+    'filmrate',
     rateModel,
     db.param,
     'id',
@@ -176,18 +176,18 @@ export function useFilmReactionService(
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    'rates_film_reaction',
+    'filmratereaction',
     rateReactionModel,
-    'rates_film',
+    'filmrate',
     'usefulCount',
     'author',
     'id'
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'rates_film_comments',
+    'filmratecomment',
     commentModel,
-    'rates_film',
+    'filmrate',
     'id',
     'author',
     'replyCount',
@@ -228,19 +228,19 @@ export function useFilmRateCommentService(
   db: DB,
   mapper?: TemplateMap
 ): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery('rates_film_comments', mapper, commentModel, true);
+  const query = useQuery('filmratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(
     db.query,
-    'rates_film_comments',
+    'filmratecomment',
     commentModel,
     db.driver,
     query
   );
   const rateCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'rates_film_comments',
+    'filmratecomment',
     commentModel,
-    'rates_film',
+    'filmrate',
     'id',
     'author',
     'replyCount',

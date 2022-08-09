@@ -458,7 +458,7 @@ export function useContext(
   const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
-    'film_directors',
+    'filmdirector',
     'director',
     queryDB.query,
     queryDB.exec
@@ -469,7 +469,7 @@ export function useContext(
     'keyword'
   );
   const castService = new StringService(
-    'film_cast',
+    'filmcast',
     'actor',
     queryDB.query,
     queryDB.exec
@@ -480,7 +480,7 @@ export function useContext(
     'keyword'
   );
   const productionService = new StringService(
-    'film_productions',
+    'filmproduction',
     'production',
     queryDB.query,
     queryDB.exec
@@ -491,7 +491,7 @@ export function useContext(
     'keyword'
   );
   const countryService = new StringService(
-    'film_countries',
+    'filmcountry',
     'country',
     queryDB.query,
     queryDB.exec
