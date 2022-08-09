@@ -30,15 +30,15 @@ export function useItemCategoryController(
   db: DB,
   mapper?: TemplateMap
 ): CategoryController {
-  const query = useQuery('itemcategories', mapper, categoryModel, true);
+  const query = useQuery('itemcategory', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    'itemcategories',
+    'itemcategory',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new Repository<Category, string>(db, 'itemcategories',categoryModel);
+  const repository = new Repository<Category, string>(db, 'itemcategory',categoryModel);
   const service= new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
