@@ -47,9 +47,7 @@ import { FilmController } from './film-controller';
 
 export { FilmController };
 
-export class FilmService
-  extends ViewSearchManager<Film, string, FilmFilter>
-  implements FilmQuery {
+export class FilmService extends ViewSearchManager<Film, string, FilmFilter> implements FilmQuery {
   constructor(
     search: Search<Film, FilmFilter>,
     protected repository: FilmRepository,
@@ -73,181 +71,41 @@ export class FilmService
     });
   }
 }
-export function useFilmController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): FilmController {
+export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {
   const query = useQuery('film', mapper, filmModel, true);
-  const builder = new SearchBuilder<Film, FilmFilter>(
-    db.query,
-    'film',
-    filmModel,
-    db.driver,
-    query
-  );
+  const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, db.driver, query);
   const repository = new Repository<Film, string>(db, 'film', filmModel);
-  const infoRepository = new SqlInfoRepository<Info10>(
-    db,
-    'filmrateinfo',
-    info10Model,
-    buildToSave
-  );
-  const service = new FilmService(
-    builder.search,
-    repository,
-    infoRepository
-  );
-
-  return new FilmController(
-    log,
-    service
-  );
+  const infoRepository = new SqlInfoRepository<Info10>(db, 'filmrateinfo', info10Model, buildToSave);
+  const service = new FilmService(builder.search, repository, infoRepository);
+  return new FilmController(log, service);
 }
 
-// Rate
-export function useFilmRateController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateController<Rate> {
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
-    'filmrate',
-    rateModel,
-    buildToSave,
-    10,
-    'filmrateinfo',
-    'rate',
-    'count',
-    'score',
-    'author',
-    'id'
-  );
-  const infoRepository = new SqlInfoRepository<Info10>(
-    db,
-    'filmrateinfo',
-    info10Model,
-    buildToSave
-  );
+export function useFilmRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {
+  const rateRepository = new SqlRateRepository<Rate>(db, 'filmrate', rateModel, buildToSave, 10, 'filmrateinfo', 'rate', 'count', 'score', 'author', 'id');
+  const infoRepository = new SqlInfoRepository<Info10>(db, 'filmrateinfo', info10Model, buildToSave);
   const rateValidator = new RateValidator(rateModel, check, 10);
   const rateService = new RateService(rateRepository, infoRepository);
-  return new RateController(
-    log,
-    rateService.rate,
-    rateValidator.validate,
-    'author',
-    'id'
-  );
+  return new RateController(log, rateService.rate, rateValidator.validate, 'author', 'id');
 }
 
-// Reaction
-export function useFilmReactionService(
-  db: DB,
-  mapper?: TemplateMap
-): ReactionService<Rate, RateFilter> {
+export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap): ReactionController<Rate, RateFilter, Comment> {
   const query = useQuery('filmrate', mapper, rateModel, true);
-  const builder = new SearchBuilder<Rate, RateFilter>(
-    db.query,
-    'filmrate',
-    rateModel,
-    db.driver,
-    query
-  );
-  const rateRepository = new SqlLoadRepository<Rate, string, string>(
-    db.query,
-    'filmrate',
-    rateModel,
-    db.param,
-    'id',
-    'author'
-  );
-  const rateReactionRepository = new SqlReactionRepository(
-    db,
-    'filmratereaction',
-    rateReactionModel,
-    'filmrate',
-    'usefulCount',
-    'author',
-    'id'
-  );
-  const rateCommentRepository = new SqlCommentRepository<Comment>(
-    db,
-    'filmratecomment',
-    commentModel,
-    'filmrate',
-    'id',
-    'author',
-    'replyCount',
-    'author',
-    'time',
-    'id'
-  );
-  return new ReactionService<Rate, RateFilter>(
-    builder.search,
-    rateRepository,
-    rateReactionRepository,
-    rateCommentRepository
-  );
-}
-
-export function useFilmReactionController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): ReactionController<Rate, RateFilter, Comment> {
+  const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'filmrate', rateModel, db.driver, query);
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
+  const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository);
   const commentValidator = new CommentValidator(commentModel, check);
-  return new ReactionController(
-    log,
-    useFilmReactionService(db, mapper),
-    commentValidator,
-    ['time'],
-    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
-    generate,
-    'commentId',
-    'userId',
-    'author',
-    'id'
-  );
+  return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
+    generate, 'commentId', 'userId', 'author', 'id');
 }
 
-// Comment
-export function useFilmRateCommentService(
-  db: DB,
-  mapper?: TemplateMap
-): CommentQuery<Comment, CommentFilter> {
+export function useFilmRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
   const query = useQuery('filmratecomment', mapper, commentModel, true);
-  const builder = new SearchBuilder<Comment, CommentFilter>(
-    db.query,
-    'filmratecomment',
-    commentModel,
-    db.driver,
-    query
-  );
-  const rateCommentRepository = new SqlCommentRepository<Comment>(
-    db,
-    'filmratecomment',
-    commentModel,
-    'filmrate',
-    'id',
-    'author',
-    'replyCount',
-    'author',
-    'time',
-    'id'
-  );
-  return new CommentQuery<Comment, CommentFilter>(
-    builder.search,
-    rateCommentRepository
-  );
-}
-
-export function useFilmRateCommentController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateCommentController<Comment> {
-  return new RateCommentController(log, useFilmRateCommentService(db, mapper));
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository);
+  return new RateCommentController(log, service);
 }
 
 export function generate(): string {
