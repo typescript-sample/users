@@ -262,23 +262,29 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/companies/categories/:id', ctx.companyCategory.patch);
   app.delete('/companies/categories/:id', ctx.companyCategory.delete);
 
-  app.post('/companies/rates', ctx.companyRate.rate);
-  app.get('/companies/rates/search', ctx.companyReaction.search);
-  app.post('/companies/rates/search', ctx.companyReaction.search);
-  app.get('/companies/rates/comments/search', ctx.companyComment.search);
-  app.post('/companies/rates/comments/search', ctx.companyComment.search);
-  app.get('/companies/rates/:id/:author', ctx.companyReaction.load);
-  app.post('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.setUseful);
-  app.delete('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.removeUseful);
-  app.post('/companies/rates/comments/:id/:author/:userId', ctx.companyReaction.comment);
-  app.delete('/companies/rates/comments/:commentId/:author', ctx.companyReaction.removeComment);
-  app.put('/companies/rates/comments/:commentId/:id/:author/:userId', ctx.companyReaction.updateComment);
+  // app.post('/companies/rates', ctx.companyRate.rate);
+  // app.get('/companies/rates/search', ctx.companyReaction.search);
+  // app.post('/companies/rates/search', ctx.companyReaction.search);
+  // app.get('/companies/rates/comment/search', ctx.companyComment.search);
+  // app.post('/companies/rates/comment/search', ctx.companyComment.search);
+  // app.get('/companies/rates/:id/:author', ctx.companyReaction.load);
+  // app.post('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.setUseful);
+  // app.delete('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.removeUseful);
+  // app.post('/companies/rates/comment/:id/:author/:userId', ctx.companyReaction.comment);
+  // app.delete('/companies/rates/comment/:commentId/:author', ctx.companyReaction.removeComment);
+  // app.put('/companies/rates/comment/:commentId/:id/:author/:userId', ctx.companyReaction.updateComment);
 
-  app.post('/company/rate-criteria/search', ctx.rateCriteria.search);
-  app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
-  app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.load);
+  app.get('/item/save-item/:id/:itemId', ctx.saveItem.save);
+  app.get('/item/save-item/:id/', ctx.saveItem.load);
 
-// Jobs
+  app.post('/backoffice/film', ctx.backOfficeFilm.create);
+  app.get('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.post('/backoffice/film/search', ctx.backOfficeFilm.search);
+  app.get('/backoffice/film/:id', ctx.backOfficeFilm.load);
+  app.put('/backoffice/film/:id', ctx.backOfficeFilm.update);
+  app.patch('/backoffice/film/:id', ctx.backOfficeFilm.patch);
+  app.delete('/backoffice/film/:id', ctx.backOfficeFilm.delete);
+
   app.get('/jobs/search', ctx.jobs.search);
   app.post('/jobs/search', ctx.jobs.search);
   app.get('/jobs/:id', ctx.jobs.load);

@@ -98,13 +98,10 @@ import {
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
-  useCompanyController,
-  useCompanyRateCommentController,
-  useCompanyRateController,
-  useCompanyReactionController,
+  useCompanyController
 } from './company';
-import { useRateCriteriaController } from './company-rate';
-import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
+import { useCompanyRateCommentController, useCompanyRateController, useCompanyRateReactionController } from './company';
+import { RateCriteria, RateCriteriaFilter } from './company/company';
 import {
   FilmController,
   useFilmController,
@@ -190,9 +187,9 @@ export interface ApplicationContext {
   cinemaComment: RateCommentController<Comment>;
   company: CompanyController;
   backofficeCompany: BackOfficeCompanyController;
-  companyRate: RateController<Rate>;
-  companyReaction: ReactionController<Rate, RateFilter, Comment>;
-  companyComment: RateCommentController<Comment>;
+  // companyRate: RateController<Rate>;
+  // companyReaction: ReactionController<Rate, RateFilter, Comment>;
+  // companyComment: RateCommentController<Comment>;
   companyCategory: CategoryController;
   comment: CommentController;
   film: FilmController;
@@ -219,7 +216,9 @@ export interface ApplicationContext {
   locationComment: RateCommentController<Comment>;
   jobs: JobController;
   backofficeJob: BackOfficeJobController;
-  rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  criteriaReaction: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
+  criteriaRate: RateController<RateCriteria>;
+  criteriaComment: RateCommentController<Comment>;
   saveItem: SavedController<Item>;
 }
 
@@ -433,13 +432,6 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
-  const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
-  const companyReaction = useCompanyReactionController(logger.error, queryDB, mapper);
-  const companyComment = useCompanyRateCommentController(
-    logger.error,
-    mainDB,
-    mapper
-  );
   const companyCategory = useCompanyCategoryController(
     logger.error,
     queryDB,
@@ -447,14 +439,12 @@ export function useContext(
   );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
-  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
   const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
-  const cinemaComment = useCinemaRateCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const cinemaComment = useCinemaRateCommentController(logger.error,queryDB,mapper);
+
+  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
+
   const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
@@ -533,6 +523,7 @@ export function useContext(
     queryDB,
     mapper
   );
+
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
@@ -579,7 +570,11 @@ export function useContext(
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
-  const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
+
+  //company-rate
+  const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
+  const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
+  const criteriaComment = useCompanyRateCommentController(logger.error, queryDB, mapper);
 
   return {
     health,
@@ -603,9 +598,6 @@ export function useContext(
     cinemaReaction,
     cinemaComment,
     company,
-    companyRate,
-    companyReaction,
-    companyComment,
     companyCategory,
     film,
     filmRate,
@@ -630,7 +622,9 @@ export function useContext(
     myitems,
     myitemsUpload,
     jobs,
-    rateCriteria,
+    criteriaRate,
+    criteriaReaction,
+    criteriaComment,
     backOfficeFilm,
     backofficeCompany,
     backofficeJob,

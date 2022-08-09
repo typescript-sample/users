@@ -68,15 +68,15 @@ export function useCompanyCategoryController(
   db: DB,
   mapper?: TemplateMap
 ): CategoryController {
-  const query = useQuery('company_categories', mapper, categoryModel, true);
+  const query = useQuery('companycategory', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    'company_categories',
+    'companycategory',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new  Repository<Category, string>(db, 'company_categories',categoryModel);
+  const repository = new  Repository<Category, string>(db, 'companycategory',categoryModel);
   const service= new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
