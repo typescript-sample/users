@@ -1,5 +1,5 @@
 import { Log } from 'express-ext';
-import { Manager, Search, ViewSearchManager } from 'onecore';
+import { Manager, Result, Search, ViewSearchManager } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -59,6 +59,18 @@ export class FilmQuery
     private infoRepository: InfoRepository<Info10>
   ) {
     super(search, repository);
+  }
+  insert(obj: Film, ctx?: any): Promise<Result<Film>> {
+    throw new Error('Method not implemented.');
+  }
+  update(obj: Film, ctx?: any): Promise<Result<Film>> {
+    throw new Error('Method not implemented.');
+  }
+  patch(obj: Partial<Film>, ctx?: any): Promise<Result<Film>> {
+    throw new Error('Method not implemented.');
+  }
+  delete(id: string, ctx?: any): Promise<number> {
+    throw new Error('Method not implemented.');
   }
   load(id: string): Promise<Film | null> {
     return this.repository.load(id).then((film) => {

@@ -10,12 +10,11 @@ export class ResponseController {
     public validator: Validator<Response>
   ) {
     this.reply = this.reply.bind(this);
-    this.updateReply = this.updateReply.bind(this);
   }
 
   reply(req: Req, res: Res) {
-    const id = req.params.id;
-    const author = req.params.author;
+    const id: string = req.params.id || req.body.id || "";
+    const author: string = req.params.author || req.body.author || "";
     const response: Response = { id, author, ...req.body };
     response.time = new Date();
     this.validator
@@ -28,27 +27,6 @@ export class ResponseController {
             .response(response)
             .then((rs) => {
               return res.status(200).json(rs).send();
-            })
-            .catch((err) => handleError(err, res, this.log));
-        }
-      })
-      .catch((err) => handleError(err, res, this.log));
-  }
-
-  updateReply(req: Req, res: Res) {
-    const id = req.params.id;
-    const author = req.params.author;
-    const response: Response = { id, author, ...req.body };
-    this.validator
-      .validate(response)
-      .then((errors) => {
-        if (errors && errors.length > 0) {
-          res.status(getStatusCode(errors)).json(errors).send();
-        } else {
-          this.responseService
-            .updateResponse(response)
-            .then((reply) => {
-              return res.status(200).json(reply).send();
             })
             .catch((err) => handleError(err, res, this.log));
         }

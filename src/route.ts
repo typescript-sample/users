@@ -125,7 +125,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/cinema/rates/search', ctx.cinemaReaction.search);
   app.post('/cinema/rates/search', ctx.cinemaReaction.search);
   app.get('/cinema/rates/comment/search', ctx.cinemaComment.search);
-  app.post('/cinema/rates/comment/search', ctx.cinemaComment.search);
   app.post('/cinema/rates/:id/:author', ctx.cinemaRate.rate);
   app.get('/cinema/rates/:id/:author', ctx.cinemaReaction.load);
   app.post('/cinema/rates/useful/:id/:author/:userId', ctx.cinemaReaction.setUseful);
@@ -155,17 +154,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/films/:id', ctx.backOfficeFilm.delete);
 
 
-  app.get('/films/:id/rates/search', ctx.filmReaction.search);
-  app.post('/films/:id/rates/search', ctx.filmReaction.search);
-  // app.get('/films/:id/rates/:author', ctx.filmReaction.load);
-  app.post('/films/:id/rates/:author', ctx.filmRate.rate);
-  app.post('/films/:id/rates/:author/useful/:userId', ctx.filmReaction.setUseful);
-  app.delete('/films/:id/rates/:author/useful/:userId', ctx.filmReaction.removeUseful);
-  // app.get('/films/:id/rates/comment/search', ctx.filmComment.search);
-  app.get('/films/:id/rates/:author/comment', ctx.filmReaction.getComments);
-  app.post('/films/:id/rates/:author/comment/:userId', ctx.filmReaction.comment);
-  app.put('/films/:id/rates/:author/comment/:userId/:commentId', ctx.filmReaction.updateComment);
-  app.delete('/films/:id/rates/:author/comment/:commentId', ctx.filmReaction.removeComment);
+  app.get('/films/rates/search', ctx.filmReaction.search);
+  app.post('/films/rates/search', ctx.filmReaction.search);
+  // app.get('/films/rates/:id/:author', ctx.filmReaction.load);
+  app.post('/films/rates/:id/:author', ctx.filmRate.rate);
+  app.post('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.setUseful);
+  app.delete('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.removeUseful);
+  // app.get('/films/rates/:id/comment/search', ctx.filmComment.search);
+  app.get('/films/rates/:id/:author/comment', ctx.filmReaction.getComments);
+  app.post('/films/rates/:id/:author/comment/:userId', ctx.filmReaction.comment);
+  app.put('/films/rates/:id/:author/comment/:userId/:commentId', ctx.filmReaction.updateComment);
+  app.delete('/films/rates/:id/:author/comment/:commentId', ctx.filmReaction.removeComment);
 
   app.get('/items/categories/search', ctx.itemCategory.search);
   app.get('/items/categories/:id', ctx.itemCategory.load);
@@ -178,17 +177,16 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
-  app.get('/items/:id/response/search', ctx.itemReaction.search);
-  app.post('/items/:id/response/search', ctx.itemReaction.search);
-  // app.get('/items/:id/response/:author', ctx.itemReaction.load);
-  app.post('/items/:id/response/:author', ctx.itemResponse.reply);
-  app.put('/items/:id/response/:author', ctx.itemResponse.updateReply);
-  app.post('/items/:id/response/:author/useful/:userId', ctx.itemReaction.setUseful);
-  app.delete('/items/:id/response/:author/useful/:userId', ctx.itemReaction.removeUseful);
-  app.get('/items/:id/response/:author/comment', ctx.itemReaction.getComments);
-  app.post('/items/:id/response/:author/comment/:userId', ctx.itemReaction.comment);
-  app.put('/items/:id/response/:author/comment/:userId/:commentId', ctx.itemReaction.updateComment);
-  app.delete('/items/:id/response/:author/comment/:commentId', ctx.itemReaction.removeComment);
+  app.get('/items/responses/search', ctx.itemReaction.search);
+  app.post('/items/responses/search', ctx.itemReaction.search);
+  // app.get('/items/response/:id/:author', ctx.itemReaction.load);
+  app.post('/items/responses/:author', ctx.itemResponse.reply);
+  app.post('/items/responses:id/:author/useful/:userId', ctx.itemReaction.setUseful);
+  app.delete('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.removeUseful);
+  app.get('/items/responses/:id/:author/comment', ctx.itemReaction.getComments);
+  app.post('/items/responses/:id/:author/comment/:userId', ctx.itemReaction.comment);
+  app.put('/items/responses/:id/:author/comment/:userId/:commentId', ctx.itemReaction.updateComment);
+  app.delete('/items/responses/:id/:author/comment/:commentId', ctx.itemReaction.removeComment);
 
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
@@ -235,17 +233,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/locations/:id', ctx.backofficeLocation.delete);
 
   app.get('/locations/rates/search', ctx.locationReaction.search);
-  app.get('/locations/rates/search/:id/:author', ctx.locationReaction.search);
-  app.post('/locations/rates/search/:id/:author', ctx.locationReaction.search);
-  app.get('/locations/rates/comment/search', ctx.locationComment.search);
-  app.post('/locations/rates/comment/search', ctx.locationComment.search);
+  app.post('/locations/rates/search', ctx.locationReaction.search);
+  // app.get('/locations/rates/:id/:author', ctx.locationReaction.load);
   app.post('/locations/rates/:id/:author', ctx.locationRate.rate);
-  app.get('/locations/rates/:id/:author', ctx.locationReaction.load);
-  app.post('/locations/rates/useful/:id/:author/:userId', ctx.locationReaction.setUseful);
-  app.delete('/locations/rates/useful/:id/:author/:userId', ctx.locationReaction.removeUseful);
-  app.post('/locations/rates/comment/:id/:author/:userId', ctx.locationReaction.comment);
-  app.delete('/locations/rates/comment/:commentId/:author', ctx.locationReaction.removeComment);
-  app.put('/locations/rates/comment/:commentId/:id/:author/:userId', ctx.locationReaction.updateComment);
+  app.post('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.setUseful);
+  app.delete('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.removeUseful);
+  // app.get('/locations/rates/:id/comment/search', ctx.locationComment.search);
+  app.get('/locations/rates/:id/:author/comment', ctx.locationReaction.getComments);
+  app.post('/locations/rates/:id/:author/comment/:userId', ctx.locationReaction.comment);
+  app.put('/locations/rates/:id/:author/comment/:userId/:commentId', ctx.locationReaction.updateComment);
+  app.delete('/locations/rates/:id/:author/comment/:commentId', ctx.locationReaction.removeComment);
+
 
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);

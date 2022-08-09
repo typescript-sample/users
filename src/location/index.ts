@@ -126,7 +126,7 @@ export function useLocationRateController(
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    'info',
+    'location_info',
     infoModel,
     buildToSave
   );
@@ -163,7 +163,7 @@ export function useLocationReactionService(
   );
   const rateReactionRepository = new SqlReactionRepository(
     db,
-    'location_ratereaction',
+    'location_rate_reactions',
     rateReactionModel,
     'location_rates',
     'usefulCount',

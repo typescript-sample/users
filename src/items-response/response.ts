@@ -1,10 +1,5 @@
 import { Attributes, Filter, ViewRepository } from 'onecore';
 
-export interface ResponseId {
-  id: string;
-  author: string;
-}
-
 export interface Response {
   id: string;
   author: string;
@@ -13,9 +8,13 @@ export interface Response {
   usefulCount: number;
   replyCount: number;
   authorURL?: string;
-  rate: number;
+  histories?: ShortResponse[];
 }
 
+export interface ShortResponse {
+  description: string;
+  time: Date;
+}
 export interface ResponseFilter extends Filter {
   id?: string;
   author?: string;
@@ -27,14 +26,13 @@ export interface ResponseFilter extends Filter {
 
 export interface ResponseRepository {
   load(id: string, author: string): Promise<Response | null>;
-  insert(obj: Response, ctx?: any): Promise<number>;
-  update(obj: Response, ctx?: any): Promise<number>;
+  insert(obj: Response, newInfo?: boolean): Promise<number>;
+  update(obj: Response): Promise<number>;
   delete(id: string, author: string, ctx?: any): Promise<number>;
 }
 
 export interface ResponseService {
-  response(response: Response): Promise<boolean>;
-  updateResponse(response: Response): Promise<number>;
+  response(response: Response): Promise<number>;
 }
 
 export const responseModel: Attributes = {

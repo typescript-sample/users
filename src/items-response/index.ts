@@ -23,6 +23,7 @@ import {
   responseModel,
   ResponseRepository,
   ResponseService,
+  ShortResponse,
 } from './response';
 import { ResponseController } from './response-controller';
 
@@ -40,37 +41,36 @@ export class ResponseManager implements ResponseService {
   constructor(
     protected find: Search<Response, ResponseFilter>,
     public repository: ResponseRepository,
-    private infoRepository: InfoRepository<Info>
+    public infoRepository: InfoRepository<Info>
   ) {
     this.response = this.response.bind(this);
-    this.updateResponse = this.updateResponse.bind(this);
   }
-  async response(response: Response): Promise<boolean> {
-    let info = await this.infoRepository.load(response.id);
+  async response(response: Response): Promise<number> {
+    response.time = new Date();
+    const info = await this.infoRepository.exist?.(response.id);
     if (!info) {
-      info = {
-        id: response.id,
-        viewCount: 0,
-      };
-      await this.repository.insert(response);
+      const r0 = await this.repository.insert(response, true);
+      return r0;
     }
-    info.viewCount++;
-    response.usefulCount = 0;
-    await this.repository.update(response);
-    await this.infoRepository.save(info);
-    return true;
-  }
-  updateResponse(response: Response): Promise<number> {
-    return this.repository.load(response.id, response.author).then((exist) => {
-      if (exist) {
-        response.time
-          ? (response.time = response.time)
-          : (response.time = new Date());
-        return this.repository.update(response);
-      } else {
-        return 0;
-      }
-    });
+    const exist = await this.repository.load(response.id, response.author);
+    console.log(exist);
+    if (!exist) {
+      const r1 = await this.repository.insert(response);
+      return r1;
+    }
+    const sr: ShortResponse = { description: exist.description, time: exist.time };
+    if (exist.histories && exist.histories.length > 0) {
+      const history = exist.histories;
+      console.log(history)
+      history.push(sr);
+      response.histories = history;
+    } else {
+      response.histories = [sr];
+    }
+    console.log(sr, response);
+    const res = await this.repository.update(response);
+    console.log(res);
+    return res;
   }
 }
 
@@ -177,7 +177,7 @@ export function useResponseReactionController(
     useResponseReactionService(db, mapper),
     commentValidator,
     ['time'],
-    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
+    ['response', 'usefulCount', 'replyCount', 'count', 'score'],
     generate,
     'commentId',
     'userId',
