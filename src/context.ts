@@ -68,16 +68,16 @@ import { ArticleController, useArticleController } from './article';
 import {
   BackOfficeCompanyController,
   useBackOfficeCompanyController
-} from './backoffice-company';
+} from './backoffice/company';
 import {
   BackOfficeFilmController,
   useBackOfficeFilmController
 } from './backoffice/film';
-import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
+import { BackOfficeJobController, useBackOfficeJobController } from './backoffice/job';
 import {
   BackOfficeLocationController,
   useBackOfficeLocationController
-} from './backoffice-location';
+} from './backoffice/location';
 import {
   CategoryController,
   useCompanyCategoryController,
@@ -94,7 +94,7 @@ import {
 import {
   BackOfficeCinemaController,
   useBackOfficeCinemaController
-} from "./backoffice-cinema";
+} from "./backoffice/cinema";
 import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
