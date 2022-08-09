@@ -89,17 +89,18 @@ import {
   useCinemaRateCommentController,
   useCinemaRateController,
   useCinemaReactionController,
-} from './cinema';
-import { CommentController, useCommentController } from './comment';
+} from "./cinema";
+import {
+  BackOfficeCinemaController,
+  useBackOfficeCinemaController
+} from "./backoffice-cinema";
+import { CommentController, useCommentController } from "./comment";
 import {
   CompanyController,
-  useCompanyController,
-  useCompanyRateCommentController,
-  useCompanyRateController,
-  useCompanyReactionController,
+  useCompanyController
 } from './company';
-import { useRateCriteriaCommentController, useRateCriteriaController, useRateCriteriaReactionController } from './company-rate';
-import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
+import { useCompanyRateCommentController, useCompanyRateController, useCompanyRateReactionController } from './company';
+import { RateCriteria, RateCriteriaFilter } from './company/rate-criteria';
 import {
   FilmController,
   useFilmController,
@@ -107,7 +108,7 @@ import {
   useFilmRateController,
   useFilmReactionController,
 } from './film';
-import { ItemController, useItemController } from './items';
+import { Item, ItemController, useItemController } from './items';
 import {
   Response,
   ResponseController,
@@ -139,6 +140,7 @@ import {
 } from './my-profile';
 import { UserController, useUserController } from './user';
 
+import {useSavedController, SavedController} from './items'
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -174,14 +176,15 @@ export interface ApplicationContext {
   article: ArticleController;
   myarticles: MyArticleController;
   cinema: CinemaController;
+  backofficeCinema: BackOfficeCinemaController;
   cinemaRate: RateController<Rate>;
   cinemaReaction: ReactionController<Rate, RateFilter, Comment>;
   cinemaComment: RateCommentController<Comment>;
   company: CompanyController;
   backofficeCompany: BackOfficeCompanyController;
-  companyRate: RateController<Rate>;
-  companyReaction: ReactionController<Rate, RateFilter, Comment>;
-  companyComment: RateCommentController<Comment>;
+  // companyRate: RateController<Rate>;
+  // companyReaction: ReactionController<Rate, RateFilter, Comment>;
+  // companyComment: RateCommentController<Comment>;
   companyCategory: CategoryController;
   comment: CommentController;
   film: FilmController;
@@ -211,6 +214,7 @@ export interface ApplicationContext {
   criteriaReaction: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
   criteriaRate: RateController<RateCriteria>;
   criteriaComment: RateCommentController<Comment>;
+  saveItem: SavedController<Item>;
 }
 
 export function useContext(
@@ -423,13 +427,6 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
-  const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
-  const companyReaction = useCompanyReactionController(logger.error, queryDB, mapper);
-  const companyComment = useCompanyRateCommentController(
-    logger.error,
-    mainDB,
-    mapper
-  );
   const companyCategory = useCompanyCategoryController(
     logger.error,
     queryDB,
@@ -437,6 +434,7 @@ export function useContext(
   );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
+  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
   const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
   const cinemaComment = useCinemaRateCommentController(
@@ -444,6 +442,7 @@ export function useContext(
     queryDB,
     mapper
   );
+  const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
     'film_directors',
@@ -492,10 +491,6 @@ export function useContext(
   const film = useFilmController(
     logger.error,
     queryDB,
-    directorService.save,
-    castService.save,
-    productionService.save,
-    countryService.save,
     mapper
   );
   const backOfficeFilm = useBackOfficeFilmController(
@@ -574,9 +569,9 @@ export function useContext(
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
 
   //company-rate
-  const criteriaRate = useRateCriteriaController(logger.error, queryDB, mapper);
-  const criteriaReaction = useRateCriteriaReactionController(logger.error, queryDB, mapper);
-  const criteriaComment = useRateCriteriaCommentController(logger.error, queryDB, mapper);
+  const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
+  const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
+  const criteriaComment = useCompanyRateCommentController(logger.error, queryDB, mapper);
 
   return {
     health,
@@ -600,9 +595,6 @@ export function useContext(
     cinemaReaction,
     cinemaComment,
     company,
-    companyRate,
-    companyReaction,
-    companyComment,
     companyCategory,
     film,
     filmRate,
@@ -633,7 +625,9 @@ export function useContext(
     backOfficeFilm,
     backofficeCompany,
     backofficeJob,
-    backofficeLocation
+    backofficeLocation,
+    backofficeCinema,
+    saveItem
   };
 }
 

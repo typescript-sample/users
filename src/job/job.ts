@@ -1,4 +1,4 @@
-import { Attributes, Filter, Repository, Service } from 'onecore';
+import { Attributes, Filter, Query, Repository, Service } from 'onecore';
 
 export interface JobFilter extends Filter {
     id?: string;
@@ -26,7 +26,7 @@ export interface Job {
 }
 export interface JobRepository extends Repository<Job, string> {
 }
-export interface JobService extends Service<Job, string, JobFilter> {
+export interface JobQuery extends Query<Job, string, JobFilter> {
 }
 
 export const jobModel: Attributes = {
@@ -39,6 +39,12 @@ export const jobModel: Attributes = {
   },
   description: {
     length: 1000
+  },
+  benefit: {
+    length:1000
+  },
+  requirements: {
+    length:1000 
   },
   publishedAt: {
     type: 'datetime'

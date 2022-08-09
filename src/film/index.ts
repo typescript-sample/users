@@ -1,5 +1,5 @@
 import { Log } from 'express-ext';
-import { Manager, Search } from 'onecore';
+import { Manager, Search, ViewSearchManager } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -41,7 +41,7 @@ import {
   FilmFilter,
   filmModel,
   FilmRepository,
-  FilmService,
+  FilmQuery,
 } from './film';
 import { FilmController } from './film-controller';
 import { SqlFilmRepositoy } from './sql-film-repository';
@@ -50,16 +50,12 @@ import { SqlFilmRepositoy } from './sql-film-repository';
 
 export { FilmController };
 
-export class FilmManager
-  extends Manager<Film, string, FilmFilter>
-  implements FilmService {
+export class FilmService
+  extends ViewSearchManager<Film, string, FilmFilter>
+  implements FilmQuery {
   constructor(
     search: Search<Film, FilmFilter>,
-    repository: FilmRepository,
-    protected saveDirectors: (values: string[]) => Promise<number>,
-    protected saveCast: (values: string[]) => Promise<number>,
-    protected saveProductions: (values: string[]) => Promise<number>,
-    protected saveCountries: (values: string[]) => Promise<number>,
+    protected repository: FilmRepository,
     private infoRepository: InfoRepository<Info10>
   ) {
     super(search, repository);
@@ -79,63 +75,11 @@ export class FilmManager
       }
     });
   }
-
-  insert(film: Film, ctx?: any): Promise<number> {
-    if (film.directors && film.directors.length > 0) {
-      this.saveDirectors(film.directors);
-    }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
-    }
-    if (film.productions && film.productions.length > 0) {
-      this.saveProductions(film.productions);
-    }
-    if (film.countries && film.countries.length > 0) {
-      this.saveCountries(film.countries);
-    }
-    return this.repository.insert(film, ctx);
-  }
-  update(film: Film, ctx?: any): Promise<number> {
-    if (film.directors && film.directors.length > 0) {
-      this.saveDirectors(film.directors);
-    }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
-    }
-    if (film.productions && film.productions.length > 0) {
-      this.saveProductions(film.productions);
-    }
-    if (film.countries && film.countries.length > 0) {
-      this.saveCountries(film.countries);
-    }
-    return this.repository.update(film, ctx);
-  }
-  patch(film: Film, ctx?: any): Promise<number> {
-    if (film.directors && film.directors.length > 0) {
-      this.saveDirectors(film.directors);
-    }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
-    }
-    if (film.productions && film.productions.length > 0) {
-      this.saveProductions(film.productions);
-    }
-    if (film.countries && film.countries.length > 0) {
-      this.saveCountries(film.countries);
-    }
-    return this.repository.patch
-      ? this.repository.patch(film, ctx)
-      : Promise.resolve(-1);
-  }
 }
 export function useFilmService(
   db: DB,
-  saveDirectors: (values: string[]) => Promise<number>,
-  saveCast: (values: string[]) => Promise<number>,
-  saveProductions: (values: string[]) => Promise<number>,
-  saveCountries: (values: string[]) => Promise<number>,
   mapper?: TemplateMap
-): FilmService {
+): FilmQuery {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
@@ -151,33 +95,21 @@ export function useFilmService(
     info10Model,
     buildToSave
   );
-  return new FilmManager(
+  return new FilmService(
     builder.search,
     repository,
-    saveDirectors,
-    saveCast,
-    saveProductions,
-    saveCountries,
     infoRepository
   );
 }
 export function useFilmController(
   log: Log,
   db: DB,
-  saveDirectors: (values: string[]) => Promise<number>,
-  saveCast: (values: string[]) => Promise<number>,
-  saveProductions: (values: string[]) => Promise<number>,
-  saveCountries: (values: string[]) => Promise<number>,
   mapper?: TemplateMap
 ): FilmController {
   return new FilmController(
     log,
     useFilmService(
       db,
-      saveDirectors,
-      saveCast,
-      saveProductions,
-      saveCountries,
       mapper
     )
   );

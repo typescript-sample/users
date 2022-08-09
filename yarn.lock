@@ -3899,10 +3899,17 @@
   "resolved" "https://registry.npmjs.org/one-storage/-/one-storage-0.1.3.tgz"
   "version" "0.1.3"
 
+<<<<<<< HEAD
 "onecore@0.0.38":
   "integrity" "sha512-XXS3Jka+f15wUFGc/8B5vMw0PHcx7Rp7LglzAoCJVs2fzRBspL8VHDzoXyyxSp/cB1/O2NiVDVOULUQyWCGcbA=="
   "resolved" "https://registry.npmjs.org/onecore/-/onecore-0.0.38.tgz"
   "version" "0.0.38"
+=======
+"onecore@^0.0.39":
+  "integrity" "sha512-p2tm5y0CPDbHx5k4ac6M7YowpVJFRRg141FzOzJa6bhCoU0uZ0uSNRga4npAzjCXwrDXifLwJ2mCmLK3eZ3bkg=="
+  "resolved" "https://registry.npmjs.org/onecore/-/onecore-0.0.39.tgz"
+  "version" "0.0.39"
+>>>>>>> fa9856bddbb06a42d10fd4b02c8bbe2cf9a3ef3e
 
 "onetime@^5.1.2":
   "integrity" "sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg=="
@@ -4101,10 +4108,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.6":
-  "integrity" "sha512-Q535siPxCu/7N79+6HDryMJhFRwl9OwIerhL+Hb1g8qnfeboDtIOW6VwqFYN67R3+CyEIP+GyavOYTWWdm2xhg=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.6.tgz"
-  "version" "0.1.6"
+"pg-extension@^0.1.8":
+  "integrity" "sha512-mgqfZ38R37mftal9kgFCWTEuIRkV7TnS23OUQEWVZMewSRkLHg4pCiuxFL8Wlu5zi05JsA7NahdiHNjHuN5OiQ=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.8.tgz"
+  "version" "0.1.8"
   dependencies:
     "pg" "^8.6.0"
 
@@ -4386,6 +4393,7 @@
     "minimist" "^1.2.0"
     "strip-json-comments" "~2.0.1"
 
+<<<<<<< HEAD
 "readable-stream@^2.0.0":
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="
   "resolved" "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
@@ -4426,6 +4434,9 @@
     "util-deprecate" "~1.0.1"
 
 "readable-stream@^2.1.5":
+=======
+"readable-stream@^2.0.0", "readable-stream@^2.0.1", "readable-stream@^2.0.2", "readable-stream@^2.1.5", "readable-stream@^2.2.2", "readable-stream@^2.3.6", "readable-stream@~2.3.6", "readable-stream@1 || 2":
+>>>>>>> fa9856bddbb06a42d10fd4b02c8bbe2cf9a3ef3e
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="
   "resolved" "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
   "version" "2.3.7"
@@ -4659,6 +4670,7 @@
   "resolved" "https://registry.npmjs.org/review-reaction/-/review-reaction-0.5.0.tgz"
   "version" "0.5.0"
 
+<<<<<<< HEAD
 "rimraf@^2.5.4":
   "integrity" "sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w=="
   "resolved" "https://registry.npmjs.org/rimraf/-/rimraf-2.7.1.tgz"
@@ -4674,6 +4686,9 @@
     "glob" "^7.1.3"
 
 "rimraf@^2.6.3":
+=======
+"rimraf@^2.5.4", "rimraf@^2.6.1", "rimraf@^2.6.3":
+>>>>>>> fa9856bddbb06a42d10fd4b02c8bbe2cf9a3ef3e
   "integrity" "sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w=="
   "resolved" "https://registry.npmjs.org/rimraf/-/rimraf-2.7.1.tgz"
   "version" "2.7.1"
