@@ -285,7 +285,7 @@
 
   <select id="film">
     select *
-    from films
+    from film
     where
     <if test="title != null">
     title like #{title} and

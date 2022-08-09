@@ -2127,6 +2127,13 @@
   dependencies:
     "express" "^4.17.1"
 
+"express-types@^0.0.1":
+  "integrity" "sha512-ynyYG00XDevb14/vyjRhuBIPDmTY78koyv4EzW8dl5XHqPZPMuvRIa5HHnDPHBqazYy1m9M+scumMZE527Pwcw=="
+  "resolved" "https://registry.npmjs.org/express-types/-/express-types-0.0.1.tgz"
+  "version" "0.0.1"
+  dependencies:
+    "express" "^4.17.1"
+
 "express@^4.17.1", "express@^4.17.3", "express@^4.18.1":
   "integrity" "sha512-zZBcOX9TfehHQhtupq57OF8lFZ3UZi08Y97dwFCkD8p9d/d2Y3M+ykKcwaMDEL+4qyUolgBDX6AblpR3fL212Q=="
   "resolved" "https://registry.npmjs.org/express/-/express-4.18.1.tgz"

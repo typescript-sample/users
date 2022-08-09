@@ -88,12 +88,12 @@ export function useBackOfficeFilmController(
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
-    'film',
+    'films',
     filmModel,
     db.driver,
     query
   );
-  const repository = new Repository<Film, string>(db, 'film',filmModel);
+  const repository = new Repository<Film, string>(db, 'films',filmModel);
   const service = new FilmManager(
     builder.search,
     repository,
