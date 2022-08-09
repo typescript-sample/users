@@ -57,18 +57,6 @@ export class FilmService
   ) {
     super(search, repository);
   }
-  insert(obj: Film, ctx?: any): Promise<Result<Film>> {
-    throw new Error('Method not implemented.');
-  }
-  update(obj: Film, ctx?: any): Promise<Result<Film>> {
-    throw new Error('Method not implemented.');
-  }
-  patch(obj: Partial<Film>, ctx?: any): Promise<Result<Film>> {
-    throw new Error('Method not implemented.');
-  }
-  delete(id: string, ctx?: any): Promise<number> {
-    throw new Error('Method not implemented.');
-  }
   load(id: string): Promise<Film | null> {
     return this.repository.load(id).then((film) => {
       if (!film) {

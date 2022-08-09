@@ -91,6 +91,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   //   ctx.appreciationReply.usefulAppreciation
   // );
 
+// Aticles
   app.post('/articles/search', ctx.article.search);
   app.get('/articles/search', ctx.article.search);
   app.get('/articles/:id', ctx.article.load);
@@ -104,13 +105,11 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/my-articles/:id', ctx.myarticles.delete);
   app.delete('/my-articles/userId', ctx.myarticles.delete);
 
-
-  app.get('/cinema/search', ctx.cinema.search);
-  app.post('/cinema/search', ctx.cinema.search);
-  app.get('/cinema', ctx.cinema.search);
-  app.get('/cinema/:id', ctx.cinema.load);
-
-
+// Cinema
+  app.get('/cinemas/search', ctx.cinema.search);
+  app.post('/cinemas/search', ctx.cinema.search);
+  app.get('/cinemas', ctx.cinema.search);
+  app.get('/cinemas/:id', ctx.cinema.load);
 
   app.get('/backoffice/cinemas/search', ctx.backofficeCinema.search);
   app.post('/backoffice/cinemas/search', ctx.backofficeCinema.search);
@@ -121,18 +120,18 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/backoffice/cinemas/:id', ctx.backofficeCinema.patch);
   app.delete('/backoffice/cinemas/:id', ctx.backofficeCinema.delete);
 
+  app.get('/cinemas/rates/search', ctx.cinemaReaction.search);
+  app.post('/cinemas/rates/search', ctx.cinemaReaction.search);
+  app.get('/cinemas/rates/comments/search', ctx.cinemaComment.search);
+  app.post('/cinemas/rates/:id/:author', ctx.cinemaRate.rate);
+  app.get('/cinemas/rates/:id/:author', ctx.cinemaReaction.load);
+  app.post('/cinemas/rates/useful/:id/:author/:userId', ctx.cinemaReaction.setUseful);
+  app.delete('/cinemas/rates/useful/:id/:author/:userId', ctx.cinemaReaction.removeUseful);
+  app.post('/cinemas/rates/comments/:id/:author/:userId', ctx.cinemaReaction.comment);
+  app.delete('/cinemas/rates/comments/:commentId/:author', ctx.cinemaReaction.removeComment);
+  app.put('/cinemas/rates/comments/:commentId/:id/:author/:userId', ctx.cinemaReaction.updateComment);
 
-  app.get('/cinema/rates/search', ctx.cinemaReaction.search);
-  app.post('/cinema/rates/search', ctx.cinemaReaction.search);
-  app.get('/cinema/rates/comment/search', ctx.cinemaComment.search);
-  app.post('/cinema/rates/:id/:author', ctx.cinemaRate.rate);
-  app.get('/cinema/rates/:id/:author', ctx.cinemaReaction.load);
-  app.post('/cinema/rates/useful/:id/:author/:userId', ctx.cinemaReaction.setUseful);
-  app.delete('/cinema/rates/useful/:id/:author/:userId', ctx.cinemaReaction.removeUseful);
-  app.post('/cinema/rates/comment/:id/:author/:userId', ctx.cinemaReaction.comment);
-  app.delete('/cinema/rates/comment/:commentId/:author', ctx.cinemaReaction.removeComment);
-  app.put('/cinema/rates/comment/:commentId/:id/:author/:userId', ctx.cinemaReaction.updateComment);
-
+// Film
   app.get('/films/categories/search', ctx.filmCategory.search);
   app.post('/films/categories/', ctx.filmCategory.create);
   app.get('/films/categories/:id', ctx.filmCategory.load);
@@ -140,7 +139,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/films/categories/:id', ctx.filmCategory.patch);
   app.delete('/films/categories/:id', ctx.filmCategory.delete);
 
-  // app.post('/films', ctx.film.create);
   app.get('/films/search', ctx.film.search);
   app.post('/films/search', ctx.film.search);
   app.get('/films/:id', ctx.film.load);
@@ -153,19 +151,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/backoffice/films/:id', ctx.backOfficeFilm.patch);
   app.delete('/backoffice/films/:id', ctx.backOfficeFilm.delete);
 
-
   app.get('/films/rates/search', ctx.filmReaction.search);
   app.post('/films/rates/search', ctx.filmReaction.search);
-  // app.get('/films/rates/:id/:author', ctx.filmReaction.load);
   app.post('/films/rates/:id/:author', ctx.filmRate.rate);
   app.post('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.setUseful);
   app.delete('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.removeUseful);
-  // app.get('/films/rates/:id/comment/search', ctx.filmComment.search);
-  app.get('/films/rates/:id/:author/comment', ctx.filmReaction.getComments);
-  app.post('/films/rates/:id/:author/comment/:userId', ctx.filmReaction.comment);
-  app.put('/films/rates/:id/:author/comment/:userId/:commentId', ctx.filmReaction.updateComment);
-  app.delete('/films/rates/:id/:author/comment/:commentId', ctx.filmReaction.removeComment);
+  app.get('/films/rates/:id/:author/comments', ctx.filmReaction.getComments);
+  app.post('/films/rates/:id/:author/comments/:userId', ctx.filmReaction.comment);
+  app.put('/films/rates/:id/:author/comments/:userId/:commentId', ctx.filmReaction.updateComment);
+  app.delete('/films/rates/:id/:author/comments/:commentId', ctx.filmReaction.removeComment);
 
+// Item
   app.get('/items/categories/search', ctx.itemCategory.search);
   app.get('/items/categories/:id', ctx.itemCategory.load);
   app.post('/items/categories/', ctx.itemCategory.create);
@@ -177,16 +173,18 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
+  app.get('/item/save-item/:id/:itemId', ctx.saveItem.save);
+  app.get('/item/save-item/:id/', ctx.saveItem.load);
+
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
-  // app.get('/items/response/:id/:author', ctx.itemReaction.load);
   app.post('/items/responses/:author', ctx.itemResponse.reply);
   app.post('/items/responses:id/:author/useful/:userId', ctx.itemReaction.setUseful);
   app.delete('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.removeUseful);
-  app.get('/items/responses/:id/:author/comment', ctx.itemReaction.getComments);
-  app.post('/items/responses/:id/:author/comment/:userId', ctx.itemReaction.comment);
-  app.put('/items/responses/:id/:author/comment/:userId/:commentId', ctx.itemReaction.updateComment);
-  app.delete('/items/responses/:id/:author/comment/:commentId', ctx.itemReaction.removeComment);
+  app.get('/items/responses/:id/:author/comments', ctx.itemReaction.getComments);
+  app.post('/items/responses/:id/:author/comments/:userId', ctx.itemReaction.comment);
+  app.put('/items/responses/:id/:author/comments/:userId/:commentId', ctx.itemReaction.updateComment);
+  app.delete('/items/responses/:id/:author/comments/:commentId', ctx.itemReaction.removeComment);
 
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
@@ -212,14 +210,16 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
   app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
 
-  app.post('/comment/search', ctx.comment.search);
-  app.get('/comment/search', ctx.comment.search);
-  app.get('/comment/:id', ctx.comment.load);
-  app.post('/comment', ctx.comment.create);
-  app.put('/comment/:id', ctx.comment.update);
-  app.patch('/comment/:id', ctx.comment.patch);
-  app.delete('/comment/:id', ctx.comment.delete);
+// Comment
+  app.post('/comments/search', ctx.comment.search);
+  app.get('/comments/search', ctx.comment.search);
+  app.get('/comments/:id', ctx.comment.load);
+  app.post('/comments', ctx.comment.create);
+  app.put('/comments/:id', ctx.comment.update);
+  app.patch('/comments/:id', ctx.comment.patch);
+  app.delete('/comments/:id', ctx.comment.delete);
 
+  // Location
   app.post('/locations/search', ctx.location.search);
   app.get('/locations/search', ctx.location.search);
   app.get('/locations/:id', ctx.location.load);
@@ -234,17 +234,15 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/locations/rates/search', ctx.locationReaction.search);
   app.post('/locations/rates/search', ctx.locationReaction.search);
-  // app.get('/locations/rates/:id/:author', ctx.locationReaction.load);
   app.post('/locations/rates/:id/:author', ctx.locationRate.rate);
   app.post('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.setUseful);
   app.delete('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.removeUseful);
-  // app.get('/locations/rates/:id/comment/search', ctx.locationComment.search);
-  app.get('/locations/rates/:id/:author/comment', ctx.locationReaction.getComments);
-  app.post('/locations/rates/:id/:author/comment/:userId', ctx.locationReaction.comment);
-  app.put('/locations/rates/:id/:author/comment/:userId/:commentId', ctx.locationReaction.updateComment);
-  app.delete('/locations/rates/:id/:author/comment/:commentId', ctx.locationReaction.removeComment);
+  app.get('/locations/rates/:id/:author/comments', ctx.locationReaction.getComments);
+  app.post('/locations/rates/:id/:author/comments/:userId', ctx.locationReaction.comment);
+  app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
+  app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
 
-
+// Company
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);
   app.get('/companies/:id', ctx.company.load);
@@ -267,32 +265,23 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/companies/rates', ctx.companyRate.rate);
   app.get('/companies/rates/search', ctx.companyReaction.search);
   app.post('/companies/rates/search', ctx.companyReaction.search);
-  app.get('/companies/rates/comment/search', ctx.companyComment.search);
-  app.post('/companies/rates/comment/search', ctx.companyComment.search);
+  app.get('/companies/rates/comments/search', ctx.companyComment.search);
+  app.post('/companies/rates/comments/search', ctx.companyComment.search);
   app.get('/companies/rates/:id/:author', ctx.companyReaction.load);
   app.post('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.setUseful);
   app.delete('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.removeUseful);
-  app.post('/companies/rates/comment/:id/:author/:userId', ctx.companyReaction.comment);
-  app.delete('/companies/rates/comment/:commentId/:author', ctx.companyReaction.removeComment);
-  app.put('/companies/rates/comment/:commentId/:id/:author/:userId', ctx.companyReaction.updateComment);
-
-  app.get('/item/save-item/:id/:itemId', ctx.saveItem.save);
-  app.get('/item/save-item/:id/', ctx.saveItem.load);
-
-
+  app.post('/companies/rates/comments/:id/:author/:userId', ctx.companyReaction.comment);
+  app.delete('/companies/rates/comments/:commentId/:author', ctx.companyReaction.removeComment);
+  app.put('/companies/rates/comments/:commentId/:id/:author/:userId', ctx.companyReaction.updateComment);
 
   app.post('/company/rate-criteria/search', ctx.rateCriteria.search);
   app.post('/company/rate-criteria/search/:id/:author', ctx.rateCriteria.search);
   app.post('/company/rate-criteria/:id/:author', ctx.rateCriteria.load);
 
-
-
-
+// Jobs
   app.get('/jobs/search', ctx.jobs.search);
   app.post('/jobs/search', ctx.jobs.search);
   app.get('/jobs/:id', ctx.jobs.load);
-
-
 
   app.get('/backoffice/jobs/search', ctx.backofficeJob.search);
   app.post('/backoffice/jobs/search', ctx.backofficeJob.search);
