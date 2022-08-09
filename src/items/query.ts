@@ -2,7 +2,7 @@ import { Statement } from 'query-core';
 import { ItemFilter } from './item';
 
 export function buildQuery(s: ItemFilter): Statement {
-  let query = `select * from items`;
+  let query = `select * from item`;
   const where = [];
   const params = [];
   let i = 1;

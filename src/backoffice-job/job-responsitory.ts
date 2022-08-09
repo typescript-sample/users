@@ -3,6 +3,6 @@ import { Job, jobModel, JobRepository } from './job';
 
 export class SqlJobRepositoy extends Repository<Job, string> implements JobRepository {
   constructor(db: DB) {
-    super(db, 'jobs', jobModel);
+    super(db, 'job', jobModel);
   }
 }

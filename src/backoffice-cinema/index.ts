@@ -26,7 +26,12 @@ export class CinemaManager
 
 }
 
-export function useBackOfficeCinemaService(db: DB, mapper?: TemplateMap): CinemaService {
+export function useBackOfficeCinemaController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): BackOfficeCinemaController {
+
   const query = useQuery("cinema", mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(
     db.query,
@@ -36,15 +41,8 @@ export function useBackOfficeCinemaService(db: DB, mapper?: TemplateMap): Cinema
     query
   );
   const repository = new Repository<Cinema, string>(db, "cinema", cinemaModel);
-  return new CinemaManager(builder.search, repository);
-}
-
-export function useBackOfficeCinemaController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): BackOfficeCinemaController {
-  return new BackOfficeCinemaController(log, useBackOfficeCinemaService(db, mapper));
+  const service = new CinemaManager(builder.search, repository);
+  return new BackOfficeCinemaController(log, service);
 }
 
 

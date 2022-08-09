@@ -79,14 +79,14 @@ export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): Cin
   const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, db.driver, query);
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
-  const infoRepository = new SqlInfoRepository<Info>(db, 'cinema_info', infoModel, buildToSave);
+  const infoRepository = new SqlInfoRepository<Info>(db, 'cinemainfo', infoModel, buildToSave);
   const service = new CinemaService(builder.search, repository, infoRepository)
   return new CinemaController(log, service);
 }
 
 export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {
-  const rateRepository = new SqlRateRepository<Rate>(db, 'cinema_rate', rateModel, buildToSave, 5, 'cinema_info', 'rate', 'count', 'score', 'author', 'id');
-  const infoRepository = new SqlInfoRepository<Info>(db, 'cinema_info', infoModel, buildToSave);
+  const rateRepository = new SqlRateRepository<Rate>(db, 'cinemarate', rateModel, buildToSave, 5, 'cinemainfo', 'rate', 'count', 'score', 'author', 'id');
+  const infoRepository = new SqlInfoRepository<Info>(db, 'cinemainfo', infoModel, buildToSave);
   const rateValidator = new RateValidator(rateModel, check, 5);
   const rateService = new RateService(rateRepository, infoRepository);
   return new RateController(log, rateService.rate, rateValidator.validate, 'author', 'id');
@@ -94,11 +94,11 @@ export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap):
 
 export function useCinemaReactionController(log: Log, db: DB, mapper?: TemplateMap): ReactionController<Rate, RateFilter, Comment> {
   const commentValidator = new CommentValidator(commentModel, check);
-  const query = useQuery('cinema_rate', mapper, rateModel, true);
-  const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'cinema_rate', rateModel, db.driver, query);
-  const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'cinema_rate', rateModel, db.param, 'id', 'author');
-  const rateReactionRepository = new SqlReactionRepository(db, 'cinema_rate_reaction', rateReactionModel, 'cinema_rate', 'usefulCount', 'author', 'id');
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'cinema_rate_comment', commentModel, 'cinema_rate', 'id', 'author', 'replyCount', 'author', 'id');
+  const query = useQuery('cinemarate', mapper, rateModel, true);
+  const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'cinemarate', rateModel, db.driver, query);
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'cinemarate', rateModel, db.param, 'id', 'author');
+  const rateReactionRepository = new SqlReactionRepository(db, 'cinemaratereaction', rateReactionModel, 'cinemarate', 'usefulCount', 'author', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'cinemaratecomment', commentModel, 'cinemarate', 'id', 'author', 'replyCount', 'author', 'id');
   const service = new ReactionService(builder.search, rateRepository, rateReactionRepository, rateCommentRepository)
   return new ReactionController(
     log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
@@ -106,9 +106,9 @@ export function useCinemaReactionController(log: Log, db: DB, mapper?: TemplateM
 }
 
 export function useCinemaRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
-  const query = useQuery('cinema_rate_comment', mapper, commentModel, true);
-  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'cinema_rate_comment', commentModel, db.driver, query);
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'cinema_rate_comment', commentModel, 'cinema_rate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const query = useQuery('cinemaratecomment', mapper, commentModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'cinemaratecomment', commentModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'cinemaratecomment', commentModel, 'cinemarate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   const service = new CommentQuery(builder.search, rateCommentRepository, queryUrl);
   return new RateCommentController(log, service);

@@ -3,6 +3,6 @@ import { Article, articleModel, ArticleRepository } from './article';
 
 export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
   constructor(db: DB) {
-    super(db, 'articles', articleModel);
+    super(db, 'article', articleModel);
   }
 }

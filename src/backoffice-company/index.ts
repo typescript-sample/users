@@ -18,12 +18,10 @@ export class CompanyManager extends Manager<Company, string, CompanyFilter> impl
   }
 }
 
-export function useBackOfficeCompanyService(db: DB, mapper?: TemplateMap): CompanyService {
+export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeCompanyController {
   const queryCompany = useQuery('companies', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'companies', companyModel,  db.driver, queryCompany);
   const repository = new Repository<Company, string>(db, 'companies', companyModel);
-  return new CompanyManager(builder.search, repository );
-}
-export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeCompanyController {
-  return new BackOfficeCompanyController(log, useBackOfficeCompanyService(db, mapper));
+  const service = new CompanyManager(builder.search, repository );
+  return new BackOfficeCompanyController(log, service);
 }

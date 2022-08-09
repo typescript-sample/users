@@ -72,7 +72,7 @@ import {
 import {
   BackOfficeFilmController,
   useBackOfficeFilmController
-} from './backoffice-film';
+} from './backoffice/film';
 import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
 import {
   BackOfficeLocationController,
@@ -337,7 +337,7 @@ export function useContext(
   const user = useUserController(logger.error, mainDB);
 
   const skillService = new StringService(
-    'skills',
+    'skill',
     'skill',
     queryDB.query,
     queryDB.exec
@@ -348,7 +348,7 @@ export function useContext(
     'keyword'
   );
   const interestService = new StringService(
-    'interests',
+    'interest',
     'interest',
     queryDB.query,
     queryDB.exec
@@ -359,7 +359,7 @@ export function useContext(
     'keyword'
   );
   const lookingForService = new StringService(
-    'searchs',
+    'search',
     'item',
     queryDB.query,
     queryDB.exec
@@ -529,7 +529,7 @@ export function useContext(
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
   const brandService = new StringService(
-    'brands',
+    'brand',
     'brand',
     queryDB.query,
     queryDB.exec

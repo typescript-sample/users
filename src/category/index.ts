@@ -25,34 +25,30 @@ export class CategoryManager
 }
 
 // Item category
-export function useItemCategoryService(
-  db: DB,
-  mapper?: TemplateMap
-): CategoryService {
-  const query = useQuery('item_categories', mapper, categoryModel, true);
-  const builder = new SearchBuilder<Category, CategoryFilter>(
-    db.query,
-    'item_categories',
-    categoryModel,
-    db.driver,
-    query
-  );
-  const repository = new Repository<Category, string>(db, 'item_categories',categoryModel);
-  return new CategoryManager(builder.search, repository);
-}
 export function useItemCategoryController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
 ): CategoryController {
-  return new CategoryController(log, useItemCategoryService(db, mapper));
+  const query = useQuery('itemcategories', mapper, categoryModel, true);
+  const builder = new SearchBuilder<Category, CategoryFilter>(
+    db.query,
+    'itemcategories',
+    categoryModel,
+    db.driver,
+    query
+  );
+  const repository = new Repository<Category, string>(db, 'itemcategories',categoryModel);
+  const service= new CategoryManager(builder.search, repository);
+  return new CategoryController(log, service);
 }
 
 // Film category
-export function useFilmCategoryService(
+export function useFilmCategoryController(
+  log: Log,
   db: DB,
   mapper?: TemplateMap
-): CategoryService {
+): CategoryController {
   const query = useQuery('film_categories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
@@ -62,21 +58,16 @@ export function useFilmCategoryService(
     query
   );
   const repository = new  Repository<Category, string>(db, 'film_categories',categoryModel);
-  return new CategoryManager(builder.search, repository);
+  const service= new CategoryManager(builder.search, repository);
+  return new CategoryController(log, service);
 }
-export function useFilmCategoryController(
+
+// Company category
+export function useCompanyCategoryController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
 ): CategoryController {
-  return new CategoryController(log, useFilmCategoryService(db, mapper));
-}
-
-// Company category
-export function useCompanyCategoryService(
-  db: DB,
-  mapper?: TemplateMap
-): CategoryService {
   const query = useQuery('company_categories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
@@ -86,12 +77,6 @@ export function useCompanyCategoryService(
     query
   );
   const repository = new  Repository<Category, string>(db, 'company_categories',categoryModel);
-  return new CategoryManager(builder.search, repository);
-}
-export function useCompanyCategoryController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): CategoryController {
-  return new CategoryController(log, useCompanyCategoryService(db, mapper));
+  const service= new CategoryManager(builder.search, repository);
+  return new CategoryController(log, service);
 }

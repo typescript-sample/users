@@ -1,5 +1,5 @@
 import { Log } from 'express-ext';
-import { Manager, Search, ViewSearchManager } from 'onecore';
+import { Search, ViewSearchManager } from 'onecore';
 import { buildToSave } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -71,8 +71,8 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
     });
   }
 }
-
 export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {
+
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'films', filmModel, db.driver, query);
   const repository = new Repository<Film, string>(db, 'films', filmModel);
