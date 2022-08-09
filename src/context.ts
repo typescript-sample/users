@@ -101,7 +101,7 @@ import {
   useCompanyController
 } from './company';
 import { useCompanyRateCommentController, useCompanyRateController, useCompanyRateReactionController } from './company';
-import { RateCriteria, RateCriteriaFilter } from './company/rate-criteria';
+import { RateCriteria, RateCriteriaFilter } from './company/company';
 import {
   FilmController,
   useFilmController,
@@ -439,14 +439,12 @@ export function useContext(
   );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
-  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
   const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
-  const cinemaComment = useCinemaRateCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const cinemaComment = useCinemaRateCommentController(logger.error,queryDB,mapper);
+
+  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
+
   const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(

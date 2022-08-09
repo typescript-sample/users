@@ -146,8 +146,8 @@
     </if>
   </select>
 
-  <select id="info">
-    select * from info
+  <select id="cinema_info">
+    select * from cinema_info
     <if test="id != null">
       id = #{id} and
     </if>
@@ -182,7 +182,7 @@
     </if>
   </select>
 
-  <select id="rates">
+  <select id="cinema_rate">
     select r.*
     <if test="userId != null">
       ,
@@ -192,9 +192,9 @@
       end
         as disable
     </if>   
-    from rates r
+    from cinema_rate r
     <if test="userId != null">
-      left join ratereaction u 
+      left join cinema_rate_reaction u 
         on u.id = r.id
         and u.author = r.author
         and u.userId = #{userId}
@@ -224,9 +224,9 @@
     </if>
   </select>
 
-  <select id="ratereaction">
+  <select id="cinema_rate_reaction">
     select *
-    from ratereaction
+    from cinema_rate_reaction
     where
     <if test="id != null">
       id = #{id} and
@@ -274,9 +274,9 @@
     </if>
   </select>
 
-    <select id="ratecomment">
+    <select id="cinema_rate_comment">
     select *
-    from rate_comments
+    from cinema_rate_comment
     where
     <if test="commentId != null">
       commentId = #{commentId} and

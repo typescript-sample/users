@@ -33,7 +33,7 @@ import {
   RateCriteria,
   RateCriteriaFilter,
   rateCriteriaModel, RateFullInfo
-} from './rate-criteria';
+} from './company';
 import {
   Company,
   CompanyFilter,
@@ -43,14 +43,8 @@ import { CompanyController } from './company-controller';
 
 export * from './company-controller';
 export { CompanyController };
-export class CompanyService
-  extends ViewSearchManager<Company, string, CompanyFilter>
-  implements CompanyQuery {
-  constructor(
-    search: Search<Company, CompanyFilter>,
-    protected repository: CompanyRepository,
-    private infoRepository: InfoRepository<Info>
-  ) {
+export class CompanyService extends ViewSearchManager<Company, string, CompanyFilter> implements CompanyQuery {
+  constructor(search: Search<Company, CompanyFilter>, protected repository: CompanyRepository, private infoRepository: InfoRepository<Info>) {
     super(search, repository);
   }
   load(id: string): Promise<Company | null> {
@@ -65,8 +59,6 @@ export class CompanyService
             delete (info as any)['score'];
             company.info = info;
           }
-          console.log({ company });
-
           return company;
         });
       }
@@ -74,64 +66,20 @@ export class CompanyService
   }
 }
 
-export function useCompanyService(
-  db: DB,
-  mapper?: TemplateMap
-): CompanyQuery {
-  const query = useQuery('companies', mapper, companyModel, true);
-  const builder = new SearchBuilder<Company, CompanyFilter>(
-    db.query,
-    'companies',
-    companyModel,
-    db.driver,
-    query
-  );
-  const repository = new Repository<Company, string>(db, 'companies', companyModel);
-  const infoRepository = new SqlInfoRepository<Info>(
-    db,
-    'info_company',
-    infoModel,
-    buildToSave
-  );
-  return new CompanyService(builder.search, repository, infoRepository);
-}
-
 export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): CompanyController {
-  return new CompanyController(log, useCompanyService(db, mapper));
+  const query = useQuery('companies', mapper, companyModel, true);
+  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'companies', companyModel, db.driver, query);
+  const repository = new Repository<Company, string>(db, 'companies', companyModel);
+  const infoRepository = new SqlInfoRepository<Info>(db, 'info_company', infoModel, buildToSave);
+  const service = new CompanyService(builder.search, repository, infoRepository);
+  return new CompanyController(log, service);
 }
 
-export function useCompanyRateController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateController<RateCriteria> {
-  const rateRepository = new SqlRatesRepository<RateCriteria>(
-    db,
-    'company_rate',
-    'company_rate_full_info',
-    [
-      'company_rate_info01',
-      'company_rate_info02',
-      'company_rate_info03',
-      'company_rate_info04',
-      'company_rate_info05',
-    ],
-    rateCriteriaModel,
-    buildToSave,
-    5,
-    'rate',
-    'count',
-    'score',
-    'author',
-    'id'
-  );
-
-  const infoRepository = new SqlInfoRepository<RateFullInfo>(
-    db,
-    'company_rate_full_info',
-    infoModel,
-    buildToSave
-  );
+export function useCompanyRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<RateCriteria> {
+  const rateRepository = new SqlRatesRepository<RateCriteria>(db, 'company_rate', 'company_rate_full_info',
+    ['company_rate_info01', 'company_rate_info02', 'company_rate_info03', 'company_rate_info04', 'company_rate_info05'],
+    rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id');
+  const infoRepository = new SqlInfoRepository<RateFullInfo>(db, 'company_rate_full_info', infoModel, buildToSave);
   const rateValidator = new RatesValidator(rateCriteriaModel, check, 5, 5);
   const rateService = new RatesService(rateRepository, infoRepository);
   return new RateController(
@@ -139,111 +87,33 @@ export function useCompanyRateController(
   );
 }
 
-export function useCompanyRateReactionService(db: DB, mapper?: TemplateMap): ReactionService<RateCriteria, RateCriteriaFilter> {
+export function useCompanyRateReactionController(log: Log, db: DB, mapper?: TemplateMap): ReactionController<RateCriteria, RateCriteriaFilter, Comment> {
   const query = useQuery('company_rate', mapper, rateCriteriaModel, true);
-  const builder = new SearchBuilder<RateCriteria, RateCriteriaFilter>(
-    db.query,
-    'company_rate',
-    rateCriteriaModel,
-    db.driver,
-    query
-  );
-
-  const rateRepository = new SqlLoadRepository<RateCriteria, string, string>(
-    db.query,
-    'company_rate',
-    rateCriteriaModel,
-    db.param,
-    'id',
-    'author'
-  );
-
-  const rateReactionRepository = new SqlReactionRepository(
-    db,
-    'company_rate_reaction',
-    rateReactionModel,
-    'company_rate',
-    'usefulCount',
-    'author',
-    'id'
-  );
-  const rateCommentRepository = new SqlCommentRepository<Comment>(
-    db,
-    'company_rate_comment',
-    commentModel,
-    'company_rate',
-    'id',
-    'author',
-    'replyCount',
-    'author',
-    'id'
-  );
-
-  return new ReactionService<RateCriteria, RateCriteriaFilter>(
-    builder.search,
-    rateRepository,
-    rateReactionRepository,
-    rateCommentRepository
-  );
-}
-
-export function useCompanyRateReactionController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): ReactionController<RateCriteria, RateCriteriaFilter, Comment> {
+  const builder = new SearchBuilder<RateCriteria, RateCriteriaFilter>(db.query, 'company_rate', rateCriteriaModel, db.driver, query);
+  const rateRepository = new SqlLoadRepository<RateCriteria, string, string>(db.query, 'company_rate', rateCriteriaModel, db.param, 'id', 'author');
+  const rateReactionRepository = new SqlReactionRepository(db, 'company_rate_reaction', rateReactionModel, 'company_rate', 'usefulCount', 'author', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'company_rate_comment', commentModel, 'company_rate', 'id', 'author', 'replyCount', 'author', 'id');
+  const service = new ReactionService<RateCriteria, RateCriteriaFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository);
   const commentValidator = new CommentValidator(commentModel, check);
-  return new ReactionController(
-    log,
-    useCompanyRateReactionService(db, mapper),
-    commentValidator,
-    ['time'],
-    ['rates', 'usefulCount', 'replyCount', 'count', 'score'],
-    generate,
-    'commentId',
-    'userId',
-    'author',
-    'id'
-  );
+  return new ReactionController(log, service, commentValidator, ['time'], ['rates', 'usefulCount', 'replyCount', 'count', 'score'],
+    generate, 'commentId', 'userId', 'author', 'id');
 }
 
-export function useCompanyRateCommentService(
-  db: DB,
-  mapper?: TemplateMap
-): CommentQuery<Comment, CommentFilter> {
+export function useCompanyRateCommentService(db: DB, mapper?: TemplateMap): CommentQuery<Comment, CommentFilter> {
   const query = useQuery('company_rate_comment', mapper, commentModel, true);
-  const builder = new SearchBuilder<Comment, CommentFilter>(
-    db.query,
-    'company_rate_comment',
-    commentModel,
-    db.driver,
-    query
-  );
-  const rateCommentRepository = new SqlCommentRepository<Comment>(
-    db,
-    'company_rate_comment',
-    commentModel,
-    'company_rate',
-    'id',
-    'author',
-    'replyCount',
-    'author',
-    'time',
-    'id'
-  );
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'company_rate_comment', commentModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'company_rate_comment', commentModel, 'company_rate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 
-export function useCompanyRateCommentController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateCommentController<Comment> {
-  return new RateCommentController(
-    log,
-    useCompanyRateCommentService(db, mapper)
-  );
+export function useCompanyRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
+  const query = useQuery('company_rate_comment', mapper, commentModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'company_rate_comment', commentModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'company_rate_comment', commentModel, 'company_rate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const service = new CommentQuery(builder.search, rateCommentRepository, queryUrl);
+  return new RateCommentController(log, service);
 }
 
 

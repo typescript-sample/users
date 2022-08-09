@@ -128,19 +128,18 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/cinema/rates/comment/search', ctx.cinemaComment.search);
   app.post('/cinema/rates/:id/:author', ctx.cinemaRate.rate);
   app.get('/cinema/rates/:id/:author', ctx.cinemaReaction.load);
-  app.post('/cinema/rates/useful/:id/:author/:userId', ctx.cinemaReaction.setUseful);
-  app.delete('/cinema/rates/useful/:id/:author/:userId', ctx.cinemaReaction.removeUseful);
-  app.post('/cinema/rates/comment/:id/:author/:userId', ctx.cinemaReaction.comment);
-  app.delete('/cinema/rates/comment/:commentId/:author', ctx.cinemaReaction.removeComment);
-  app.put('/cinema/rates/comment/:commentId/:id/:author/:userId', ctx.cinemaReaction.updateComment);
+  app.post('/cinema/rates/:id/:author/useful/:userId', ctx.cinemaReaction.setUseful);
+  app.delete('/cinema/rates/:id/:author/useful/:userId', ctx.cinemaReaction.removeUseful);
+  app.post('/cinema/rates/:id/:author/comment/:userId', ctx.cinemaReaction.comment);
+  app.put('/cinema/rates/:id/:author/comment/:userId/:commentId', ctx.cinemaReaction.updateComment);
+  app.delete('/cinema/rates/:author/comment/:commentId', ctx.cinemaReaction.removeComment);
   
-  //rate-criteria
   app.post('/company/rates/search', ctx.criteriaReaction.search);
   app.post('/company/rates/search/:id/:author', ctx.criteriaReaction.search);
   app.get('/company/rates/comment/search', ctx.criteriaComment.search);
   app.post('/company/rates/comment/search', ctx.criteriaComment.search);
-  app.post('/company/rates/:id/:author', ctx.criteriaReaction.load);
   app.post('/company/rates/rate/:id/:author', ctx.criteriaRate.rate);
+  app.post('/company/rates/:id/:author', ctx.criteriaReaction.load);
   app.post('/company/rates/:id/:author/useful/:userId', ctx.criteriaReaction.setUseful);
   app.delete('/company/rates/:id/:author/useful/:userId', ctx.criteriaReaction.removeUseful);
   app.post('/company/rates/:id/:author/comment/:userId', ctx.criteriaReaction.comment);
