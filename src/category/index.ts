@@ -29,15 +29,15 @@ export function useItemCategoryService(
   db: DB,
   mapper?: TemplateMap
 ): CategoryService {
-  const query = useQuery('item_categories', mapper, categoryModel, true);
+  const query = useQuery('itemcategories', mapper, categoryModel, true);
   const builder = new SearchBuilder<Category, CategoryFilter>(
     db.query,
-    'item_categories',
+    'itemcategories',
     categoryModel,
     db.driver,
     query
   );
-  const repository = new Repository<Category, string>(db, 'item_categories',categoryModel);
+  const repository = new Repository<Category, string>(db, 'itemcategories',categoryModel);
   return new CategoryManager(builder.search, repository);
 }
 export function useItemCategoryController(

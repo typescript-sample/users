@@ -16,16 +16,18 @@ export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> imp
 }
 export function useItemController(log: Log, db: DB): ItemController {
   const savedItemMax = 50;
-  const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
-  const repository = new Repository<Item, string>(db, 'items', itemModel);
-  const saveItemRepository = new ArrayRepository<string, string>(db.query, db.exec, 'save_items', 'items', 'id');
+  const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'item', itemModel, postgres, buildQuery);
+  const repository = new Repository<Item, string>(db, 'item', itemModel);
+  const saveItemRepository = new ArrayRepository<string, string>(db.query, db.exec, 'saveditem', 'items', 'id');
   const service = new ItemManager(builder.search, repository, saveItemRepository, savedItemMax);
   return new ItemController(log, service);
 }
 
+
+
 export function useSavedController(log: Log, db: DB): SavedController<Item> {
-  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'save_items', 'items', 'id');
-  const repository = new QueryRepository<Item, string>(db, 'items', itemModel);
+  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'saveditem', 'items', 'id');
+  const repository = new QueryRepository<Item, string>(db, 'item', itemModel);
   const service = new SavedService(savedRepository, repository.query, 50);
   return new SavedController<Item>(log, service, 'itemId', 'id');
 }

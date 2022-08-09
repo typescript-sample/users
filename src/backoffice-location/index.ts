@@ -13,9 +13,9 @@ export class LocationManager extends Manager<Location, string, LocationFilter> i
 }
 
 export function useBackOfficeLocationService( db: DB, mapper?: TemplateMap ): LocationService {
-  const query = useQuery('locations', mapper, locationModel, true);
-  const builder = new SearchBuilder<Location, LocationFilter>(  db.query, 'locations',  locationModel, db.driver, query );
-  const repository = new Repository<Location, string>(db,'locations' , locationModel);
+  const query = useQuery('location', mapper, locationModel, true);
+  const builder = new SearchBuilder<Location, LocationFilter>(  db.query, 'location',  locationModel, db.driver, query );
+  const repository = new Repository<Location, string>(db,'location' , locationModel);
   return new LocationManager(builder.search, repository);
 }
 export function useBackOfficeLocationController( log: Log, db: DB, mapper?: TemplateMap ): BackOfficeLocationController {
