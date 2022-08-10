@@ -8,12 +8,11 @@ export interface LocationFilter extends Filter {
   status?: string;
   latitude?: number;
   longitude?: number;
-  info?: Info;
 }
 
 export interface Location {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   type?: string;
   description?: string;
   status?: string;
@@ -40,23 +39,22 @@ export const locationModel: Attributes = {
     q: true,
   },
   type: {
-    match: 'equal',
+    match: "equal",
     required: true,
   },
   description: {
     q: true,
   },
   status: {
-    match: 'equal',
+    match: "equal",
     length: 1,
   },
   latitude: {
-    type: 'number',
+    type: "number",
   },
   longitude: {
-    type: 'number',
+    type: "number",
   },
   imageURL: {},
   coverURL: {},
 };
-
