@@ -27,7 +27,8 @@ import {
   QueryController,
   ReactionController,
   SavedController,
-  RateController
+  RateController,
+  FollowController
 } from 'express-types';
 import {
   deleteFile,
@@ -109,6 +110,7 @@ import {
 import { useJobController } from './job';
 import {
   useLocationController,
+  useLocationFollowController,
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
@@ -124,7 +126,7 @@ import {
   useMyProfileController,
   UserSettings,
 } from './my-profile';
-import { useUserController } from './user';
+import { useUserFollowController, useUserController } from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
 
@@ -153,6 +155,7 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: QueryController;
+  userFollow: FollowController;
   skill: Query;
   interest: Query;
   lookingFor: Query;
@@ -195,6 +198,7 @@ export interface ApplicationContext {
   locationRate: RateController;
   locationReaction: ReactionController;
   locationComment: QueryController;
+  locationFollow:FollowController;
   jobs: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
@@ -317,6 +321,7 @@ export function useContext(
   const password = new PasswordController(logger.error, passwordService);
 
   const user = useUserController(logger.error, mainDB);
+  const userFollow = useUserFollowController(logger.error, mainDB);
 
   const skillService = new StringService(
     'skill',
@@ -505,6 +510,7 @@ export function useContext(
     queryDB,
     mapper
   );
+  const locationFollow=useLocationFollowController(logger.error, queryDB)
 
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
@@ -567,6 +573,7 @@ export function useContext(
     password,
     myprofile,
     user,
+    userFollow,
     skill,
     interest,
     lookingFor,
@@ -612,7 +619,8 @@ export function useContext(
     backofficeJob,
     backofficeLocation,
     backofficeCinema,
-    saveItem
+    saveItem,
+    locationFollow
   };
 }
 

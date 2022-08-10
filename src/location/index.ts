@@ -1,3 +1,5 @@
+import { FollowRepository } from '../follow';
+import { FollowController } from '../following-controller';
 import { Log, Search,ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
@@ -246,4 +248,14 @@ export function useLocationRateCommentController(
 
 export function generate(): string {
   return shortid.generate();
+}
+
+export function useLocationFollowController(log: Log, db: DB): FollowController {
+
+  const service = new FollowRepository<string>(
+    db.execBatch,
+    'locationfollowing', 'id', 'following',
+    'locationfollower', 'id', 'follower',
+    'locationinfomation', 'id', 'followerCount', 'followingCount');
+  return new FollowController(log, service, 'id', 'target');
 }

@@ -53,7 +53,19 @@ create table history (
 	id character varying(40) not null primary key,
 	history character varying[]
 );
-
+create table userinfo (
+  id character varying(40) not null primary key,
+  followercount bigint,
+  followingcount bigint
+)
+create table userfollowing (
+  id character varying(40) not null ,
+  following character varying(40) not null 
+)
+create table userfollower (
+  id character varying(40) not null ,
+  follower character varying(40) not null 
+)
 create table signupcodes (
 	id character varying(40) not null primary key,
 	code character varying(500) not null,
@@ -448,7 +460,20 @@ CREATE TABLE location_ratereaction(
 	primary key(id, author, userid)
 )
 
-
+create table locationinfomation (
+  id character varying(40) not null primary key,
+  followercount bigint,
+  followingcount bigint
+)
+create table locationfollowing (
+  id character varying(40) not null ,
+  following character varying(40) not null 
+)
+create table locationfollower (
+  id character varying(40) not null ,
+  follower character varying(40) not null 
+)
+//--company----
 create table companies
 (
     id character varying(40) not null primary key,

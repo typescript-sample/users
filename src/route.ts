@@ -64,6 +64,10 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
 
+  app.get('/users/follow/:id/:target', ctx.userFollow.follow)
+  app.get('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
+
+
   app.get('/appreciation/search', ctx.appreciation.search);
   app.post('/appreciation/search', ctx.appreciation.search);
   app.post('/appreciation/reply/search', ctx.comment.search);
@@ -254,6 +258,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/locations/rates/comment/:id/:author/:userId', ctx.locationReaction.comment);
   app.delete('/locations/rates/comment/:commentId/:author', ctx.locationReaction.removeComment);
   app.put('/locations/rates/comment/:commentId/:id/:author/:userId', ctx.locationReaction.updateComment);
+
+  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow)
+  app.get('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow)
 
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);
