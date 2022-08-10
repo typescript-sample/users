@@ -53,7 +53,19 @@ create table history (
 	id character varying(40) not null primary key,
 	history character varying[]
 );
-
+create table userinfo (
+  id character varying(40) not null primary key,
+  followercount bigint,
+  followingcount bigint
+)
+create table userfollowing (
+  id character varying(40) not null ,
+  following character varying(40) not null 
+)
+create table userfollower (
+  id character varying(40) not null ,
+  follower character varying(40) not null 
+)
 create table signupcodes (
 	id character varying(40) not null primary key,
 	code character varying(500) not null,
@@ -277,8 +289,7 @@ insert into item_response (id,author,description,time) values ('04','77c35c38c35
 insert into item_response (id,author,description,time) values ('05','77c35c38c3554ea6906730dbcfeca0f2', 'I hate this', '2022-07-22');
 
 
-create table item_comment(
-  commentId character varying(40) not null,
+create table location commentId character varying(40) not null,
   id character varying(40) not null,
   author character varying(40) not null,
   userId character varying(40) not null,
@@ -402,7 +413,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 );
 
 
-create table locationinfo (
+create table location_info (
   id character varying(40) primary key,
   rate numeric DEFAULT 0,
   rate1 integer DEFAULT 0,
@@ -413,16 +424,16 @@ create table locationinfo (
   viewCount integer DEFAULT 0
 );
 
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d146cbffbdf2b1d30742262',3.1811023622047245,22,32,15,17,41,123);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a18c5e4f320a86ca6b1',3.4,1,1,0,1,2,2);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a66c5e4f320a86ca6b2',3.857142857142857,1,0,0,4,2,4);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a85c5e4f320a86ca6b3',0,0,0,0,0,0,0);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7b79c5e4f320a86ca6b4',0,0,0,0,0,0,0);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1efb3796988a127077547c',0,0,0,0,0,0,0);
-insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d562ad357568217d0d9a2d5',0,0,0,0,0,0,0);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d146cbffbdf2b1d30742262',3.1811023622047245,22,32,15,17,41,123);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a18c5e4f320a86ca6b1',3.4,1,1,0,1,2,2);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a66c5e4f320a86ca6b2',3.857142857142857,1,0,0,4,2,4);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a85c5e4f320a86ca6b3',0,0,0,0,0,0,0);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7b79c5e4f320a86ca6b4',0,0,0,0,0,0,0);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1efb3796988a127077547c',0,0,0,0,0,0,0);
+insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d562ad357568217d0d9a2d5',0,0,0,0,0,0,0);
 
 
-create table locationrate (
+create table location_rates (
   id character varying(40) not null,
   author character varying(40) not null,
   rate integer not null,
@@ -433,13 +444,13 @@ create table locationrate (
   primary key (id, author)
 );
 
-insert into locationrate (id, author, rate, rateTime, review) values ('5d146cbffbdf2b1d30742262','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Bad');
-insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7a18c5e4f320a86ca6b1','77c35c38c3554ea6906730dbcfeca0f2',3,'2021-10-01','Poor');
-insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
-insert into locationrate (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
-insert into locationrate (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
+insert into location_rates (id, author, rate, rateTime, review) values ('5d146cbffbdf2b1d30742262','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Bad');
+insert into location_rates (id, author, rate, rateTime, review) values ('5d1d7a18c5e4f320a86ca6b1','77c35c38c3554ea6906730dbcfeca0f2',3,'2021-10-01','Poor');
+insert into location_rates (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
+insert into location_rates (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
+insert into location_rates (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
 
-CREATE TABLE location_ratereaction(
+CREATE TABLE location_rate_reactions (
 	id character varying(40),
 	author character varying(40),
 	userid character varying(40),
@@ -448,7 +459,33 @@ CREATE TABLE location_ratereaction(
 	primary key(id, author, userid)
 )
 
+create table location_comments(
+  commentId character varying(40) not null,
+  id character varying(40) not null,
+  author character varying(40) not null,
+  userId character varying(40) not null,
+  comment text,
+  time timestamp,
+  updatedat timestamp,
+  histories jsonb[],
+  primary key (commentId)
+);
 
+
+create table locationinfomation (
+  id character varying(40) not null primary key,
+  followercount bigint,
+  followingcount bigint
+)
+create table locationfollowing (
+  id character varying(40) not null ,
+  following character varying(40) not null 
+)
+create table locationfollower (
+  id character varying(40) not null ,
+  follower character varying(40) not null 
+)
+//--company----
 create table companies
 (
     id character varying(40) not null primary key,
