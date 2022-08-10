@@ -27,7 +27,8 @@ import {
   QueryController,
   ReactionController,
   SavedController,
-  RateController
+  RateController,
+  FollowController
 } from 'express-types';
 import {
   deleteFile,
@@ -64,9 +65,10 @@ import {
 } from 'signup-service';
 import { createValidator } from 'xvalidators';
 import {
-  AppreciationController,
   useAppreciationController,
-} from './appreciation';
+  useAppreciationCommentController,
+  useAppreciationReactionController
+} from './appreciation copy';
 import { useArticleController } from './article';
 import { useBackOfficeCompanyController } from './backoffice/company';
 import { useBackOfficeFilmController } from './backoffice/film';
@@ -109,6 +111,7 @@ import {
 import { useJobController } from './job';
 import {
   useLocationController,
+  useLocationFollowController,
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
@@ -124,7 +127,7 @@ import {
   useMyProfileController,
   UserSettings,
 } from './my-profile';
-import { useUserController } from './user';
+import { useUserFollowController, useUserController } from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
 
@@ -153,12 +156,17 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   user: QueryController;
+  userFollow: FollowController;
   skill: Query;
   interest: Query;
   lookingFor: Query;
   educationQuery: Query;
   companyQuery: Query;
-  appreciation: AppreciationController;
+
+  appreciation: RateController;
+  appreciationComment: QueryController;
+  appreciationReaction: ReactionController;
+
   article: QueryController;
   myarticles: Controller;
   cinema: QueryController;
@@ -195,6 +203,7 @@ export interface ApplicationContext {
   locationRate: RateController;
   locationReaction: ReactionController;
   locationComment: QueryController;
+  locationFollow:FollowController;
   jobs: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
@@ -317,6 +326,7 @@ export function useContext(
   const password = new PasswordController(logger.error, passwordService);
 
   const user = useUserController(logger.error, mainDB);
+  const userFollow = useUserFollowController(logger.error, mainDB);
 
   const skillService = new StringService(
     'skill',
@@ -374,6 +384,8 @@ export function useContext(
     'keyword'
   );
   const appreciation = useAppreciationController(logger.error, mainDB);
+  const appreciationComment = useAppreciationCommentController(logger.error, mainDB);
+  const appreciationReaction = useAppreciationReactionController(logger.error, mainDB,generate);
   // const appreciationReply = useAppreciationReplyController(
   //   logger.error,
   //   mainDB,
@@ -505,6 +517,7 @@ export function useContext(
     queryDB,
     mapper
   );
+  const locationFollow=useLocationFollowController(logger.error, queryDB)
 
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
@@ -567,12 +580,15 @@ export function useContext(
     password,
     myprofile,
     user,
+    userFollow,
     skill,
     interest,
     lookingFor,
     educationQuery,
     companyQuery,
     appreciation,
+    appreciationComment,
+    appreciationReaction,
     // appreciationReply,
     comment,
     cinema,
@@ -612,7 +628,8 @@ export function useContext(
     backofficeJob,
     backofficeLocation,
     backofficeCinema,
-    saveItem
+    saveItem,
+    locationFollow
   };
 }
 

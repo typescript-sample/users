@@ -19,9 +19,9 @@ export class CompanyManager extends Manager<Company, string, CompanyFilter> impl
 }
 
 export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeCompanyController {
-  const queryCompany = useQuery('companies', mapper, companyModel, true);
-  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'companies', companyModel,  db.driver, queryCompany);
-  const repository = new Repository<Company, string>(db, 'companies', companyModel);
+  const queryCompany = useQuery('company', mapper, companyModel, true);
+  const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel,  db.driver, queryCompany);
+  const repository = new Repository<Company, string>(db, 'company', companyModel);
   const service = new CompanyManager(builder.search, repository );
   return new BackOfficeCompanyController(log, service);
 }
