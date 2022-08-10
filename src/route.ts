@@ -122,11 +122,12 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/cinemas/rates/search', ctx.cinemaReaction.search);
   app.post('/cinemas/rates/search', ctx.cinemaReaction.search);
-  app.get('/cinemas/rates/comments/search', ctx.cinemaComment.search);
+  // app.get('/cinemas/rates/comments/search', ctx.cinemaComment.search);
+  // app.get('/cinemas/rates/:id/:author', ctx.cinemaReaction.load);
   app.post('/cinemas/rates/:id/:author', ctx.cinemaRate.rate);
-  app.get('/cinemas/rates/:id/:author', ctx.cinemaReaction.load);
   app.post('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.setUseful);
   app.delete('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.removeUseful);
+  app.get('/cinemas/rates/:id/:author/comments', ctx.cinemaReaction.getComments);
   app.post('/cinemas/rates/:id/:author/comments/:userId', ctx.cinemaReaction.comment);
   app.put('/cinemas/rates/:id/:author/comments/:userId/:commentId/', ctx.cinemaReaction.updateComment);
   app.delete('/cinemas/rates/:id/:author/comments/:commentId', ctx.cinemaReaction.removeComment);
