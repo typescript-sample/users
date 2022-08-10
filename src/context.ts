@@ -65,9 +65,10 @@ import {
 } from 'signup-service';
 import { createValidator } from 'xvalidators';
 import {
-  AppreciationController,
   useAppreciationController,
-} from './appreciation';
+  useAppreciationCommentController,
+  useAppreciationReactionController
+} from './appreciation copy';
 import { useArticleController } from './article';
 import { useBackOfficeCompanyController } from './backoffice/company';
 import { useBackOfficeFilmController } from './backoffice/film';
@@ -162,7 +163,11 @@ export interface ApplicationContext {
   lookingFor: Query;
   educationQuery: Query;
   companyQuery: Query;
-  appreciation: AppreciationController;
+
+  appreciation: RateController;
+  appreciationComment: QueryController;
+  appreciationReaction: ReactionController;
+
   article: QueryController;
   myarticles: Controller;
   cinema: QueryController;
@@ -381,6 +386,8 @@ export function useContext(
     'keyword'
   );
   const appreciation = useAppreciationController(logger.error, mainDB);
+  const appreciationComment = useAppreciationCommentController(logger.error, mainDB);
+  const appreciationReaction = useAppreciationReactionController(logger.error, mainDB,generate);
   // const appreciationReply = useAppreciationReplyController(
   //   logger.error,
   //   mainDB,
@@ -583,6 +590,8 @@ export function useContext(
     educationQuery,
     companyQuery,
     appreciation,
+    appreciationComment,
+    appreciationReaction,
     // appreciationReply,
     comment,
     cinema,
