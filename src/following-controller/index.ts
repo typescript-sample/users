@@ -3,7 +3,7 @@ import { handleError } from 'express-ext';
 
 export type Log = (msg: string) => void;
 export interface FollowService {
-    follow(id: string, target: string): Promise<number>;
+    follow(id: string, target: string): Promise<number|undefined>;
     unfollow(id: string, target: string): Promise<number>;
 }
 export class FollowController {
@@ -17,7 +17,6 @@ export class FollowController {
         // const id = req.params[this.id];
         const id = req.params.id;
         const target = req.params.target;
-        console.log(req.params)
         if (!id || id.length === 0) {
             res.status(400).end(`'${this.id}' cannot be empty`);
             return;
