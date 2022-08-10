@@ -78,24 +78,24 @@ export function useResponseService(
   db: DB,
   mapper?: TemplateMap
 ): ResponseService {
-  const query = useQuery('item_response', mapper, responseModel, true);
+  const query = useQuery('itemresponse', mapper, responseModel, true);
   const builder = new SearchBuilder<Response, ResponseFilter>(
     db.query,
-    'item_response',
+    'itemresponse',
     responseModel,
     db.driver,
     query
   );
   const repository = new GenericRepository<Response, string, string>(
     db,
-    'item_response',
+    'itemresponse',
     responseModel,
     'id',
     'author'
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    'item_info',
+    'iteminfo',
     infoModel,
     buildToSave
   );
@@ -121,35 +121,35 @@ export function useResponseReactionService(
   db: DB,
   mapper?: TemplateMap
 ): ReactionService<Response, ResponseFilter> {
-  const query = useQuery('item_response', mapper, responseModel, true);
+  const query = useQuery('itemresponse', mapper, responseModel, true);
   const builder = new SearchBuilder<Response, ResponseFilter>(
     db.query,
-    'item_response',
+    'itemresponse',
     responseModel,
     db.driver,
     query
   );
   const repository = new GenericRepository<Response, string, string>(
     db,
-    'item_response',
+    'itemresponse',
     responseModel,
     'id',
     'author'
   );
   const responseReactionRepository = new SqlReactionRepository(
     db,
-    'item_response_reaction',
+    'itemresponsereaction',
     rateReactionModel,
-    'item_response',
+    'itemresponse',
     'usefulCount',
     'author',
     'id'
   );
   const responseCommentRepository = new SqlCommentRepository<Comment>(
     db,
-    'item_comment',
+    'itemcomment',
     commentModel,
-    'item_response',
+    'itemresponse',
     'id',
     'author',
     'replyCount',

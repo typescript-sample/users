@@ -20,8 +20,15 @@ import {
   ItemController as ItemsController,
   resources,
   useBuild,
-  SavedController,
 } from 'express-ext';
+import {
+  Controller,
+  Query,
+  QueryController,
+  ReactionController,
+  SavedController,
+  RateController
+} from 'express-types';
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -31,7 +38,6 @@ import {
 } from 'google-storage';
 import { generateToken } from 'jsonwebtoken-plus';
 import { MailConfig, MailService, Send } from 'mail-core';
-import { MyItemUploadController } from 'my-items/item-controller';
 import nodemailer from 'nodemailer';
 import { ModelConf, StorageConf } from 'one-storage';
 import { PasswordController } from 'password-express';
@@ -44,9 +50,6 @@ import {
 import { CodeRepository, DB, StringService } from 'pg-extension';
 import { createChecker } from 'query-core';
 import { TemplateMap } from 'query-mappers';
-import { Rate, RateFilter } from 'rate-core';
-import { Comment } from 'review-reaction';
-import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
 import { SendGridMailService } from 'sendgrid-plus';
 import shortid from 'shortid';
 import { SignupController } from 'signup-express';
@@ -64,74 +67,53 @@ import {
   AppreciationController,
   useAppreciationController,
 } from './appreciation';
-import { ArticleController, useArticleController } from './article';
+import { useArticleController } from './article';
+import { useBackOfficeCompanyController } from './backoffice/company';
+import { useBackOfficeFilmController } from './backoffice/film';
+import { useBackOfficeJobController } from './backoffice/job';
+import { useBackOfficeLocationController } from './backoffice/location';
 import {
-  BackOfficeCompanyController,
-  useBackOfficeCompanyController
-} from './backoffice-company';
-import {
-  BackOfficeFilmController,
-  useBackOfficeFilmController
-} from './backoffice-film';
-import { BackOfficeJobController, useBackOfficeJobController } from './backoffice-job';
-import {
-  BackOfficeLocationController,
-  useBackOfficeLocationController
-} from './backoffice-location';
-import {
-  CategoryController,
   useCompanyCategoryController,
   useFilmCategoryController,
   useItemCategoryController,
 } from './category';
 import {
-  CinemaController,
   useCinemaController,
   useCinemaRateCommentController,
   useCinemaRateController,
   useCinemaReactionController,
 } from "./cinema";
 import {
-  BackOfficeCinemaController,
   useBackOfficeCinemaController
-} from "./backoffice-cinema";
-import { CommentController, useCommentController } from "./comment";
+} from "./backoffice/cinema";
+import { useCommentController } from "./comment";
 import {
-  CompanyController,
   useCompanyController,
   useCompanyRateCommentController,
   useCompanyRateController,
-  useCompanyReactionController,
+  useCompanyRateReactionController
 } from './company';
-import { useRateCriteriaController } from './company-rate';
-import { RateCriteria, RateCriteriaFilter } from './company-rate/rate-criteria';
+import { RateCriteria, RateCriteriaFilter } from './company/company';
 import {
-  FilmController,
   useFilmController,
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
 } from './film';
-import { Item, ItemController, useItemController } from './items';
+import { useItemController } from './items';
 import {
-  Response,
   ResponseController,
-  ResponseFilter,
   useResponseController,
   useResponseReactionController,
 } from './items-response';
-import { JobController, useJobController } from './job';
+import { useJobController } from './job';
 import {
-  LocationController,
   useLocationController,
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
 } from './location';
-import {
-  ArticleController as MyArticleController,
-  useMyArticleController,
-} from './my-articles';
+import { useMyArticleController } from './my-articles';
 import {
   MyItemController,
   useMyItemController,
@@ -142,10 +124,10 @@ import {
   useMyProfileController,
   UserSettings,
 } from './my-profile';
-import { UserController, useUserController } from './user';
+import { useUserController } from './user';
+import { useSavedController } from './items'
+import { UploadController } from 'upload-express';
 
-import {useSavedController} from './items'
-import { Request, Response as Res } from 'express';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -162,9 +144,6 @@ export interface Config {
   modelAppreciation: ModelConfig;
   modelItem: ModelConf;
 }
-export interface QueryController {
-  search(req: Request, res: Res): void;
-}
 export interface ApplicationContext {
   health: HealthController;
   log: LogController;
@@ -173,54 +152,56 @@ export interface ApplicationContext {
   signup: SignupController<Signup>;
   password: PasswordController;
   myprofile: MyProfileController;
-  user: UserController;
-  skill: ItemsController<string[]>;
-  interest: ItemsController<string[]>;
-  lookingFor: ItemsController<string[]>;
-  educationQuery: ItemsController<string[]>;
-  companyQuery: ItemsController<string[]>;
+  user: QueryController;
+  skill: Query;
+  interest: Query;
+  lookingFor: Query;
+  educationQuery: Query;
+  companyQuery: Query;
   appreciation: AppreciationController;
-  // appreciationReply: ReplyController;
-  article: ArticleController;
-  myarticles: MyArticleController;
-  cinema: CinemaController;
-  backofficeCinema: BackOfficeCinemaController;
-  cinemaRate: RateController<Rate>;
-  cinemaReaction: ReactionController<Rate, RateFilter, Comment>;
-  cinemaComment: RateCommentController<Comment>;
-  company: CompanyController;
-  backofficeCompany: BackOfficeCompanyController;
-  companyRate: RateController<Rate>;
-  companyReaction: ReactionController<Rate, RateFilter, Comment>;
-  companyComment: RateCommentController<Comment>;
-  companyCategory: CategoryController;
-  comment: CommentController;
-  film: FilmController;
-  backOfficeFilm: BackOfficeFilmController;
-  filmRate: RateController<Rate>;
-  filmReaction: ReactionController<Rate, RateFilter, Comment>;
-  filmComment: RateCommentController<Comment>;
-  filmCategory: CategoryController;
-  director: ItemsController<string[]>;
-  cast: ItemsController<string[]>;
-  production: ItemsController<string[]>;
-  country: ItemsController<string[]>;
-  items: ItemController;
-  brand: ItemsController<string[]>;
-  itemCategory: CategoryController;
+  article: QueryController;
+  myarticles: Controller;
+  cinema: QueryController;
+  backofficeCinema: Controller;
+  cinemaRate: RateController;
+  cinemaReaction: ReactionController;
+  cinemaComment: QueryController;
+  company: QueryController;
+  backofficeCompany: Controller;
+  // companyRate: RateController;
+  // companyReaction: ReactionController;
+  // companyComment: QueryController;
+  companyCategory: Controller;
+  comment: Controller;
+  film: QueryController;
+  backOfficeFilm: Controller;
+  filmRate: RateController;
+  filmReaction: ReactionController;
+  filmComment: QueryController;
+  filmCategory: Controller;
+  director: Query;
+  cast: Query;
+  production: Query;
+  country: Query;
+  items: QueryController;
+  brand: Query;
+  itemCategory: Controller;
   itemResponse: ResponseController;
-  itemReaction: ReactionController<Response, ResponseFilter, Comment>;
+  itemReaction: ReactionController;
   myitems: MyItemController;
-  myitemsUpload: MyItemUploadController;
-  location: LocationController;
-  backofficeLocation: BackOfficeLocationController;
-  locationRate: RateController<Rate>;
-  locationReaction: ReactionController<Rate, RateFilter, Comment>;
-  locationComment: RateCommentController<Comment>;
-  jobs: JobController;
-  backofficeJob: BackOfficeJobController;
-  rateCriteria: ReactionController<RateCriteria, RateCriteriaFilter, Comment>;
-  saveItem: SavedController<Item>;
+  myitemsUpload: UploadController;
+  location: QueryController;
+  backofficeLocation: Controller;
+  locationRate: RateController;
+  locationReaction: ReactionController;
+  locationComment: QueryController;
+  jobs: QueryController;
+  backofficeJob: Controller;
+  // rateCriteria: ReactionController;
+  saveItem: SavedController;
+  criteriaReaction: ReactionController;
+  criteriaRate: RateController;
+  criteriaComment: QueryController;
 }
 
 export function useContext(
@@ -338,7 +319,7 @@ export function useContext(
   const user = useUserController(logger.error, mainDB);
 
   const skillService = new StringService(
-    'skills',
+    'skill',
     'skill',
     queryDB.query,
     queryDB.exec
@@ -349,7 +330,7 @@ export function useContext(
     'keyword'
   );
   const interestService = new StringService(
-    'interests',
+    'interest',
     'interest',
     queryDB.query,
     queryDB.exec
@@ -360,7 +341,7 @@ export function useContext(
     'keyword'
   );
   const lookingForService = new StringService(
-    'searchs',
+    'search',
     'item',
     queryDB.query,
     queryDB.exec
@@ -433,13 +414,6 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
-  const companyRate = useCompanyRateController(logger.error, queryDB, mapper);
-  const companyReaction = useCompanyReactionController(logger.error, queryDB, mapper);
-  const companyComment = useCompanyRateCommentController(
-    logger.error,
-    mainDB,
-    mapper
-  );
   const companyCategory = useCompanyCategoryController(
     logger.error,
     queryDB,
@@ -447,18 +421,16 @@ export function useContext(
   );
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
-  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
   const cinemaReaction = useCinemaReactionController(logger.error, queryDB, mapper);
-  const cinemaComment = useCinemaRateCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const cinemaComment = useCinemaRateCommentController(logger.error,queryDB,mapper);
+
+  const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
+
   const saveItem=useSavedController(logger.error, queryDB)
 
   const directorService = new StringService(
-    'film_directors',
+    'filmdirector',
     'director',
     queryDB.query,
     queryDB.exec
@@ -469,7 +441,7 @@ export function useContext(
     'keyword'
   );
   const castService = new StringService(
-    'film_cast',
+    'casts',
     'actor',
     queryDB.query,
     queryDB.exec
@@ -480,7 +452,7 @@ export function useContext(
     'keyword'
   );
   const productionService = new StringService(
-    'film_productions',
+    'filmproduction',
     'production',
     queryDB.query,
     queryDB.exec
@@ -491,7 +463,7 @@ export function useContext(
     'keyword'
   );
   const countryService = new StringService(
-    'film_countries',
+    'filmcountry',
     'country',
     queryDB.query,
     queryDB.exec
@@ -533,12 +505,13 @@ export function useContext(
     queryDB,
     mapper
   );
+
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
   const brandService = new StringService(
-    'brands',
+    'brand',
     'brand',
     queryDB.query,
     queryDB.exec
@@ -579,7 +552,11 @@ export function useContext(
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
-  const rateCriteria = useRateCriteriaController(logger.error, queryDB, mapper);
+
+  //company-rate
+  const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
+  const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
+  const criteriaComment = useCompanyRateCommentController(logger.error, queryDB, mapper);
 
   return {
     health,
@@ -603,9 +580,6 @@ export function useContext(
     cinemaReaction,
     cinemaComment,
     company,
-    companyRate,
-    companyReaction,
-    companyComment,
     companyCategory,
     film,
     filmRate,
@@ -630,7 +604,9 @@ export function useContext(
     myitems,
     myitemsUpload,
     jobs,
-    rateCriteria,
+    criteriaRate,
+    criteriaReaction,
+    criteriaComment,
     backOfficeFilm,
     backofficeCompany,
     backofficeJob,

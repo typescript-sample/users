@@ -31,8 +31,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -46,8 +46,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -61,8 +61,8 @@ export class FilmManager
     if (film.directors && film.directors.length > 0) {
       this.saveDirectors(film.directors);
     }
-    if (film.filmcast && film.filmcast.length > 0) {
-      this.saveCast(film.filmcast);
+    if (film.casts && film.casts.length > 0) {
+      this.saveCast(film.casts);
     }
     if (film.productions && film.productions.length > 0) {
       this.saveProductions(film.productions);
@@ -75,33 +75,7 @@ export class FilmManager
       : Promise.resolve(-1);
   }
 }
-export function useFilmService(
-  db: DB,
-  saveDirectors: (values: string[]) => Promise<number>,
-  saveCast: (values: string[]) => Promise<number>,
-  saveProductions: (values: string[]) => Promise<number>,
-  saveCountries: (values: string[]) => Promise<number>,
-  mapper?: TemplateMap
-): FilmService {
-  const query = useQuery('film', mapper, filmModel, true);
-  const builder = new SearchBuilder<Film, FilmFilter>(
-    db.query,
-    'films',
-    filmModel,
-    db.driver,
-    query
-  );
-  const repository = new Repository<Film, string>(db, 'films',filmModel);
 
-  return new FilmManager(
-    builder.search,
-    repository,
-    saveDirectors,
-    saveCast,
-    saveProductions,
-    saveCountries
-  );
-}
 export function useBackOfficeFilmController(
   log: Log,
   db: DB,
@@ -111,15 +85,25 @@ export function useBackOfficeFilmController(
   saveCountries: (values: string[]) => Promise<number>,
   mapper?: TemplateMap
 ): BackOfficeFilmController {
+  const query = useQuery('film', mapper, filmModel, true);
+  const builder = new SearchBuilder<Film, FilmFilter>(
+    db.query,
+    'film',
+    filmModel,
+    db.driver,
+    query
+  );
+  const repository = new Repository<Film, string>(db, 'film',filmModel);
+  const service = new FilmManager(
+    builder.search,
+    repository,
+    saveDirectors,
+    saveCast,
+    saveProductions,
+    saveCountries
+  );
   return new BackOfficeFilmController(
     log,
-    useFilmService(
-      db,
-      saveDirectors,
-      saveCast,
-      saveProductions,
-      saveCountries,
-      mapper
-    )
+    service
   );
 }
