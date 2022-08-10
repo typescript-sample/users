@@ -64,6 +64,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
 
+  
   app.get('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/:id/rates/:author', ctx.appreciation.rate);
@@ -73,6 +74,22 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/appreciation/:id/rates/:author/comment/:userId', ctx.appreciationReaction.comment);
   app.put('/appreciation/:id/rates/:author/comment/:userId/:commentId', ctx.appreciationReaction.updateComment);
   app.delete('/appreciation/:id/rates/:author/comment/:commentId', ctx.appreciationReaction.removeComment);
+
+
+  // app.get('/appreciation/search', ctx.appreciation.search);
+  // app.get('/appreciation/search', ctx.appreciation.search);
+  // app.post('/appreciation/search', ctx.appreciation.search);
+  // app.post('/appreciation/reply/search', ctx.comment.search);
+  // app.post('/appreciation', ctx.appreciation.create);
+  // app.put('/appreciation/:id/:author', ctx.appreciation.update);
+  // app.delete('/appreciation/:id/:author', ctx.appreciation.delete);
+  // app.post('/appreciation/:id/:author', ctx.appreciation.load);
+  // app.put('/appreciation/:id/:author', ctx.appreciation.update);
+  // app.patch('/appreciation/:id/:author', ctx.appreciation.patch);
+  // app.get('/appreciation/reply/:id/:author', ctx.appreciation.getReplys);
+  // app.post('/appreciation/reply/:id/:author/:userid', ctx.appreciation.reply);
+  // app.delete('/appreciation/reply/:id/:author/:userid', ctx.appreciation.removeReply);
+  // app.put('/appreciation/reply/:id/:author/:userid', ctx.appreciation.updateReply);
 
   // appreciation reply
   // app.get('/appreciation-reply', ctx.appreciationReply.search);
