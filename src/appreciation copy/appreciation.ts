@@ -1,14 +1,4 @@
-import { Log } from 'express-ext';
-import { Attributes, Filter, Info10, Repository, Service } from 'onecore';
-import { buildToSave } from 'pg-extension';
-import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
-import { TemplateMap, useQuery } from 'query-mappers';
-import { info10Model, Rate, RateService, RateValidator } from 'rate-core';
-import { SqlRateRepository } from 'rate-query';
-import { ReactionService } from 'review-reaction';
-import { RateController } from 'review-reaction-express';
-import { commentModel, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
-import { check } from 'xvalidators';
+import { Attributes, Filter, Repository, Service } from 'onecore';
 
 export interface AppreciationFilter extends Filter {
   id?: string;
@@ -38,134 +28,18 @@ export interface Histories {
   review: string;
   title: string;
 }
-
-export function useAppreciationController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): RateController<Rate> {
-  const rateRepository = new SqlRateRepository<Rate>(
-    db,
-    'appreciation',
-    appreciationModel,
-    buildToSave,
-    10,
-    'appreciation_info',
-    'rate',
-    'count',
-    'score',
-    'author',
-    'id'
-  );
-  const infoRepository = new SqlInfoRepository<Info10>(
-    db,
-    'appreciation_info',
-    info10Model,
-    buildToSave
-  );
-  const rateValidator = new RateValidator(appreciationModel, check, 10);
-  const rateService = new RateService(rateRepository, infoRepository);
-  return new RateController(
-    log,
-    rateService.rate,
-    rateValidator.validate,
-    'author',
-    'id'
-  );
-}
-
-// Reaction
-export function useAppreciationService(
-  db: DB,
-  mapper?: TemplateMap
-): ReactionService<Appreciation, AppreciationFilter> {
-  const query = useQuery('rates_film', mapper, appreciationModel, true);
-  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(
-    db.query,
-    'appreciation',
-    appreciationModel,
-    db.driver,
-    query
-  );
-  const rateRepository = new SqlLoadRepository<Appreciation, string, string>(
-    db.query,
-    'rates_film',
-    appreciationModel,
-    db.param,
-    'id',
-    'author'
-  );
-  const rateReactionRepository = new SqlReactionRepository(
-    db,
-    'appreciation_reaction',
-    rateReactionModel,
-    'rates_film',
-    'usefulCount',
-    'author',
-    'id'
-  );
-  const rateCommentRepository = new SqlCommentRepository<Comment>(
-    db,
-    'reply',
-    commentModel,
-    'rates_film',
-    'id',
-    'author',
-    'replyCount',
-    'author',
-    'time',
-    'id'
-  );
-  return new ReactionService<Rate, RateFilter>(
-    builder.search,
-    rateRepository,
-    rateReactionRepository,
-    rateCommentRepository
-  );
-}
-
-const rateRepository = new SqlLoadRepository<Appreciation, string, string>(
-  db.query,
-  'appreciation',
-  rateModel,
-  db.param,
-  'id',
-  'author'
-);
-const rateReactionRepository = new SqlReactionRepository(
-  db,
-  'rates_film_reaction',
-  rateReactionModel,
-  'rates_film',
-  'usefulCount',
-  'author',
-  'id'
-);
-const rateCommentRepository = new SqlCommentRepository<Comment>(
-  db,
-  'rates_film_comments',
-  commentModel,
-  'rates_film',
-  'id',
-  'author',
-  'replyCount',
-  'author',
-  'time',
-  'id'
-);
-
 export interface AppreciationRepository extends Repository<Appreciation, AppreciationId> {
   getAppreciation(id: string, author: string): Promise<Appreciation | null>;
   increaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
   decreaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
 }
-// export interface AppreciationService extends Service<Appreciation, AppreciationId, AppreciationFilter> {
-//   reply(reply: Reply): Promise<boolean>;
-//   removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-//   updateReply(reply: Reply): Promise<number>;
-//   setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-//   getReplys(id: string, author: string, ctx?: any): Promise<Reply[]>;
-// }
+export interface AppreciationService extends Service<Appreciation, AppreciationId, AppreciationFilter> {
+  reply(reply: Reply): Promise<boolean>;
+  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  updateReply(reply: Reply): Promise<number>;
+  setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  getReplys(id: string, author: string, ctx?: any): Promise<Reply[]>;
+}
 
 export const appreciationModel: Attributes = {
   id: {

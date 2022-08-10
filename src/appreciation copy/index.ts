@@ -1,8 +1,13 @@
 import { Build, Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
 import { buildToSave } from 'pg-extension';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
+import { Rate, RateFilter } from 'rate-core';
+import { Comment, CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
+import { RateCommentController, ReactionController } from 'review-reaction-express';
+import { commentModel, CommentQuery, rateReactionModel, SqlCommentRepository, SqlReactionRepository } from 'review-reaction-query';
+import { check } from 'xvalidators';
 import { Appreciation, AppreciationFilter, AppreciationId, appreciationModel, AppreciationRepository, AppreciationService, Reply, ReplyFilter, ReplyId, replyModel, ReplyRepository, ReplyService, Useful, usefulModel, UsefulRepository } from './appreciation';
 import { AppreciationController } from './appreciation-controller';
 import { AppreciationReplyController } from './reply-controller';
@@ -96,18 +101,7 @@ export class AppreciationManager extends Manager<Appreciation, AppreciationId, A
   }
 }
 
-export function useAppreciationService(db: DB, mapper?: TemplateMap): AppreciationService {
-  const query = useQuery('appreciation', mapper, appreciationModel, true);
-  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(db.query, 'appreciation', appreciationModel, db.driver, query);
-  const repository = new SqlAppreciationRepository(db, 'appreciation', buildToSave);
-  const replyRepository = new SqlReplyRepository(db, 'reply', buildToSave);
-  const usefulRepository = new SqlUsefulRepository(db, 'useful', usefulModel, buildToSave);
-  return new AppreciationManager(builder.search, repository, replyRepository, usefulRepository);
-}
 
-export function useAppreciationController(log: Log, db: DB, mapper?: TemplateMap, build?: Build<Appreciation>): AppreciationController {
-  return new AppreciationController(log, useAppreciationService(db, mapper), build);
-}
 
 export class ReplyManager extends Manager<Reply, ReplyId, ReplyFilter> implements ReplyService {
   constructor(search: Search<Reply, ReplyFilter>,
@@ -125,4 +119,112 @@ export function useReplyService(db: DB, mapper?: TemplateMap): ReplyService {
 
 export function useAppreciationReplyController(log: Log, db: DB, mapper?: TemplateMap): AppreciationReplyController {
   return new AppreciationReplyController(log, useReplyService(db, mapper));
+}
+
+
+export function useAppreciationService(
+  db: DB,
+  mapper?: TemplateMap
+): ReactionService<Rate, RateFilter> {
+  const query = useQuery('appreciation', mapper, appreciationModel, true);
+  const builder = new SearchBuilder<Rate, RateFilter>(
+    db.query,
+    'appreciation',
+    appreciationModel,
+    db.driver,
+    query
+  );
+  const rateRepository = new SqlLoadRepository<Rate, string, string>(
+    db.query,
+    'appreciation',
+    appreciationModel,
+    db.param,
+    'id',
+    'author'
+  );
+  const rateReactionRepository = new SqlReactionRepository(
+    db,
+    'appreciation_reaction',
+    rateReactionModel,
+    'appreciation',
+    'usefulCount',
+    'author',
+    'id'
+  );
+  const rateCommentRepository = new SqlCommentRepository<Comment>(
+    db,
+    'reply',
+    commentModel,
+    'appreciation',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'time',
+    'id'
+  );
+  return new ReactionService<Rate, RateFilter>(
+    builder.search,
+    rateRepository,
+    rateReactionRepository,
+    rateCommentRepository
+  );
+}
+
+export function useAppreciationController(
+  log: Log,
+  db: DB,
+  generate:()=>string,
+  mapper?: TemplateMap,
+): ReactionController<Rate, RateFilter, Comment> {
+  const commentValidator = new CommentValidator(commentModel, check);
+  return new ReactionController(
+    log,
+    useAppreciationService(db, mapper),
+    commentValidator,
+    ['time'],
+    ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
+    generate,
+    'commentId',
+    'userId',
+    'author',
+    'id'
+  );
+}
+// Comment
+export function useAppreciationCommentService(
+  db: DB,
+  mapper?: TemplateMap
+): CommentQuery<Comment, CommentFilter> {
+  const query = useQuery('reply', mapper, commentModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(
+    db.query,
+    'reply',
+    commentModel,
+    db.driver,
+    query
+  );
+  const rateCommentRepository = new SqlCommentRepository<Comment>(
+    db,
+    'reply',
+    commentModel,
+    'appreciation',
+    'id',
+    'author',
+    'replyCount',
+    'author',
+    'time',
+    'id'
+  );
+  return new CommentQuery<Comment, CommentFilter>(
+    builder.search,
+    rateCommentRepository
+  );
+}
+export function useAppreciationCommentController(
+  log: Log,
+  db: DB,
+  mapper?: TemplateMap
+): RateCommentController<Comment> {
+  return new RateCommentController(log, useAppreciationCommentService(db, mapper));
 }
