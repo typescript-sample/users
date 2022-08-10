@@ -119,7 +119,7 @@ export function useLocationRateController(
   );
   const infoRepository = new SqlInfoRepository<Info>(
     db,
-    'location_info',
+    'locationinfo',
     infoModel,
     buildToSave
   );

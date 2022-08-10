@@ -125,11 +125,11 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/cinemas/rates/comments/search', ctx.cinemaComment.search);
   app.post('/cinemas/rates/:id/:author', ctx.cinemaRate.rate);
   app.get('/cinemas/rates/:id/:author', ctx.cinemaReaction.load);
-  app.post('/cinemas/rates/useful/:id/:author/:userId', ctx.cinemaReaction.setUseful);
-  app.delete('/cinemas/rates/useful/:id/:author/:userId', ctx.cinemaReaction.removeUseful);
-  app.post('/cinemas/rates/comments/:id/:author/:userId', ctx.cinemaReaction.comment);
-  app.delete('/cinemas/rates/comments/:commentId/:author', ctx.cinemaReaction.removeComment);
-  app.put('/cinemas/rates/comments/:commentId/:id/:author/:userId', ctx.cinemaReaction.updateComment);
+  app.post('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.setUseful);
+  app.delete('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.removeUseful);
+  app.post('/cinemas/rates/:id/:author/comments/:userId', ctx.cinemaReaction.comment);
+  app.put('/cinemas/rates/:id/:author/comments/:userId/:commentId/', ctx.cinemaReaction.updateComment);
+  app.delete('/cinemas/rates/:id/:author/comments/:commentId', ctx.cinemaReaction.removeComment);
 
 // Film
   app.get('/films/categories/search', ctx.filmCategory.search);
@@ -178,8 +178,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
-  app.post('/items/responses/:author', ctx.itemResponse.reply);
-  app.post('/items/responses:id/:author/useful/:userId', ctx.itemReaction.setUseful);
+  app.post('/items/responses/:id/:author', ctx.itemResponse.reply);
+  app.post('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.setUseful);
   app.delete('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.removeUseful);
   app.get('/items/responses/:id/:author/comments', ctx.itemReaction.getComments);
   app.post('/items/responses/:id/:author/comments/:userId', ctx.itemReaction.comment);
