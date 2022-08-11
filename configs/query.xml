@@ -37,7 +37,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -74,7 +74,7 @@
     </if>
         1 = 1
         <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -111,7 +111,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -139,7 +139,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -181,7 +181,7 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -215,7 +215,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -254,7 +254,7 @@
       (title like #{q} or description like #{q} or imageUrl like #{q} or trailerUrl like #{trailerUrl}) and
     </if>
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
     1 = 1
   </select>
@@ -297,7 +297,7 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -330,7 +330,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -357,7 +357,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
   
@@ -400,7 +400,7 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -434,7 +434,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -450,7 +450,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
