@@ -281,6 +281,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/companies/categories/:id', ctx.companyCategory.patch);
   app.delete('/companies/categories/:id', ctx.companyCategory.delete);
 
+  app.get('/companies/follow/:id/:target', ctx.companyFollow.follow)
+  app.get('/companies/unfollow/:id/:target', ctx.companyFollow.unfollow)
+
   // app.post('/companies/rates', ctx.companyRate.rate);
   // app.get('/companies/rates/search', ctx.companyReaction.search);
   // app.post('/companies/rates/search', ctx.companyReaction.search);

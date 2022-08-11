@@ -91,6 +91,7 @@ import {
 import { useCommentController } from "./comment";
 import {
   useCompanyController,
+  useCompanyFollowController,
   useCompanyRateCommentController,
   useCompanyRateController,
   useCompanyRateReactionController
@@ -175,6 +176,7 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
+  companyFollow:FollowController;
   backofficeCompany: Controller;
   // companyRate: RateController;
   // companyReaction: ReactionController;
@@ -425,6 +427,7 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
+  const companyFollow=useCompanyFollowController(logger.error, queryDB)
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
   const companyCategory = useCompanyCategoryController(
     logger.error,
@@ -629,7 +632,8 @@ export function useContext(
     backofficeLocation,
     backofficeCinema,
     saveItem,
-    locationFollow
+    locationFollow,
+    companyFollow
   };
 }
 
