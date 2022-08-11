@@ -160,6 +160,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/films/search', ctx.film.search);
   app.get('/films/:id', ctx.film.load);
   
+  app.get('/films/save/:id/:itemId', ctx.saveFilm.save);
+  app.get('/films/save/:id/', ctx.saveFilm.load);
+
   app.post('/backoffice/films', ctx.backOfficeFilm.create);
   app.get('/backoffice/films/search', ctx.backOfficeFilm.search);
   app.post('/backoffice/films/search', ctx.backOfficeFilm.search);

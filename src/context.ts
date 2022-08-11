@@ -104,6 +104,7 @@ import {
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
+  useSavedFilmsController,
 } from './film';
 import { useItemController } from './items';
 import {
@@ -217,6 +218,7 @@ export interface ApplicationContext {
   // rateCriteria: ReactionController;
   saveItem: SavedController;
   saveLocation: SavedController;
+  saveFilm: SavedController;
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
@@ -453,6 +455,7 @@ export function useContext(
 
   const saveItem=useSavedController(logger.error, queryDB)
   const saveLocation=useSavedLocationController(logger.error, queryDB)
+  const saveFilm=useSavedFilmsController(logger.error, queryDB)
 
   const directorService = new StringService(
     'filmdirector',
@@ -646,7 +649,8 @@ export function useContext(
     companyFollow,
     userInfo,
     saveLocation,
-    locationInfomation
+    locationInfomation,
+    saveFilm
   };
 }
 
