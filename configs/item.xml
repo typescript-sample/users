@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers">
+  <select id="item">
+    select * from item
+    where
+    <if test="id != null">
+        id = (#{id}) and
+    </if>
+    <if test="title != null">
+        title like #{title} and
+    </if>
+    <if test="status != null">
+        status like #{status} and
+    </if>
+    <if test="description != null">
+        description like #{description} and
+    </if>
+    <if test="brand != null">
+        brand in (#{brand}) and
+    </if>
+    <if test="price.min != null">
+        price >= (#{price.min}) and
+    </if>
+    <if test="price.max != null">
+        price <= (#{price.max}) and
+    </if>
+    <if test="categories != null" array="skip">
+        categories && #{categories} and
+    </if>
+    <if test="q != null">
+        (title like #{q} or description like #{q} and
+    </if>
+        1 = 1
+        <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+</mapper>

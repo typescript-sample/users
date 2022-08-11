@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers">
+  <select id="article">
+    select * from article
+    where
+    <if test="id != null">
+      id in (#{id}) and
+    </if>
+    <if test="title != null">
+      title like #{title} and
+    </if>
+    <if test="type != null">
+      status like #{status} and
+    </if>
+    <if test="description != null">
+      description ilike #{description} and
+    </if>
+    <if test="content != null">
+      content like #{content} and
+    </if>
+    <if test="tags != null">
+      tags like #{tags} and
+    </if>
+    <if test="status != null">
+      status like #{status} and
+    </if>
+    <if test="authorId != null">
+      authorId in #{authorId} and
+    </if>
+     <if test="q != null">
+      (title ilike #{q} or status ilike #{q}) and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
+  </select>
+</mapper>

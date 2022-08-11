@@ -144,6 +144,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.setUseful);
   app.delete('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.removeUseful);
   app.get('/cinemas/rates/:id/:author/comments', ctx.cinemaReaction.getComments);
+  app.post('/cinemas/rates/:id/:author/comments', ctx.cinemaReaction.getComments);
   app.post('/cinemas/rates/:id/:author/comments/:userId', ctx.cinemaReaction.comment);
   app.put('/cinemas/rates/:id/:author/comments/:userId/:commentId/', ctx.cinemaReaction.updateComment);
   app.delete('/cinemas/rates/:id/:author/comments/:commentId', ctx.cinemaReaction.removeComment);
@@ -177,6 +178,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.setUseful);
   app.delete('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.removeUseful);
   app.get('/films/rates/:id/:author/comments', ctx.filmReaction.getComments);
+  app.post('/films/rates/:id/:author/comments', ctx.filmReaction.getComments);
   app.post('/films/rates/:id/:author/comments/:userId', ctx.filmReaction.comment);
   app.put('/films/rates/:id/:author/comments/:userId/:commentId', ctx.filmReaction.updateComment);
   app.delete('/films/rates/:id/:author/comments/:commentId', ctx.filmReaction.removeComment);
@@ -258,6 +260,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.setUseful);
   app.delete('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.removeUseful);
   app.get('/locations/rates/:id/:author/comments', ctx.locationReaction.getComments);
+  app.post('/locations/rates/:id/:author/comments', ctx.locationReaction.getComments);
   app.post('/locations/rates/:id/:author/comments/:userId', ctx.locationReaction.comment);
   app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
   app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
