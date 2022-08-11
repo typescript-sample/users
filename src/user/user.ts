@@ -1,4 +1,4 @@
-import { Attributes, DateRange, Filter, ViewRepository, ViewService } from 'onecore';
+import { Attributes, DateRange, Filter,Query, ViewRepository, ViewService,Repository } from 'onecore';
 
 export interface UserFilter extends Filter {
   id?: string;
@@ -97,3 +97,33 @@ export const userModel: Attributes = {
 
   },
 };
+
+export interface UserInfo {
+  id: string;
+  followercount: number;
+  followingcount: number;
+}
+export interface UserInfoFilter extends Filter {
+  id?: string;
+  followercount?: number;
+  followingcount?: number;
+}
+
+export const userInfoModel: Attributes = {
+  id: {
+      key: true,
+      length: 40
+  },
+  followingcount: {
+      type: 'number'
+  },
+  followercount: {
+      type: 'number'
+  }
+}
+export interface UserInfoQuery extends Query<UserInfo, string, UserInfoFilter> {
+  // getFollow(id: string): Promise<UserInfo[]>;
+}
+export interface UserInfoRepository extends Repository<UserInfo, string> {
+
+}

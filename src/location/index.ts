@@ -1,9 +1,19 @@
 import { FollowRepository } from '../follow';
 import { FollowController } from '../following-controller';
-import { Log, Search,ViewSearchManager } from 'onecore';
-import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { Log, SavedService, Search,ViewSearchManager } from 'onecore';
+import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
+import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
+
+import {
+  LocationInfomation,
+  LocationInfomationQuery,
+  locationInfomationModel,
+  LocationInfomationFilter,
+  LocationInfomationRepository
+} from './location';
+import {LocationInfomationController} from './location-controller'
+import { SavedController } from 'express-ext';
 import {
   Info,
   infoModel,
@@ -258,4 +268,23 @@ export function useLocationFollowController(log: Log, db: DB): FollowController 
     'locationfollower', 'id', 'follower',
     'locationinfomation', 'id', 'followerCount', 'followingCount');
   return new FollowController(log, service, 'id', 'target');
+}
+export function useSavedLocationController(log: Log, db: DB): SavedController<Location> {
+  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'savedlocation', 'items', 'id');
+  const repository = new QueryRepository<Location, string>(db, 'location', locationModel);
+  const service = new SavedService(savedRepository, repository.query, 50);
+  return new SavedController<Location>(log, service, 'itemId', 'id');
+}
+
+export class LocationInfomationService extends ViewSearchManager<LocationInfomation, string,LocationInfomationFilter> implements LocationInfomationQuery {
+  constructor(search: Search<LocationInfomation, LocationInfomationFilter>,repository: LocationInfomationRepository) {
+    super(search,repository);
+  }
+}
+export function useLocationInfomationController(log: Log, db: DB,mapper?: TemplateMap): LocationInfomationController {
+  const query = useQuery('locationinfomation', mapper, locationInfomationModel, true);
+  const builder = new SearchBuilder<LocationInfomation, LocationInfomationFilter>(db.query, 'locationinfomation', locationInfomationModel, db.driver, query);
+  const repository = new Repository<LocationInfomation, string>(db, 'locationinfomation', locationInfomationModel);
+  const service = new LocationInfomationService(builder.search,repository);
+  return new LocationInfomationController(log,service);
 }
