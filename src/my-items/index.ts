@@ -61,7 +61,7 @@ export function useMyItemService(db: DB, storage: StorageRepository, save: (valu
   sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): ItemService {
   const queryItems = useQuery('item', mapper, itemModel, true);
   const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'item', itemModel, postgres, queryItems);
-  const repository = new Repository<Item, string>(db, 'item',itemModel);
+  const repository = new Repository<Item, string>(db, 'item', itemModel);
   return new ItemManager(builder.search, repository, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
 }
 export function useMyItemController(log: Log, db: DB, storage: StorageRepository, save: (values: string[]) => Promise<number>, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
