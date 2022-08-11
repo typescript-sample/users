@@ -1,8 +1,8 @@
 import { FollowRepository } from '../follow';
 import { FollowController } from '../following-controller';
-import { Log, ViewManager } from 'onecore';
+import { Log, ViewManager, ViewSearchManager, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
-import { TemplateMap } from 'query-mappers';
+import { TemplateMap, useQuery } from 'query-mappers';
 import { buildQuery } from './query';
 import {
   User,
@@ -10,8 +10,13 @@ import {
   userModel,
   UserRepository,
   UserService,
+  UserInfo,
+  UserInfoQuery,
+  UserInfoRepository,
+  userInfoModel,
+  UserInfoFilter
 } from './user';
-import { UserController } from './user-controller';
+import { UserController, UserInFoController } from './user-controller';
 export * from './user';
 export * from './user-controller';
 
@@ -47,4 +52,19 @@ export function useUserFollowController(log: Log, db: DB): FollowController {
     'userinfo', 'id', 'followerCount', 'followingCount');
   return new FollowController(log, service, 'id', 'target');
 }
+export { FollowController };
 
+export { UserInFoController };
+
+export class UserInfoService extends ViewSearchManager<UserInfo, string, UserInfoFilter> implements UserInfoQuery {
+  constructor(search: Search<UserInfo, UserInfoFilter>, repository: UserInfoRepository) {
+    super(search, repository);
+  }
+}
+export function useUserInfoController(log: Log, db: DB, mapper?: TemplateMap): UserInFoController {
+  const query = useQuery('userinfo', mapper, userInfoModel, true);
+  const builder = new SearchBuilder<UserInfo, UserInfoFilter>(db.query, 'userinfo', userInfoModel, db.driver, query);
+  const repository = new Repository<UserInfo, string>(db, 'userinfo', userInfoModel);
+  const service = new UserInfoService(builder.search, repository);
+  return new UserInFoController(log, service);
+}

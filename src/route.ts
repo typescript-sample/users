@@ -64,6 +64,11 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
 
+  app.get('/users/follow/:id/:target', ctx.userFollow.follow)
+  app.get('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
+  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkfollow)
+  app.get('/users/loadfollow/:id/', ctx.userInfo.load)
+
   
   app.get('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
@@ -76,9 +81,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/appreciation/:id/rates/:author/comment/:commentId', ctx.appreciationReaction.removeComment);
 
 
-  // app.get('/appreciation/search', ctx.appreciation.search);
-  // app.get('/appreciation/search', ctx.appreciation.search);
-  // app.post('/appreciation/search', ctx.appreciation.search);
+  app.get('/appreciation/search', ctx.appreciationReaction.search);
+  // app.post('/appreciation/search', ctx.appreciationReaction.search);
   // app.post('/appreciation/reply/search', ctx.comment.search);
   // app.post('/appreciation', ctx.appreciation.create);
   // app.put('/appreciation/:id/:author', ctx.appreciation.update);
@@ -189,8 +193,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
-  app.get('/item/save-item/:id/:itemId', ctx.saveItem.save);
-  app.get('/item/save-item/:id/', ctx.saveItem.load);
+  app.get('/item/save/:id/:itemId', ctx.saveItem.save);
+  app.get('/item/save/:id/', ctx.saveItem.load);
 
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
@@ -260,6 +264,12 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/locations/follow/:id/:target', ctx.locationFollow.follow)
   app.get('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow)
+  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkfollow)
+  app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load)
+
+
+  app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);
+  app.get('/locations/save/:id/', ctx.saveLocation.load);
 
   app.post('/companies/search', ctx.company.search);
   app.get('/companies/search', ctx.company.search);

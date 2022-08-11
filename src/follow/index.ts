@@ -17,6 +17,7 @@ export class FollowRepository<ID> {
         public followingCount: string) {
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
+        this.checkfollow = this.checkfollow.bind(this);
     }
     follow(id: ID, target: ID): Promise<number | undefined> {
         const double = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2 `
@@ -60,6 +61,12 @@ export class FollowRepository<ID> {
             { query: query2, params: [target, id] },
             { query: query3, params: [id] },
             { query: query4, params: [target] },
+        ], true);
+    }
+    checkfollow(id: ID, target: ID): Promise<number> {
+        const check = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2 `
+        return this.exec([
+            { query: check, params: [id, target] }
         ], true);
     }
 }

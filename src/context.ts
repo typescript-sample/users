@@ -20,6 +20,7 @@ import {
   ItemController as ItemsController,
   resources,
   useBuild,
+  Load,
 } from 'express-ext';
 import {
   Controller,
@@ -28,8 +29,9 @@ import {
   ReactionController,
   SavedController,
   RateController,
-  FollowController
+  // FollowController
 } from 'express-types';
+import {FollowController,useUserInfoController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -116,6 +118,8 @@ import {
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
+  useSavedLocationController,
+  useLocationInfomationController
 } from './location';
 import { useMyArticleController } from './my-articles';
 import {
@@ -128,7 +132,7 @@ import {
   useMyProfileController,
   UserSettings,
 } from './my-profile';
-import { useUserFollowController, useUserController } from './user';
+import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
 
@@ -158,6 +162,8 @@ export interface ApplicationContext {
   myprofile: MyProfileController;
   user: QueryController;
   userFollow: FollowController;
+  userInfo:QueryController;
+  locationInfomation:QueryController;
   skill: Query;
   interest: Query;
   lookingFor: Query;
@@ -210,6 +216,7 @@ export interface ApplicationContext {
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
   saveItem: SavedController;
+  saveLocation: SavedController;
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
@@ -329,6 +336,8 @@ export function useContext(
 
   const user = useUserController(logger.error, mainDB);
   const userFollow = useUserFollowController(logger.error, mainDB);
+  const userInfo = useUserInfoController(logger.error, mainDB, mapper);
+  const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
 
   const skillService = new StringService(
     'skill',
@@ -443,6 +452,7 @@ export function useContext(
   const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
 
   const saveItem=useSavedController(logger.error, queryDB)
+  const saveLocation=useSavedLocationController(logger.error, queryDB)
 
   const directorService = new StringService(
     'filmdirector',
@@ -633,7 +643,10 @@ export function useContext(
     backofficeCinema,
     saveItem,
     locationFollow,
-    companyFollow
+    companyFollow,
+    userInfo,
+    saveLocation,
+    locationInfomation
   };
 }
 
