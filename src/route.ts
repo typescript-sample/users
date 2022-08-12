@@ -197,9 +197,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
 
-  app.get('/item/save/:id/:itemId', ctx.saveItem.save);
-  app.get('/item/save/:id/', ctx.saveItem.load);
-  app.delete('/item/unsave/:id/:itemId', ctx.saveItem.remove);
+  app.get('/saved-items/:id/', ctx.saveItem.load);
+  app.post('/saved-items/:id/:itemId', ctx.saveItem.save);
+  app.delete('/saved-items/:id/:itemId', ctx.saveItem.remove);
 
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
