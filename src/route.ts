@@ -65,8 +65,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/:id', ctx.user.load);
 
   app.get('/users/follow/:id/:target', ctx.userFollow.follow)
-  app.get('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
-  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkfollow)
+  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
+  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow)
   app.get('/users/loadfollow/:id/', ctx.userInfo.load)
 
   
@@ -163,6 +163,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   
   app.get('/films/save/:id/:itemId', ctx.saveFilm.save);
   app.get('/films/save/:id/', ctx.saveFilm.load);
+  app.delete('/films/unsave/:id/:itemId', ctx.saveFilm.remove);
 
   app.post('/backoffice/films', ctx.backOfficeFilm.create);
   app.get('/backoffice/films/search', ctx.backOfficeFilm.search);
@@ -197,6 +198,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/item/save/:id/:itemId', ctx.saveItem.save);
   app.get('/item/save/:id/', ctx.saveItem.load);
+  app.delete('/item/unsave/:id/:itemId', ctx.saveItem.remove);
 
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
@@ -266,13 +268,15 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
 
   app.get('/locations/follow/:id/:target', ctx.locationFollow.follow)
-  app.get('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow)
-  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkfollow)
+  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow)
+  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow)
   app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load)
 
 
   app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);
   app.get('/locations/save/:id/', ctx.saveLocation.load);
+  app.delete('/locations/unsave/:id/:itemId', ctx.saveLocation.remove);
+  
 
 // Company
   app.post('/companies/search', ctx.company.search);
@@ -294,8 +298,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/companies/categories/:id', ctx.companyCategory.patch);
   app.delete('/companies/categories/:id', ctx.companyCategory.delete);
 
-  app.get('/companies/follow/:id/:target', ctx.companyFollow.follow)
-  app.get('/companies/unfollow/:id/:target', ctx.companyFollow.unfollow)
 
   // app.post('/companies/rates', ctx.companyRate.rate);
   // app.get('/companies/rates/search', ctx.companyReaction.search);

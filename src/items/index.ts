@@ -1,7 +1,9 @@
 import { SavedController } from 'express-ext';
-import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
+// import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
+import { Log, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, QueryRepository, Repository, SearchBuilder } from 'query-core';
+import { SavedRepository, SavedService } from '../save/save-repository';
 import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, } from './item';
 import { ItemController } from './item-controller';
 import { buildQuery } from './query';
@@ -31,3 +33,6 @@ export function useSavedController(log: Log, db: DB): SavedController<Item> {
   const service = new SavedService(savedRepository, repository.query, 50);
   return new SavedController<Item>(log, service, 'itemId', 'id');
 }
+//--------------------------------------------------
+
+

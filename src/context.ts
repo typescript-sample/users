@@ -19,8 +19,7 @@ import {
   ModelConfig,
   ItemController as ItemsController,
   resources,
-  useBuild,
-  Load,
+  useBuild
 } from 'express-ext';
 import {
   Controller,
@@ -29,9 +28,10 @@ import {
   ReactionController,
   SavedController,
   RateController,
-  // FollowController
+  FollowController,
+  UploadController
 } from 'express-types';
-import {FollowController,useUserInfoController} from './user'
+import {useUserInfoController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -93,12 +93,10 @@ import {
 import { useCommentController } from "./comment";
 import {
   useCompanyController,
-  useCompanyFollowController,
   useCompanyRateCommentController,
   useCompanyRateController,
   useCompanyRateReactionController
 } from './company';
-import { RateCriteria, RateCriteriaFilter } from './company/company';
 import {
   useFilmController,
   useFilmRateCommentController,
@@ -134,9 +132,7 @@ import {
   UserSettings,
 } from './my-profile';
 import { useUserFollowController, useUserController} from './user';
-import { useSavedController } from './items'
-import { UploadController } from 'upload-express';
-
+import { useSavedController } from './items';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -183,7 +179,6 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
-  companyFollow:FollowController;
   backofficeCompany: Controller;
   // companyRate: RateController;
   // companyReaction: ReactionController;
@@ -216,6 +211,7 @@ export interface ApplicationContext {
   jobs: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
+  // saveItem: SavedController;
   saveItem: SavedController;
   saveLocation: SavedController;
   saveFilm: SavedController;
@@ -438,7 +434,6 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
-  const companyFollow=useCompanyFollowController(logger.error, queryDB)
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
   const companyCategory = useCompanyCategoryController(
     logger.error,
@@ -646,7 +641,6 @@ export function useContext(
     backofficeCinema,
     saveItem,
     locationFollow,
-    companyFollow,
     userInfo,
     saveLocation,
     locationInfomation,

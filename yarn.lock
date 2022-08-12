@@ -2149,17 +2149,17 @@
   "resolved" "https://registry.npmjs.org/expand-template/-/expand-template-2.0.3.tgz"
   "version" "2.0.3"
 
-"express-ext@^0.1.29":
-  "integrity" "sha512-VZ/2XmCebmAQse9rbta0BZzG52NwLiGagQuSCjntcH0qxifOMG5nhCvepguJpCvKZpx4SaXBmkzqRHsPleWn4w=="
-  "resolved" "https://registry.npmjs.org/express-ext/-/express-ext-0.1.29.tgz"
-  "version" "0.1.29"
+"express-ext@^0.1.32":
+  "integrity" "sha512-yRm96T5v0QQK0yDnzUER8eKP0zcXFj1nJ4tXqpEDlb5M0Ck+epPwiaQzcTe4aKJG14v4HxLYpKCD2sG/51ETyg=="
+  "resolved" "https://registry.npmjs.org/express-ext/-/express-ext-0.1.32.tgz"
+  "version" "0.1.32"
   dependencies:
     "express" "^4.17.1"
 
-"express-types@^0.0.1":
-  "integrity" "sha512-ynyYG00XDevb14/vyjRhuBIPDmTY78koyv4EzW8dl5XHqPZPMuvRIa5HHnDPHBqazYy1m9M+scumMZE527Pwcw=="
-  "resolved" "https://registry.npmjs.org/express-types/-/express-types-0.0.1.tgz"
-  "version" "0.0.1"
+"express-types@^0.0.3":
+  "integrity" "sha512-ZS5KSAybmt63NSlN3sxqy0q5/a83WhGeblnSrd8EftYNN3tnECZ5LNFZikyZbSn9U6m5tOpTbP/zln9tYZ7P3Q=="
+  "resolved" "https://registry.npmjs.org/express-types/-/express-types-0.0.3.tgz"
+  "version" "0.0.3"
   dependencies:
     "express" "^4.17.1"
 
@@ -4108,10 +4108,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.8":
-  "integrity" "sha512-mgqfZ38R37mftal9kgFCWTEuIRkV7TnS23OUQEWVZMewSRkLHg4pCiuxFL8Wlu5zi05JsA7NahdiHNjHuN5OiQ=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.8.tgz"
-  "version" "0.1.8"
+"pg-extension@^0.1.9":
+  "integrity" "sha512-RCPrjnQxgoasrSnovTEQ4f1ImawZFv3MzD8SCaITazB8/LFw0oRPfVJMFLNay3ap7Dshe8hvK/WQh82SVGWrZQ=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.9.tgz"
+  "version" "0.1.9"
   dependencies:
     "pg" "^8.6.0"
 

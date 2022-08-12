@@ -1,7 +1,5 @@
-import { FollowRepository } from '../follow';
-import { FollowController } from '../following-controller';
-import { Log, SavedService, Search,ViewSearchManager } from 'onecore';
-import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
+import { Log, Search,ViewSearchManager } from 'onecore';
+import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 
@@ -54,6 +52,8 @@ import {
   LocationQuery,
 } from './location';
 import { LocationController } from './location-controller';
+import { SavedService } from '../save/save-repository';
+import { FollowController } from 'express-ext';
 export * from './location-controller';
 export { LocationController };
 
@@ -261,8 +261,7 @@ export function generate(): string {
 }
 
 export function useLocationFollowController(log: Log, db: DB): FollowController {
-
-  const service = new FollowRepository<string>(
+  const service = new FollowService<string>(
     db.execBatch,
     'locationfollowing', 'id', 'following',
     'locationfollower', 'id', 'follower',
