@@ -10,23 +10,23 @@
       id = #{id} and
     </if>
     <if test="name != null">
-      name like #{name} and
+      name ilike #{name} and
     </if>
     <if test="type != null">
-      type like (#{type}) and
+      type ilike (#{type}) and
     </if>
     <if test="description != null">
-      parent like #{description} and
+      parent ilike #{description} and
     </if>
     <if test="status != null">
-      status like (#{status}) and
+      status ilike (#{status}) and
     </if>
     <if test="q != null">
-      (name like #{q} ) and
+      (name ilike #{q} ) and
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -61,14 +61,14 @@
       r.time >= #{time} and
     </if>   
     <if test="review != null">
-      r.review like #{review} and
+      r.review ilike #{review} and
     </if>
     <if test="usefulCount != null">
       r.usefulCount >= (#{usefulCount}) and
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -101,7 +101,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 </mapper>

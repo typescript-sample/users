@@ -5,6 +5,9 @@
   <select id="film">
     select * from film
     where
+    <if test="id != null">
+    id = (#{id}) and
+    </if>
     <if test="title != null">
     title ilike #{title} and
     </if>
@@ -12,10 +15,10 @@
     description ilike #{description} and
     </if>
     <if test ="imageUrl != null">
-    imageUrl like #{imageUrl} and 
+    imageUrl ilike #{imageUrl} and 
     </if>
     <if test = "trailerUrl != null">
-    trailerUrl like #{trailerUrl} and
+    trailerUrl ilike #{trailerUrl} and
     </if>
     <if test="categories != null" array="skip">
       categories && #{categories} and
@@ -33,7 +36,7 @@
       countries && #{countries} and
     </if>
     <if test="q != null">
-      (title ilike #{q} or description ilike #{q}) and
+      (title ilike #{q} or description ilike #{q} or imageUrl ilike #{q} or trailerUrl ilike #{trailerUrl}) and
     </if>
     1 = 1
     <if test="sort != null">
@@ -72,7 +75,7 @@
       r.time >= #{time} and
     </if>   
     <if test="review != null">
-      r.review like #{review} and
+      r.review ilike #{review} and
     </if>
     <if test="usefulCount != null">
       r.usefulCount >= (#{usefulCount}) and

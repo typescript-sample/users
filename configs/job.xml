@@ -5,8 +5,17 @@
   <select id="job">
     select * from job
     where
+    <if test="id != null">
+      id = (#{id}) and
+    </if>
+    <if test="title != null">
+      title ilike #{title} and
+    </if>
+    <if test="description != null">
+      description ilike #{description} and
+    </if>
     <if test="skill != null" array="skip">
-       skill && (#{skill}) and
+      skill && (#{skill}) and
     </if>
     1 = 1
   </select>

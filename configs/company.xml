@@ -9,13 +9,13 @@
         id = (#{id}) and
     </if>
     <if test="name != null">
-        name like #{name} and
+        name ilike #{name} and
     </if>
     <if test="description != null">
         description ilike #{description} and
     </if>
     <if test="status != null">
-        status like #{status} and
+        status ilike #{status} and
     </if>
     <if test="categories != null" array="skip">
         categories && (#{categories}) and
@@ -25,7 +25,7 @@
     </if>
         1 = 1
     <if test="sort != null">
-        order by {sort}
+        order by ${sort}
     </if>
     </select>
 
@@ -60,14 +60,14 @@
       r.time >= #{time} and
     </if>   
     <if test="review != null">
-      r.review like #{review} and
+      r.review ilike #{review} and
     </if>
     <if test="usefulCount != null">
       r.usefulCount >= (#{usefulCount}) and
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -100,7 +100,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 </mapper>
