@@ -322,7 +322,6 @@ export function useContext(
     conf.password.max,
     undefined
   );
-  const build = useBuild(conf.modelAppreciation, generate);
   const password = new PasswordController(logger.error, passwordService);
 
   const user = useUserController(logger.error, mainDB);
