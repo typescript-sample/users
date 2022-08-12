@@ -5,8 +5,11 @@
   <select id="film">
     select * from film
     where
+    <if test="id != null">
+    id = (#{id}) and
+    </if>
     <if test="title != null">
-    title iilike #{title} and
+    title ilike #{title} and
     </if>
     <if test="description != null">
     description iilike #{description} and

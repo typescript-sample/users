@@ -6,7 +6,7 @@
     select * from article
     where
     <if test="id != null">
-      id in (#{id}) and
+      id = (#{id}) and
     </if>
     <if test="title != null">
       title ilike #{title} and

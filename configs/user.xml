@@ -6,7 +6,7 @@
     select * from users
     where
     <if test="id != null">
-      id in (#{id}) and
+      id = (#{id}) and
     </if>
     <if test="interests != null" array="skip">
       interests && #{interests} and
