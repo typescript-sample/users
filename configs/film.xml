@@ -12,7 +12,7 @@
     title ilike #{title} and
     </if>
     <if test="description != null">
-    description iilike #{description} and
+    description ilike #{description} and
     </if>
     <if test ="imageUrl != null">
     imageUrl ilike #{imageUrl} and 
