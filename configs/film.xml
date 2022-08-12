@@ -6,10 +6,10 @@
     select * from film
     where
     <if test="title != null">
-    title ilike #{title} and
+    title iilike #{title} and
     </if>
     <if test="description != null">
-    description ilike #{description} and
+    description iilike #{description} and
     </if>
     <if test ="imageUrl != null">
     imageUrl ilike #{imageUrl} and 

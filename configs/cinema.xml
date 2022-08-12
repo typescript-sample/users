@@ -18,10 +18,10 @@
       status in (#{status}) and
     </if>
     <if test="parent != null">
-      parent ilike #{parent} and
+      parent = #{parent} and
     </if>
     <if test="q != null">
-      (name ilike #{q} ) and
+      (name like #{q}) and
     </if>
     1 = 1
     <if test="sort != null">
