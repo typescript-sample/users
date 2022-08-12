@@ -10,7 +10,7 @@ import { PoolManager } from 'pg-extension';
 import { log } from 'query-core';
 import { buildTemplates, trim } from 'query-mappers';
 import { config, env } from './config';
-import { useContext} from './context';
+import { useContext } from './context';
 import { route } from './route';
 
 dotenv.config();
@@ -21,7 +21,17 @@ const middleware = new MiddlewareLogger(logger.info, conf.middleware);
 const app = express();
 
 app.use(allow(conf.allow), json(), cookieParser(), middleware.log);
-const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/query.xml']);
+const templates = loadTemplates(conf.template, buildTemplates, trim, [
+  './configs/article.xml',
+  './configs/cinema.xml',
+  './configs/comment.xml',
+  './configs/company.xml',
+  './configs/film.xml',
+  './configs/item.xml',
+  './configs/job.xml',
+  './configs/location.xml',
+  './configs/user.xml',
+]);
 // const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/job.xml']);
 const db = log(new PoolManager(new Pool(conf.db.user)), true, logger, 'postgres');
 const pool = new Pool(conf.db.query);
