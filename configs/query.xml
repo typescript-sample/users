@@ -3,8 +3,7 @@
 
 <mapper namespace="mappers">
   <select id="user">
-    select *
-    from users
+    select * from users
     where
     <if test="id != null">
       id in (#{id}) and
@@ -38,7 +37,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -75,7 +74,7 @@
     </if>
         1 = 1
         <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -112,12 +111,10 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
-
-  
   <select id="cinema">
     select *
     from cinema
@@ -142,45 +139,9 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
-
-  <select id="cinemainfo">
-    select * from cinemainfo
-    <if test="id != null">
-      id = #{id} and
-    </if>
-    <if test="rate != null">
-      rate = #{rate} and
-    </if>
-    <if test="count != null">
-      count = #{count} and
-    </if>
-    <if test="score != null">
-      score = #{score} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <!-- <select id="cinemaRate">
-    select *
-    from cinemarate
-    where
-    <if test="id != null">
-      id = (#{id}) and
-    </if> 
-    <if test="userId != null">
-      userId = (#{userId}) and
-    </if>  
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select> -->
 
   <select id="cinemarate">
     select r.*
@@ -220,61 +181,11 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
-  <select id="cinemarate_eaction">
-    select *
-    from cinemaratereaction
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="userId != null">
-      userId = #{userId} and
-    </if>  
-    <if test="author != null">
-      author = #{author} and
-    </if>  
-    <if test="time != null">
-      time >= #{time} and
-    </if>  
-    <if test="reaction != null">
-      reaction = #{reaction} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="company_rate_reaction">
-    select *
-    from company_rate_reaction
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="userId != null">
-      userId = #{userId} and
-    </if>  
-    <if test="author != null">
-      author = #{author} and
-    </if>  
-    <if test="time != null">
-      time >= #{time} and
-    </if>  
-    <if test="reaction != null">
-      reaction = #{reaction} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-    <select id="cinemaratecomment">
+  <select id="cinemaratecomment">
     select *
     from cinemaratecomment
     where
@@ -304,41 +215,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="company_rate_comment">
-    select *
-    from company_rate_comment
-    where
-    <if test="commentId != null">
-      commentId = #{commentId} and
-    </if> 
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="author != null">
-      author = #{author} and
-    </if> 
-    <if test="userId != null">
-      userId = #{userId} and
-    </if>   
-    <if test="comment != null">
-      comment ilike #{comment} and
-    </if>  
-    <if test="time != null">
-      time >= #{time} and
-    </if>
-    <if test="updateAt != null">
-      updateAt >= #{updateAt} and
-    </if>
-    <if test="histories != null">
-      histories in #{histories} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -364,8 +241,8 @@
     <if test="directors != null" array="skip">
       directors && #{directors} and
     </if>
-    <if test="casts != null" array="skip">
-      casts && #{casts} and
+    <if test="cast != null" array="skip">
+      cast && #{cast} and
     </if>
     <if test="productions != null" array="skip">
       productions && #{productions} and
@@ -377,29 +254,9 @@
       (title like #{q} or description like #{q} or imageUrl like #{q} or trailerUrl like #{trailerUrl}) and
     </if>
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
     1 = 1
-  </select>
-
-  <select id="filmrateinfo">
-    select * from filmrateinfo
-    <if test="id != null">
-      id = #{id} and
-    </if>
-    <if test="rate != null">
-      rate = #{rate} and
-    </if>
-    <if test="count != null">
-      count = #{count} and
-    </if>
-    <if test="score != null">
-      score = #{score} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
   </select>
 
   <select id="filmrate">
@@ -414,7 +271,7 @@
     </if>   
     from filmrate r
     <if test="userId != null">
-      left join rates_film_reaction rfr
+      left join filmratereaction rfr
         on rfr.id = r.id
         and rfr.author = r.author
         and rfr.userId = #{userId}
@@ -440,80 +297,12 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-   <select id="company_rate">
-    select r.*
-    <if test="userId != null">
-      ,
-      case
-        when rfr.reaction = 1 then true
-        else false
-      end
-        as disable
-    </if>   
-    from company_rate r
-    <if test="userId != null">
-      left join company_rate_reaction rfr
-        on rfr.id = r.id
-        and rfr.author = r.author
-        and rfr.userId = #{userId}
-    </if> 
-    where
-    <if test="id != null">
-      r.id = #{id} and
-    </if> 
-    <if test="author != null">
-      r.author = #{author} and
-    </if> 
-    <if test="rate != null">
-      r.rate = #{rate} and
-    </if>   
-    <if test="ratetime != null">   
-      r.time >= #{time} and
-    </if>   
-    <if test="review != null">
-      r.review like #{review} and
-    </if>
-    <if test="usefulCount != null">
-      r.usefulCount >= (#{usefulCount}) and
-    </if>    
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="filmratereaction">
-    select *
-    from filmratereaction
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="userId != null">
-      userId = #{userId} and
-    </if>  
-    <if test="author != null">
-      author = #{author} and
-    </if>  
-    <if test="time != null">
-      time >= #{time} and
-    </if>  
-    <if test="reaction != null">
-      reaction = #{reaction} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
   <select id="filmratecomment">
-    select *
-    from filmratecomment
+    select * from filmratecomment
     where
     <if test="commentId != null">
       commentId = #{commentId} and
@@ -541,31 +330,12 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
-
-
-  <select id="comment">
-    select * 
-    from comment
-    where 
-    <if test="id != null">
-      id = #{id} and 
-    </if>
-    <if test="author != null">
-      author = #{author} and 
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="companies">
-        select *
-    from companies
+  <select id="company">
+    select * from company
     where
     <if test="id != null">
         id = (#{id}) and
@@ -587,26 +357,27 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
-
-   <select id="rates_company">
+  
+  
+  <select id="companyrate">
     select r.*
     <if test="userId != null">
       ,
       case
-        when u.reaction = 1 then true
+        when rfr.reaction = 1 then true
         else false
       end
         as disable
     </if>   
-    from rates_company r
+    from companyrate r
     <if test="userId != null">
-      left join ratereaction_company u 
-        on u.id = r.id
-        and u.author = r.author
-        and u.userId = #{userId}
+      left join companyratereaction rfr
+        on rfr.id = r.id
+        and rfr.author = r.author
+        and rfr.userId = #{userId}
     </if> 
     where
     <if test="id != null">
@@ -629,87 +400,13 @@
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
-  <select id="reply_company">
+  <select id="companyratecomment">
     select *
-    from reply_company
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="author != null">
-      author = #{author} and
-    </if> 
-     <if test="userId != null">
-      userId = #{userId} and
-    </if>
-    <if test="description != null">
-      description ilike #{description} and
-    </if>
-    <if test="createAt != null">
-      createAt >= #{createAt} and
-    </if>
-    <if test="updateAt != null">
-      updateAt >= #{updateAt} and
-    </if>
-    <if test="usefulCount != null">
-      replyCount >= #{replyCount} and
-    </if>
-    <if test="replyCount != null">
-      replyCount >= #{replyCount} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="info_company">
-    select * from info_company
-    <if test="id != null">
-      id = #{id} and
-    </if>
-    <if test="rate != null">
-      rate = #{rate} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-  <select id="ratereaction_company">
-    select *
-    from ratereaction_company
-    where
-    <if test="id != null">
-      id = #{id} and
-    </if> 
-    <if test="userId != null">
-      userId = #{userId} and
-    </if>  
-    <if test="author != null">
-      author = #{author} and
-    </if>  
-    <if test="time != null">
-      time >= #{time} and
-    </if>  
-    <if test="reaction != null">
-      reaction = #{reaction} and
-    </if>
-    1 = 1
-    <if test="sort != null">
-      order by {sort}
-    </if>
-  </select>
-
-
-  <select id="rate_comments_company">
-    select *
-    from rate_comments_company
+    from companyratecomment
     where
     <if test="commentId != null">
       commentId = #{commentId} and
@@ -737,7 +434,24 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
+
+
+  <select id="comment">
+    select * from comment
+    where 
+    <if test="id != null">
+      id = #{id} and 
+    </if>
+    <if test="author != null">
+      author = #{author} and 
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by ${sort}
+    </if>
+  </select>
+
 </mapper>

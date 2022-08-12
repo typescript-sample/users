@@ -596,6 +596,21 @@ CREATE TABLE rate_comments_company(
   primary key(commentid)
 );
 
+create table companyinfomation (
+  id character varying(40) not null primary key,
+  followercount bigint,
+  followingcount bigint
+)
+create table companyfollowing (
+  id character varying(40) not null ,
+  following character varying(40) not null 
+)
+create table companyfollower (
+  id character varying(40) not null ,
+  follower character varying(40) not null 
+)
+
+--film----------------------------------------------------
 
 create table films(
   filmid character varying(40) primary key,

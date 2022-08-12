@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers">
+  <select id="film">
+    select * from film
+    where
+    <if test="title != null">
+    title like #{title} and
+    </if>
+    <if test="description != null">
+    description like #{description} and
+    </if>
+    <if test ="imageUrl != null">
+    imageUrl like #{imageUrl} and 
+    </if>
+    <if test = "trailerUrl != null">
+    trailerUrl like #{trailerUrl} and
+    </if>
+    <if test="categories != null" array="skip">
+      categories && #{categories} and
+    </if>
+    <if test="directors != null" array="skip">
+      directors && #{directors} and
+    </if>
+    <if test="casts != null" array="skip">
+      casts && #{casts} and
+    </if>
+    <if test="productions != null" array="skip">
+      productions && #{productions} and
+    </if>
+    <if test="countries != null" array="skip">
+      countries && #{countries} and
+    </if>
+    <if test="q != null">
+      (title like #{q} or description like #{q} or imageUrl like #{q} or trailerUrl like #{trailerUrl}) and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by ${sort}
+    </if>
+  </select>
+
+  <select id="filmrate">
+    select r.*
+    <if test="userId != null">
+      ,
+      case
+        when u.reaction = 1 then true
+        else false
+      end
+        as disable
+    </if>   
+    from filmrate r
+    <if test="userId != null">
+      left join filmratereaction u
+        on u.id = r.id
+        and u.author = r.author
+        and u.userId = #{userId}
+    </if> 
+    where
+    <if test="id != null">
+      r.id = #{id} and
+    </if> 
+    <if test="author != null">
+      r.author = #{author} and
+    </if> 
+    <if test="rate != null">
+      r.rate = #{rate} and
+    </if>   
+    <if test="ratetime != null">   
+      r.time >= #{time} and
+    </if>   
+    <if test="review != null">
+      r.review like #{review} and
+    </if>
+    <if test="usefulCount != null">
+      r.usefulCount >= (#{usefulCount}) and
+    </if>    
+    1 = 1
+    <if test="sort != null">
+      order by ${sort}
+    </if>
+  </select>
+
+  <select id="filmratecomment">
+    select * from filmratecomment
+    where
+    <if test="commentId != null">
+      commentId = #{commentId} and
+    </if> 
+    <if test="id != null">
+      id = #{id} and
+    </if> 
+    <if test="author != null">
+      author = #{author} and
+    </if> 
+    <if test="userId != null">
+      userId = #{userId} and
+    </if>   
+    <if test="comment != null">
+      comment ilike #{comment} and
+    </if>  
+    <if test="time != null">
+      time >= #{time} and
+    </if>
+    <if test="updateAt != null">
+      updateAt >= #{updateAt} and
+    </if>
+    <if test="histories != null">
+      histories in #{histories} and
+    </if>
+    1 = 1
+    <if test="sort != null">
+      order by ${sort}
+    </if>
+  </select>
+</mapper>

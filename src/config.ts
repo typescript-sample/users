@@ -41,6 +41,7 @@ export const config = {
       password: '1093639f514498fbf09e803d98714b853849704783dc052aa1ef2039c60fe6e0',
       database: 'd8maa489i4calm',
       port: 5432,
+      multipleStatements: true,
       ssl: {
         rejectUnauthorized: false,
       }

@@ -1,5 +1,5 @@
 import { Log } from 'express-ext';
-import { Manager, Search,ViewSearchManager } from 'onecore';
+import {Search,ViewSearchManager } from 'onecore';
 import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Job, JobFilter, jobModel, JobRepository, JobQuery } from './job';

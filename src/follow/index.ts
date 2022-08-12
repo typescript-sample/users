@@ -1,7 +1,7 @@
 export interface Statement {
     query: string;
     params?: any[];
-  }
+}
 export class FollowRepository<ID> {
     constructor(
         public exec: (statements: Statement[], firstSuccess?: boolean, ctx?: any) => Promise<number>,
@@ -17,9 +17,10 @@ export class FollowRepository<ID> {
         public followingCount: string) {
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
+        this.checkfollow = this.checkfollow.bind(this);
     }
-    follow(id: ID, target: ID): Promise<number> {
-
+    follow(id: ID, target: ID): Promise<number | undefined> {
+        const double = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2 `
         const query1 = `insert into ${this.followingTable}(${this.id}, ${this.following}) values ($1, $2)`;
         const query2 = `insert into ${this.followerTable}(${this.followerId}, ${this.follower}) values ($1, $2)`;
         const query3 = `
@@ -30,12 +31,19 @@ export class FollowRepository<ID> {
             insert into ${this.infoTable}(${this.infoId},${this.followingCount}, ${this.followerCount})
             values ($1, 0, 1)
             on conflict (${this.infoId}) do update set ${this.followerCount} = ${this.infoTable}.${this.followerCount} + 1`;
-        return this.exec([
-            {query: query1, params: [id, target]},
-            {query: query2, params: [target, id]},
-            {query: query3, params: [id]},
-            {query: query4, params: [target]},
-        ], true);
+        return this.exec([{ query: double, params: [id, target] }], true).then(data => {
+            if (!data) {
+                return this.exec([
+                    { query: query1, params: [id, target] },
+                    { query: query2, params: [target, id] },
+                    { query: query3, params: [id] },
+                    { query: query4, params: [target] },
+                ], true);
+            }else{
+                return Promise.resolve(0);
+            }
+        })
+
     }
     unfollow(id: ID, target: ID): Promise<number> {
         const query1 = `delete from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2`;
@@ -49,10 +57,16 @@ export class FollowRepository<ID> {
         set ${this.followerCount} =${this.followerCount} - 1
         where ${this.infoId} = $1`;
         return this.exec([
-            {query: query1, params: [id,target]},
-            {query: query2, params: [target,id]},
-            {query: query3, params: [id]},
-            {query: query4, params: [target]},
+            { query: query1, params: [id, target] },
+            { query: query2, params: [target, id] },
+            { query: query3, params: [id] },
+            { query: query4, params: [target] },
+        ], true);
+    }
+    checkfollow(id: ID, target: ID): Promise<number> {
+        const check = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2 `
+        return this.exec([
+            { query: check, params: [id, target] }
         ], true);
     }
 }

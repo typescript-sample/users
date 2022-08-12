@@ -20,6 +20,7 @@ import {
   ItemController as ItemsController,
   resources,
   useBuild,
+  Load,
 } from 'express-ext';
 import {
   Controller,
@@ -28,8 +29,9 @@ import {
   ReactionController,
   SavedController,
   RateController,
-  FollowController
+  // FollowController
 } from 'express-types';
+import {FollowController,useUserInfoController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -91,6 +93,7 @@ import {
 import { useCommentController } from "./comment";
 import {
   useCompanyController,
+  useCompanyFollowController,
   useCompanyRateCommentController,
   useCompanyRateController,
   useCompanyRateReactionController
@@ -101,6 +104,7 @@ import {
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
+  useSavedFilmsController,
 } from './film';
 import { useItemController } from './items';
 import {
@@ -115,6 +119,8 @@ import {
   useLocationRateCommentController,
   useLocationRateController,
   useLocationReactionController,
+  useSavedLocationController,
+  useLocationInfomationController
 } from './location';
 import { useMyArticleController } from './my-articles';
 import {
@@ -127,7 +133,7 @@ import {
   useMyProfileController,
   UserSettings,
 } from './my-profile';
-import { useUserFollowController, useUserController } from './user';
+import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
 
@@ -157,6 +163,8 @@ export interface ApplicationContext {
   myprofile: MyProfileController;
   user: QueryController;
   userFollow: FollowController;
+  userInfo:QueryController;
+  locationInfomation:QueryController;
   skill: Query;
   interest: Query;
   lookingFor: Query;
@@ -175,6 +183,7 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
+  companyFollow:FollowController;
   backofficeCompany: Controller;
   // companyRate: RateController;
   // companyReaction: ReactionController;
@@ -208,6 +217,8 @@ export interface ApplicationContext {
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
   saveItem: SavedController;
+  saveLocation: SavedController;
+  saveFilm: SavedController;
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
@@ -326,6 +337,8 @@ export function useContext(
 
   const user = useUserController(logger.error, mainDB);
   const userFollow = useUserFollowController(logger.error, mainDB);
+  const userInfo = useUserInfoController(logger.error, mainDB, mapper);
+  const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
 
   const skillService = new StringService(
     'skill',
@@ -424,6 +437,7 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
+  const companyFollow=useCompanyFollowController(logger.error, queryDB)
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
   const companyCategory = useCompanyCategoryController(
     logger.error,
@@ -439,6 +453,8 @@ export function useContext(
   const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
 
   const saveItem=useSavedController(logger.error, queryDB)
+  const saveLocation=useSavedLocationController(logger.error, queryDB)
+  const saveFilm=useSavedFilmsController(logger.error, queryDB)
 
   const directorService = new StringService(
     'filmdirector',
@@ -628,7 +644,12 @@ export function useContext(
     backofficeLocation,
     backofficeCinema,
     saveItem,
-    locationFollow
+    locationFollow,
+    companyFollow,
+    userInfo,
+    saveLocation,
+    locationInfomation,
+    saveFilm
   };
 }
 

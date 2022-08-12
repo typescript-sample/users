@@ -1,7 +1,7 @@
-import { Log } from 'express-ext';
-import { Search, ViewSearchManager } from 'onecore';
-import { buildToSave } from 'pg-extension';
-import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { Log, SavedController } from 'express-ext';
+import { SavedService, Search, ViewSearchManager } from 'onecore';
+import { ArrayRepository, buildToSave } from 'pg-extension';
+import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info10,
@@ -110,4 +110,11 @@ export function useFilmRateCommentController(log: Log, db: DB, mapper?: Template
 
 export function generate(): string {
   return shortid.generate();
+}
+
+export function useSavedFilmsController(log: Log, db: DB): SavedController<Film> {
+  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'savedfilm', 'items', 'id');
+  const repository = new QueryRepository<Film, string>(db, 'film', filmModel);
+  const service = new SavedService(savedRepository, repository.query, 50);
+  return new SavedController<Film>(log, service, 'itemId', 'id');
 }

@@ -40,6 +40,8 @@ import {
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
 import { CompanyController } from './company-controller';
+import { FollowRepository } from '../follow';
+import { FollowController } from '../following-controller';
 
 export * from './company-controller';
 export { CompanyController };
@@ -118,4 +120,13 @@ export function useCompanyRateCommentController(log: Log, db: DB, mapper?: Templ
 
 export function generate(): string {
   return shortid.generate();
+}
+
+export function useCompanyFollowController(log: Log, db: DB): FollowController {
+  const service = new FollowRepository<string>(
+    db.execBatch,
+    'companyfollowing', 'id', 'following',
+    'companyfollower', 'id', 'follower',
+    'companyinfo', 'id', 'followerCount', 'followingCount');
+  return new FollowController(log, service, 'id', 'target');
 }
