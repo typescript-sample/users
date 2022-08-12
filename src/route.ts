@@ -324,4 +324,13 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/jobs/:id', ctx.backofficeJob.update);
   app.patch('/backoffice/jobs/:id', ctx.backofficeJob.patch);
   app.delete('/backoffice/jobs/:id', ctx.backofficeJob.delete);
+
+
+  app.post('/backoffice/rooms/search', ctx.backofficeRoom.search);
+  app.get('/backoffice/rooms/search', ctx.backofficeRoom.search);
+  app.get('/backoffice/rooms/:id', ctx.backofficeRoom.load);
+  app.post('/backoffice/rooms/', ctx.backofficeRoom.create);
+  app.put('/backoffice/rooms/:id', ctx.backofficeRoom.update);
+  app.patch('/backoffice/rooms/:id', ctx.backofficeRoom.patch);
+  app.delete('/backoffice/rooms/:id', ctx.backofficeRoom.delete);
 }

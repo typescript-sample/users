@@ -21,11 +21,11 @@ const middleware = new MiddlewareLogger(logger.info, conf.middleware);
 const app = express();
 
 app.use(allow(conf.allow), json(), cookieParser(), middleware.log);
-const templates = loadTemplates(conf.template, buildTemplates, trim, [
-  './configs/film.xml',
-  './configs/cinema.xml'
-]);
-// const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/job.xml']);
+// const templates = loadTemplates(conf.template, buildTemplates, trim, [
+//   './configs/film.xml',
+//   './configs/cinema.xml'
+// ]);
+const templates = loadTemplates(conf.template, buildTemplates, trim, ['./configs/job.xml']);
 const db = log(new PoolManager(new Pool(conf.db.user)), true, logger, 'postgres');
 const pool = new Pool(conf.db.query);
 const queryDB = new PoolManager(pool);

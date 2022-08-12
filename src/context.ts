@@ -133,6 +133,7 @@ import {
 } from './my-profile';
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items';
+import { useBackOfficeRoomController } from './backoffice/room';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -218,6 +219,7 @@ export interface ApplicationContext {
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
+  backofficeRoom:Controller;
 }
 
 export function useContext(
@@ -575,6 +577,7 @@ export function useContext(
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
+  const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
 
   //company-rate
   const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
@@ -643,7 +646,8 @@ export function useContext(
     userInfo,
     saveLocation,
     locationInfomation,
-    saveFilm
+    saveFilm,
+    backofficeRoom
   };
 }
 
