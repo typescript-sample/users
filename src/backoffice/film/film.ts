@@ -1,7 +1,7 @@
 import { Attributes, Filter, Info10, Repository, Service } from 'onecore';
 
 export interface FilmFilter extends Filter {
-  filmId?: string;
+  id?: string;
   title?: string;
   description?: string;
   imageUrl?: string;
@@ -17,7 +17,7 @@ export interface FilmFilter extends Filter {
 }
 
 export interface Film {
-  filmId: string;
+  id: string;
   title: string;
   status: string;
   description?: string;
@@ -39,7 +39,7 @@ export interface FilmService extends Service<Film, string, FilmFilter> {
 }
 
 export const filmModel: Attributes = {
-  filmId: {
+  id: {
     key: true,
     length: 40
   },
