@@ -1,5 +1,5 @@
 import { Log, SavedController } from 'express-ext';
-import {  Search, ViewSearchManager } from 'onecore';
+import {  SavedService, Search, ViewSearchManager } from 'onecore';
 // import { SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository, buildToSave } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
@@ -34,7 +34,6 @@ import {
   SqlReactionRepository,
 } from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
-import { SavedService } from '../save/save-repository';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
 
@@ -117,6 +116,6 @@ export function generate(): string {
 export function useSavedFilmsController(log: Log, db: DB): SavedController<Film> {
   const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'savedfilm', 'items', 'id');
   const repository = new QueryRepository<Film, string>(db, 'film', filmModel);
-  const service = new SavedService(savedRepository, repository.query, 50);
+  const service = new SavedService<string, Film>(savedRepository, repository.query, 50);
   return new SavedController<Film>(log, service, 'itemId', 'id');
 }
