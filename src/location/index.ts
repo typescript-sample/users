@@ -1,6 +1,6 @@
 import { FollowController } from 'express-ext';
 import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
-import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { BuildUrl, Generate, Log, SavedService, Search,ViewSearchManager } from 'onecore';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Delete, StorageRepository } from 'google-storage';

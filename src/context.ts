@@ -134,9 +134,9 @@ import {
 } from './my-profile';
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
-import { UploadController } from 'upload-express';
 import { FilmUploadController } from 'film/film-controller';
 import { useBackOfficeRoomController } from './backoffice/room';
+import { AppreciationController } from 'appreciation copy/appreciation-controller';
 
 resources.createValidator = createValidator;
 
