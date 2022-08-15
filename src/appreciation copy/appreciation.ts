@@ -8,10 +8,7 @@ export interface AppreciationFilter extends Filter {
   createAt?: Date;
   replyCount?: number;
 }
-export interface AppreciationId {
-  id: string;
-  author: string;
-}
+
 export interface Appreciation {
   id: string;
   author: string;
@@ -26,35 +23,32 @@ export interface Appreciation {
 export interface Histories {
   time: Date;
   review: string;
-  title: string;
+  // title: string;
 }
-export interface AppreciationRepository extends Repository<Appreciation, AppreciationId> {
-  getAppreciation(id: string, author: string): Promise<Appreciation | null>;
-  increaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
-  decreaseReplyCount(id: string, author: string, ctx?: any): Promise<number>;
+export interface AppreciationRepository {
+  load(id: string, author: string): Promise<Appreciation | null>;
+  insert(obj: Appreciation, newInfo?: boolean): Promise<number>;
+  update(obj: Appreciation): Promise<number>;
+  delete(id: string, author: string, ctx?: any): Promise<number>;
 }
-export interface AppreciationService extends Service<Appreciation, AppreciationId, AppreciationFilter> {
-  reply(reply: Reply): Promise<boolean>;
-  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  updateReply(reply: Reply): Promise<number>;
-  setUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  getReplys(id: string, author: string, ctx?: any): Promise<Reply[]>;
+export interface AppreciationService {
+  response(response: Appreciation): Promise<number>;
 }
 
 export const appreciationModel: Attributes = {
   id: {
     key: true,
-    length: 40,
+    match: 'equal',
     required: true,
   },
   author: {
     key: true,
     required: true,
-    length: 255,
+    match: 'equal',
   },
-  title: {
-    length: 255
-  },
+  // title: {
+  //   length: 255
+  // },
   review: {
     length: 255
   },
@@ -64,12 +58,16 @@ export const appreciationModel: Attributes = {
   updateAt: {
     type: 'datetime'
   },
-  histories: {
-
+  usefulCount: {
+    type: 'integer',
+    min: 0,
   },
   replyCount: {
     type: 'integer',
     min: 0
+  },
+  histories:{
+    
   }
 };
 

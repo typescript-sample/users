@@ -104,6 +104,7 @@ import {
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
+  useFilmUploadController,
   useSavedFilmsController,
 } from './film';
 import { useItemController } from './items';
@@ -136,6 +137,8 @@ import {
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
+import { AppreciationController } from 'appreciation copy/appreciation-controller';
+import { FilmUploadController } from 'film/film-controller';
 
 resources.createValidator = createValidator;
 
@@ -171,7 +174,7 @@ export interface ApplicationContext {
   educationQuery: Query;
   companyQuery: Query;
 
-  appreciation: RateController;
+  appreciation: AppreciationController;
   appreciationComment: QueryController;
   appreciationReaction: ReactionController;
 
@@ -196,6 +199,7 @@ export interface ApplicationContext {
   filmReaction: ReactionController;
   filmComment: QueryController;
   filmCategory: Controller;
+  filmUpload:FilmUploadController;
   director: Query;
   cast: Query;
   production: Query;
@@ -523,6 +527,20 @@ export function useContext(
   );
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
+  const filmUpload = useFilmUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
+
   const location = useLocationController(logger.error, queryDB, mapper);
   const backofficeLocation = useBackOfficeLocationController(logger.error, queryDB, mapper);
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
@@ -617,6 +635,7 @@ export function useContext(
     filmReaction,
     filmComment,
     filmCategory,
+    filmUpload,
     director,
     cast,
     production,

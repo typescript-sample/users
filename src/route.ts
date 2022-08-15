@@ -69,16 +69,15 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkfollow)
   app.get('/users/loadfollow/:id/', ctx.userInfo.load)
   
-  app.get('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
-  app.post('/appreciation/:id/rates/search', ctx.appreciationReaction.search);
-  app.post('/appreciation/:id/rates/:author', ctx.appreciation.rate);
-  app.post('/appreciation/:id/rates/:author/useful/:userId', ctx.appreciationReaction.setUseful);
-  app.delete('/appreciation/:id/rates/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
-  app.get('/appreciation/:id/rates/:author/comment', ctx.appreciationReaction.getComments);
-  app.post('/appreciation/:id/rates/:author/comment/:userId', ctx.appreciationReaction.comment);
-  app.put('/appreciation/:id/rates/:author/comment/:userId/:commentId', ctx.appreciationReaction.updateComment);
-  app.delete('/appreciation/:id/rates/:author/comment/:commentId', ctx.appreciationReaction.removeComment);
-
+  app.get('/appreciation/rates/search', ctx.appreciationReaction.search);
+  app.post('/appreciation/rates/search', ctx.appreciationReaction.search);
+  app.post('/appreciation/rates/:id/:author', ctx.appreciation.reply);  
+  app.post('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.setUseful);
+  app.delete('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
+  app.get('/appreciation/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
+  app.post('/appreciation/rates/:id/:author/comments/:userId', ctx.appreciationReaction.comment);
+  app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId/', ctx.appreciationReaction.updateComment);
+  app.delete('/appreciation/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
 
   // app.get('/appreciation/search', ctx.appreciation.search);
   // app.get('/appreciation/search', ctx.appreciation.search);
@@ -171,7 +170,25 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/films/:id', ctx.backOfficeFilm.update);
   app.patch('/backoffice/films/:id', ctx.backOfficeFilm.patch);
   app.delete('/backoffice/films/:id', ctx.backOfficeFilm.delete);
-
+  app.post(
+    '/backoffice/films/:id/upload',
+    parser.array('files'),
+    ctx.filmUpload.uploadImage
+  );
+  app.post(
+    '/backoffice/films/:id/cover',
+    parser.array('files'),
+    ctx.filmUpload.uploadCover
+  );
+  app.post(
+    '/backoffice/films/:id/gallery',
+    parser.single('file'),
+    ctx.filmUpload.uploadGallery
+  );
+  app.get(
+    '/backoffice/films/:id/fetchImageGalleryUploaded',
+    ctx.filmUpload.getGallery
+  );
 
   app.get('/films/:id/rates/search', ctx.filmReaction.search);
   app.post('/films/:id/rates/search', ctx.filmReaction.search);

@@ -1,7 +1,9 @@
 import { Log, SavedController } from 'express-ext';
-import { SavedService, Search, ViewSearchManager } from 'onecore';
+import { StorageRepository } from 'google-storage';
+import { GenericSearchStorageService, ModelConf, Delete, StorageConf, UploadInfo } from 'one-storage';
+import { BuildUrl, Generate, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository, buildToSave } from 'pg-extension';
-import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info10,
@@ -34,6 +36,7 @@ import {
 } from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
+import { UploadService } from 'upload-express';
 import { check } from 'xvalidators';
 
 import {
@@ -42,8 +45,9 @@ import {
   filmModel,
   FilmRepository,
   FilmQuery,
+  FilmUploadRepository,
 } from './film';
-import { FilmController } from './film-controller';
+import { FilmController, FilmUploadController } from './film-controller';
 
 export { FilmController };
 
@@ -68,6 +72,31 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
           return film;
         });
       }
+    });
+  }
+}
+
+export class FilmUploadService extends GenericSearchStorageService<Film, string, FilmFilter> implements UploadService {
+  constructor(
+    search: Search<Film, FilmFilter>,
+    repository: FilmUploadRepository,
+    storage: StorageRepository,
+    deleteFile: Delete,
+    generateId: Generate,
+    buildUrl: BuildUrl,
+    sizesCover: number[],
+    sizesImage: number[],
+    config?: StorageConf,
+    model?: ModelConf
+  ) {
+    super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  }
+  async getGalllery(id: string): Promise<UploadInfo[]> {
+    return this.repository.load(id).then((item) => {
+      if (item) {
+        return (item as any)[this.model.gallery];
+      }
+      return [];
     });
   }
 }
@@ -117,4 +146,16 @@ export function useSavedFilmsController(log: Log, db: DB): SavedController<Film>
   const repository = new QueryRepository<Film, string>(db, 'film', filmModel);
   const service = new SavedService(savedRepository, repository.query, 50);
   return new SavedController<Film>(log, service, 'itemId', 'id');
+}
+export function useFilmUploadService(db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadService {
+  const queryItems = useQuery('film', mapper, filmModel, true);
+  const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, postgres, queryItems);
+  const repository = new Repository<Film, string>(db, 'film', filmModel);
+  return new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+}
+
+export function useFilmUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): FilmUploadController {
+  return new FilmUploadController(log, useFilmUploadService(db, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper), generateId, sizesCover, sizesImage);
 }
