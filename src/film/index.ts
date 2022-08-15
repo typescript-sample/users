@@ -100,6 +100,7 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
     });
   }
 }
+
 export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, db.driver, query);

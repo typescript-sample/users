@@ -70,7 +70,7 @@ import {
   useAppreciationController,
   useAppreciationCommentController,
   useAppreciationReactionController
-} from './appreciation copy';
+} from './appreciation';
 import { useArticleController } from './article';
 import { useBackOfficeCompanyController } from './backoffice/company';
 import { useBackOfficeFilmController } from './backoffice/film';
@@ -136,7 +136,7 @@ import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { FilmUploadController } from 'film/film-controller';
 import { useBackOfficeRoomController } from './backoffice/room';
-import { AppreciationController } from 'appreciation copy/appreciation-controller';
+import { AppreciationController } from 'appreciation/appreciation-controller';
 
 resources.createValidator = createValidator;
 
