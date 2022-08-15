@@ -9,13 +9,13 @@
         id = (#{id}) and
     </if>
     <if test="title != null">
-        title like #{title} and
+        title ilike #{title} and
     </if>
     <if test="status != null">
-        status like #{status} and
+        status ilike #{status} and
     </if>
     <if test="description != null">
-        description like #{description} and
+        description ilike #{description} and
     </if>
     <if test="brand != null">
         brand in (#{brand}) and
@@ -30,11 +30,11 @@
         categories && #{categories} and
     </if>
     <if test="q != null">
-        (title like #{q} or description like #{q} and
+        (title ilike #{q} or description ilike #{q} and
     </if>
         1 = 1
-        <if test="sort != null">
-      order by {sort}
+    <if test="sort != null">
+      order by ${sort}
     </if>
   </select>
 </mapper>

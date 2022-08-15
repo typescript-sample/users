@@ -1,8 +1,7 @@
-import { FollowRepository } from '../follow';
-import { FollowController } from '../following-controller';
+import { FollowController } from 'express-ext';
+import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
+import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { BuildUrl, Generate, Log, SavedService, Search,ViewSearchManager } from 'onecore';
-import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Delete, StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
@@ -288,8 +287,7 @@ export function generate(): string {
 }
 
 export function useLocationFollowController(log: Log, db: DB): FollowController {
-
-  const service = new FollowRepository<string>(
+  const service = new FollowService<string>(
     db.execBatch,
     'locationfollowing', 'id', 'following',
     'locationfollower', 'id', 'follower',
@@ -299,7 +297,7 @@ export function useLocationFollowController(log: Log, db: DB): FollowController 
 export function useSavedLocationController(log: Log, db: DB): SavedController<Location> {
   const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'savedlocation', 'items', 'id');
   const repository = new QueryRepository<Location, string>(db, 'location', locationModel);
-  const service = new SavedService(savedRepository, repository.query, 50);
+  const service = new SavedService<string, Location>(savedRepository, repository.query, 50);
   return new SavedController<Location>(log, service, 'itemId', 'id');
 }
 

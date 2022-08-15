@@ -144,7 +144,7 @@ export function generate(): string {
 export function useSavedFilmsController(log: Log, db: DB): SavedController<Film> {
   const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'savedfilm', 'items', 'id');
   const repository = new QueryRepository<Film, string>(db, 'film', filmModel);
-  const service = new SavedService(savedRepository, repository.query, 50);
+  const service = new SavedService<string, Film>(savedRepository, repository.query, 50);
   return new SavedController<Film>(log, service, 'itemId', 'id');
 }
 export function useFilmUploadService(db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],

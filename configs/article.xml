@@ -6,25 +6,25 @@
     select * from article
     where
     <if test="id != null">
-      id in (#{id}) and
+      id = (#{id}) and
     </if>
     <if test="title != null">
-      title like #{title} and
+      title ilike #{title} and
     </if>
     <if test="type != null">
-      status like #{status} and
+      status ilike #{status} and
     </if>
     <if test="description != null">
       description ilike #{description} and
     </if>
     <if test="content != null">
-      content like #{content} and
+      content ilike #{content} and
     </if>
     <if test="tags != null">
-      tags like #{tags} and
+      tags ilike #{tags} and
     </if>
     <if test="status != null">
-      status like #{status} and
+      status ilike #{status} and
     </if>
     <if test="authorId != null">
       authorId in #{authorId} and
@@ -34,7 +34,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 </mapper>

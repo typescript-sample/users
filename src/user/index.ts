@@ -1,5 +1,3 @@
-import { FollowRepository } from '../follow';
-import { FollowController } from '../following-controller';
 import { Log, ViewManager, ViewSearchManager, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -17,6 +15,8 @@ import {
   UserInfoFilter
 } from './user';
 import { UserController, UserInFoController } from './user-controller';
+import { FollowService } from 'pg-extension';
+import { FollowController } from 'express-ext';
 export * from './user';
 export * from './user-controller';
 
@@ -45,14 +45,13 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserC
 
 export function useUserFollowController(log: Log, db: DB): FollowController {
 
-  const service = new FollowRepository<string>(
+  const service = new FollowService<string>(
     db.execBatch,
     'userfollowing', 'id', 'following',
     'userfollower', 'id', 'follower',
     'userinfo', 'id', 'followerCount', 'followingCount');
   return new FollowController(log, service, 'id', 'target');
 }
-export { FollowController };
 
 export { UserInFoController };
 

@@ -19,8 +19,7 @@ import {
   ModelConfig,
   ItemController as ItemsController,
   resources,
-  useBuild,
-  Load,
+  useBuild
 } from 'express-ext';
 import {
   Controller,
@@ -29,9 +28,10 @@ import {
   ReactionController,
   SavedController,
   RateController,
-  // FollowController
+  FollowController,
+  UploadController
 } from 'express-types';
-import {FollowController,useUserInfoController} from './user'
+import {useUserInfoController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -93,12 +93,10 @@ import {
 import { useCommentController } from "./comment";
 import {
   useCompanyController,
-  useCompanyFollowController,
   useCompanyRateCommentController,
   useCompanyRateController,
   useCompanyRateReactionController
 } from './company';
-import { RateCriteria, RateCriteriaFilter } from './company/company';
 import {
   useFilmController,
   useFilmRateCommentController,
@@ -137,8 +135,8 @@ import {
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { UploadController } from 'upload-express';
-import { AppreciationController } from 'appreciation copy/appreciation-controller';
 import { FilmUploadController } from 'film/film-controller';
+import { useBackOfficeRoomController } from './backoffice/room';
 
 resources.createValidator = createValidator;
 
@@ -186,7 +184,6 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
-  companyFollow:FollowController;
   backofficeCompany: Controller;
   // companyRate: RateController;
   // companyReaction: ReactionController;
@@ -220,12 +217,14 @@ export interface ApplicationContext {
   jobs: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
+  // saveItem: SavedController;
   saveItem: SavedController;
   saveLocation: SavedController;
   saveFilm: SavedController;
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
+  backofficeRoom:Controller;
 }
 
 export function useContext(
@@ -441,7 +440,6 @@ export function useContext(
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
-  const companyFollow=useCompanyFollowController(logger.error, queryDB)
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
   const companyCategory = useCompanyCategoryController(
     logger.error,
@@ -598,6 +596,7 @@ export function useContext(
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
+  const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
 
   //company-rate
   const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
@@ -664,11 +663,11 @@ export function useContext(
     backofficeCinema,
     saveItem,
     locationFollow,
-    companyFollow,
     userInfo,
     saveLocation,
     locationInfomation,
-    saveFilm
+    saveFilm,
+    backofficeRoom
   };
 }
 

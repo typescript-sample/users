@@ -6,3 +6,4 @@ export class ItemController extends QueryController<Item, string, ItemFilter> {
     super(log, itemQuery);
   }
 }
+

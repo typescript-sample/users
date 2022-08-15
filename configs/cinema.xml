@@ -18,14 +18,14 @@
       status in (#{status}) and
     </if>
     <if test="parent != null">
-      parent ilike #{parent} and
+      parent = #{parent} and
     </if>
     <if test="q != null">
-      (name like #{q} ) and
+      (name like #{q}) and
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -60,14 +60,14 @@
       r.time >= #{time} and
     </if>   
     <if test="review != null">
-      r.review like #{review} and
+      r.review ilike #{review} and
     </if>
     <if test="usefulCount != null">
       r.usefulCount >= (#{usefulCount}) and
     </if>    
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 
@@ -100,7 +100,7 @@
     </if>
     1 = 1
     <if test="sort != null">
-      order by {sort}
+      order by ${sort}
     </if>
   </select>
 </mapper>

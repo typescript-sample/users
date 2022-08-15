@@ -765,3 +765,32 @@ INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('
 INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00008','The Adam Project','http://photos.q00gle.com/storage/files/images-2021/images-movies/09/622b6789e7084.jpg','https://youtu.be/IE8HIsIrq4o','{action,comedy,adventure}','A');
 INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00009','Spider-Man: No Way Home','https://gamek.mediacdn.vn/133514250583805952/2021/11/17/photo-1-1637118381839432740223.jpg','https://www.youtube.com/watch?v=OB3g37GTALc','{action,adventure,fantasy}','A');
 INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00010','Dune','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/d/u/dune-poster-1.jpg','https://youtu.be/8g18jFHCLXk','{action,adventure,drama}','A');
+
+create table room(
+  id varchar(255)  primary key,
+  title varchar(255),
+  description varchar(1000),
+  price integer,
+  offer character varying[],
+  location varchar(255),
+  host varchar(255),
+  guest integer,
+  room character varying[],
+  highlight character varying[],
+  status CHAR(1) NOT NULL,
+)
+
+insert into room ( id,title,description,price,offer,location,host,guest,room,highlight,status) 
+values (
+  '01',
+  'KHU NGHỈ DƯỠNG PIUGUS',
+  'Piugus resort tọa lạc tại một hòn đảo nhỏ tư nhân tại Anambas. Toàn bộ biệt thự được xây dựng từ gỗ tự nhiên.',
+  '500',
+  '{Máy giặt,Sân hoặc ban công,Điều hòa nhiệt độ,Bữa sáng,Cho phép ở dài hạn,Cho phép hút thuốc}',
+  'Anambas, Kepulauan Riau, Indonesia',
+  'Herry',
+  '5',
+  '{1 phòng ngủ ,1 giường,1 phòng tắm chung}',
+  '{Self check-in,Great location,Dive right in}',
+  'A'
+  )
