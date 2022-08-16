@@ -3,7 +3,6 @@ import { SavedController } from 'express-ext';
 import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, QueryRepository, Repository, SearchBuilder } from 'query-core';
-import { stringify } from 'uuid';
 import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, } from './item';
 import { ItemController } from './item-controller';
 import { buildQuery } from './query';
@@ -24,7 +23,6 @@ export function useItemController(log: Log, db: DB): ItemController {
   const service = new ItemManager(builder.search, repository, saveItemRepository, savedItemMax);
   return new ItemController(log, service);
 }
-
 
 
 export function useSavedController(log: Log, db: DB): SavedController<Item> {

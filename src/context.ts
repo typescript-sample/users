@@ -136,6 +136,8 @@ import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
 import { AppreciationController } from './appreciation/appreciation-controller';
 import { FilmUploadController } from './backoffice/film/film-controller';
+import { useMusicController } from './music';
+import { useBackOfficeMusicController } from './backoffice/music';
 import { LocationUploadController } from 'backoffice/location/location-controller';
 import { CinemaUploadController } from './backoffice/cinema/cinema-controller';
 
@@ -229,6 +231,8 @@ export interface ApplicationContext {
   criteriaRate: RateController;
   criteriaComment: QueryController;
   backofficeRoom:Controller;
+  music: QueryController;
+  backofficeMusic: Controller;
 }
 
 export function useContext(
@@ -640,7 +644,8 @@ export function useContext(
   const jobs = useJobController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
   const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
-
+  const music = useMusicController(logger.error, mainDB, mapper);
+  const backofficeMusic = useBackOfficeMusicController(logger.error, mainDB, mapper);
   //company-rate
   const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
   const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
@@ -706,7 +711,6 @@ export function useContext(
     backofficeLocation,
     backofficeLocationUpload,
     backofficeCinema,
-    backofficeCinemaUpload,
     saveItem,
     locationFollow,
     userInfo,

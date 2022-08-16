@@ -71,7 +71,7 @@
     <if test="rate != null">
       r.rate = #{rate} and
     </if>   
-    <if test="ratetime != null">   
+    <if test="time != null">   
       r.time >= #{time} and
     </if>   
     <if test="review != null">
