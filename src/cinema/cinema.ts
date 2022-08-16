@@ -1,3 +1,4 @@
+import { fileUploadGalleryModel } from '../my-profile';
 import { Attributes, Filter, Info, Query, Repository } from 'onecore';
 
 export interface CinemaFilter extends Filter {
@@ -8,14 +9,14 @@ export interface CinemaFilter extends Filter {
   status?: string;
   latitude?: number;
   longtitude?: number;
-  imageUrl?: string;
+  imageURL?: string;
   createdBy?: Date;
   createAt?: Date;
   createdAt?: Date;
   updatedBy?: Date;
   updatedAt?: Date;
   gallery?: string;
-  coverUrl?: string;
+  coverURL?: string;
   info?: Info;
 }
 
@@ -42,14 +43,7 @@ export interface CinemaRepository extends Repository<Cinema, string> {}
 
 export interface CinemaQuery extends Query<Cinema, string, CinemaFilter> {}
 
-export const galleryModel: Attributes = {
-  url: {
-    required: true,
-  },
-  type: {
-    required: true,
-  },
-};
+
 
 export const cinemaModel: Attributes = {
   id: {
@@ -75,7 +69,7 @@ export const cinemaModel: Attributes = {
   longitude: {
     length: 255,
   },
-  imageUrl: {},
+  imageURL: {},
   createdBy: {},
   createdAt: {
     column: 'createdat',
@@ -87,9 +81,8 @@ export const cinemaModel: Attributes = {
     type: 'datetime',
   },
   gallery: {
-    column: 'gallery',
     type: 'array',
-    typeof: galleryModel,
+    typeof: fileUploadGalleryModel,
   },
-  coverUrl: {},
+  coverURL: {},
 };

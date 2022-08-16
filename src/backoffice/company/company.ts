@@ -1,3 +1,5 @@
+import { fileUploadGalleryModel } from '../../my-profile';
+import { UploadInfo } from 'one-storage';
 import { Attributes, Filter, NumberRange, Repository, Service } from 'onecore';
 
 export interface Company {
@@ -9,6 +11,9 @@ export interface Company {
   status: string;
   establishedAt: Date;
   categories: string[];
+  imageURL?: string;
+  coverURL?: string;
+  gallery?: UploadInfo[];
 }
 
 export interface CompanyFilter extends Filter {
@@ -52,4 +57,10 @@ export const companyModel: Attributes = {
   categories: {
     type: 'strings',
   },
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
+  },
+  coverURL: {},
+  iamgeURL: {},
 };

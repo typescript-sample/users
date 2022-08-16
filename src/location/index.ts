@@ -87,7 +87,7 @@ export class LocationService
   }
 }
 
-export class FilmUploadService extends GenericSearchStorageService<Location, string, LocationFilter> implements UploadService {
+export class LocationUploadService extends GenericSearchStorageService<Location, string, LocationFilter> implements UploadService {
   constructor(
     search: Search<Location, LocationFilter>,
     repository: LocationRepository,
@@ -319,7 +319,7 @@ export function useLocationUploadService(db: DB, storage: StorageRepository, del
   const queryItems = useQuery('item', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(db.query, 'item', locationModel, postgres, queryItems);
   const repository = new Repository<Location, string>(db, 'item', locationModel);
-  return new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
 }
 
 export function useLocationUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],

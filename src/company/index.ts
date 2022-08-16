@@ -1,7 +1,7 @@
 
-import { Log, Search, ViewSearchManager } from 'onecore';
+import { BuildUrl, Delete, Generate, Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, postgres, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
@@ -40,6 +40,9 @@ import {
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
 import { CompanyController } from './company-controller';
+import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
+import { StorageRepository } from 'google-storage';
+import { UploadService } from 'upload-express';
 
 export * from './company-controller';
 export { CompanyController };
@@ -119,3 +122,4 @@ export function useCompanyRateCommentController(log: Log, db: DB, mapper?: Templ
 export function generate(): string {
   return shortid.generate();
 }
+

@@ -180,6 +180,12 @@ export const rateCriteriaModel: Attributes = {
     type: 'datetime'
   },
   review: {},
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
+  },
+  coverURL: {},
+  iamgeURL: {},
 };
 
 

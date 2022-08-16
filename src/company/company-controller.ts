@@ -1,4 +1,5 @@
 import { QueryController, Log } from 'express-ext';
+
 import { Company, CompanyFilter, CompanyQuery } from './company';
 
 export class CompanyController extends QueryController<Company, string, CompanyFilter> {
@@ -6,3 +7,4 @@ export class CompanyController extends QueryController<Company, string, CompanyF
     super(log, companyService);
   }
 }
+

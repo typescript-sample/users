@@ -73,7 +73,7 @@ import {
 } from './appreciation';
 import { useArticleController } from './article';
 import { useBackOfficeCompanyController } from './backoffice/company';
-import { useBackOfficeFilmController } from './backoffice/film';
+import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
 import { useBackOfficeLocationController } from './backoffice/location';
 import {
@@ -102,7 +102,6 @@ import {
   useFilmRateCommentController,
   useFilmRateController,
   useFilmReactionController,
-  useFilmUploadController,
   useSavedFilmsController,
 } from './film';
 import { useItemController } from './items';
@@ -134,9 +133,9 @@ import {
 } from './my-profile';
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
-import { FilmUploadController } from 'film/film-controller';
 import { useBackOfficeRoomController } from './backoffice/room';
-import { AppreciationController } from 'appreciation/appreciation-controller';
+import { AppreciationController } from './appreciation/appreciation-controller';
+import { FilmUploadController } from './backoffice/film/film-controller';
 
 resources.createValidator = createValidator;
 
