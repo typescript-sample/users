@@ -31,6 +31,7 @@ const templates = loadTemplates(conf.template, buildTemplates, trim, [
   './configs/job.xml',
   './configs/location.xml',
   './configs/user.xml',
+  './configs/music.xml',
 ]);
 const db = log(new PoolManager(new Pool(conf.db.user)), true, logger, 'postgres');
 const pool = new Pool(conf.db.query);
