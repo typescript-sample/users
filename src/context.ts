@@ -72,10 +72,10 @@ import {
   useAppreciationReactionController
 } from './appreciation';
 import { useArticleController } from './article';
-import { useBackOfficeCompanyController } from './backoffice/company';
+import { CompanyUploadController, useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
 import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
-import { useBackOfficeLocationController } from './backoffice/location';
+import { useBackOfficeLocationController, useLocationUploadController } from './backoffice/location';
 import {
   useCompanyCategoryController,
   useFilmCategoryController,
@@ -88,7 +88,7 @@ import {
   useCinemaReactionController,
 } from "./cinema";
 import {
-  useBackOfficeCinemaController
+  useBackOfficeCinemaController, useCinemaUploadController
 } from "./backoffice/cinema";
 import { useCommentController } from "./comment";
 import {
@@ -136,6 +136,8 @@ import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
 import { AppreciationController } from './appreciation/appreciation-controller';
 import { FilmUploadController } from './backoffice/film/film-controller';
+import { LocationUploadController } from 'backoffice/location/location-controller';
+import { CinemaUploadController } from './backoffice/cinema/cinema-controller';
 
 resources.createValidator = createValidator;
 
@@ -179,11 +181,13 @@ export interface ApplicationContext {
   myarticles: Controller;
   cinema: QueryController;
   backofficeCinema: Controller;
+  backofficeCinemaUpload: CinemaUploadController;
   cinemaRate: RateController;
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
   backofficeCompany: Controller;
+  backofficeCompanyUpload: CompanyUploadController;
   // companyRate: RateController;
   // companyReaction: ReactionController;
   // companyComment: QueryController;
@@ -195,7 +199,7 @@ export interface ApplicationContext {
   filmReaction: ReactionController;
   filmComment: QueryController;
   filmCategory: Controller;
-  filmUpload:FilmUploadController;
+  backOfficeFilmUpload:FilmUploadController;
   director: Query;
   cast: Query;
   production: Query;
@@ -209,6 +213,7 @@ export interface ApplicationContext {
   myitemsUpload: UploadController;
   location: QueryController;
   backofficeLocation: Controller;
+  backofficeLocationUpload: LocationUploadController;
   locationRate: RateController;
   locationReaction: ReactionController;
   locationComment: QueryController;
@@ -440,6 +445,19 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
+  const backofficeCompanyUpload = useCompanyUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
   const companyCategory = useCompanyCategoryController(
     logger.error,
     queryDB,
@@ -452,6 +470,19 @@ export function useContext(
   const cinemaComment = useCinemaRateCommentController(logger.error,queryDB,mapper);
 
   const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
+  const backofficeCinemaUpload = useCinemaUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
 
   const saveItem=useSavedController(logger.error, queryDB)
   const saveLocation=useSavedLocationController(logger.error, queryDB)
@@ -524,7 +555,7 @@ export function useContext(
   );
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
-  const filmUpload = useFilmUploadController(
+  const backOfficeFilmUpload = useFilmUploadController(
     logger.error,
     queryDB,
     storageRepository,
@@ -540,6 +571,19 @@ export function useContext(
 
   const location = useLocationController(logger.error, queryDB, mapper);
   const backofficeLocation = useBackOfficeLocationController(logger.error, queryDB, mapper);
+  const backofficeLocationUpload = useLocationUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
   const locationComment = useLocationRateCommentController(
@@ -633,7 +677,7 @@ export function useContext(
     filmReaction,
     filmComment,
     filmCategory,
-    filmUpload,
+    backOfficeFilmUpload,
     director,
     cast,
     production,
@@ -657,9 +701,12 @@ export function useContext(
     criteriaComment,
     backOfficeFilm,
     backofficeCompany,
+    backofficeCompanyUpload,
     backofficeJob,
     backofficeLocation,
+    backofficeLocationUpload,
     backofficeCinema,
+    backofficeCinemaUpload,
     saveItem,
     locationFollow,
     userInfo,

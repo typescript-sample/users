@@ -62,5 +62,5 @@ export const companyModel: Attributes = {
     typeof: fileUploadGalleryModel,
   },
   coverURL: {},
-  iamgeURL: {},
+  imageURL: {},
 };
