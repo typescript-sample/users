@@ -144,7 +144,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.deleteGalleryFile);
   app.post('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.addExternalResource);
   app.delete('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.deleteExternalResource);
-
+  app.get('/backoffice/cinemas/:id/fetchImageGalleryUploaded',ctx.backofficeCinemaUpload.getGallery);
 
   app.get('/cinemas/rates/search', ctx.cinemaReaction.search);
   app.post('/cinemas/rates/search', ctx.cinemaReaction.search);
@@ -180,25 +180,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/films/:id', ctx.backOfficeFilm.update);
   app.patch('/backoffice/films/:id', ctx.backOfficeFilm.patch);
   app.delete('/backoffice/films/:id', ctx.backOfficeFilm.delete);
-  app.post(
-    '/backoffice/films/:id/upload',
+  app.post('/backoffice/films/:id/upload',
     parser.array('files'),
     ctx.backOfficeFilmUpload.uploadImage
   );
-  app.post(
-    '/backoffice/films/:id/cover',
+  app.post('/backoffice/films/:id/cover',
     parser.array('files'),
     ctx.backOfficeFilmUpload.uploadCover
   );
-  app.post(
-    '/backoffice/films/:id/gallery',
+  app.post('/backoffice/films/:id/gallery',
     parser.single('file'),
     ctx.backOfficeFilmUpload.uploadGallery
   );
-  app.get(
-    '/backoffice/films/:id/fetchImageGalleryUploaded',
-    ctx.backOfficeFilmUpload.getGallery
-  );
+  app.get('/backoffice/films/:id/fetchImageGalleryUploaded',ctx.backOfficeFilmUpload.getGallery);
 
   app.get('/films/rates/search', ctx.filmReaction.search);
   app.post('/films/rates/search', ctx.filmReaction.search);
@@ -291,7 +285,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.deleteGalleryFile);
   app.post('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.addExternalResource);
   app.delete('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.deleteExternalResource);
-
+  app.get('/backoffice/locations/:id/fetchImageGalleryUploaded',ctx.backofficeLocationUpload.getGallery);
 
   app.get('/locations/rates/search', ctx.locationReaction.search);
   app.post('/locations/rates/search', ctx.locationReaction.search);
@@ -335,7 +329,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.deleteGalleryFile);
   app.post('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.addExternalResource);
   app.delete('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.deleteExternalResource);
-
+  app.get('/backoffice/companies/:id/fetchImageGalleryUploaded',ctx.backofficeCompanyUpload.getGallery);
 
   app.get('/companies/categories/search', ctx.companyCategory.search);
   app.get('/companies/categories/:id', ctx.companyCategory.load);
@@ -379,7 +373,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/backoffice/rooms/:id', ctx.backofficeRoom.patch);
   app.delete('/backoffice/rooms/:id', ctx.backofficeRoom.delete);
 
-// Music
+  // Music
   app.get('/musics/search', ctx.music.search);
   app.post('/musics/search', ctx.music.search);
   app.get('/musics/:id', ctx.music.load);

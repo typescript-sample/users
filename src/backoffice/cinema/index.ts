@@ -67,6 +67,7 @@ export class CinemaUploadService extends GenericSearchStorageService<Cinema, str
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+    this.getGalllery = this.getGalllery.bind(this)
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {

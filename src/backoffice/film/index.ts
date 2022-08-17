@@ -96,7 +96,7 @@ export function useBackOfficeFilmController(
     db.driver,
     query
   );
-  const repository = new Repository<Film, string>(db, 'film',filmModel);
+  const repository = new Repository<Film, string>(db, 'film', filmModel);
   const service = new FilmManager(
     builder.search,
     repository,
@@ -124,10 +124,12 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+    this.getGalllery = this.getGalllery.bind(this)
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {
       if (item) {
+        console.log('this.model.gallery', this.model.gallery)
         return (item as any)[this.model.gallery];
       }
       return [];
@@ -137,9 +139,9 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
 
 export function useFilmUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): FilmUploadController {
-    const queryItems = useQuery('film', mapper, filmModel, true);
-    const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, postgres, queryItems);
-    const repository = new Repository<Film, string>(db, 'film', filmModel);
-    const controller = new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new FilmUploadController(log,controller, generateId, sizesCover, sizesImage);
+  const queryItems = useQuery('film', mapper, filmModel, true);
+  const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, postgres, queryItems);
+  const repository = new Repository<Film, string>(db, 'film', filmModel);
+  const controller = new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new FilmUploadController(log, controller, generateId, sizesCover, sizesImage);
 }

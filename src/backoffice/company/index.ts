@@ -42,6 +42,7 @@ export class CompanyUploadService extends GenericSearchStorageService<Company, s
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+    this.getGalllery = this.getGalllery.bind(this)
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {
