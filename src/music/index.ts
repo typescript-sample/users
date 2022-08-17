@@ -11,9 +11,14 @@ import {
   MusicRepository,
   MusicQuery,
 } from './music';
-import { MusicController } from './music-controller';
+import { QueryController } from 'express-ext';
 
-export { MusicController };
+export class MusicController extends QueryController<Music, string, MusicFilter> {
+  constructor(log: Log, mucsicService: MusicQuery) {
+    super(log, mucsicService);
+  }
+}
+
 
 export class MusicService extends ViewSearchManager<Music, string, MusicFilter> implements MusicQuery {
   constructor(

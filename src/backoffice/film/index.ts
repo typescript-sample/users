@@ -1,4 +1,3 @@
-
 import { Log } from 'express-ext';
 import { BuildUrl, Generate, Manager, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
@@ -12,10 +11,23 @@ import {
   FilmRepository,
   FilmService
 } from './film';
-import { BackOfficeFilmController, FilmUploadController } from './film-controller';
-import { UploadService } from 'upload-express';
+import { Controller} from 'express-ext';
 
-export { BackOfficeFilmController };
+
+import { UploadController, UploadService } from 'upload-express';
+
+
+export class BackOfficeFilmController extends Controller<Film, string, FilmFilter> {
+  constructor(log: Log, filmService: FilmService) {
+    super(log, filmService);
+  }
+}
+export class FilmUploadController extends UploadController {
+  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
+    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  }
+}
+
 
 export class FilmManager
   extends Manager<Film, string, FilmFilter>

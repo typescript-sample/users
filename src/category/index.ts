@@ -9,9 +9,15 @@ import {
   CategoryRepository,
   CategoryService,
 } from './category';
-import { CategoryController } from './category-controller';
 
-export { CategoryController };
+import { Controller } from 'express-ext';
+
+export class CategoryController extends Controller<Category, string, CategoryFilter> {
+  constructor(log: Log, private categoryService: CategoryService) {
+    super(log, categoryService);
+    this.array = ['status'];
+  }
+}
 
 export class CategoryManager
   extends Manager<Category, string, CategoryFilter>

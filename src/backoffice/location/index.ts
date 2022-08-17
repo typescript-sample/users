@@ -2,13 +2,22 @@ import { BuildUrl, Delete, Generate, Log, Manager, Search } from "onecore";
 import { StorageRepository } from "google-storage";
 import { DB, postgres, Repository, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from 'query-mappers';
-import { UploadService } from "upload-express";
 import shortid from 'shortid';
 import { Location, LocationFilter, locationModel, LocationRepository, LocationService} from './location';
-import { BackOfficeLocationController,LocationUploadController } from './location-controller';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from "one-storage";
-export { BackOfficeLocationController };
+import { Controller } from 'express-ext';
+import { UploadController, UploadService } from 'upload-express';
 
+export class BackOfficeLocationController extends Controller<Location, string, LocationFilter> {
+  constructor(log: Log, public locationService: LocationService) {
+    super(log, locationService);
+  }
+}
+export class LocationUploadController extends UploadController { 
+  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
+    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  }
+}
 export class LocationManager extends Manager<Location, string, LocationFilter> implements LocationService {
   constructor(search: Search<Location, LocationFilter>, repository: LocationRepository) {
     super(search, repository);

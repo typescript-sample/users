@@ -134,12 +134,13 @@ import {
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
-import { AppreciationController } from './appreciation/appreciation-controller';
-import { FilmUploadController } from './backoffice/film/film-controller';
+import { useRoomController } from './room';
+import { AppreciationController } from './appreciation';
+import { FilmUploadController } from './backoffice/film';
 import { useMusicController } from './music';
 import { useBackOfficeMusicController } from './backoffice/music';
-import { LocationUploadController } from 'backoffice/location/location-controller';
-import { CinemaUploadController } from './backoffice/cinema/cinema-controller';
+import { LocationUploadController } from 'backoffice/location';
+import { CinemaUploadController } from './backoffice/cinema';
 
 resources.createValidator = createValidator;
 
@@ -221,6 +222,7 @@ export interface ApplicationContext {
   locationComment: QueryController;
   locationFollow:FollowController;
   jobs: QueryController;
+  room: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
   // saveItem: SavedController;
@@ -642,6 +644,7 @@ export function useContext(
   );
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
+  const room = useRoomController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
   const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
   const music = useMusicController(logger.error, mainDB, mapper);
@@ -720,7 +723,8 @@ export function useContext(
     saveFilm,
     backofficeRoom,
     music,
-    backofficeMusic
+    backofficeMusic,
+    room
   };
 }
 

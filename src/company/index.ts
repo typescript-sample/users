@@ -39,13 +39,17 @@ import {
   CompanyFilter,
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
-import { CompanyController } from './company-controller';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
 import { StorageRepository } from 'google-storage';
 import { UploadService } from 'upload-express';
+import { QueryController } from 'express-ext';
 
-export * from './company-controller';
-export { CompanyController };
+export class CompanyController extends QueryController<Company, string, CompanyFilter> {
+  constructor(log: Log, companyService: CompanyQuery) {
+    super(log, companyService);
+  }
+}
+
 export class CompanyService extends ViewSearchManager<Company, string, CompanyFilter> implements CompanyQuery {
   constructor(search: Search<Company, CompanyFilter>, protected repository: CompanyRepository, private infoRepository: InfoRepository<Info>) {
     super(search, repository);

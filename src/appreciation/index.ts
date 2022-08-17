@@ -1,18 +1,51 @@
-import { Build, Log } from 'express-ext';
-import { Manager, Search } from 'onecore';
-import { buildToSave } from 'pg-extension';
+import { Search } from 'onecore';
 import { DB, GenericRepository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { Info10, info10Model, Rate, RateFilter, rateModel, RateValidator,RateService } from 'rate-core';
-import { SqlRateRepository } from 'rate-query';
+import { Rate, RateFilter, rateModel } from 'rate-core';
 import { Comment, CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
-import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
-import { commentModel, CommentQuery, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
+import { RateCommentController, ReactionController } from 'review-reaction-express';
+import { commentModel, CommentQuery, rateReactionModel, SqlCommentRepository, SqlReactionRepository } from 'review-reaction-query';
 import { check, createValidator } from 'xvalidators';
-import { Appreciation, AppreciationFilter, appreciationModel, AppreciationRepository, AppreciationService, Histories, Reply, ReplyFilter, ReplyId, replyModel, ReplyRepository, ReplyService, Useful, usefulModel, UsefulRepository } from './appreciation';
-import { AppreciationController } from './appreciation-controller';
-
+import { Appreciation, AppreciationFilter, appreciationModel, AppreciationRepository, AppreciationService, Histories } from './appreciation';
+import { Request as Req, Response as Res } from 'express';
+import { getStatusCode, handleError, Log } from 'express-ext';
+import { Validator } from 'onecore';
 export * from './appreciation';
+
+export class AppreciationController {
+  constructor(
+    protected log: Log,
+    protected responseService: AppreciationService,
+    public validator: Validator<Appreciation>
+  ) {
+    this.reply = this.reply.bind(this);
+  }
+
+  reply(req: Req, res: Res) {
+    const id: string = req.params.id || req.body.id || "";
+    const author: string = req.params.author || req.body.author || "";
+    const response: Appreciation = { id, author, ...req.body };
+    response.time = new Date();
+    this.validator
+      .validate(response)
+      .then((errors) => {
+        if (errors && errors.length > 0) {
+          res.status(getStatusCode(errors)).json(errors).send();
+        } else {
+          this.responseService
+            .response(response)
+            .then((rs) => {
+              return res.status(200).json(rs).send();
+            })
+            .catch((err) => handleError(err, res, this.log));
+        }
+      })
+      .catch((err) => handleError(err, res, this.log));
+  }
+}
+
+
+
 
 export class AppreciationManager implements AppreciationService {
   constructor(

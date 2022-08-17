@@ -372,6 +372,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/rooms/:id', ctx.backofficeRoom.update);
   app.patch('/backoffice/rooms/:id', ctx.backofficeRoom.patch);
   app.delete('/backoffice/rooms/:id', ctx.backofficeRoom.delete);
+  app.get('/rooms/search', ctx.room.search);
+  app.post('/rooms/search', ctx.room.search);
+  app.get('/rooms/:id', ctx.room.load);
 
   // Music
   app.get('/musics/search', ctx.music.search);
