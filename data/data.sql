@@ -795,3 +795,13 @@ create table music (
 
 );
 INSERT INTO music (id,name,author,releaseDate,duration,lyric) VALUES ('00001','Họ trông chờ gì ở tôi','ICD','15/03/2019','Ánh đèn vàng là sợi dây trói mình lại ở bên cái ghế. Không thể đem cho những cảm xúc tiêu cực nên phải tái chế');
+
+create table booking (
+  id character varying(40) primary key,
+  startdate date,
+	enddate date,
+  guestid varchar(255),
+  totalprice integer,
+
+
+);
