@@ -711,13 +711,16 @@ export function useContext(
     backofficeLocation,
     backofficeLocationUpload,
     backofficeCinema,
+    backofficeCinemaUpload,
     saveItem,
     locationFollow,
     userInfo,
     saveLocation,
     locationInfomation,
     saveFilm,
-    backofficeRoom
+    backofficeRoom,
+    music,
+    backofficeMusic
   };
 }
 
