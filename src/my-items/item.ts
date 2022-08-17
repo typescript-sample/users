@@ -14,7 +14,6 @@ export interface Item {
   description?: string;
   categories?: string[];
   gallery?: UploadInfo[];
-  imageUrl?: string;
 }
 
 export interface ItemFilter extends Filter {

@@ -217,28 +217,28 @@ create table if not exists comments (
 );
 
 -- Item
-create table items (
-    id character varying(40) primary key,
-    title character varying(120) not null,
-    status char(1) not null,
+create table item (
+  id character varying(40) primary key,
+  title character varying(120) not null,
+  status char(1) not null,
 	price numeric(16,2) not null,
 	imageurl character varying(1500),
-    brand character varying(120) not null,
+  brand character varying(120) not null,
 	publishedat timestamp with time zone,
 	expiredat timestamp with time zone,
-    description character varying(1000),
-    categories character varying[]
+  description character varying(1000),
+  category character varying[]
 );
 
-insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('01', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
-insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('02', 'Iphone 13', 'A', 20000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Apple', '2022-07-19', '2025-07-19', 'Iphone 13 from Apple', '{mobiphone,technological,apple}');
-insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('03', 'Camera', 'A', 100000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Samsung', '2022-07-19', '2025-07-19', 'Camera from Samsung', '{camera,technological}');
-insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('04', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Disney', '2022-07-19', '2022-08-25', 'Minion mooive ticket', '{comedy,action}');
-insert into items (id, title, status, price, imageurl, brand, publishedat, expiredat, description, categories) values ('05', 'Macbook', 'A', 25000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Apple', '2022-07-19', '2025-07-19', 'Macbook from Apple', '{laptop,technological,apple}');
+insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('01', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
+insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('02', 'Iphone 13', 'A', 20000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Apple', '2022-07-19', '2025-07-19', 'Iphone 13 from Apple', '{mobiphone,technological,apple}');
+insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('03', 'Camera', 'A', 100000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Samsung', '2022-07-19', '2025-07-19', 'Camera from Samsung', '{camera,technological}');
+insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('04', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Disney', '2022-07-19', '2022-08-25', 'Minion mooive ticket', '{comedy,action}');
+insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('05', 'Macbook', 'A', 25000000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png','Apple', '2022-07-19', '2025-07-19', 'Macbook from Apple', '{laptop,technological,apple}');
 
-select * from items where categories && '{"apple"}';
+select * from item where category && '{"apple"}';
 
-create table categories(
+create table category(
   categoryid character varying(40) primary key,
   categoryname character varying(300) not null,
   status char(1) not null,
@@ -248,16 +248,16 @@ create table categories(
   updatedat timestamp
 );
 
-insert into categories (categoryid,categoryname,status) values ('action','action','A');
-insert into categories (categoryid,categoryname,status) values ('comedy','comedy','A');
-insert into categories (categoryid,categoryname,status) values ('camera','camera','A');
-insert into categories (categoryid,categoryname,status) values ('mobiphone','mobiphone','A');
-insert into categories (categoryid,categoryname,status) values ('technological','technological','A');
-insert into categories (categoryid,categoryname,status) values ('apple','apple','A');
-insert into categories (categoryid,categoryname,status) values ('laptop','laptop','A');
+insert into category (categoryid,categoryname,status) values ('action','action','A');
+insert into category (categoryid,categoryname,status) values ('comedy','comedy','A');
+insert into category (categoryid,categoryname,status) values ('camera','camera','A');
+insert into category (categoryid,categoryname,status) values ('mobiphone','mobiphone','A');
+insert into category (categoryid,categoryname,status) values ('technological','technological','A');
+insert into category (categoryid,categoryname,status) values ('apple','apple','A');
+insert into category (categoryid,categoryname,status) values ('laptop','laptop','A');
 
 
-create table brands (
+create table brand (
   brand character varying(255) primary key
 );
 
@@ -271,7 +271,7 @@ insert into brands (brand) values ('Apple');
 insert into brands (brand) values ('Disney');
 
 
-create table item_response(
+create table itemresponse(
   id character varying(40) not null,
   author character varying(40) not null,
   description text,
@@ -282,14 +282,15 @@ create table item_response(
   primary key (id, author)
 );
 
-insert into item_response (id,author,description,time) values ('01','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
-insert into item_response (id,author,description,time) values ('02','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
-insert into item_response (id,author,description,time) values ('03','77c35c38c3554ea6906730dbcfeca0f2', 'Wow', '2022-07-22');
-insert into item_response (id,author,description,time) values ('04','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
-insert into item_response (id,author,description,time) values ('05','77c35c38c3554ea6906730dbcfeca0f2', 'I hate this', '2022-07-22');
+insert into itemresponse (id,author,description,time) values ('01','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
+insert into itemresponse (id,author,description,time) values ('02','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
+insert into itemresponse (id,author,description,time) values ('03','77c35c38c3554ea6906730dbcfeca0f2', 'Wow', '2022-07-22');
+insert into itemresponse (id,author,description,time) values ('04','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
+insert into itemresponse (id,author,description,time) values ('05','77c35c38c3554ea6906730dbcfeca0f2', 'I hate this', '2022-07-22');
 
 
-create table location commentId character varying(40) not null,
+create table itemcomment (
+  commentId character varying(40) not null,
   id character varying(40) not null,
   author character varying(40) not null,
   userId character varying(40) not null,
@@ -300,19 +301,19 @@ create table location commentId character varying(40) not null,
   primary key (commentId)
 );
 
-insert into item_comment (id,author,userId,comment,time) values ('01','02','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
-insert into item_comment (id,author,userId,comment,time) values ('02','06','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
-insert into item_comment (id,author,userId,comment,time) values ('03','05','77c35c38c3554ea6906730dbcfeca0f2', 'abc', '2022-07-22');
-insert into item_comment (id,author,userId,comment,time) values ('04','07','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
-insert into item_comment (id,author,userId,comment,time) values ('05','11','77c35c38c3554ea6906730dbcfeca0f2', '123', '2022-07-22');
+insert into itemcomment (id,author,userId,comment,time) values ('01','02','77c35c38c3554ea6906730dbcfeca0f2', 'Good', '2022-07-22');
+insert into itemcomment (id,author,userId,comment,time) values ('02','06','77c35c38c3554ea6906730dbcfeca0f2', 'Not Bad', '2022-07-22');
+insert into itemcomment (id,author,userId,comment,time) values ('03','05','77c35c38c3554ea6906730dbcfeca0f2', 'abc', '2022-07-22');
+insert into itemcomment (id,author,userId,comment,time) values ('04','07','77c35c38c3554ea6906730dbcfeca0f2', 'Bad', '2022-07-22');
+insert into itemcomment (id,author,userId,comment,time) values ('05','11','77c35c38c3554ea6906730dbcfeca0f2', '123', '2022-07-22');
 
-CREATE TABLE item_info(
+CREATE TABLE iteminfo(
   id varchar(255),
   viewCount integer DEFAULT 0,
   primary key(id)
 )
 
-create table item_response_reaction(
+create table itemresponsereaction(
 	id varchar(255),
 	author varchar(255),
 	userid varchar(255),
@@ -322,19 +323,19 @@ create table item_response_reaction(
 )
 
 -- Location
-create table locations (
-    id character varying(40) primary key,
-    name character varying(300) not null,
-    type character varying(40),
-    description character varying(1000),
-    status char(1) not null,
+create table location (
+  id character varying(40) primary key,
+  name character varying(300) not null,
+  type character varying(40),
+  description character varying(1000),
+  status char(1) not null,
 	latitude numeric(20,16) not null,
 	longitude numeric(20,16) not null,
 	imageURL character varying(1500),
 	coverURL character varying(1500)
 );
 
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d146cbffbdf2b1d30742262',	
 	'Highland Coffee',
 	'coffee',
@@ -345,7 +346,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://thumbs.dreamstime.com/z/highlands-coffee-shop-vung-tau-vietnam-jan-facade-vietnamese-chain-producer-distributor-86167986.jpg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d1d7a18c5e4f320a86ca6b1',	
 	'Trung Nguyen Coffee',
 	'coffee',
@@ -356,7 +357,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://cdn2.shopify.com/s/files/1/0065/6759/1999/files/dia-chi-trung-nguyen-legend-cafe-tai-vincom-ha-nam_grande.jpg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d1d7a66c5e4f320a86ca6b2',	
 	'Highland Coffee',
 	'coffee',
@@ -367,7 +368,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/image/5d1d7a66c5e4f320a86ca6b2_IFc9Db9DT_c.jpg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d1d7a85c5e4f320a86ca6b3',	
 	'Starbucks Coffee',
 	'coffee',
@@ -378,7 +379,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://ichef.bbci.co.uk/news/976/cpsprodpb/17185/production/_118879549_gettyimages-1308703596.jpg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d1d7b79c5e4f320a86ca6b4',	
 	'King Coffee',
 	'coffee',
@@ -389,7 +390,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://www.asia-bars.com/wp-content/uploads/2015/11/cong-caphe-1.jpg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d1efb3796988a127077547c',	
 	'Sumo BBQ Restaurant',
 	'restaurant',
@@ -400,7 +401,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 	'https://135525-391882-2-raikfcquaxqncofqfm.stackpathdns.com/wp-content/uploads/2021/04/Summo-BBQ-1280x960.jpeg',
 	'https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/5d146cbffbdf2b1d30742262_TL4wqjvnz_4K-Art-Wallpapers.jpg'
 );
-insert into locations (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
+insert into location (id, name, type, description, status, latitude, longitude, imageURL, coverURL) values (
 	'5d562ad357568217d0d9a2d5',	
 	'CGV',
 	'cinema',
@@ -413,7 +414,7 @@ insert into locations (id, name, type, description, status, latitude, longitude,
 );
 
 
-create table location_info (
+create table locationinfo (
   id character varying(40) primary key,
   rate numeric DEFAULT 0,
   rate1 integer DEFAULT 0,
@@ -424,16 +425,16 @@ create table location_info (
   viewCount integer DEFAULT 0
 );
 
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d146cbffbdf2b1d30742262',3.1811023622047245,22,32,15,17,41,123);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a18c5e4f320a86ca6b1',3.4,1,1,0,1,2,2);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a66c5e4f320a86ca6b2',3.857142857142857,1,0,0,4,2,4);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a85c5e4f320a86ca6b3',0,0,0,0,0,0,0);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7b79c5e4f320a86ca6b4',0,0,0,0,0,0,0);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1efb3796988a127077547c',0,0,0,0,0,0,0);
-insert into location_info (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d562ad357568217d0d9a2d5',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d146cbffbdf2b1d30742262',3.1811023622047245,22,32,15,17,41,123);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a18c5e4f320a86ca6b1',3.4,1,1,0,1,2,2);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a66c5e4f320a86ca6b2',3.857142857142857,1,0,0,4,2,4);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7a85c5e4f320a86ca6b3',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1d7b79c5e4f320a86ca6b4',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d1efb3796988a127077547c',0,0,0,0,0,0,0);
+insert into locationinfo (id, rate, rate1, rate2, rate3, rate4, rate5, viewCount) values ('5d562ad357568217d0d9a2d5',0,0,0,0,0,0,0);
 
 
-create table location_rates (
+create table locationrate (
   id character varying(40) not null,
   author character varying(40) not null,
   rate integer not null,
@@ -444,13 +445,13 @@ create table location_rates (
   primary key (id, author)
 );
 
-insert into location_rates (id, author, rate, rateTime, review) values ('5d146cbffbdf2b1d30742262','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Bad');
-insert into location_rates (id, author, rate, rateTime, review) values ('5d1d7a18c5e4f320a86ca6b1','77c35c38c3554ea6906730dbcfeca0f2',3,'2021-10-01','Poor');
-insert into location_rates (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
-insert into location_rates (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
-insert into location_rates (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d146cbffbdf2b1d30742262','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Bad');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7a18c5e4f320a86ca6b1','77c35c38c3554ea6906730dbcfeca0f2',3,'2021-10-01','Poor');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1d7b79c5e4f320a86ca6b4','77c35c38c3554ea6906730dbcfeca0f2',5,'2021-10-01','Excellent');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d1efb3796988a127077547c','77c35c38c3554ea6906730dbcfeca0f2',1,'2021-10-01','Poor');
+insert into locationrate (id, author, rate, rateTime, review) values ('5d562ad357568217d0d9a2d5','77c35c38c3554ea6906730dbcfeca0f2',4,'2021-10-01','Good');
 
-CREATE TABLE location_rate_reactions (
+CREATE TABLE locationratereaction (
 	id character varying(40),
 	author character varying(40),
 	userid character varying(40),
@@ -459,7 +460,7 @@ CREATE TABLE location_rate_reactions (
 	primary key(id, author, userid)
 )
 
-create table location_comments(
+create table locationcomment(
   commentId character varying(40) not null,
   id character varying(40) not null,
   author character varying(40) not null,
@@ -485,8 +486,9 @@ create table locationfollower (
   id character varying(40) not null ,
   follower character varying(40) not null 
 )
-//--company----
-create table companies
+
+--company----
+create table company
 (
     id character varying(40) not null primary key,
     name character varying(120),
@@ -495,13 +497,13 @@ create table companies
     size integer,
     status char(1) not null,
     establishedAt timestamp with time zone,
-    categories character varying[]
+    category character varying[]
 );
-insert into companies (id, name,address, description, size, status, establishedAt, categories) values ('id1','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id2','Softwave company', ' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh','This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id3','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id4','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
-insert into companies (id, name,address, description, size,status, establishedAt, categories) values ('id5','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into company (id, name,address, description, size, status, establishedAt, category) values ('id1','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into company (id, name,address, description, size,status, establishedAt, category) values ('id2','Softwave company', ' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh','This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into company (id, name,address, description, size,status, establishedAt, category) values ('id3','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'A', '2022-07-21','{Categories1, Categories2}');
+insert into company (id, name,address, description, size,status, establishedAt, category) values ('id4','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
+insert into company (id, name,address, description, size,status, establishedAt, category) values ('id5','Softwave company',' Hùng Vương Plaza 126 Hùng Vương Quận 5 Tp. Hồ Chí Minh', 'This is description', 500,'I', '2022-07-21','{Categories1, Categories2}');
 
 create table company_categories(
   categoryid character varying(40) primary key,
@@ -612,13 +614,13 @@ create table companyfollower (
 
 --film----------------------------------------------------
 
-create table films(
+create table film(
   filmid character varying(40) primary key,
   title character varying(300) not null,
   description character varying(300),
   imageurl character varying(300),
   trailerurl character varying(300),
-  categories character varying[],
+  category character varying[],
   status char(1) not null,
   createdby character varying(40),
   createdat timestamp,
@@ -634,8 +636,8 @@ create table if not exists usefulfilm(
   PRIMARY KEY (id, author)
 )
 
---drop table categories
-create table film_categories(
+--drop table category
+create table filmcategory(
   categoryid character varying(40) primary key,
   categoryname character varying(300) not null,
   status char(1) not null,
@@ -664,8 +666,8 @@ CREATE TABLE cinema (
   primary key(id)
 );
 
-CREATE TABLE filmInfo (
-  id varchar(255) PRIMARY KEY,
+CREATE TABLE filmrateinfo(
+  id varchar(255),
   rate numeric DEFAULT 0,
   rate1 integer DEFAULT 0,
   rate2 integer DEFAULT 0,
@@ -677,32 +679,11 @@ CREATE TABLE filmInfo (
   rate8 integer DEFAULT 0,
   rate9 integer DEFAULT 0,
   rate10 integer DEFAULT 0,
-  viewCount integer DEFAULT 0
-);
-
-CREATE TABLE filmrate (
-  id varchar(255),
-  userid varchar(255),
-  rate integer DEFAULT 0,
-  rateTime date,
-  review varchar(255),
-  usefulcount integer DEFAULT 0,
-  PRIMARY KEY (id , userid)
-);
-
-CREATE TABLE info(
-  id varchar(255),
-  rate numeric DEFAULT 0,
-  rate1 integer DEFAULT 0,
-  rate2 integer DEFAULT 0,
-  rate3 integer DEFAULT 0,
-  rate4 integer DEFAULT 0,
-  rate5 integer DEFAULT 0,
   viewCount integer DEFAULT 0,
   primary key(id)
 )
 
-CREATE TABLE rates(
+CREATE TABLE filmrate(
   id varchar(255),
   author varchar(255),
   rate integer,
@@ -714,7 +695,7 @@ CREATE TABLE rates(
   primary key(id, author)
 )
 
-CREATE TABLE ratereaction(
+CREATE TABLE filmratereaction(
 	id varchar(255),
 	author varchar(255),
 	userid varchar(255),
@@ -723,18 +704,8 @@ CREATE TABLE ratereaction(
 	primary key(id, author, userid)
 )
 
-CREATE TABLE appreciation(
-	id varchar(255),
-	author varchar(255),
-	title text,
-	description text,
-	createat timestamp,
-	replycount integer default 0,
-	primary key(id, author)
-);
-
-CREATE TABLE rate_comments(
-  commentid varchar(255),
+CREATE TABLE filmratecomment(
+  commentId varchar(255),
   id varchar(255),
   author varchar(255),
   userid varchar(255),
@@ -746,26 +717,27 @@ CREATE TABLE rate_comments(
 );
 
 
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES('adventure','adventure','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('animated','animated','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('drama','drama','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('horror','horror','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('crime','crime','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
-INSERT INTO film_categories (categoryid,categoryname,status) VALUES ('family','family','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES('adventure','adventure','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('animated','animated','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('comedy','comedy','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('drama','drama','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('horror','horror','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('crime','crime','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('fantasy','fantasy','A');
+INSERT INTO filmcategory (categoryid,categoryname,status) VALUES ('family','family','A');
 
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00001','The Shawshank Redemption','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{drama}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00002','Thor: Love and Thunder','https://genk.mediacdn.vn/139269124445442048/2022/4/19/2-16503255592162067496114.jpg','https://www.youtube.com/watch?v=tgB1wUcmbbw','{drama,crime}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00003','Top Gun: Maverick','https://www.cgv.vn/media/catalog/product/cache/3/image/c5f0a1eff4c394a251036189ccddaacd/t/o/top_gun_maverick_-_poster_28.03_1_.jpg','https://www.youtube.com/watch?v=yM389FbhlRQ','{action,drama}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00004','The Batman','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_batman-1.jpg','https://youtu.be/761uRaAoW00','{action,crime,drama}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00005','The Sadness','https://phimnhua.com/wp-content/uploads/2022/04/phimnhua_1650248826.jpg','https://www.youtube.com/watch?v=axjme4v-xRo','{horror}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00006','Doctor Strange in the Multiverse of Madness','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{action,adventure,fantasy}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00007','Fantastic Beasts: The Secrets of Dumbledore','https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/04/review-phim-sinh-vat-huyen-bi-3-fantastic-beasts-3-2-696x1031.jpg?fit=700%2C20000&quality=95&ssl=1','https://youtu.be/Y9dr2zw-TXQ','{family,adventure,fantasy}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00008','The Adam Project','http://photos.q00gle.com/storage/files/images-2021/images-movies/09/622b6789e7084.jpg','https://youtu.be/IE8HIsIrq4o','{action,comedy,adventure}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00009','Spider-Man: No Way Home','https://gamek.mediacdn.vn/133514250583805952/2021/11/17/photo-1-1637118381839432740223.jpg','https://www.youtube.com/watch?v=OB3g37GTALc','{action,adventure,fantasy}','A');
-INSERT INTO films (filmid,title,imageurl,trailerurl,categories,status) VALUES ('00010','Dune','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/d/u/dune-poster-1.jpg','https://youtu.be/8g18jFHCLXk','{action,adventure,drama}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00001','The Shawshank Redemption','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{drama}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00002','Thor: Love and Thunder','https://genk.mediacdn.vn/139269124445442048/2022/4/19/2-16503255592162067496114.jpg','https://www.youtube.com/watch?v=tgB1wUcmbbw','{drama,crime}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00003','Top Gun: Maverick','https://www.cgv.vn/media/catalog/product/cache/3/image/c5f0a1eff4c394a251036189ccddaacd/t/o/top_gun_maverick_-_poster_28.03_1_.jpg','https://www.youtube.com/watch?v=yM389FbhlRQ','{action,drama}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00004','The Batman','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_batman-1.jpg','https://youtu.be/761uRaAoW00','{action,crime,drama}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00005','The Sadness','https://phimnhua.com/wp-content/uploads/2022/04/phimnhua_1650248826.jpg','https://www.youtube.com/watch?v=axjme4v-xRo','{horror}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00006','Doctor Strange in the Multiverse of Madness','https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg','https://www.imdb.com/video/vi3877612057?playlistId=tt0111161&ref_=tt_pr_ov_vi','{action,adventure,fantasy}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00007','Fantastic Beasts: The Secrets of Dumbledore','https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/04/review-phim-sinh-vat-huyen-bi-3-fantastic-beasts-3-2-696x1031.jpg?fit=700%2C20000&quality=95&ssl=1','https://youtu.be/Y9dr2zw-TXQ','{family,adventure,fantasy}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00008','The Adam Project','http://photos.q00gle.com/storage/files/images-2021/images-movies/09/622b6789e7084.jpg','https://youtu.be/IE8HIsIrq4o','{action,comedy,adventure}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00009','Spider-Man: No Way Home','https://gamek.mediacdn.vn/133514250583805952/2021/11/17/photo-1-1637118381839432740223.jpg','https://www.youtube.com/watch?v=OB3g37GTALc','{action,adventure,fantasy}','A');
+INSERT INTO film (filmid,title,imageurl,trailerurl,category,status) VALUES ('00010','Dune','https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/d/u/dune-poster-1.jpg','https://youtu.be/8g18jFHCLXk','{action,adventure,drama}','A');
 
+-- room
 create table room(
   id varchar(255)  primary key,
   title varchar(255),
@@ -810,3 +782,16 @@ values (
   '{Tiếng Anh, Tiếng Việt}',
   '{"{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_3VZT2SW8b\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_oSipzWeYi\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_EF7bCPZry\", \"type\": \"image\"}"}'
   )
+
+
+
+create table music (
+  id character varying(40) primary key,
+  name character varying(300) not null,
+  author character varying[],
+	releaseDate date,
+	duration time,
+  lyric text,
+
+);
+INSERT INTO music (id,name,author,releaseDate,duration,lyric) VALUES ('00001','Họ trông chờ gì ở tôi','ICD','15/03/2019','Ánh đèn vàng là sợi dây trói mình lại ở bên cái ghế. Không thể đem cho những cảm xúc tiêu cực nên phải tái chế');

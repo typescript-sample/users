@@ -70,12 +70,12 @@ import {
   useAppreciationController,
   useAppreciationCommentController,
   useAppreciationReactionController
-} from './appreciation copy';
+} from './appreciation';
 import { useArticleController } from './article';
-import { useBackOfficeCompanyController } from './backoffice/company';
-import { useBackOfficeFilmController } from './backoffice/film';
+import { CompanyUploadController, useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
+import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
-import { useBackOfficeLocationController } from './backoffice/location';
+import { useBackOfficeLocationController, useLocationUploadController } from './backoffice/location';
 import {
   useCompanyCategoryController,
   useFilmCategoryController,
@@ -88,7 +88,7 @@ import {
   useCinemaReactionController,
 } from "./cinema";
 import {
-  useBackOfficeCinemaController
+  useBackOfficeCinemaController, useCinemaUploadController
 } from "./backoffice/cinema";
 import { useCommentController } from "./comment";
 import {
@@ -132,9 +132,16 @@ import {
   UserSettings,
 } from './my-profile';
 import { useUserFollowController, useUserController} from './user';
-import { useSavedController } from './items';
+import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
 import { useRoomController } from './room';
+import { AppreciationController } from './appreciation/appreciation-controller';
+import { FilmUploadController } from './backoffice/film/film-controller';
+import { useMusicController } from './music';
+import { useBackOfficeMusicController } from './backoffice/music';
+import { LocationUploadController } from 'backoffice/location/location-controller';
+import { CinemaUploadController } from './backoffice/cinema/cinema-controller';
+
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -169,7 +176,7 @@ export interface ApplicationContext {
   educationQuery: Query;
   companyQuery: Query;
 
-  appreciation: RateController;
+  appreciation: AppreciationController;
   appreciationComment: QueryController;
   appreciationReaction: ReactionController;
 
@@ -177,11 +184,13 @@ export interface ApplicationContext {
   myarticles: Controller;
   cinema: QueryController;
   backofficeCinema: Controller;
+  backofficeCinemaUpload: CinemaUploadController;
   cinemaRate: RateController;
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
   backofficeCompany: Controller;
+  backofficeCompanyUpload: CompanyUploadController;
   // companyRate: RateController;
   // companyReaction: ReactionController;
   // companyComment: QueryController;
@@ -193,6 +202,7 @@ export interface ApplicationContext {
   filmReaction: ReactionController;
   filmComment: QueryController;
   filmCategory: Controller;
+  backOfficeFilmUpload:FilmUploadController;
   director: Query;
   cast: Query;
   production: Query;
@@ -206,6 +216,7 @@ export interface ApplicationContext {
   myitemsUpload: UploadController;
   location: QueryController;
   backofficeLocation: Controller;
+  backofficeLocationUpload: LocationUploadController;
   locationRate: RateController;
   locationReaction: ReactionController;
   locationComment: QueryController;
@@ -222,6 +233,8 @@ export interface ApplicationContext {
   criteriaRate: RateController;
   criteriaComment: QueryController;
   backofficeRoom:Controller;
+  music: QueryController;
+  backofficeMusic: Controller;
 }
 
 export function useContext(
@@ -438,6 +451,19 @@ export function useContext(
 
   const company = useCompanyController(logger.error, queryDB);
   const backofficeCompany = useBackOfficeCompanyController(logger.error, queryDB);
+  const backofficeCompanyUpload = useCompanyUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
   const companyCategory = useCompanyCategoryController(
     logger.error,
     queryDB,
@@ -450,6 +476,19 @@ export function useContext(
   const cinemaComment = useCinemaRateCommentController(logger.error,queryDB,mapper);
 
   const backofficeCinema = useBackOfficeCinemaController(logger.error, queryDB, mapper);
+  const backofficeCinemaUpload = useCinemaUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
 
   const saveItem=useSavedController(logger.error, queryDB)
   const saveLocation=useSavedLocationController(logger.error, queryDB)
@@ -522,8 +561,35 @@ export function useContext(
   );
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
+  const backOfficeFilmUpload = useFilmUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
+
   const location = useLocationController(logger.error, queryDB, mapper);
   const backofficeLocation = useBackOfficeLocationController(logger.error, queryDB, mapper);
+  const backofficeLocationUpload = useLocationUploadController(
+    logger.error,
+    queryDB,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
+    [],
+    [],
+    undefined,
+    conf.modelItem,
+    mapper
+  );
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
   const locationComment = useLocationRateCommentController(
@@ -581,7 +647,8 @@ export function useContext(
   const room = useRoomController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
   const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
-
+  const music = useMusicController(logger.error, mainDB, mapper);
+  const backofficeMusic = useBackOfficeMusicController(logger.error, mainDB, mapper);
   //company-rate
   const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
   const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
@@ -618,6 +685,7 @@ export function useContext(
     filmReaction,
     filmComment,
     filmCategory,
+    backOfficeFilmUpload,
     director,
     cast,
     production,
@@ -641,9 +709,12 @@ export function useContext(
     criteriaComment,
     backOfficeFilm,
     backofficeCompany,
+    backofficeCompanyUpload,
     backofficeJob,
     backofficeLocation,
+    backofficeLocationUpload,
     backofficeCinema,
+    backofficeCinemaUpload,
     saveItem,
     locationFollow,
     userInfo,
@@ -651,6 +722,8 @@ export function useContext(
     locationInfomation,
     saveFilm,
     backofficeRoom,
+    music,
+    backofficeMusic,
     room
   };
 }

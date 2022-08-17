@@ -1,3 +1,5 @@
+import { fileUploadGalleryModel } from '../my-profile';
+import { UploadInfo } from 'one-storage';
 import { Attributes, Filter, Info, NumberRange, Repository, Query, SearchResult } from 'onecore';
 
 export interface Company {
@@ -10,6 +12,9 @@ export interface Company {
   establishedAt: Date;
   categories: string[];
   info?: Info;
+  imageURL?: string;
+  coverURL?: string;
+  gallery?: UploadInfo[];
 }
 
 export interface CompanyFilter extends Filter {
@@ -55,6 +60,12 @@ export const companyModel: Attributes = {
   },
   categories: {
     type: 'strings',
+  },
+  imageURL: {},
+  coverURL: {},
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
   },
 };
 
@@ -169,6 +180,12 @@ export const rateCriteriaModel: Attributes = {
     type: 'datetime'
   },
   review: {},
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
+  },
+  coverURL: {},
+  iamgeURL: {},
 };
 
 

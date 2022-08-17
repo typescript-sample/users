@@ -1,10 +1,11 @@
-import { Attributes, Filter, Info10, Query, ViewRepository } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
+import { UploadInfo } from 'one-storage';
+import { Attributes, Filter, Info10, Query, Repository, ViewRepository } from 'onecore';
 
 export interface FilmFilter extends Filter {
   id?: string;
   title?: string;
   description?: string;
-  imageUrl?: string;
   trailerUrl?: string;
   status?: string;
   categories?: string[];
@@ -14,6 +15,7 @@ export interface FilmFilter extends Filter {
   countries?: string[];
   language?:string;
   writer?:string[];
+  imageURL?: string;
 }
 
 export interface Film {
@@ -21,7 +23,7 @@ export interface Film {
   title: string;
   status: string;
   description?: string;
-  imageUrl?: string;
+  imageURL?: string;
   trailerUrl?: string;
   categories?: string[];
   directors?: string[];
@@ -31,9 +33,13 @@ export interface Film {
   info?: Info10;
   language?:string;
   writer?:string[];
+  gallery?: UploadInfo[];
+  coverURL?:string
 }
 
 export interface FilmRepository extends ViewRepository<Film, string> {
+}
+export interface FilmUploadRepository extends Repository<Film, string> {
 }
 export interface FilmQuery extends Query<Film, string,FilmFilter> {
 }
@@ -51,7 +57,7 @@ export const filmModel: Attributes = {
   description: {
     length: 300,
   },
-  imageUrl: {
+  imageURL: {
     length: 300
   },
   trailerUrl: {
@@ -90,6 +96,10 @@ export const filmModel: Attributes = {
   updatedAt: {
     type: 'datetime'
   },
-
+  gallery: {
+    type: 'array',
+    typeof: fileUploadGalleryModel,
+  },
+  coverURL: {},
 };
 

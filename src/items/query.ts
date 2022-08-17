@@ -55,8 +55,8 @@ export function buildQuery(s: ItemFilter): Statement {
   if (where.length > 0) {
     query = query + ` where ` + where.join(' and ');
   }
-  if (s.sortItem) {
-    query = query + ` order by ${s.sortItem}`;
+  if (s.sort) {
+    query = query + ` order by ${s.sort}`;
   }
   return { query, params };
 }

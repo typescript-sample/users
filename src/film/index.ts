@@ -1,6 +1,6 @@
 import { Log, SavedController } from 'express-ext';
+
 import {  SavedService, Search, ViewSearchManager } from 'onecore';
-// import { SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository, buildToSave } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -35,6 +35,7 @@ import {
 } from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
+import { UploadService } from 'upload-express';
 import { check } from 'xvalidators';
 
 import {
@@ -43,6 +44,7 @@ import {
   filmModel,
   FilmRepository,
   FilmQuery,
+  FilmUploadRepository,
 } from './film';
 import { FilmController } from './film-controller';
 
@@ -72,6 +74,9 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
     });
   }
 }
+
+
+
 export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, db.driver, query);
