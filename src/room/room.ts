@@ -1,4 +1,4 @@
-import { Attributes, Filter,NumberRange, Repository, Service } from 'onecore';
+import { Attributes, Filter,NumberRange, Repository, Query } from 'onecore';
 
 export interface RoomFilter extends Filter {
     id?: string;
@@ -50,7 +50,7 @@ export interface UploadImage {
 export interface RoomRepository extends Repository<Room, string> {
 
 }
-export interface RoomService extends Service<Room, string, RoomFilter> {
+export interface RoomQuery extends Query<Room, string, RoomFilter> {
 
 }
 export const fileUploadImageModel: Attributes = {

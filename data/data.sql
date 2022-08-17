@@ -775,12 +775,20 @@ create table room(
   location varchar(255),
   host varchar(255),
   guest integer,
-  room character varying[],
+  bedrooms integer,
+  bed integer,
+  bathrooms integer,
   highlight character varying[],
-  status CHAR(1) NOT NULL,
+  status CHAR(1) ,
+  region varchar(255),
+  category character varying[],
+  typeof character varying[],
+  property varchar(255),
+  language character varying[],
+  imageUrl jsonb[]
 )
 
-insert into room ( id,title,description,price,offer,location,host,guest,room,highlight,status) 
+insert into room ( id,title,description,price,offer,location,host,guest,bedrooms,bed,bathrooms,highlight,status,region,category,typeof,property,language,imageUrl) 
 values (
   '01',
   'KHU NGHỈ DƯỠNG PIUGUS',
@@ -789,8 +797,16 @@ values (
   '{Máy giặt,Sân hoặc ban công,Điều hòa nhiệt độ,Bữa sáng,Cho phép ở dài hạn,Cho phép hút thuốc}',
   'Anambas, Kepulauan Riau, Indonesia',
   'Herry',
-  '5',
-  '{1 phòng ngủ ,1 giường,1 phòng tắm chung}',
+  5,
+  1,
+  2,
+  1,
   '{Self check-in,Great location,Dive right in}',
-  'A'
+  'A',
+  'Viet Nam',
+  '{Beach, Tiny Home, Islands}',
+  '{Toàn bộ nhà, Phòng riêng, Phòng chung}',
+  'Nhà',
+  '{Tiếng Anh, Tiếng Việt}',
+  '{"{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_3VZT2SW8b\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_oSipzWeYi\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_EF7bCPZry\", \"type\": \"image\"}"}'
   )

@@ -134,6 +134,7 @@ import {
 import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items';
 import { useBackOfficeRoomController } from './backoffice/room';
+import { useRoomController } from './room';
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -210,6 +211,7 @@ export interface ApplicationContext {
   locationComment: QueryController;
   locationFollow:FollowController;
   jobs: QueryController;
+  room: QueryController;
   backofficeJob: Controller;
   // rateCriteria: ReactionController;
   // saveItem: SavedController;
@@ -576,6 +578,7 @@ export function useContext(
   );
   const comment = useCommentController(logger.error, queryDB, mapper);
   const jobs = useJobController(logger.error, mainDB, mapper);
+  const room = useRoomController(logger.error, mainDB, mapper);
   const backofficeJob = useBackOfficeJobController(logger.error, mainDB, mapper);
   const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
 
@@ -647,7 +650,8 @@ export function useContext(
     saveLocation,
     locationInfomation,
     saveFilm,
-    backofficeRoom
+    backofficeRoom,
+    room
   };
 }
 
