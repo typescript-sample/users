@@ -4,7 +4,6 @@ import { BuildUrl, Generate, Log, Manager, Search } from "onecore";
 import { DB, postgres, Repository, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from "query-mappers";
 import shortid from "shortid";
-import { UploadService } from "upload-express";
 import {
   Cinema,
   CinemaFilter,
@@ -12,9 +11,21 @@ import {
   CinemaRepository,
   CinemaService,
 } from "./cinema";
-import { BackOfficeCinemaController, CinemaUploadController } from "./cinema-controller";
+import { Request, Response } from "express";
+import { Controller, handleError} from "express-ext";
+import { UploadController, UploadService } from 'upload-express';
 
-export { BackOfficeCinemaController };
+export class BackOfficeCinemaController extends Controller<Cinema, string, CinemaFilter> {
+  constructor(log: Log, private cinemaService: CinemaService) {
+    super(log, cinemaService);
+  }
+}
+export class CinemaUploadController extends UploadController {
+  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
+    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  }
+}
+
 
 export class CinemaManager
   extends Manager<Cinema, string, CinemaFilter>

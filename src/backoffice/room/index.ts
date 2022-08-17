@@ -8,9 +8,13 @@ import {
   RoomRepository,
   RoomService,
 } from './room';
-import { BackOfficeRoomController } from './room-controller';
-export * from './room-controller';
-export { BackOfficeRoomController };
+import { Controller} from 'express-ext';
+
+export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
+  constructor(log: Log, roomService: RoomService) {
+    super(log, roomService);
+  }
+}
 
 export class RoomManager extends Manager<Room, string, RoomFilter> implements RoomService {
   constructor(search: Search<Room, RoomFilter>, repository: RoomRepository) {

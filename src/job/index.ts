@@ -3,9 +3,13 @@ import {Search,ViewSearchManager } from 'onecore';
 import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Job, JobFilter, jobModel, JobRepository, JobQuery } from './job';
-import { JobController } from './job-controller';
+import {  QueryController } from 'express-ext';
 
-export { JobController };
+export class JobController extends QueryController<Job, string, JobFilter> {
+  constructor(log: Log, jobService: JobQuery) {
+    super(log, jobService);
+  }
+}
 
 export class JobService extends ViewSearchManager<Job, string, JobFilter> implements JobQuery {
   constructor(search: Search<Job, JobFilter>, repository: JobRepository) {

@@ -1,12 +1,16 @@
-import { Log, ViewManager } from 'onecore';
+import { ViewManager } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from './article';
-import { ArticleController } from './article-controller';
-
+import { LoadSearchHandler, Log } from 'express-ext';
+import { Search } from 'onecore';
 export * from './article';
-export { ArticleController };
 
+export class ArticleController extends LoadSearchHandler<Article, string, ArticleFilter> {
+  constructor(log: Log, find: Search<Article, ArticleFilter>, service: ArticleService) {
+    super(log, find, service);
+  }
+}
 export class ArticleManager extends ViewManager<Article, string> implements ArticleService {
   constructor(repository: ArticleRepository) {
     super(repository);

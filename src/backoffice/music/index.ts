@@ -9,9 +9,13 @@ import {
   MusicRepository,
   MusicService,
 } from "./music";
-import { BackOfficeMusicController } from "./music-controller";
+import { Controller } from "express-ext";
 
-export { BackOfficeMusicController };
+export class BackOfficeMusicController extends Controller<Music, string, MusicFilter> {
+  constructor(log: Log, private musicService: MusicService) {
+    super(log, musicService);
+  }
+}
 
 export class MusicManager
   extends Manager<Music, string, MusicFilter>

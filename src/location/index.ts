@@ -1,7 +1,7 @@
 import { FollowController } from 'express-ext';
 import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
 import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
-import { BuildUrl, Generate, Log, SavedService, Search,ViewSearchManager } from 'onecore';
+import { BuildUrl, Generate, Log, SavedService, Search, ViewSearchManager } from 'onecore';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Delete, StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
@@ -12,7 +12,6 @@ import {
   LocationInfomationFilter,
   LocationInfomationRepository
 } from './location';
-import {LocationInfomationController, LocationUploadController} from './location-controller'
 import { SavedController } from 'express-ext';
 import {
   Info,
@@ -53,11 +52,26 @@ import {
   LocationRepository,
   LocationQuery,
 } from './location';
-import { LocationController } from './location-controller';
-import { UploadService } from 'upload-express';
-export * from './location-controller';
-export { LocationController };
+import { QueryController } from 'express-ext';
+import { UploadController, UploadService } from 'upload-express';
 
+//---------------------------------------------------
+export class LocationController extends QueryController<Location, string, LocationFilter> {
+  constructor(log: Log, public locationService: LocationQuery) {
+    super(log, locationService);
+  }
+}
+export class LocationInfomationController extends QueryController<LocationInfomation, string, LocationInfomationFilter> {
+  constructor(log: Log, service: LocationInfomationQuery) {
+    super(log, service);
+  }
+}
+export class LocationUploadController extends UploadController {
+  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
+    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  }
+}
+//--------------------------------------------
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
   implements LocationQuery {
@@ -132,7 +146,7 @@ export function useLocationController(
     infoModel,
     buildToSave
   );
-  const service= new LocationService(builder.search, repository, infoRepository);
+  const service = new LocationService(builder.search, repository, infoRepository);
   return new LocationController(log, service);
 }
 
@@ -301,17 +315,17 @@ export function useSavedLocationController(log: Log, db: DB): SavedController<Lo
   return new SavedController<Location>(log, service, 'itemId', 'id');
 }
 
-export class LocationInfomationService extends ViewSearchManager<LocationInfomation, string,LocationInfomationFilter> implements LocationInfomationQuery {
-  constructor(search: Search<LocationInfomation, LocationInfomationFilter>,repository: LocationInfomationRepository) {
-    super(search,repository);
+export class LocationInfomationService extends ViewSearchManager<LocationInfomation, string, LocationInfomationFilter> implements LocationInfomationQuery {
+  constructor(search: Search<LocationInfomation, LocationInfomationFilter>, repository: LocationInfomationRepository) {
+    super(search, repository);
   }
 }
-export function useLocationInfomationController(log: Log, db: DB,mapper?: TemplateMap): LocationInfomationController {
+export function useLocationInfomationController(log: Log, db: DB, mapper?: TemplateMap): LocationInfomationController {
   const query = useQuery('locationinfomation', mapper, locationInfomationModel, true);
   const builder = new SearchBuilder<LocationInfomation, LocationInfomationFilter>(db.query, 'locationinfomation', locationInfomationModel, db.driver, query);
   const repository = new Repository<LocationInfomation, string>(db, 'locationinfomation', locationInfomationModel);
-  const service = new LocationInfomationService(builder.search,repository);
-  return new LocationInfomationController(log,service);
+  const service = new LocationInfomationService(builder.search, repository);
+  return new LocationInfomationController(log, service);
 }
 
 export function useLocationUploadService(db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],

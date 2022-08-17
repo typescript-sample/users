@@ -2,7 +2,6 @@ import { BuildUrl, Generate, Log, Manager, Search } from "onecore";
 import { StorageRepository } from "google-storage";
 import { DB, postgres, Repository, SearchBuilder } from "query-core";
 import { TemplateMap, useQuery } from 'query-mappers';
-import { UploadService } from "upload-express";
 import { GenericSearchStorageService, ModelConf, Delete, StorageConf, UploadInfo } from 'one-storage';
 import {
   Company,
@@ -11,9 +10,19 @@ import {
   CompanyRepository,
   CompanyService,
 } from './company';
-import { BackOfficeCompanyController, CompanyUploadController } from './company-controller';
-export * from './company-controller';
-export { BackOfficeCompanyController };
+
+import { Controller } from 'express-ext';
+import { UploadController, UploadService } from 'upload-express';
+export class BackOfficeCompanyController extends Controller<Company, string, CompanyFilter> {
+  constructor(log: Log, companyService: CompanyService) {
+    super(log, companyService);
+  }
+}
+export class CompanyUploadController extends UploadController {
+  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
+    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  }
+}
 
 export class CompanyManager extends Manager<Company, string, CompanyFilter> implements CompanyService {
   constructor(search: Search<Company, CompanyFilter>, repository: CompanyRepository) {

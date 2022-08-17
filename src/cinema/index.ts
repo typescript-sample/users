@@ -41,9 +41,14 @@ import {
   CinemaRepository,
   CinemaQuery,
 } from './cinema';
-import { CinemaController } from './cinema-controller';
 
-export { CinemaController };
+import { QueryController } from 'express-ext';
+
+export class CinemaController extends QueryController<Cinema, string, CinemaFilter> {
+  constructor(log: Log, cinemaService: CinemaQuery) {
+    super(log, cinemaService);
+  }
+}
 
 export class CinemaService
   extends ViewSearchManager<Cinema, string, CinemaFilter>

@@ -4,11 +4,16 @@ import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'o
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, QueryRepository, Repository, SearchBuilder } from 'query-core';
 import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, } from './item';
-import { ItemController } from './item-controller';
 import { buildQuery } from './query';
 
+import {  QueryController } from 'express-ext';
+
 export * from './item';
-export { ItemController };
+export class ItemController extends QueryController<Item, string, ItemFilter> {
+  constructor(log: Log, protected itemQuery: ItemQuery) {
+    super(log, itemQuery);
+  }
+}
 
 export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
   constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedRepository<string>, public max: number) {

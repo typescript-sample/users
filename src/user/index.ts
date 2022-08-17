@@ -14,11 +14,22 @@ import {
   userInfoModel,
   UserInfoFilter
 } from './user';
-import { UserController, UserInFoController } from './user-controller';
 import { FollowService } from 'pg-extension';
 import { FollowController } from 'express-ext';
 export * from './user';
-export * from './user-controller';
+import { LoadSearchHandler,QueryController } from 'express-ext';
+
+export class UserController extends LoadSearchHandler<User, string, UserFilter> {
+  constructor(log: Log, find: Search<User, UserFilter>, service: UserService) {
+    super(log, find, service);
+  }
+}
+
+export class UserInFoController extends QueryController<UserInfo, string,UserInfoFilter> {
+  constructor(log: Log, service: UserInfoQuery) {
+    super(log, service);
+  }
+}
 
 export class UserManager
   extends ViewManager<User, string>
@@ -53,7 +64,6 @@ export function useUserFollowController(log: Log, db: DB): FollowController {
   return new FollowController(log, service, 'id', 'target');
 }
 
-export { UserInFoController };
 
 export class UserInfoService extends ViewSearchManager<UserInfo, string, UserInfoFilter> implements UserInfoQuery {
   constructor(search: Search<UserInfo, UserInfoFilter>, repository: UserInfoRepository) {

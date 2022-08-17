@@ -9,9 +9,14 @@ import {
   RoomRepository,
   RoomQuery,
 } from './room';
-import { RoomController } from './room-controller';
+import { QueryController } from 'express-ext';
 
-export { RoomController };
+export class RoomController extends QueryController<Room, string, RoomFilter> {
+  constructor(log: Log, roomService: RoomQuery) {
+    super(log, roomService);
+  }
+}
+
 
 export class RoomService extends ViewSearchManager<Room, string, RoomFilter> implements RoomQuery {
   constructor(search: Search<Room, RoomFilter>, repository: RoomRepository) {

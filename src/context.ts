@@ -135,12 +135,12 @@ import { useUserFollowController, useUserController} from './user';
 import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
 import { useRoomController } from './room';
-import { AppreciationController } from './appreciation/appreciation-controller';
-import { FilmUploadController } from './backoffice/film/film-controller';
+import { AppreciationController } from './appreciation';
+import { FilmUploadController } from './backoffice/film';
 import { useMusicController } from './music';
 import { useBackOfficeMusicController } from './backoffice/music';
-import { LocationUploadController } from 'backoffice/location/location-controller';
-import { CinemaUploadController } from './backoffice/cinema/cinema-controller';
+import { LocationUploadController } from 'backoffice/location';
+import { CinemaUploadController } from './backoffice/cinema';
 
 resources.createValidator = createValidator;
 
