@@ -85,26 +85,11 @@ export interface Reply {
   id: string;
   author: string;
   userId: string;
-  review: string;
+  comment: string;
   time: Date;
   updateAt: Date;
 }
-export interface ReplyRepository extends Repository<Reply, ReplyId> {
-  getReply(id: string, author: string, userId: string): Promise<Reply | null>;
-  getReplys(id: string, author: string): Promise<Reply[]>;
-  save(obj: Reply, ctx?: any): Promise<number>;
-  removeReply(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  increaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-  decreaseUsefulCount(id: string, author: string, userId: string, ctx?: any): Promise<number>;
-}
-export interface ReplyService extends Service<Reply, ReplyId, ReplyFilter> {
-}
 
-export interface ReplyId {
-  id: string;
-  author: string;
-  userId: string;
-}
 
 export const replyModel: Attributes = {
   id: {

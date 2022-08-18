@@ -136,7 +136,7 @@ import { useSavedController } from './items'
 import { useBackOfficeRoomController } from './backoffice/room';
 import { useRoomController } from './room';
 import { AppreciationController } from './appreciation';
-import { FilmUploadController } from './backoffice/film';
+import { FilmUploadController } from './backoffice/film'; 
 import { useMusicController } from './music';
 import { useBackOfficeMusicController } from './backoffice/music';
 import { LocationUploadController } from 'backoffice/location';
