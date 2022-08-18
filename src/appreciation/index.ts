@@ -10,6 +10,7 @@ import { Appreciation, AppreciationFilter, appreciationModel, AppreciationReposi
 import { Request as Req, Response as Res } from 'express';
 import { getStatusCode, handleError, Log } from 'express-ext';
 import { Validator } from 'onecore';
+import { useUrlQuery } from 'pg-extension';
 export * from './appreciation';
 
 export class AppreciationController {
@@ -43,9 +44,6 @@ export class AppreciationController {
       .catch((err) => handleError(err, res, this.log));
   }
 }
-
-
-
 
 export class AppreciationManager implements AppreciationService {
   constructor(
@@ -119,7 +117,8 @@ export function useAppreciationReactionController(log: Log, db: DB, generate: ()
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'appreciation', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'appreciationreaction', rateReactionModel, 'appreciation', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'appreciationcomment', commentModel, 'appreciation', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository);
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository,queryUrl);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
@@ -129,6 +128,7 @@ export function useAppreciationCommentController(log: Log, db: DB, mapper?: Temp
   const query = useQuery('appreciationcomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'appreciationcomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'appreciationcomment', commentModel, 'appreciation', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository);
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository,queryUrl);
   return new RateCommentController(log, service);
 }

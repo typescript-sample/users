@@ -68,45 +68,19 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
   app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow)
   app.get('/users/loadfollow/:id/', ctx.userInfo.load)
-
+  
+  app.post('/appreciation/rates/comments', ctx.appreciationComment.search);
   app.get('/appreciation/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/rates/:id/:author', ctx.appreciation.reply);
   app.post('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.setUseful);
   app.delete('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
-  app.get('/appreciation/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
+  // app.get('/appreciation/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
+  
   app.post('/appreciation/rates/:id/:author/comments/:userId', ctx.appreciationReaction.comment);
   app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId/', ctx.appreciationReaction.updateComment);
   app.delete('/appreciation/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
 
-  // app.get('/appreciation/search', ctx.appreciation.search);
-  // app.get('/appreciation/search', ctx.appreciation.search);
-  // app.post('/appreciation/search', ctx.appreciation.search);
-  // app.post('/appreciation/reply/search', ctx.comment.search);
-  // app.post('/appreciation', ctx.appreciation.create);
-  // app.put('/appreciation/:id/:author', ctx.appreciation.update);
-  // app.delete('/appreciation/:id/:author', ctx.appreciation.delete);
-  // app.post('/appreciation/:id/:author', ctx.appreciation.load);
-  // app.put('/appreciation/:id/:author', ctx.appreciation.update);
-  // app.patch('/appreciation/:id/:author', ctx.appreciation.patch);
-  // app.get('/appreciation/reply/:id/:author', ctx.appreciation.getReplys);
-  // app.post('/appreciation/reply/:id/:author/:userid', ctx.appreciation.reply);
-  // app.delete('/appreciation/reply/:id/:author/:userid', ctx.appreciation.removeReply);
-  // app.put('/appreciation/reply/:id/:author/:userid', ctx.appreciation.updateReply);
-
-  // appreciation reply
-  // app.get('/appreciation-reply', ctx.appreciationReply.search);
-  // app.post('/appreciation-reply/search', ctx.appreciationReply.search);
-  // app.get('/appreciation-reply/search', ctx.appreciationReply.search);
-  // app.get('/appreciation-reply/:id', ctx.appreciationReply.load);
-  // app.post('/appreciation-reply', ctx.appreciationReply.insert);
-  // app.put('/appreciation-reply/:id', ctx.appreciationReply.update);
-  // app.patch('/appreciation-reply/:id', ctx.appreciationReply.patch);
-  // app.delete('/appreciation-reply/:id', ctx.appreciationReply.delete);
-  // app.post(
-  //   '/appreciation-reply/useful',
-  //   ctx.appreciationReply.usefulAppreciation
-  // );
 
   // Aticles
   app.post('/articles/search', ctx.article.search);
