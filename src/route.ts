@@ -375,6 +375,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/rooms/search', ctx.room.search);
   app.post('/rooms/search', ctx.room.search);
   app.get('/rooms/:id', ctx.room.load);
+  // app.post('/rooms/reserve', ctx.room.saveReservation);
 
   // Music
   app.get('/musics/search', ctx.music.search);

@@ -796,12 +796,17 @@ create table music (
 );
 INSERT INTO music (id,name,author,releaseDate,duration,lyric) VALUES ('00001','Họ trông chờ gì ở tôi','ICD','15/03/2019','Ánh đèn vàng là sợi dây trói mình lại ở bên cái ghế. Không thể đem cho những cảm xúc tiêu cực nên phải tái chế');
 
-create table booking (
+create table reservation (
   id character varying(40) primary key,
   startdate date,
 	enddate date,
   guestid varchar(255),
   totalprice integer,
-
-
+  roomid varchar(255)
 );
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('01','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('02','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('03','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('04','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('05','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
+insert into reservation (id, startdate,enddate,guestid,totalprice,roomid) values ('06','2022-08-18','2022-08-25','ra0mKfxLs',500,'00001')
