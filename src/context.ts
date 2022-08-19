@@ -137,7 +137,7 @@ import { useBackOfficeRoomController } from './backoffice/room';
 import { useRoomController } from './room';
 import { AppreciationController } from './appreciation';
 import { FilmUploadController } from './backoffice/film'; 
-import { useMusicController } from './music';
+import { useMusicController, usePlaylistController, useSavedListSongController, useSavedMusicsController } from './music';
 import { useBackOfficeMusicController } from './backoffice/music';
 import { LocationUploadController } from 'backoffice/location';
 import { CinemaUploadController } from './backoffice/cinema';
@@ -229,12 +229,15 @@ export interface ApplicationContext {
   saveItem: SavedController;
   saveLocation: SavedController;
   saveFilm: SavedController;
+  saveMusic: SavedController;
+  saveListsong: SavedController;
   criteriaReaction: ReactionController;
   criteriaRate: RateController;
   criteriaComment: QueryController;
   backofficeRoom:Controller;
   music: QueryController;
   backofficeMusic: Controller;
+  playlist:Controller;
 }
 
 export function useContext(
@@ -493,6 +496,8 @@ export function useContext(
   const saveItem=useSavedController(logger.error, queryDB)
   const saveLocation=useSavedLocationController(logger.error, queryDB)
   const saveFilm=useSavedFilmsController(logger.error, queryDB)
+  const saveMusic=useSavedMusicsController(logger.error, queryDB)
+  const saveListsong=useSavedListSongController(logger.error, queryDB)
 
   const directorService = new StringService(
     'filmdirector',
@@ -649,6 +654,8 @@ export function useContext(
   const backofficeRoom = useBackOfficeRoomController(logger.error, mainDB, mapper);
   const music = useMusicController(logger.error, mainDB, mapper);
   const backofficeMusic = useBackOfficeMusicController(logger.error, mainDB, mapper);
+
+  const playlist = usePlaylistController(logger.error, mainDB, mapper);
   //company-rate
   const criteriaRate = useCompanyRateController(logger.error, queryDB, mapper);
   const criteriaReaction = useCompanyRateReactionController(logger.error, queryDB, mapper);
@@ -724,7 +731,10 @@ export function useContext(
     backofficeRoom,
     music,
     backofficeMusic,
-    room
+    room,
+    saveMusic,
+    playlist,
+    saveListsong
   };
 }
 

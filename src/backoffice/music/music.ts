@@ -7,7 +7,6 @@ export interface MusicFilter extends Filter {
   releaseDate?: Date;
   duration?: TimeRange;
   lyric?: string;
-
 }
 
 export interface Music {
@@ -18,6 +17,7 @@ export interface Music {
   duration?: Date;
   lyric?: string;
   imageURL?: string;
+  mp3URL?:string;
 
 }
 
@@ -46,6 +46,9 @@ export const musicModel: Attributes = {
   lyric: {
   },
   imageURL: {
+    length: 1500,
+  },
+  mp3URL: {
     length: 1500,
   },
 };

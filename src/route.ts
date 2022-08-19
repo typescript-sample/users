@@ -363,4 +363,21 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/musics/:id', ctx.backofficeMusic.update);
   app.patch('/backoffice/musics/:id', ctx.backofficeMusic.patch);
   app.delete('/backoffice/musics/:id', ctx.backofficeMusic.delete);
+
+  app.get('/saved-musics/:id/', ctx.saveMusic.load);
+  app.get('/saved-musics/:id/:itemId', ctx.saveMusic.save);
+  app.delete('/saved-musics/:id/:itemId', ctx.saveMusic.remove);
+
+  app.get('/musics/playlist/search', ctx.playlist.search);
+  app.post('/musics/playlist/search', ctx.playlist.search);
+  app.get('/musics/playlist/:id', ctx.playlist.load);
+  app.post('/musics/playlist/', ctx.playlist.create);
+  app.put('/musics/playlist/:id', ctx.playlist.update);
+  app.patch('/musics/playlist/:id', ctx.playlist.patch);
+  app.delete('/musics/playlist/:id', ctx.playlist.delete);
+
+  app.get('/saved-listsong/:id/', ctx.saveListsong.load);
+  app.post('/saved-listsong/:id/:itemId', ctx.saveListsong.save);
+  app.delete('/saved-listsong/:id/:itemId', ctx.saveListsong.remove);
+
 }
