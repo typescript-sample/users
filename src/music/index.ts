@@ -1,5 +1,5 @@
-import { Controller, Log, SavedController } from 'express-ext';
-import { Manager, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
+import { Controller, SavedController } from 'express-ext';
+import { Log, Manager, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
