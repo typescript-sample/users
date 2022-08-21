@@ -1,5 +1,5 @@
-import { fileUploadGalleryModel } from '../my-profile';
 import { Attributes, Filter, Info, Query, Repository } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
 
 export interface CinemaFilter extends Filter {
   id?: string;

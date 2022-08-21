@@ -38,8 +38,8 @@ import {
   Cinema,
   CinemaFilter,
   cinemaModel,
-  CinemaRepository,
   CinemaQuery,
+  CinemaRepository,
 } from './cinema';
 
 import { QueryController } from 'express-ext';
@@ -85,7 +85,7 @@ export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): Cin
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, db.driver, query);
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const infoRepository = new SqlInfoRepository<Info>(db, 'cinemainfo', infoModel, buildToSave);
-  const service = new CinemaService(builder.search, repository, infoRepository)
+  const service = new CinemaService(builder.search, repository, infoRepository);
   return new CinemaController(log, service);
 }
 
@@ -104,7 +104,7 @@ export function useCinemaReactionController(log: Log, db: DB, mapper?: TemplateM
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'cinemarate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'cinemaratereaction', rateReactionModel, 'cinemarate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'cinemaratecomment', commentModel, 'cinemarate', 'id', 'author', 'replyCount', 'author', 'id');
-  const service = new ReactionService(builder.search, rateRepository, rateReactionRepository, rateCommentRepository)
+  const service = new ReactionService(builder.search, rateRepository, rateReactionRepository, rateCommentRepository);
   return new ReactionController(
     log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');

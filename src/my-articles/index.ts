@@ -11,7 +11,6 @@ export class ArticleController extends Controller<Article, string, ArticleFilter
   }
 }
 
-
 export class ArticleManager extends Manager<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository);
@@ -21,7 +20,7 @@ export class ArticleManager extends Manager<Article, string, ArticleFilter> impl
 export function useMyArticleController(log: Log, db: DB, mapper?: TemplateMap): ArticleController {
   const queryArticles = useQuery('article', mapper, articleModel, true);
   const builder = new SearchBuilder<Article, ArticleFilter>(db.query, 'article', articleModel, postgres, queryArticles);
-  const repository = new Repository<Article, string>(db,'article', articleModel);
-  const service= new ArticleManager(builder.search, repository);
+  const repository = new Repository<Article, string>(db, 'article', articleModel);
+  const service = new ArticleManager(builder.search, repository);
   return new ArticleController(log, service);
 }

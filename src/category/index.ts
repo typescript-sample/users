@@ -44,8 +44,8 @@ export function useItemCategoryController(
     db.driver,
     query
   );
-  const repository = new Repository<Category, string>(db, 'itemcategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new Repository<Category, string>(db, 'itemcategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
 
@@ -63,8 +63,8 @@ export function useFilmCategoryController(
     db.driver,
     query
   );
-  const repository = new  Repository<Category, string>(db, 'filmcategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new  Repository<Category, string>(db, 'filmcategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
 
@@ -82,7 +82,7 @@ export function useCompanyCategoryController(
     db.driver,
     query
   );
-  const repository = new  Repository<Category, string>(db, 'companycategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new  Repository<Category, string>(db, 'companycategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }

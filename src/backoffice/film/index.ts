@@ -1,9 +1,10 @@
 import { Log } from 'express-ext';
+import { Controller} from 'express-ext';
+import { StorageRepository } from 'google-storage';
+import { Delete, GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
 import { BuildUrl, Generate, Manager, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { GenericSearchStorageService, ModelConf, Delete, StorageConf, UploadInfo } from 'one-storage';
-import { StorageRepository } from 'google-storage';
 import {
   Film,
   FilmFilter,
@@ -11,7 +12,6 @@ import {
   FilmRepository,
   FilmService
 } from './film';
-import { Controller} from 'express-ext';
 
 
 import { UploadController, UploadService } from 'upload-express';
@@ -136,12 +136,12 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-    this.getGalllery = this.getGalllery.bind(this)
+    this.getGalllery = this.getGalllery.bind(this);
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {
       if (item) {
-        console.log('this.model.gallery', this.model.gallery)
+        console.log('this.model.gallery', this.model.gallery);
         return (item as any)[this.model.gallery];
       }
       return [];

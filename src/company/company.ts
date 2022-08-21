@@ -1,6 +1,6 @@
-import { fileUploadGalleryModel } from '../my-profile';
 import { UploadInfo } from 'one-storage';
-import { Attributes, Filter, Info, NumberRange, Repository, Query, SearchResult } from 'onecore';
+import { Attributes, Filter, Info, NumberRange, Query, Repository, SearchResult } from 'onecore';
+import { fileUploadGalleryModel } from '../my-profile';
 
 export interface Company {
   id: string;
@@ -144,19 +144,19 @@ export const rateFullInfoModel: Attributes = {
   score: {
     type: 'number',
   },
-  rate1:{
+  rate1: {
     type: 'number',
   },
-  rate2:{
+  rate2: {
     type: 'number',
   },
-  rate3:{
+  rate3: {
     type: 'number',
   },
-  rate4:{
+  rate4: {
     type: 'number',
   },
-  rate5:{
+  rate5: {
     type: 'number',
   }
 };

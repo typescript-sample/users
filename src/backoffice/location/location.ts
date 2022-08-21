@@ -1,5 +1,5 @@
-import { fileUploadGalleryModel } from '../../my-profile';
 import { Attributes, Filter, Repository, Service } from 'onecore';
+import { fileUploadGalleryModel } from '../../my-profile';
 
 export interface LocationFilter extends Filter {
   id?: string;

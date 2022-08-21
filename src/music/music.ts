@@ -1,4 +1,4 @@
-import { Attributes, Filter, Query, TimeRange, ViewRepository, Repository, Service } from 'onecore'
+import { Attributes, Filter, Query, Repository, Service, TimeRange, ViewRepository } from 'onecore';
 
 export interface MusicFilter extends Filter {
   id?: string;
@@ -22,7 +22,7 @@ export interface Music {
 
 export interface MusicRepository extends ViewRepository<Music, string> {
 }
-export interface MusicQuery extends Query<Music, string,MusicFilter> {
+export interface MusicQuery extends Query<Music, string, MusicFilter> {
 }
 
 export const musicModel: Attributes = {
@@ -64,7 +64,7 @@ export interface Playlist {
 }
 export interface PlaylistRepository extends Repository<Playlist, string> {
 }
-export interface PlaylistService extends Service<Playlist, string,PlaylistFilter> {
+export interface PlaylistService extends Service<Playlist, string, PlaylistFilter> {
 }
 export const playlistModel: Attributes = {
   id: {

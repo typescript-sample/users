@@ -1,29 +1,27 @@
 import { Controller, SavedController } from 'express-ext';
+import { QueryController } from 'express-ext';
 import { Log, Manager, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-
 import {
   Music,
   MusicFilter,
   musicModel,
-  MusicRepository,
   MusicQuery,
+  MusicRepository,
   Playlist,
   PlaylistFilter,
-  PlaylistService,
-  PlaylistRepository,
   playlistModel,
+  PlaylistRepository,
+  PlaylistService,
 } from './music';
-import { QueryController } from 'express-ext';
 
 export class MusicController extends QueryController<Music, string, MusicFilter> {
   constructor(log: Log, mucsicService: MusicQuery) {
     super(log, mucsicService);
   }
 }
-
 
 export class MusicService extends ViewSearchManager<Music, string, MusicFilter> implements MusicQuery {
   constructor(
@@ -75,7 +73,6 @@ export class PlaylistManager
   ) {
     super(search, repository);
   }
-
 }
 
 export function usePlaylistController(
@@ -83,15 +80,15 @@ export function usePlaylistController(
   db: DB,
   mapper?: TemplateMap
 ): PlaylistController {
-  const query = useQuery("playlist", mapper, playlistModel, true);
+  const query = useQuery('playlist', mapper, playlistModel, true);
   const builder = new SearchBuilder<Playlist, PlaylistFilter>(
     db.query,
-    "playlist",
+    'playlist',
     playlistModel,
     db.driver,
     query
   );
-  const repository = new Repository<Music, string>(db, "playlist", playlistModel);
+  const repository = new Repository<Music, string>(db, 'playlist', playlistModel);
   const service = new PlaylistManager(builder.search, repository);
   return new PlaylistController(log, service);
 }

@@ -1,18 +1,12 @@
 import { FollowController } from 'express-ext';
-import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
-import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
-import { BuildUrl, Generate, Log, SavedService, Search, ViewSearchManager } from 'onecore';
-import { TemplateMap, useQuery } from 'query-mappers';
+import { SavedController } from 'express-ext';
+import { QueryController } from 'express-ext';
 import { Delete, StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
-import {
-  LocationInfomation,
-  LocationInfomationQuery,
-  locationInfomationModel,
-  LocationInfomationFilter,
-  LocationInfomationRepository
-} from './location';
-import { SavedController } from 'express-ext';
+import { BuildUrl, Generate, Log, SavedService, Search, ViewSearchManager } from 'onecore';
+import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
+import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
   infoModel,
@@ -44,18 +38,23 @@ import {
 } from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
+import { UploadController, UploadService } from 'upload-express';
 import { check } from 'xvalidators';
+import {
+  LocationInfomation,
+  LocationInfomationFilter,
+  locationInfomationModel,
+  LocationInfomationQuery,
+  LocationInfomationRepository
+} from './location';
 import {
   Location,
   LocationFilter,
   locationModel,
-  LocationRepository,
   LocationQuery,
+  LocationRepository,
 } from './location';
-import { QueryController } from 'express-ext';
-import { UploadController, UploadService } from 'upload-express';
 
-//---------------------------------------------------
 export class LocationController extends QueryController<Location, string, LocationFilter> {
   constructor(log: Log, public locationService: LocationQuery) {
     super(log, locationService);
@@ -71,7 +70,7 @@ export class LocationUploadController extends UploadController {
     super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
   }
 }
-//--------------------------------------------
+
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
   implements LocationQuery {

@@ -1,19 +1,18 @@
-import { StorageRepository } from "google-storage";
-import { GenericSearchStorageService, ModelConf, Delete, StorageConf, UploadInfo } from 'one-storage';
-import { BuildUrl, Generate, Log, Manager, Search } from "onecore";
-import { DB, postgres, Repository, SearchBuilder } from "query-core";
-import { TemplateMap, useQuery } from "query-mappers";
-import shortid from "shortid";
+import { Controller } from 'express-ext';
+import { StorageRepository } from 'google-storage';
+import { Delete, GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
+import { BuildUrl, Generate, Log, Manager, Search } from 'onecore';
+import { DB, postgres, Repository, SearchBuilder } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
+import shortid from 'shortid';
+import { UploadController, UploadService } from 'upload-express';
 import {
   Cinema,
   CinemaFilter,
   cinemaModel,
   CinemaRepository,
   CinemaService,
-} from "./cinema";
-import { Request, Response } from "express";
-import { Controller, handleError} from "express-ext";
-import { UploadController, UploadService } from 'upload-express';
+} from './cinema';
 
 export class BackOfficeCinemaController extends Controller<Cinema, string, CinemaFilter> {
   constructor(log: Log, private cinemaService: CinemaService) {
@@ -36,7 +35,6 @@ export class CinemaManager
   ) {
     super(search, repository);
   }
-
 }
 
 export function useBackOfficeCinemaController(
@@ -45,24 +43,22 @@ export function useBackOfficeCinemaController(
   mapper?: TemplateMap
 ): BackOfficeCinemaController {
 
-  const query = useQuery("cinema", mapper, cinemaModel, true);
+  const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(
     db.query,
-    "cinema",
+    'cinema',
     cinemaModel,
     db.driver,
     query
   );
-  const repository = new Repository<Cinema, string>(db, "cinema", cinemaModel);
+  const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const service = new CinemaManager(builder.search, repository);
   return new BackOfficeCinemaController(log, service);
 }
 
-
 export function generate(): string {
   return shortid.generate();
 }
-
 
 export class CinemaUploadService extends GenericSearchStorageService<Cinema, string, CinemaFilter> implements UploadService {
   constructor(
@@ -78,7 +74,7 @@ export class CinemaUploadService extends GenericSearchStorageService<Cinema, str
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-    this.getGalllery = this.getGalllery.bind(this)
+    this.getGalllery = this.getGalllery.bind(this);
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {
@@ -94,7 +90,7 @@ export function useCinemaUploadController(log: Log, db: DB, storage: StorageRepo
   sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): CinemaUploadController {
   const queryItems = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, postgres, queryItems);
-  const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel)
+  const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const controller = new CinemaUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
   return new CinemaUploadController(log, controller, generateId, sizesCover, sizesImage);
 }

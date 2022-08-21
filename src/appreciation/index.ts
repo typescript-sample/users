@@ -1,4 +1,7 @@
-import { Search } from 'onecore';
+import { Request as Req, Response as Res } from 'express';
+import { getStatusCode, handleError, Log } from 'express-ext';
+import { Search, Validator } from 'onecore';
+import { useUrlQuery } from 'pg-extension';
 import { DB, GenericRepository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Rate, RateFilter, rateModel } from 'rate-core';
@@ -7,10 +10,7 @@ import { RateCommentController, ReactionController } from 'review-reaction-expre
 import { commentModel, CommentQuery, rateReactionModel, SqlCommentRepository, SqlReactionRepository } from 'review-reaction-query';
 import { check, createValidator } from 'xvalidators';
 import { Appreciation, AppreciationFilter, appreciationModel, AppreciationRepository, AppreciationService, Histories } from './appreciation';
-import { Request as Req, Response as Res } from 'express';
-import { getStatusCode, handleError, Log } from 'express-ext';
-import { Validator } from 'onecore';
-import { useUrlQuery } from 'pg-extension';
+
 export * from './appreciation';
 
 export class AppreciationController {
@@ -23,8 +23,8 @@ export class AppreciationController {
   }
 
   reply(req: Req, res: Res) {
-    const id: string = req.params.id || req.body.id || "";
-    const author: string = req.params.author || req.body.author || "";
+    const id: string = req.params.id || req.body.id || '';
+    const author: string = req.params.author || req.body.author || '';
     const response: Appreciation = { id, author, ...req.body };
     response.time = new Date();
     this.validator
@@ -62,15 +62,12 @@ export class AppreciationManager implements AppreciationService {
     const sr: Histories = { review: exist.review, time: exist.time };
     if (exist.histories && exist.histories.length > 0) {
       const history = exist.histories;
-      console.log(history)
       history.push(sr);
       response.histories = history;
     } else {
       response.histories = [sr];
     }
-    console.log(sr, response);
     const res = await this.repository.update(response);
-    console.log(res);
     return res;
   }
 }
@@ -118,7 +115,7 @@ export function useAppreciationReactionController(log: Log, db: DB, generate: ()
   const rateReactionRepository = new SqlReactionRepository(db, 'appreciationreaction', rateReactionModel, 'appreciation', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'appreciationcomment', commentModel, 'appreciation', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
-  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository,queryUrl);
+  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
@@ -129,6 +126,6 @@ export function useAppreciationCommentController(log: Log, db: DB, mapper?: Temp
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'appreciationcomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'appreciationcomment', commentModel, 'appreciation', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
-  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository,queryUrl);
+  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryUrl);
   return new RateCommentController(log, service);
 }

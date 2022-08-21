@@ -1,23 +1,24 @@
-import { Log, ViewManager, ViewSearchManager, Search } from 'onecore';
+import { FollowController } from 'express-ext';
+import { LoadSearchHandler, QueryController } from 'express-ext';
+import { Log, Search, ViewManager, ViewSearchManager } from 'onecore';
+import { FollowService } from 'pg-extension';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { buildQuery } from './query';
 import {
   User,
   UserFilter,
-  userModel,
-  UserRepository,
-  UserService,
   UserInfo,
+  UserInfoFilter,
+  userInfoModel,
   UserInfoQuery,
   UserInfoRepository,
-  userInfoModel,
-  UserInfoFilter
+  userModel,
+  UserRepository,
+  UserService
 } from './user';
-import { FollowService } from 'pg-extension';
-import { FollowController } from 'express-ext';
+
 export * from './user';
-import { LoadSearchHandler,QueryController } from 'express-ext';
 
 export class UserController extends LoadSearchHandler<User, string, UserFilter> {
   constructor(log: Log, find: Search<User, UserFilter>, service: UserService) {
@@ -25,7 +26,7 @@ export class UserController extends LoadSearchHandler<User, string, UserFilter> 
   }
 }
 
-export class UserInFoController extends QueryController<UserInfo, string,UserInfoFilter> {
+export class UserInFoController extends QueryController<UserInfo, string, UserInfoFilter> {
   constructor(log: Log, service: UserInfoQuery) {
     super(log, service);
   }

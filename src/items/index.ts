@@ -1,5 +1,4 @@
 import { SavedController } from 'express-ext';
-// import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
 import { Log, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, postgres, QueryRepository, Repository, SearchBuilder } from 'query-core';
@@ -36,6 +35,3 @@ export function useSavedController(log: Log, db: DB): SavedController<Item> {
   const service = new SavedService<string, Item>(savedRepository, repository.query, 50);
   return new SavedController<Item>(log, service, 'itemId', 'id');
 }
-//--------------------------------------------------
-
-

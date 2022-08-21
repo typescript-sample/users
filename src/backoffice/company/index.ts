@@ -1,8 +1,10 @@
-import { BuildUrl, Generate, Log, Manager, Search } from "onecore";
-import { StorageRepository } from "google-storage";
-import { DB, postgres, Repository, SearchBuilder } from "query-core";
+import { Controller } from 'express-ext';
+import { StorageRepository } from 'google-storage';
+import { Delete, GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
+import { BuildUrl, Generate, Log, Manager, Search } from 'onecore';
+import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { GenericSearchStorageService, ModelConf, Delete, StorageConf, UploadInfo } from 'one-storage';
+import { UploadController, UploadService } from 'upload-express';
 import {
   Company,
   CompanyFilter,
@@ -11,8 +13,6 @@ import {
   CompanyService,
 } from './company';
 
-import { Controller } from 'express-ext';
-import { UploadController, UploadService } from 'upload-express';
 export class BackOfficeCompanyController extends Controller<Company, string, CompanyFilter> {
   constructor(log: Log, companyService: CompanyService) {
     super(log, companyService);
@@ -51,7 +51,7 @@ export class CompanyUploadService extends GenericSearchStorageService<Company, s
     model?: ModelConf
   ) {
     super(search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-    this.getGalllery = this.getGalllery.bind(this)
+    this.getGalllery = this.getGalllery.bind(this);
   }
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {

@@ -10,7 +10,7 @@ export { MyProfileController };
 
 export function useMyProfileController(log: Log, db: DB, settings: UserSettings, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf): MyProfileController {
-  const repository = new Repository<User, string>(db,'users', userModel);
+  const repository = new Repository<User, string>(db, 'users', userModel);
   const service = new MyProfileManager(repository, settings, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
   return new MyProfileController(log, service, generateId, sizesCover, sizesImage, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany);
 }

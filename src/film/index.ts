@@ -1,5 +1,5 @@
 import { Log, SavedController } from 'express-ext';
-
+import { QueryController } from 'express-ext';
 import { SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository, buildToSave } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
@@ -36,16 +36,13 @@ import {
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
-
 import {
   Film,
   FilmFilter,
   filmModel,
-  FilmRepository,
   FilmQuery,
+  FilmRepository,
 } from './film';
-import { QueryController } from 'express-ext';
-
 
 export class FilmController extends QueryController<Film, string, FilmFilter> {
   constructor(log: Log, filmService: FilmQuery) {
@@ -77,7 +74,6 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
     });
   }
 }
-
 
 
 export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {

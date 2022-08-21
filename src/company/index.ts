@@ -1,14 +1,13 @@
 
-import { BuildUrl, Delete, Generate, Log, Search, ViewSearchManager } from 'onecore';
+import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, postgres, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
   infoModel, RatesService,
   RatesValidator
 } from 'rate-core';
-import shortid from 'shortid';
 import { SqlRatesRepository } from 'rate-query';
 import {
   Comment,
@@ -28,6 +27,7 @@ import {
   SqlInfoRepository,
   SqlReactionRepository
 } from 'review-reaction-query';
+import shortid from 'shortid';
 import { check } from 'xvalidators';
 import {
   RateCriteria,
@@ -39,9 +39,7 @@ import {
   CompanyFilter,
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
-import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
-import { StorageRepository } from 'google-storage';
-import { UploadService } from 'upload-express';
+
 import { QueryController } from 'express-ext';
 
 export class CompanyController extends QueryController<Company, string, CompanyFilter> {
@@ -126,4 +124,3 @@ export function useCompanyRateCommentController(log: Log, db: DB, mapper?: Templ
 export function generate(): string {
   return shortid.generate();
 }
-

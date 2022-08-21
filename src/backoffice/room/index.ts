@@ -1,3 +1,4 @@
+import { Controller} from 'express-ext';
 import { Log, Manager, Search } from 'onecore';
 import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -8,7 +9,6 @@ import {
   RoomRepository,
   RoomService,
 } from './room';
-import { Controller} from 'express-ext';
 
 export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
   constructor(log: Log, roomService: RoomService) {
