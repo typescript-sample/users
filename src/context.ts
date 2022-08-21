@@ -8,7 +8,6 @@ import {
   User,
   useUserRepository,
 } from 'authen-service';
-import { LocationUploadController } from 'backoffice/location';
 import { compare } from 'bcrypt';
 import { Comparator } from 'bcrypt-plus';
 import {
@@ -19,8 +18,7 @@ import {
   Middleware,
   MiddlewareController,
   ModelConfig,
-  resources,
-  useBuild
+  resources
 } from 'express-ext';
 import {
   Controller,
@@ -32,24 +30,13 @@ import {
   SavedController,
   UploadController
 } from 'express-types';
-import {
-  deleteFile,
-  GoogleStorageRepository,
-  map,
-  StorageConfig,
-  useBuildUrl,
-} from 'google-storage';
+import { deleteFile, GoogleStorageRepository, map, StorageConfig, useBuildUrl } from 'google-storage';
 import { generateToken } from 'jsonwebtoken-plus';
 import { MailConfig, MailService, Send } from 'mail-core';
 import nodemailer from 'nodemailer';
 import { ModelConf, StorageConf } from 'one-storage';
 import { PasswordController } from 'password-express';
-import {
-  MailSender,
-  PasswordService,
-  PasswordTemplateConfig,
-  usePasswordRepository,
-} from 'password-service';
+import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from 'password-service';
 import { CodeRepository, DB, StringService } from 'pg-extension';
 import { createChecker } from 'query-core';
 import { TemplateMap } from 'query-mappers';
@@ -66,29 +53,20 @@ import {
   Validator,
 } from 'signup-service';
 import { createValidator } from 'xvalidators';
-import {
-  useAppreciationCommentController,
-  useAppreciationController,
-  useAppreciationReactionController
-} from './appreciation';
+import { useAppreciationCommentController, useAppreciationController, useAppreciationReactionController } from './appreciation';
 import { AppreciationController } from './appreciation';
 import { useArticleController } from './article';
-import {
-  useBackOfficeCinemaController, useCinemaUploadController
-} from './backoffice/cinema';
+import { useBackOfficeCinemaController, useCinemaUploadController } from './backoffice/cinema';
 import { CinemaUploadController } from './backoffice/cinema';
 import { CompanyUploadController, useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
 import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
 import { FilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
+import { LocationUploadController } from './backoffice/location';
 import { useBackOfficeLocationController, useLocationUploadController } from './backoffice/location';
 import { useBackOfficeMusicController } from './backoffice/music';
 import { useBackOfficeRoomController } from './backoffice/room';
-import {
-  useCompanyCategoryController,
-  useFilmCategoryController,
-  useItemCategoryController,
-} from './category';
+import { useCompanyCategoryController, useFilmCategoryController, useItemCategoryController } from './category';
 import {
   useCinemaController,
   useCinemaRateCommentController,
@@ -111,11 +89,7 @@ import {
 } from './film';
 import { useItemController } from './items';
 import { useSavedController } from './items';
-import {
-  ResponseController,
-  useResponseController,
-  useResponseReactionController,
-} from './items-response';
+import { ResponseController, useResponseController, useResponseReactionController } from './items-response';
 import { useJobController } from './job';
 import {
   useLocationController,
@@ -128,16 +102,8 @@ import {
 } from './location';
 import { useMusicController, usePlaylistController, useSavedListSongController, useSavedMusicsController } from './music';
 import { useMyArticleController } from './my-articles';
-import {
-  MyItemController,
-  useMyItemController,
-  useMyItemUploadController,
-} from './my-items';
-import {
-  MyProfileController,
-  useMyProfileController,
-  UserSettings,
-} from './my-profile';
+import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
+import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
 import { useRoomController } from './room';
 import { useUserInfoController } from './user';
 import { useUserController, useUserFollowController } from './user';
@@ -264,14 +230,8 @@ export function useContext(
     conf.auth.template.body,
     conf.auth.template.subject
   );
-  const verifiedCodeRepository = new CodeRepository<string>(
-    mainDB,
-    'authencodes'
-  );
-  const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(
-    queryDB,
-    conf.auth
-  );
+  const verifiedCodeRepository = new CodeRepository<string>(mainDB, 'authencodes');
+  const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(queryDB, conf.auth);
   const authenticator = new Authenticator(
     status,
     compare,
@@ -288,11 +248,7 @@ export function useContext(
     verifiedCodeRepository,
     comparator.hash
   );
-  const authentication = new AuthenticationController(
-    logger.error,
-    authenticator.authenticate,
-    conf.cookie
-  );
+  const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
 
   const signupMailSender = new SignupSender(
     conf.signup.url,
@@ -356,79 +312,24 @@ export function useContext(
   const userInfo = useUserInfoController(logger.error, mainDB, mapper);
   const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
 
-  const skillService = new StringService(
-    'skill',
-    'skill',
-    queryDB.query,
-    queryDB.exec
-  );
-  const skill = new ItemsController<string[]>(
-    logger.error,
-    skillService.load,
-    'keyword'
-  );
-  const interestService = new StringService(
-    'interest',
-    'interest',
-    queryDB.query,
-    queryDB.exec
-  );
-  const interest = new ItemsController<string[]>(
-    logger.error,
-    interestService.load,
-    'keyword'
-  );
-  const lookingForService = new StringService(
-    'search',
-    'item',
-    queryDB.query,
-    queryDB.exec
-  );
-  const lookingFor = new ItemsController<string[]>(
-    logger.error,
-    interestService.load,
-    'keyword'
-  );
-  const companyService = new StringService(
-    'user_companies',
-    'company',
-    queryDB.query,
-    queryDB.exec
-  );
-  const companyQuery = new ItemsController<string[]>(
-    logger.error,
-    companyService.load,
-    'keyword'
-  );
-  const educationService = new StringService(
-    'educations',
-    'school',
-    queryDB.query,
-    queryDB.exec
-  );
-  const educationQuery = new ItemsController<string[]>(
-    logger.error,
-    educationService.load,
-    'keyword'
-  );
+  const skillService = new StringService('skill', 'skill', queryDB.query, queryDB.exec);
+  const skill = new ItemsController<string[]>(logger.error, skillService.load, 'keyword');
+  const interestService = new StringService('interest', 'interest', queryDB.query, queryDB.exec);
+  const interest = new ItemsController<string[]>(logger.error, interestService.load, 'keyword');
+  const lookingForService = new StringService('search', 'item', queryDB.query, queryDB.exec);
+  const lookingFor = new ItemsController<string[]>(logger.error, interestService.load, 'keyword');
+  const companyService = new StringService('user_companies', 'company', queryDB.query, queryDB.exec);
+  const companyQuery = new ItemsController<string[]>(logger.error, companyService.load, 'keyword');
+  const educationService = new StringService('educations', 'school', queryDB.query, queryDB.exec);
+  const educationQuery = new ItemsController<string[]>(logger.error, educationService.load, 'keyword');
   const appreciation = useAppreciationController(logger.error, mainDB);
   const appreciationComment = useAppreciationCommentController(logger.error, mainDB);
   const appreciationReaction = useAppreciationReactionController(logger.error, mainDB, generate);
-  // const appreciationReply = useAppreciationReplyController(
-  //   logger.error,
-  //   mainDB,
-  //   undefined,
-  //   build
-  // );
 
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
   const bucket = storage.bucket(conf.bucket);
-  const storageRepository = new GoogleStorageRepository(
-    bucket,
-    storageConfig,
-    map
-  );
+  const storageRepository = new GoogleStorageRepository(bucket, storageConfig, map);
   const sizesCover: number[] = [576, 768];
   const sizesImage: number[] = [40, 400];
   const myprofile = useMyProfileController(
@@ -467,11 +368,7 @@ export function useContext(
     conf.modelItem,
     mapper
   );
-  const companyCategory = useCompanyCategoryController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const companyCategory = useCompanyCategoryController(logger.error, queryDB, mapper);
 
   const cinema = useCinemaController(logger.error, queryDB, mapper);
   const cinemaRate = useCinemaRateController(logger.error, queryDB, mapper);
@@ -499,55 +396,15 @@ export function useContext(
   const saveMusic = useSavedMusicsController(logger.error, queryDB);
   const saveListsong = useSavedListSongController(logger.error, queryDB);
 
-  const directorService = new StringService(
-    'filmdirector',
-    'director',
-    queryDB.query,
-    queryDB.exec
-  );
-  const director = new ItemsController<string[]>(
-    logger.error,
-    directorService.load,
-    'keyword'
-  );
-  const castService = new StringService(
-    'casts',
-    'actor',
-    queryDB.query,
-    queryDB.exec
-  );
-  const cast = new ItemsController<string[]>(
-    logger.error,
-    castService.load,
-    'keyword'
-  );
-  const productionService = new StringService(
-    'filmproduction',
-    'production',
-    queryDB.query,
-    queryDB.exec
-  );
-  const production = new ItemsController<string[]>(
-    logger.error,
-    productionService.load,
-    'keyword'
-  );
-  const countryService = new StringService(
-    'filmcountry',
-    'country',
-    queryDB.query,
-    queryDB.exec
-  );
-  const country = new ItemsController<string[]>(
-    logger.error,
-    countryService.load,
-    'keyword'
-  );
-  const film = useFilmController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const directorService = new StringService('filmdirector', 'director', queryDB.query, queryDB.exec);
+  const director = new ItemsController<string[]>(logger.error, directorService.load, 'keyword');
+  const castService = new StringService('casts', 'actor', queryDB.query, queryDB.exec);
+  const cast = new ItemsController<string[]>(logger.error, castService.load, 'keyword');
+  const productionService = new StringService('filmproduction', 'production', queryDB.query, queryDB.exec);
+  const production = new ItemsController<string[]>(logger.error, productionService.load, 'keyword');
+  const countryService = new StringService('filmcountry', 'country', queryDB.query, queryDB.exec);
+  const country = new ItemsController<string[]>(logger.error, countryService.load, 'keyword');
+  const film = useFilmController(logger.error, queryDB, mapper);
   const backOfficeFilm = useBackOfficeFilmController(
     logger.error,
     queryDB,
@@ -559,11 +416,7 @@ export function useContext(
   );
   const filmRate = useFilmRateController(logger.error, queryDB, mapper);
   const filmReaction = useFilmReactionController(logger.error, queryDB, mapper);
-  const filmComment = useFilmRateCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const filmComment = useFilmRateCommentController(logger.error, queryDB, mapper);
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
   const backOfficeFilmUpload = useFilmUploadController(
@@ -597,28 +450,15 @@ export function useContext(
   );
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
-  const locationComment = useLocationRateCommentController(
-    logger.error,
-    queryDB,
-    mapper
-  );
+  const locationComment = useLocationRateCommentController(logger.error, queryDB, mapper);
   const locationFollow = useLocationFollowController(logger.error, queryDB);
 
   const items = useItemController(logger.error, queryDB);
   const itemResponse = useResponseController(logger.error, queryDB, mapper);
   const itemReaction = useResponseReactionController(logger.error, queryDB, mapper);
   const itemCategory = useItemCategoryController(logger.error, queryDB, mapper);
-  const brandService = new StringService(
-    'brand',
-    'brand',
-    queryDB.query,
-    queryDB.exec
-  );
-  const brand = new ItemsController<string[]>(
-    logger.error,
-    brandService.load,
-    'keyword'
-  );
+  const brandService = new StringService('brand', 'brand', queryDB.query, queryDB.exec);
+  const brand = new ItemsController<string[]>(logger.error, brandService.load, 'keyword');
   const myitems = useMyItemController(
     logger.error,
     queryDB,
