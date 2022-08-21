@@ -57,12 +57,9 @@ import { useAppreciationCommentController, useAppreciationController, useAppreci
 import { AppreciationController } from './appreciation';
 import { useArticleController } from './article';
 import { useBackOfficeCinemaController, useCinemaUploadController } from './backoffice/cinema';
-import { CinemaUploadController } from './backoffice/cinema';
-import { CompanyUploadController, useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
+import { useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
 import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
-import { FilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
-import { LocationUploadController } from './backoffice/location';
 import { useBackOfficeLocationController, useLocationUploadController } from './backoffice/location';
 import { useBackOfficeMusicController } from './backoffice/music';
 import { useBackOfficeRoomController } from './backoffice/room';
@@ -150,13 +147,13 @@ export interface ApplicationContext {
   myarticles: Controller;
   cinema: QueryController;
   backofficeCinema: Controller;
-  backofficeCinemaUpload: CinemaUploadController;
+  backofficeCinemaUpload: UploadController;
   cinemaRate: RateController;
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
   backofficeCompany: Controller;
-  backofficeCompanyUpload: CompanyUploadController;
+  backofficeCompanyUpload: UploadController;
   // companyRate: RateController;
   // companyReaction: ReactionController;
   // companyComment: QueryController;
@@ -168,7 +165,7 @@ export interface ApplicationContext {
   filmReaction: ReactionController;
   filmComment: QueryController;
   filmCategory: Controller;
-  backOfficeFilmUpload: FilmUploadController;
+  backOfficeFilmUpload: UploadController;
   director: Query;
   cast: Query;
   production: Query;
@@ -182,7 +179,7 @@ export interface ApplicationContext {
   myitemsUpload: UploadController;
   location: QueryController;
   backofficeLocation: Controller;
-  backofficeLocationUpload: LocationUploadController;
+  backofficeLocationUpload: UploadController;
   locationRate: RateController;
   locationReaction: ReactionController;
   locationComment: QueryController;
@@ -190,8 +187,6 @@ export interface ApplicationContext {
   jobs: QueryController;
   room: QueryController;
   backofficeJob: Controller;
-  // rateCriteria: ReactionController;
-  // saveItem: SavedController;
   saveItem: SavedController;
   saveLocation: SavedController;
   saveFilm: SavedController;
@@ -519,7 +514,6 @@ export function useContext(
     appreciation,
     appreciationComment,
     appreciationReaction,
-    // appreciationReply,
     comment,
     cinema,
     cinemaRate,

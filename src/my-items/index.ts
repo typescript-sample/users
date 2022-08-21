@@ -1,31 +1,18 @@
+import { Controller } from 'express-ext';
 import { StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
 import { BuildUrl, Delete, Generate, Log, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
+import { UploadController } from 'upload-express';
 import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
 export * from './item';
-import { Controller } from 'express-ext';
-import { UploadController } from 'upload-express';
 export type Save = (values: string[]) => Promise<number>;
-
-export class MyItemController extends Controller<Item, string, ItemFilter> {
-  constructor(log: Log, itemService: ItemService) {
-    super(log, itemService);
-  }
-}
-
-export class MyItemUploadController extends UploadController {
-  constructor(log: Log, service: ItemService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-
 
 export class ItemManager extends GenericSearchStorageService<Item, string, ItemFilter> implements ItemService {
   constructor(search: Search<Item, ItemFilter>, repository: ItemRepository,
     storage: StorageRepository,
-    protected save: (values: string[]) => Promise<number>,
+    protected save: Save,
     deleteFile: Delete,
     generateId: Generate,
     buildUrl: BuildUrl,
@@ -49,7 +36,6 @@ export class ItemManager extends GenericSearchStorageService<Item, string, ItemF
       return [];
     });
   }
-
   insert(item: Item, ctx?: any): Promise<number> {
     if (item.brand && item.brand.length > 0) {
       this.save([item.brand]);
@@ -77,12 +63,19 @@ export function useMyItemService(db: DB, storage: StorageRepository, save: (valu
   const repository = new Repository<Item, string>(db, 'item', itemModel);
   return new ItemManager(builder.search, repository, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
 }
+
+export class MyItemController extends Controller<Item, string, ItemFilter> {
+  constructor(log: Log, itemService: ItemService) {
+    super(log, itemService);
+  }
+}
 export function useMyItemController(log: Log, db: DB, storage: StorageRepository, save: (values: string[]) => Promise<number>, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): MyItemController {
   return new MyItemController(log, useMyItemService(db, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper));
 }
 
 export function useMyItemUploadController(log: Log, db: DB, storage: StorageRepository, save: (values: string[]) => Promise<number>, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): MyItemUploadController {
-  return new MyItemUploadController(log, useMyItemService(db, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper), generateId, sizesCover, sizesImage);
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
+  const service = useMyItemService(db, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
 }

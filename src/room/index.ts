@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { Attributes, Log } from 'express-ext';
-import { QueryController } from 'express-ext';
+import { Log, QueryController } from 'express-ext';
 import { Search, ViewSearchManager } from 'onecore';
 import { Statement } from 'pg-extension';
 import { DB, Repository, SearchBuilder } from 'query-core';
@@ -50,14 +49,14 @@ export function useRoomController(log: Log, db: DB, mapper?: TemplateMap): RoomC
   const queryRoom = useQuery('room', mapper, roomModel, true);
   const builder = new SearchBuilder<Room, RoomFilter>(db.query, 'room', roomModel, db.driver, queryRoom);
   const repository = new Repository<Room, string>(db, 'room', roomModel);
-  const reservationRepository = new SqlReservationRoomRepository(db, 'reservation', reservationModel, db.execBatch, 'startdate', 'enddate', 'roomid');
+  const reservationRepository = new SqlReservationRoomRepository(db, db.execBatch, 'startdate', 'enddate', 'roomid');
   const service = new RoomService(builder.search, repository, reservationRepository);
   return new RoomController(log, service);
 }
 
 export class SqlReservationRoomRepository extends Repository<Reservation, string> implements ReservationRoomRepository {
   constructor(
-    db: DB, table: string, attributes: Attributes,
+    db: DB,
     public execute: (statements: Statement[], firstSuccess?: boolean, ctx?: any) => Promise<number>,
     public startdate: string,
     public enddate: string,

@@ -64,7 +64,6 @@ export class ResponseController {
 }
 
 
-
 export function generate(): string {
   return shortid.generate();
 }

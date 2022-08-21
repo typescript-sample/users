@@ -14,18 +14,6 @@ import {
   CinemaService,
 } from './cinema';
 
-export class BackOfficeCinemaController extends Controller<Cinema, string, CinemaFilter> {
-  constructor(log: Log, private cinemaService: CinemaService) {
-    super(log, cinemaService);
-  }
-}
-export class CinemaUploadController extends UploadController {
-  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-
-
 export class CinemaManager
   extends Manager<Cinema, string, CinemaFilter>
   implements CinemaService {
@@ -41,7 +29,7 @@ export function useBackOfficeCinemaController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): BackOfficeCinemaController {
+): Controller<Cinema, string, CinemaFilter> {
 
   const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(
@@ -53,7 +41,7 @@ export function useBackOfficeCinemaController(
   );
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const service = new CinemaManager(builder.search, repository);
-  return new BackOfficeCinemaController(log, service);
+  return new Controller<Cinema, string, CinemaFilter>(log, service);
 }
 
 export function generate(): string {
@@ -87,10 +75,10 @@ export class CinemaUploadService extends GenericSearchStorageService<Cinema, str
 }
 
 export function useCinemaUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): CinemaUploadController {
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const queryItems = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, postgres, queryItems);
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
-  const controller = new CinemaUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new CinemaUploadController(log, controller, generateId, sizesCover, sizesImage);
+  const service = new CinemaUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
 }

@@ -5,15 +5,15 @@ import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { Job, JobFilter, jobModel, JobQuery, JobRepository } from './job';
 
-export class JobController extends QueryController<Job, string, JobFilter> {
-  constructor(log: Log, jobService: JobQuery) {
-    super(log, jobService);
-  }
-}
-
 export class JobService extends ViewSearchManager<Job, string, JobFilter> implements JobQuery {
   constructor(search: Search<Job, JobFilter>, repository: JobRepository) {
     super(search, repository);
+  }
+}
+
+export class JobController extends QueryController<Job, string, JobFilter> {
+  constructor(log: Log, jobService: JobQuery) {
+    super(log, jobService);
   }
 }
 export function useJobController(log: Log, db: DB, mapper?: TemplateMap): JobController {

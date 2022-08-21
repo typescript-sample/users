@@ -5,6 +5,7 @@ import { Delete, GenericSearchStorageService, ModelConf, StorageConf, UploadInfo
 import { BuildUrl, Generate, Manager, Search } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
+import { UploadController, UploadService } from 'upload-express';
 import {
   Film,
   FilmFilter,
@@ -12,22 +13,6 @@ import {
   FilmRepository,
   FilmService
 } from './film';
-
-
-import { UploadController, UploadService } from 'upload-express';
-
-
-export class BackOfficeFilmController extends Controller<Film, string, FilmFilter> {
-  constructor(log: Log, filmService: FilmService) {
-    super(log, filmService);
-  }
-}
-export class FilmUploadController extends UploadController {
-  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-
 
 export class FilmManager
   extends Manager<Film, string, FilmFilter>
@@ -99,7 +84,7 @@ export function useBackOfficeFilmController(
   saveProductions: (values: string[]) => Promise<number>,
   saveCountries: (values: string[]) => Promise<number>,
   mapper?: TemplateMap
-): BackOfficeFilmController {
+): Controller<Film, string, FilmFilter> {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(
     db.query,
@@ -117,7 +102,7 @@ export function useBackOfficeFilmController(
     saveProductions,
     saveCountries
   );
-  return new BackOfficeFilmController(
+  return new Controller<Film, string, FilmFilter>(
     log,
     service
   );
@@ -148,12 +133,11 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
     });
   }
 }
-
 export function useFilmUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): FilmUploadController {
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const queryItems = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, postgres, queryItems);
   const repository = new Repository<Film, string>(db, 'film', filmModel);
-  const controller = new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new FilmUploadController(log, controller, generateId, sizesCover, sizesImage);
+  const service = new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
 }

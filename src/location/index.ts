@@ -55,22 +55,6 @@ import {
   LocationRepository,
 } from './location';
 
-export class LocationController extends QueryController<Location, string, LocationFilter> {
-  constructor(log: Log, public locationService: LocationQuery) {
-    super(log, locationService);
-  }
-}
-export class LocationInfomationController extends QueryController<LocationInfomation, string, LocationInfomationFilter> {
-  constructor(log: Log, service: LocationInfomationQuery) {
-    super(log, service);
-  }
-}
-export class LocationUploadController extends UploadController {
-  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
   implements LocationQuery {
@@ -125,6 +109,17 @@ export class LocationUploadService extends GenericSearchStorageService<Location,
   }
 }
 
+
+export class LocationController extends QueryController<Location, string, LocationFilter> {
+  constructor(log: Log, public locationService: LocationQuery) {
+    super(log, locationService);
+  }
+}
+export class LocationInfomationController extends QueryController<LocationInfomation, string, LocationInfomationFilter> {
+  constructor(log: Log, service: LocationInfomationQuery) {
+    super(log, service);
+  }
+}
 export function useLocationController(
   log: Log,
   db: DB,
@@ -327,15 +322,11 @@ export function useLocationInfomationController(log: Log, db: DB, mapper?: Templ
   return new LocationInfomationController(log, service);
 }
 
-export function useLocationUploadService(db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadService {
+export function useLocationUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const queryItems = useQuery('item', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(db.query, 'item', locationModel, postgres, queryItems);
   const repository = new Repository<Location, string>(db, 'item', locationModel);
-  return new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-}
-
-export function useLocationUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): LocationUploadController {
-  return new LocationUploadController(log, useLocationUploadService(db, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper), generateId, sizesCover, sizesImage);
+  const service = new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
 }

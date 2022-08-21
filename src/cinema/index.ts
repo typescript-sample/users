@@ -1,3 +1,4 @@
+import { QueryController } from 'express-ext';
 import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
@@ -42,14 +43,6 @@ import {
   CinemaRepository,
 } from './cinema';
 
-import { QueryController } from 'express-ext';
-
-export class CinemaController extends QueryController<Cinema, string, CinemaFilter> {
-  constructor(log: Log, cinemaService: CinemaQuery) {
-    super(log, cinemaService);
-  }
-}
-
 export class CinemaService
   extends ViewSearchManager<Cinema, string, CinemaFilter>
   implements CinemaQuery {
@@ -60,7 +53,6 @@ export class CinemaService
   ) {
     super(search, repository);
   }
-
   load(id: string): Promise<Cinema | null> {
     return this.repository.load(id).then((cinema) => {
       if (!cinema) {
@@ -80,13 +72,13 @@ export class CinemaService
   }
 }
 
-export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): CinemaController {
+export function useCinemaController(log: Log, db: DB, mapper?: TemplateMap): QueryController<Cinema, string, CinemaFilter> {
   const query = useQuery('cinema', mapper, cinemaModel, true);
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, db.driver, query);
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const infoRepository = new SqlInfoRepository<Info>(db, 'cinemainfo', infoModel, buildToSave);
   const service = new CinemaService(builder.search, repository, infoRepository);
-  return new CinemaController(log, service);
+  return new QueryController<Cinema, string, CinemaFilter>(log, service);
 }
 
 export function useCinemaRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {

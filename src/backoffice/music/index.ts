@@ -11,12 +11,6 @@ import {
   MusicService,
 } from './music';
 
-export class BackOfficeMusicController extends Controller<Music, string, MusicFilter> {
-  constructor(log: Log, private musicService: MusicService) {
-    super(log, musicService);
-  }
-}
-
 export class MusicManager
   extends Manager<Music, string, MusicFilter>
   implements MusicService {
@@ -26,14 +20,13 @@ export class MusicManager
   ) {
     super(search, repository);
   }
-
 }
 
 export function useBackOfficeMusicController(
   log: Log,
   db: DB,
   mapper?: TemplateMap
-): BackOfficeMusicController {
+): Controller<Music, string, MusicFilter> {
 
   const query = useQuery('music', mapper, musicModel, true);
   const builder = new SearchBuilder<Music, MusicFilter>(
@@ -45,9 +38,8 @@ export function useBackOfficeMusicController(
   );
   const repository = new Repository<Music, string>(db, 'music', musicModel);
   const service = new MusicManager(builder.search, repository);
-  return new BackOfficeMusicController(log, service);
+  return new Controller<Music, string, MusicFilter>(log, service);
 }
-
 
 export function generate(): string {
   return shortid.generate();

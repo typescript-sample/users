@@ -13,30 +13,20 @@ import {
   CompanyService,
 } from './company';
 
-export class BackOfficeCompanyController extends Controller<Company, string, CompanyFilter> {
-  constructor(log: Log, companyService: CompanyService) {
-    super(log, companyService);
-  }
-}
-export class CompanyUploadController extends UploadController {
-  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-
 export class CompanyManager extends Manager<Company, string, CompanyFilter> implements CompanyService {
   constructor(search: Search<Company, CompanyFilter>, repository: CompanyRepository) {
     super(search, repository);
   }
 }
 
-export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeCompanyController {
+export function useBackOfficeCompanyController(log: Log, db: DB, mapper?: TemplateMap): Controller<Company, string, CompanyFilter> {
   const queryCompany = useQuery('company', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, db.driver, queryCompany);
   const repository = new Repository<Company, string>(db, 'company', companyModel);
   const service = new CompanyManager(builder.search, repository);
-  return new BackOfficeCompanyController(log, service);
+  return new Controller<Company, string, CompanyFilter>(log, service);
 }
+
 export class CompanyUploadService extends GenericSearchStorageService<Company, string, CompanyFilter> implements UploadService {
   constructor(
     search: Search<Company, CompanyFilter>,
@@ -64,10 +54,10 @@ export class CompanyUploadService extends GenericSearchStorageService<Company, s
 }
 
 export function useCompanyUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): CompanyUploadController {
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const queryItems = useQuery('company', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, postgres, queryItems);
   const repository = new Repository<Company, string>(db, 'company', companyModel);
-  const controller = new CompanyUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new CompanyUploadController(log, controller, generateId, sizesCover, sizesImage);
+  const service = new CompanyUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
 }

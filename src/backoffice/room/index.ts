@@ -10,18 +10,17 @@ import {
   RoomService,
 } from './room';
 
-export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
-  constructor(log: Log, roomService: RoomService) {
-    super(log, roomService);
-  }
-}
-
 export class RoomManager extends Manager<Room, string, RoomFilter> implements RoomService {
   constructor(search: Search<Room, RoomFilter>, repository: RoomRepository) {
     super(search, repository);
   }
 }
 
+export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
+  constructor(log: Log, roomService: RoomService) {
+    super(log, roomService);
+  }
+}
 export function useBackOfficeRoomController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeRoomController {
   const queryRoom = useQuery('room', mapper, roomModel, true);
   const builder = new SearchBuilder<Room, RoomFilter>(db.query, 'room', roomModel,  db.driver, queryRoom);

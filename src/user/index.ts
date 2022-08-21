@@ -20,18 +20,6 @@ import {
 
 export * from './user';
 
-export class UserController extends LoadSearchHandler<User, string, UserFilter> {
-  constructor(log: Log, find: Search<User, UserFilter>, service: UserService) {
-    super(log, find, service);
-  }
-}
-
-export class UserInFoController extends QueryController<UserInfo, string, UserInfoFilter> {
-  constructor(log: Log, service: UserInfoQuery) {
-    super(log, service);
-  }
-}
-
 export class UserManager
   extends ViewManager<User, string>
   implements UserService {
@@ -40,6 +28,11 @@ export class UserManager
   }
 }
 
+export class UserController extends LoadSearchHandler<User, string, UserFilter> {
+  constructor(log: Log, find: Search<User, UserFilter>, service: UserService) {
+    super(log, find, service);
+  }
+}
 export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserController {
   // const query = useQuery('users', mapper, userModel, true);
   const builder = new SearchBuilder<User, UserFilter>(
@@ -54,9 +47,7 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserC
   return new UserController(log, builder.search, service);
 }
 
-
 export function useUserFollowController(log: Log, db: DB): FollowController {
-
   const service = new FollowService<string>(
     db.execBatch,
     'userfollowing', 'id', 'following',
@@ -65,10 +56,14 @@ export function useUserFollowController(log: Log, db: DB): FollowController {
   return new FollowController(log, service, 'id', 'target');
 }
 
-
 export class UserInfoService extends ViewSearchManager<UserInfo, string, UserInfoFilter> implements UserInfoQuery {
   constructor(search: Search<UserInfo, UserInfoFilter>, repository: UserInfoRepository) {
     super(search, repository);
+  }
+}
+export class UserInFoController extends QueryController<UserInfo, string, UserInfoFilter> {
+  constructor(log: Log, service: UserInfoQuery) {
+    super(log, service);
   }
 }
 export function useUserInfoController(log: Log, db: DB, mapper?: TemplateMap): UserInFoController {
