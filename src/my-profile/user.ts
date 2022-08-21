@@ -1,3 +1,4 @@
+import { uploadModel } from 'one-storage';
 import { Attributes, DateRange, Filter, Repository } from 'onecore';
 import { UploadData } from 'upload-express';
 import { Company, Education, Work } from 'user';
@@ -129,16 +130,6 @@ export const fileUploadModel: Attributes = {
   },
 };
 
-export const fileUploadGalleryModel: Attributes = {
-  type: {},
-  url: {
-    required: true,
-  },
-  source: {
-    required: true,
-  },
-};
-
 export const userSettingsModel: Attributes = {
   userId: {},
   language: {},
@@ -196,7 +187,7 @@ export const userModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   links: {
     type: 'object',

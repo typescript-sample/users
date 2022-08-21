@@ -1,6 +1,5 @@
-import { UploadInfo } from 'one-storage';
+import { UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, Filter, Info10, Query, Repository, ViewRepository } from 'onecore';
-import { fileUploadGalleryModel } from '../my-profile';
 
 export interface FilmFilter extends Filter {
   id?: string;
@@ -98,7 +97,7 @@ export const filmModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   coverURL: {},
 };

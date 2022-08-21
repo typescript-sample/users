@@ -1,6 +1,5 @@
-import { UploadInfo } from 'one-storage';
+import { UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, Filter, NumberRange, Repository, Service } from 'onecore';
-import { fileUploadGalleryModel } from '../../my-profile';
 
 export interface Company {
   id: string;
@@ -59,7 +58,7 @@ export const companyModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   coverURL: {},
   imageURL: {},

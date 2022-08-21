@@ -1,6 +1,5 @@
-import { UploadData, UploadGallery, UploadInfo } from 'one-storage';
+import { UploadData, UploadGallery, UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
-import { fileUploadGalleryModel } from '../my-profile';
 
 export interface Item {
   id: string;
@@ -80,6 +79,6 @@ export const itemModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   }
 };

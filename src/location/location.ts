@@ -1,6 +1,5 @@
-import { UploadInfo } from 'one-storage';
+import { UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, Filter, Info, Query, Repository } from 'onecore';
-import { fileUploadGalleryModel } from '../my-profile';
 
 export interface LocationFilter extends Filter {
   id?: string;
@@ -62,7 +61,7 @@ export const locationModel: Attributes = {
   coverURL: {},
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
 };
 export interface LocationInfomation {

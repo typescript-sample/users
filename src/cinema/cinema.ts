@@ -1,5 +1,5 @@
+import { uploadModel } from 'one-storage';
 import { Attributes, Filter, Info, Query, Repository } from 'onecore';
-import { fileUploadGalleryModel } from '../my-profile';
 
 export interface CinemaFilter extends Filter {
   id?: string;
@@ -82,7 +82,7 @@ export const cinemaModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   coverURL: {},
 };
