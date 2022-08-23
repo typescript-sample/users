@@ -1,5 +1,4 @@
-import { fileUploadGalleryModel } from '../../my-profile';
-import { UploadInfo } from 'one-storage';
+import { UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, Filter, Info10, Repository, Service } from 'onecore';
 
 export interface FilmFilter extends Filter {
@@ -14,8 +13,8 @@ export interface FilmFilter extends Filter {
   casts?: string[];
   productions?: string[];
   countries?: string[];
-  language?:string;
-  writer?:string[];
+  language?: string;
+  writer?: string[];
 }
 
 export interface Film {
@@ -31,10 +30,10 @@ export interface Film {
   productions?: string[];
   countries?: string[];
   info?: Info10;
-  language?:string;
-  writer?:string[];
+  language?: string;
+  writer?: string[];
   gallery?: UploadInfo[];
-  coverURL?:string
+  coverURL?: string;
 }
 
 export interface FilmRepository extends Repository<Film, string> {
@@ -80,11 +79,11 @@ export const filmModel: Attributes = {
   countries: {
     type: 'primitives',
   },
-  language:{
-    type:'string'
+  language: {
+    type: 'string'
   },
-  writer:{
-    type:'strings'
+  writer: {
+    type: 'strings'
   },
   createdBy: {},
   createdAt: {
@@ -96,8 +95,7 @@ export const filmModel: Attributes = {
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   coverURL: {},
 };
-

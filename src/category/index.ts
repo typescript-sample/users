@@ -1,4 +1,4 @@
-import { Log } from 'express-ext';
+import { Controller, Log } from 'express-ext';
 import { Manager, Search } from 'onecore';
 import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -9,15 +9,6 @@ import {
   CategoryRepository,
   CategoryService,
 } from './category';
-
-import { Controller } from 'express-ext';
-
-export class CategoryController extends Controller<Category, string, CategoryFilter> {
-  constructor(log: Log, private categoryService: CategoryService) {
-    super(log, categoryService);
-    this.array = ['status'];
-  }
-}
 
 export class CategoryManager
   extends Manager<Category, string, CategoryFilter>
@@ -30,6 +21,12 @@ export class CategoryManager
   }
 }
 
+export class CategoryController extends Controller<Category, string, CategoryFilter> {
+  constructor(log: Log, categoryService: CategoryService) {
+    super(log, categoryService);
+    this.array = ['status'];
+  }
+}
 // Item category
 export function useItemCategoryController(
   log: Log,
@@ -44,8 +41,8 @@ export function useItemCategoryController(
     db.driver,
     query
   );
-  const repository = new Repository<Category, string>(db, 'itemcategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new Repository<Category, string>(db, 'itemcategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
 
@@ -63,8 +60,8 @@ export function useFilmCategoryController(
     db.driver,
     query
   );
-  const repository = new  Repository<Category, string>(db, 'filmcategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new  Repository<Category, string>(db, 'filmcategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }
 
@@ -82,7 +79,7 @@ export function useCompanyCategoryController(
     db.driver,
     query
   );
-  const repository = new  Repository<Category, string>(db, 'companycategory',categoryModel);
-  const service= new CategoryManager(builder.search, repository);
+  const repository = new  Repository<Category, string>(db, 'companycategory', categoryModel);
+  const service = new CategoryManager(builder.search, repository);
   return new CategoryController(log, service);
 }

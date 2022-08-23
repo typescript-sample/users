@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { buildAndCheckId, handleError, minimize, respondModel} from 'express-ext';
+import { buildAndCheckId, handleError, minimize, respondModel } from 'express-ext';
 import { Log } from 'onecore';
 import { UploadController } from 'upload-express';
 import { UserSettings } from '../my-profile';

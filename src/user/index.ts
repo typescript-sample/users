@@ -1,18 +1,18 @@
-import { Log, ViewManager, ViewSearchManager, Search } from 'onecore';
+import { Log, Search, ViewManager, ViewSearchManager } from 'onecore';
 import { DB, postgres, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import { buildQuery } from './query';
 import {
   User,
   UserFilter,
-  userModel,
-  UserRepository,
-  UserService,
   UserInfo,
+  UserInfoFilter,
+  userInfoModel,
   UserInfoQuery,
   UserInfoRepository,
-  userInfoModel,
-  UserInfoFilter
+  userModel,
+  UserRepository,
+  UserService
 } from './user';
 import { buildToSave, FollowService } from 'pg-extension';
 import { FollowController } from 'express-ext';
@@ -32,11 +32,6 @@ export class UserController extends QueryController<User, string, UserFilter> {
   }
 }
 
-export class UserInFoController extends QueryController<UserInfo, string,UserInfoFilter> {
-  constructor(log: Log, service: UserInfoQuery) {
-    super(log, service);
-  }
-}
 
 export class UserManager
   extends ViewSearchManager<User, string,UserFilter>
@@ -115,7 +110,6 @@ export function generate(): string {
 
 //--follow------------------------------------
 export function useUserFollowController(log: Log, db: DB): FollowController {
-
   const service = new FollowService<string>(
     db.execBatch,
     'userfollowing', 'id', 'following',
@@ -124,10 +118,14 @@ export function useUserFollowController(log: Log, db: DB): FollowController {
   return new FollowController(log, service, 'id', 'target');
 }
 
-
 export class UserInfoService extends ViewSearchManager<UserInfo, string, UserInfoFilter> implements UserInfoQuery {
   constructor(search: Search<UserInfo, UserInfoFilter>, repository: UserInfoRepository) {
     super(search, repository);
+  }
+}
+export class UserInFoController extends QueryController<UserInfo, string, UserInfoFilter> {
+  constructor(log: Log, service: UserInfoQuery) {
+    super(log, service);
   }
 }
 export function useUserInfoController(log: Log, db: DB, mapper?: TemplateMap): UserInFoController {

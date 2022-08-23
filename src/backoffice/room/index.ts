@@ -1,3 +1,4 @@
+import { Controller} from 'express-ext';
 import { Log, Manager, Search } from 'onecore';
 import { DB, Repository, SearchBuilder } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
@@ -8,13 +9,6 @@ import {
   RoomRepository,
   RoomService,
 } from './room';
-import { Controller} from 'express-ext';
-
-export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
-  constructor(log: Log, roomService: RoomService) {
-    super(log, roomService);
-  }
-}
 
 export class RoomManager extends Manager<Room, string, RoomFilter> implements RoomService {
   constructor(search: Search<Room, RoomFilter>, repository: RoomRepository) {
@@ -22,6 +16,11 @@ export class RoomManager extends Manager<Room, string, RoomFilter> implements Ro
   }
 }
 
+export class BackOfficeRoomController extends Controller<Room, string, RoomFilter> {
+  constructor(log: Log, roomService: RoomService) {
+    super(log, roomService);
+  }
+}
 export function useBackOfficeRoomController(log: Log, db: DB, mapper?: TemplateMap): BackOfficeRoomController {
   const queryRoom = useQuery('room', mapper, roomModel, true);
   const builder = new SearchBuilder<Room, RoomFilter>(db.query, 'room', roomModel,  db.driver, queryRoom);

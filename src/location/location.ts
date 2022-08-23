@@ -1,5 +1,4 @@
-import { fileUploadGalleryModel } from '../my-profile';
-import { UploadInfo } from 'one-storage';
+import { UploadInfo, uploadModel } from 'one-storage';
 import { Attributes, Filter, Info, Query, Repository } from 'onecore';
 
 export interface LocationFilter extends Filter {
@@ -42,27 +41,27 @@ export const locationModel: Attributes = {
     q: true,
   },
   type: {
-    match: "equal",
+    match: 'equal',
     required: true,
   },
   description: {
     q: true,
   },
   status: {
-    match: "equal",
+    match: 'equal',
     length: 1,
   },
   latitude: {
-    type: "number",
+    type: 'number',
   },
   longitude: {
-    type: "number",
+    type: 'number',
   },
   imageURL: {},
   coverURL: {},
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
 };
 export interface LocationInfomation {
@@ -86,10 +85,8 @@ export const locationInfomationModel: Attributes = {
   followercount: {
       type: 'number'
   }
-}
+};
 export interface LocationInfomationQuery extends Query<LocationInfomation, string, LocationInfomationFilter> {
-  // getFollow(id: string): Promise<UserInfo[]>;
 }
 export interface LocationInfomationRepository extends Repository<LocationInfomation, string> {
-
 }

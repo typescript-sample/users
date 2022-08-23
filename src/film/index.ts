@@ -1,5 +1,4 @@
-import { Log, SavedController } from 'express-ext';
-
+import { Log, QueryController, SavedController } from 'express-ext';
 import { SavedService, Search, ViewSearchManager } from 'onecore';
 import { ArrayRepository, buildToSave } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
@@ -36,22 +35,13 @@ import {
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
-
 import {
   Film,
   FilmFilter,
   filmModel,
-  FilmRepository,
   FilmQuery,
+  FilmRepository,
 } from './film';
-import { QueryController } from 'express-ext';
-
-
-export class FilmController extends QueryController<Film, string, FilmFilter> {
-  constructor(log: Log, filmService: FilmQuery) {
-    super(log, filmService);
-  }
-}
 
 export class FilmService extends ViewSearchManager<Film, string, FilmFilter> implements FilmQuery {
   constructor(
@@ -79,15 +69,13 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
   }
 }
 
-
-
-export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): FilmController {
+export function useFilmController(log: Log, db: DB, mapper?: TemplateMap): QueryController<Film, string, FilmFilter> {
   const query = useQuery('film', mapper, filmModel, true);
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, db.driver, query);
   const repository = new Repository<Film, string>(db, 'film', filmModel);
   const infoRepository = new SqlInfoRepository<Info10>(db, 'filmrateinfo', info10Model, buildToSave);
   const service = new FilmService(builder.search, repository, infoRepository);
-  return new FilmController(log, service);
+  return new QueryController<Film, string, FilmFilter>(log, service);
 }
 
 export function useFilmRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {

@@ -1,4 +1,4 @@
-import { Attributes, Filter, Repository, Service } from 'onecore';
+import { Attributes, Filter } from 'onecore';
 
 export interface AppreciationFilter extends Filter {
   id?: string;
@@ -66,8 +66,7 @@ export const appreciationModel: Attributes = {
     type: 'integer',
     min: 0
   },
-  histories:{
-    
+  histories: {
   }
 };
 

@@ -1,14 +1,14 @@
 
-import { BuildUrl, Delete, Generate, Log, Search, ViewSearchManager } from 'onecore';
+import { QueryController } from 'express-ext';
+import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
-import { DB, postgres, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
   infoModel, RatesService,
   RatesValidator
 } from 'rate-core';
-import shortid from 'shortid';
 import { SqlRatesRepository } from 'rate-query';
 import {
   Comment,
@@ -28,6 +28,7 @@ import {
   SqlInfoRepository,
   SqlReactionRepository
 } from 'review-reaction-query';
+import shortid from 'shortid';
 import { check } from 'xvalidators';
 import {
   RateCriteria,
@@ -39,16 +40,6 @@ import {
   CompanyFilter,
   companyModel, CompanyQuery, CompanyRepository
 } from './company';
-import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
-import { StorageRepository } from 'google-storage';
-import { UploadService } from 'upload-express';
-import { QueryController } from 'express-ext';
-
-export class CompanyController extends QueryController<Company, string, CompanyFilter> {
-  constructor(log: Log, companyService: CompanyQuery) {
-    super(log, companyService);
-  }
-}
 
 export class CompanyService extends ViewSearchManager<Company, string, CompanyFilter> implements CompanyQuery {
   constructor(search: Search<Company, CompanyFilter>, protected repository: CompanyRepository, private infoRepository: InfoRepository<Info>) {
@@ -73,13 +64,13 @@ export class CompanyService extends ViewSearchManager<Company, string, CompanyFi
   }
 }
 
-export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): CompanyController {
+export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): QueryController<Company, string, CompanyFilter> {
   const query = useQuery('company', mapper, companyModel, true);
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, db.driver, query);
   const repository = new Repository<Company, string>(db, 'company', companyModel);
   const infoRepository = new SqlInfoRepository<Info>(db, 'companyratefullinfo', infoModel, buildToSave);
   const service = new CompanyService(builder.search, repository, infoRepository);
-  return new CompanyController(log, service);
+  return new QueryController<Company, string, CompanyFilter>(log, service);
 }
 
 export function useCompanyRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<RateCriteria> {
@@ -126,4 +117,3 @@ export function useCompanyRateCommentController(log: Log, db: DB, mapper?: Templ
 export function generate(): string {
   return shortid.generate();
 }
-

@@ -26,13 +26,13 @@ const templates = loadTemplates(conf.template, buildTemplates, trim, [
   './configs/cinema.xml',
   './configs/comment.xml',
   './configs/company.xml',
-  './configs/film.xml', 
+  './configs/film.xml',
   './configs/item.xml',
-  './configs/job.xml', 
+  './configs/job.xml',
   './configs/location.xml',
   './configs/user.xml',
   './configs/music.xml',
-  './configs/room.xml', 
+  './configs/room.xml',
 ]);
 const db = log(new PoolManager(new Pool(conf.db.user)), true, logger, 'postgres');
 const pool = new Pool(conf.db.query);

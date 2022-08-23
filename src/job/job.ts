@@ -41,10 +41,10 @@ export const jobModel: Attributes = {
     length: 1000
   },
   benefit: {
-    length:1000
+    length: 1000
   },
   requirements: {
-    length:1000 
+    length: 1000
   },
   publishedAt: {
     type: 'datetime'

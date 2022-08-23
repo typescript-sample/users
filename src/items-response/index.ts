@@ -41,8 +41,8 @@ export class ResponseController {
   }
 
   reply(req: Req, res: Res) {
-    const id: string = req.params.id || req.body.id || "";
-    const author: string = req.params.author || req.body.author || "";
+    const id: string = req.params.id || req.body.id || '';
+    const author: string = req.params.author || req.body.author || '';
     const response: Response = { id, author, ...req.body };
     response.time = new Date();
     this.validator
@@ -62,7 +62,6 @@ export class ResponseController {
       .catch((err) => handleError(err, res, this.log));
   }
 }
-
 
 
 export function generate(): string {
@@ -94,7 +93,7 @@ export class ResponseManager implements ResponseService {
     const sr: ShortResponse = { description: exist.description, time: exist.time };
     if (exist.histories && exist.histories.length > 0) {
       const history = exist.histories;
-      console.log(history)
+      console.log(history);
       history.push(sr);
       response.histories = history;
     } else {

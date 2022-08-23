@@ -17,15 +17,13 @@ export interface Music {
   duration?: Date;
   lyric?: string;
   imageURL?: string;
-  mp3URL?:string;
-
+  mp3URL?: string;
 }
 
 export interface MusicRepository extends Repository<Music, string> {
 }
-export interface MusicService extends Service<Music, string,MusicFilter> {
+export interface MusicService extends Service<Music, string, MusicFilter> {
 }
-
 
 export const musicModel: Attributes = {
   id: {
@@ -52,4 +50,3 @@ export const musicModel: Attributes = {
     length: 1500,
   },
 };
-

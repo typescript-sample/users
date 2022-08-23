@@ -87,11 +87,10 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.setUseful);
   app.delete('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
   // app.get('/appreciation/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
-  
+
   app.post('/appreciation/rates/:id/:author/comments/:userId', ctx.appreciationReaction.comment);
   app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId/', ctx.appreciationReaction.updateComment);
   app.delete('/appreciation/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
-
 
   // Aticles
   app.post('/articles/search', ctx.article.search);
@@ -121,7 +120,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/cinemas/:id', ctx.backofficeCinema.update);
   app.patch('/backoffice/cinemas/:id', ctx.backofficeCinema.patch);
   app.delete('/backoffice/cinemas/:id', ctx.backofficeCinema.delete);
-  //upload
+  // upload
   app.post('/backoffice/cinemas/:id/cover', parser.array('files'), ctx.backofficeCinemaUpload.uploadCover);
   app.post('/backoffice/cinemas/:id/upload', parser.array('files'), ctx.backofficeCinemaUpload.uploadImage);
   app.post('/backoffice/cinemas/:id/gallery', parser.single('file'), ctx.backofficeCinemaUpload.uploadGallery);
@@ -129,7 +128,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.deleteGalleryFile);
   app.post('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.addExternalResource);
   app.delete('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.deleteExternalResource);
-  app.get('/backoffice/cinemas/:id/fetchImageGalleryUploaded',ctx.backofficeCinemaUpload.getGallery);
+  app.get('/backoffice/cinemas/:id/fetchImageGalleryUploaded', ctx.backofficeCinemaUpload.getGallery);
 
   app.get('/cinemas/rates/search', ctx.cinemaReaction.search);
   app.post('/cinemas/rates/search', ctx.cinemaReaction.search);
@@ -177,7 +176,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
     parser.single('file'),
     ctx.backOfficeFilmUpload.uploadGallery
   );
-  app.get('/backoffice/films/:id/fetchImageGalleryUploaded',ctx.backOfficeFilmUpload.getGallery);
+  app.get('/backoffice/films/:id/fetchImageGalleryUploaded', ctx.backOfficeFilmUpload.getGallery);
 
   app.get('/films/rates/search', ctx.filmReaction.search);
   app.post('/films/rates/search', ctx.filmReaction.search);
@@ -262,7 +261,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/locations/:id', ctx.backofficeLocation.update);
   app.patch('/backoffice/locations/:id', ctx.backofficeLocation.patch);
   app.delete('/backoffice/locations/:id', ctx.backofficeLocation.delete);
-  //upload
+  // upload
   app.post('/backoffice/locations/:id/cover', parser.array('files'), ctx.backofficeLocationUpload.uploadCover);
   app.post('/backoffice/locations/:id/upload', parser.array('files'), ctx.backofficeLocationUpload.uploadImage);
   app.post('/backoffice/locations/:id/gallery', parser.single('file'), ctx.backofficeLocationUpload.uploadGallery);
@@ -270,7 +269,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.deleteGalleryFile);
   app.post('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.addExternalResource);
   app.delete('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.deleteExternalResource);
-  app.get('/backoffice/locations/:id/fetchImageGalleryUploaded',ctx.backofficeLocationUpload.getGallery);
+  app.get('/backoffice/locations/:id/fetchImageGalleryUploaded', ctx.backofficeLocationUpload.getGallery);
 
   app.get('/locations/rates/search', ctx.locationReaction.search);
   app.post('/locations/rates/search', ctx.locationReaction.search);
@@ -283,10 +282,10 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
   app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
 
-  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow)
-  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow)
-  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow)
-  app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load)
+  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
+  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
+  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
+  app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load);
 
 
   app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);
@@ -306,7 +305,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/companies/:id', ctx.backofficeCompany.update);
   app.patch('/backoffice/companies/:id', ctx.backofficeCompany.patch);
   app.delete('/backoffice/companies/:id', ctx.backofficeCompany.delete);
-  //upload
+  // upload
   app.post('/backoffice/companies/:id/cover', parser.array('files'), ctx.backofficeCompanyUpload.uploadCover);
   app.post('/backoffice/companies/:id/upload', parser.array('files'), ctx.backofficeCompanyUpload.uploadImage);
   app.post('/backoffice/companies/:id/gallery', parser.single('file'), ctx.backofficeCompanyUpload.uploadGallery);
@@ -314,7 +313,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.deleteGalleryFile);
   app.post('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.addExternalResource);
   app.delete('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.deleteExternalResource);
-  app.get('/backoffice/companies/:id/fetchImageGalleryUploaded',ctx.backofficeCompanyUpload.getGallery);
+  app.get('/backoffice/companies/:id/fetchImageGalleryUploaded', ctx.backofficeCompanyUpload.getGallery);
 
   app.get('/companies/categories/search', ctx.companyCategory.search);
   app.get('/companies/categories/:id', ctx.companyCategory.load);

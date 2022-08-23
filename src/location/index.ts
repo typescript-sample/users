@@ -1,18 +1,12 @@
 import { FollowController } from 'express-ext';
-import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
-import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
-import { BuildUrl, Generate, Log, SavedService, Search, ViewSearchManager } from 'onecore';
-import { TemplateMap, useQuery } from 'query-mappers';
+import { SavedController } from 'express-ext';
+import { QueryController } from 'express-ext';
 import { Delete, StorageRepository } from 'google-storage';
 import { GenericSearchStorageService, ModelConf, StorageConf, UploadInfo } from 'one-storage';
-import {
-  LocationInfomation,
-  LocationInfomationQuery,
-  locationInfomationModel,
-  LocationInfomationFilter,
-  LocationInfomationRepository
-} from './location';
-import { SavedController } from 'express-ext';
+import { BuildUrl, Generate, Log, SavedService, Search, ViewSearchManager } from 'onecore';
+import { ArrayRepository, buildToSave, FollowService, useUrlQuery } from 'pg-extension';
+import { DB, postgres, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Info,
   infoModel,
@@ -44,34 +38,23 @@ import {
 } from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
+import { UploadController, UploadService } from 'upload-express';
 import { check } from 'xvalidators';
+import {
+  LocationInfomation,
+  LocationInfomationFilter,
+  locationInfomationModel,
+  LocationInfomationQuery,
+  LocationInfomationRepository
+} from './location';
 import {
   Location,
   LocationFilter,
   locationModel,
-  LocationRepository,
   LocationQuery,
+  LocationRepository,
 } from './location';
-import { QueryController } from 'express-ext';
-import { UploadController, UploadService } from 'upload-express';
 
-//---------------------------------------------------
-export class LocationController extends QueryController<Location, string, LocationFilter> {
-  constructor(log: Log, public locationService: LocationQuery) {
-    super(log, locationService);
-  }
-}
-export class LocationInfomationController extends QueryController<LocationInfomation, string, LocationInfomationFilter> {
-  constructor(log: Log, service: LocationInfomationQuery) {
-    super(log, service);
-  }
-}
-export class LocationUploadController extends UploadController {
-  constructor(log: Log, service: UploadService, generateId: () => string, sizesCover: number[], sizesImage: number[]) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-  }
-}
-//--------------------------------------------
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
   implements LocationQuery {
@@ -127,6 +110,17 @@ export class LocationUploadService extends GenericSearchStorageService<Location,
   }
 }
 
+
+export class LocationController extends QueryController<Location, string, LocationFilter> {
+  constructor(log: Log, public locationService: LocationQuery) {
+    super(log, locationService);
+  }
+}
+export class LocationInfomationController extends QueryController<LocationInfomation, string, LocationInfomationFilter> {
+  constructor(log: Log, service: LocationInfomationQuery) {
+    super(log, service);
+  }
+}
 export function useLocationController(
   log: Log,
   db: DB,
@@ -329,15 +323,11 @@ export function useLocationInfomationController(log: Log, db: DB, mapper?: Templ
   return new LocationInfomationController(log, service);
 }
 
-export function useLocationUploadService(db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadService {
+export function useLocationUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
+  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const queryItems = useQuery('item', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(db.query, 'item', locationModel, postgres, queryItems);
   const repository = new Repository<Location, string>(db, 'item', locationModel);
-  return new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-}
-
-export function useLocationUploadController(log: Log, db: DB, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): LocationUploadController {
-  return new LocationUploadController(log, useLocationUploadService(db, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper), generateId, sizesCover, sizesImage);
+  const service = new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
 }

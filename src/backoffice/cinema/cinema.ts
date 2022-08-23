@@ -1,7 +1,7 @@
-import { fileUploadGalleryModel } from "../../my-profile";
-import { Attributes, Filter, Service } from "onecore";
-import { Repository } from "query-core";
-import { Info } from "rate-core";
+import { uploadModel } from 'one-storage';
+import { Attributes, Filter, Service } from 'onecore';
+import { Repository } from 'query-core';
+import { Info } from 'rate-core';
 
 export interface CinemaFilter extends Filter {
   id?: string;
@@ -58,7 +58,7 @@ export const cinemaModel: Attributes = {
   id: {
     key: true,
     length: 40,
-    match: "equal",
+    match: 'equal',
   },
   name: {
     length: 255,
@@ -81,17 +81,17 @@ export const cinemaModel: Attributes = {
   imageURL: {},
   createdBy: {},
   createdAt: {
-    column: "createdat",
-    type: "datetime",
+    column: 'createdat',
+    type: 'datetime',
   },
   updatedBy: {},
   updatedAt: {
-    column: "createdat",
-    type: "datetime",
+    column: 'createdat',
+    type: 'datetime',
   },
   gallery: {
     type: 'array',
-    typeof: fileUploadGalleryModel,
+    typeof: uploadModel,
   },
   coverURL: {},
 };
