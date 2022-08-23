@@ -84,6 +84,7 @@ export class LocationService
   }
   load(id: string): Promise<Location | null> {
     return this.repository.load(id).then((location) => {
+      console.log(location)
       if (!location) {
         return null;
       } else {

@@ -69,6 +69,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow)
   app.get('/users/loadfollow/:id/', ctx.userInfo.load)
   
+  app.get('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/:id/:author', ctx.userRate.rate);
+  app.post('/users/rates/:id/:author/useful/:userId', ctx.userReaction.setUseful);
+  app.delete('/users/rates/:id/:author/useful/:userId', ctx.userReaction.removeUseful);
+  app.get('/users/rates/:id/:author/comments', ctx.userReaction.getComments);
+  app.post('/users/rates/:id/:author/comments/:userId', ctx.userReaction.comment);
+  app.put('/users/rates/:id/:author/comments/:userId/:commentId', ctx.userReaction.updateComment);
+  app.delete('/users/rates/:id/:author/comments/:commentId', ctx.userReaction.removeComment);
+
+
   app.post('/appreciation/rates/comments', ctx.appreciationComment.search);
   app.get('/appreciation/rates/search', ctx.appreciationReaction.search);
   app.post('/appreciation/rates/search', ctx.appreciationReaction.search);

@@ -31,7 +31,7 @@ import {
   FollowController,
   UploadController
 } from 'express-types';
-import {useUserInfoController} from './user'
+import {useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -201,6 +201,9 @@ export interface ApplicationContext {
   filmRate: RateController;
   filmReaction: ReactionController;
   filmComment: QueryController;
+  userRate: RateController;
+  userReaction: ReactionController;
+  userComment: QueryController;
   filmCategory: Controller;
   backOfficeFilmUpload:FilmUploadController;
   director: Query;
@@ -564,6 +567,13 @@ export function useContext(
     queryDB,
     mapper
   );
+  const userRate = useUserRateController(logger.error, queryDB, mapper);
+  const userReaction = useUserReactionController(logger.error, queryDB, mapper);
+  const userComment = useUserRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
   const backOfficeFilmUpload = useFilmUploadController(
@@ -691,6 +701,9 @@ export function useContext(
     filmRate,
     filmReaction,
     filmComment,
+    userRate,
+    userReaction,
+    userComment,
     filmCategory,
     backOfficeFilmUpload,
     director,
