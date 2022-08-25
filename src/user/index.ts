@@ -25,6 +25,8 @@ import { SqlRateRepository } from 'rate-query';
 import { check } from 'xvalidators';
 import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
 import shortid from 'shortid';
+import { UserReactionController } from '../reaction/reaction-controller';
+import { ReactService } from '../reaction/reaction-repository'
 
 export class UserController extends QueryController<User, string, UserFilter> {
   constructor(log: Log, service: UserService) {
@@ -108,7 +110,16 @@ export function generate(): string {
   return shortid.generate();
 }
 
-//--follow------------------------------------
+//--reaction------------------------------------
+export function useReactionController(log: Log, db: DB): UserReactionController {
+  const service = new ReactService<string>(
+    db,
+    'userreaction', 'id', 'author','reaction',
+    'level','count',
+    'userinfo', 'id','reactioncount');
+  return new UserReactionController(log, service,  'author','id','reaction');
+  }
+ //-------follow----------------------------- 
 export function useUserFollowController(log: Log, db: DB): FollowController {
   const service = new FollowService<string>(
     db.execBatch,

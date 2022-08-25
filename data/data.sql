@@ -178,7 +178,23 @@ CREATE TABLE userratecomment(
   histories jsonb[],
   primary key(commentid)
 )
----------------------------------------------------------
+--userreaction-----------------------------------------------
+create table userreaction (
+  id varchar(255),
+  author varchar(255),
+  reaction smallint,
+  time timestamp,
+  primary key(id, author, userid)
+)
+create table userinfomation(
+  id varchar(255),
+  appreciate bigint default 0,
+  respect bigint default 0,
+  admire bigint default 0,
+  reactioncount bigint default 0,
+  primary key(id)
+)
+-------------------------------------------------------------
 create table articles (
   id character varying(40) primary key,
   title character varying(300),

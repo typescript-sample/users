@@ -30,7 +30,7 @@ import {
   SavedController,
   UploadController
 } from 'express-types';
-import {useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
+import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -111,6 +111,8 @@ import { MyProfileController, useMyProfileController, UserSettings } from './my-
 import { useRoomController } from './room';
 import { useUserController, useUserFollowController } from './user';
 
+import { UserReactionController } from 'reaction/reaction-controller';
+
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -137,6 +139,7 @@ export interface ApplicationContext {
   myprofile: MyProfileController;
   user: QueryController;
   userFollow: FollowController;
+  reaction: UserReactionController;
   userInfo: QueryController;
   locationInfomation: QueryController;
   skill: Query;
@@ -312,6 +315,7 @@ export function useContext(
   const password = new PasswordController(logger.error, passwordService);
 
   const user = useUserController(logger.error, mainDB);
+  const reaction = useReactionController(logger.error, mainDB);
   const userFollow = useUserFollowController(logger.error, mainDB);
   const userInfo = useUserInfoController(logger.error, mainDB, mapper);
   const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
@@ -525,6 +529,7 @@ export function useContext(
     password,
     myprofile,
     user,
+    reaction,
     userFollow,
     skill,
     interest,
