@@ -17,6 +17,7 @@ export class ReactService<ID> {
     ) {
     this.react = this.react.bind(this);
     this.unreact = this.unreact.bind(this);
+    this.checkReact = this.checkReact.bind(this);
   }
   react(id: ID, author: ID, reaction: string): Promise<number> {
     const query = `select reaction from ${this.userreactionTable} where ${this.id} = $1 and ${this.author} = $2`;
@@ -33,7 +34,9 @@ export class ReactService<ID> {
           on conflict (${this.id}) do update set ${this.prefix}1${this.suffix} = ${obj['l1']}, ${this.prefix}2${this.suffix} = ${obj['l2']}, ${this.prefix}3${this.suffix} = ${obj['l3']}, ${this.reactioncount}=1`;
         const s1: Statement = {query: query1, params: [id, author, reaction]};
         const s2: Statement = {query: query2, params: [id]};
-        return this.db.execBatch([s1, s2]);
+        return this.db.execBatch([s1, s2]).catch(err=>{
+          return Promise.resolve(0)
+        });
       } else {
         const query1 = `update ${this.userreactionTable} set ${this.reaction} = $1 where ${this.id} = $2 and ${this.author} = $3`;
         const query2 =
@@ -42,7 +45,9 @@ export class ReactService<ID> {
         const s1: Statement = {query: query1, params: [reaction, id, author]};
         const s2: Statement = {query: query2, params: [id]};
         console.log(query1,query2)
-        return this.db.execBatch([s1, s2]);
+        return this.db.execBatch([s1, s2]).catch(err=>{
+          return Promise.resolve(0)
+        });
       }
     });
   }
@@ -54,6 +59,17 @@ export class ReactService<ID> {
     const s1: Statement = {query: query1, params: [id, author, reaction]};
     const s2: Statement = {query: query2, params: [id]};
     console.log(query1,query2)
-    return this.db.execBatch([s1, s2], true);
+    return this.db.execBatch([s1, s2], true).catch(err=>{
+      return Promise.resolve(0)
+    });
+  }
+  checkReact(id: ID, author: ID):Promise<any> {
+    const query = `select reaction from ${this.userreactionTable} where ${this.id} = $1 and ${this.author} = $2`;
+    return this.db.query<Reaction>(query, [id, author]).then(r=>{
+      console.log(r)
+      return r
+    }).catch(err=>{
+      return Promise.resolve(0)
+    })
   }
 }
