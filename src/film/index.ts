@@ -1,6 +1,6 @@
 import { Log, QueryController, SavedController } from 'express-ext';
 import { SavedService, Search, ViewSearchManager } from 'onecore';
-import { ArrayRepository, buildToSave } from 'pg-extension';
+import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
@@ -91,7 +91,8 @@ export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository);
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
@@ -101,7 +102,8 @@ export function useFilmRateCommentController(log: Log, db: DB, mapper?: Template
   const query = useQuery('filmratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository);
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryUrl);
   return new RateCommentController(log, service);
 }
 

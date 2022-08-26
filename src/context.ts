@@ -55,7 +55,11 @@ import {
 import { createValidator } from 'xvalidators';
 import { useAppreciationCommentController, useAppreciationController, useAppreciationReactionController } from './appreciation';
 import { AppreciationController } from './appreciation';
-import { useArticleController } from './article';
+import { useArticleController ,
+  useArticleRateCommentController,
+  useArticleRateController,
+  useArticleReactionController
+} from './article';
 import { useBackOfficeCinemaController, useCinemaUploadController } from './backoffice/cinema';
 import { useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
 import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
@@ -144,6 +148,10 @@ export interface ApplicationContext {
   appreciationReaction: ReactionController;
 
   article: QueryController;
+  articleRate: RateController;
+  articleReaction: ReactionController;
+  articleComment: QueryController;
+
   myarticles: Controller;
   cinema: QueryController;
   backofficeCinema: Controller;
@@ -199,6 +207,8 @@ export interface ApplicationContext {
   music: QueryController;
   backofficeMusic: Controller;
   playlist: Controller;
+
+
 }
 
 export function useContext(
@@ -346,6 +356,10 @@ export function useContext(
     conf.model
   );
   const article = useArticleController(logger.error, mainDB);
+  const articleRate = useArticleRateController(logger.error, queryDB, mapper);
+  const articleReaction = useArticleReactionController(logger.error, queryDB, mapper);
+  const articleComment = useArticleRateCommentController(logger.error, queryDB, mapper);
+
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
@@ -536,6 +550,9 @@ export function useContext(
     locationReaction,
     locationComment,
     article,
+    articleRate,
+    articleComment,
+    articleReaction,
     myarticles,
     items,
     itemCategory,

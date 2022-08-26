@@ -72,40 +72,16 @@ export class AppreciationManager implements AppreciationService {
   }
 }
 
-export function useAppreciationService(
-  db: DB,
-  mapper?: TemplateMap
-): AppreciationService {
+export function useAppreciationService(db: DB, mapper?: TemplateMap): AppreciationService {
   const query = useQuery('appreciation', mapper, appreciationModel, true);
-  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(
-    db.query,
-    'appreciation',
-    appreciationModel,
-    db.driver,
-    query
-  );
-  const repository = new GenericRepository<Appreciation, string, string>(
-    db,
-    'appreciation',
-    appreciationModel,
-    'id',
-    'author'
-  );
-
+  const builder = new SearchBuilder<Appreciation, AppreciationFilter>(db.query, 'appreciation', appreciationModel, db.driver, query);
+  const repository = new GenericRepository<Appreciation, string, string>(db, 'appreciation', appreciationModel, 'id', 'author');
   return new AppreciationManager(builder.search, repository);
 }
 
-export function useAppreciationController(
-  log: Log,
-  db: DB,
-  mapper?: TemplateMap
-): AppreciationController {
+export function useAppreciationController(log: Log, db: DB, mapper?: TemplateMap): AppreciationController {
   const responseValidator = createValidator<Appreciation>(appreciationModel);
-  return new AppreciationController(
-    log,
-    useAppreciationService(db, mapper),
-    responseValidator
-  );
+  return new AppreciationController(log, useAppreciationService(db, mapper), responseValidator);
 }
 
 export function useAppreciationReactionController(log: Log, db: DB, generate: () => string, mapper?: TemplateMap): ReactionController<Rate, RateFilter, Comment> {

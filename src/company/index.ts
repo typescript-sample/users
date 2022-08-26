@@ -1,4 +1,3 @@
-
 import { QueryController } from 'express-ext';
 import { Log, Search, ViewSearchManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
