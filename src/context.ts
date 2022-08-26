@@ -30,7 +30,14 @@ import {
   SavedController,
   UploadController
 } from 'express-types';
-import { deleteFile, GoogleStorageRepository, map, StorageConfig, useBuildUrl } from 'google-storage';
+import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
+import {
+  deleteFile,
+  GoogleStorageRepository,
+  map,
+  StorageConfig,
+  useBuildUrl,
+} from 'google-storage';
 import { generateToken } from 'jsonwebtoken-plus';
 import { MailConfig, MailService, Send } from 'mail-core';
 import nodemailer from 'nodemailer';
@@ -106,8 +113,9 @@ import { useMyArticleController } from './my-articles';
 import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
 import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
 import { useRoomController } from './room';
-import { useUserInfoController } from './user';
 import { useUserController, useUserFollowController } from './user';
+
+import { UserReactionController } from 'reaction/reaction-controller';
 
 resources.createValidator = createValidator;
 
@@ -135,6 +143,7 @@ export interface ApplicationContext {
   myprofile: MyProfileController;
   user: QueryController;
   userFollow: FollowController;
+  reaction: UserReactionController;
   userInfo: QueryController;
   locationInfomation: QueryController;
   skill: Query;
@@ -172,6 +181,9 @@ export interface ApplicationContext {
   filmRate: RateController;
   filmReaction: ReactionController;
   filmComment: QueryController;
+  userRate: RateController;
+  userReaction: ReactionController;
+  userComment: QueryController;
   filmCategory: Controller;
   backOfficeFilmUpload: UploadController;
   director: Query;
@@ -313,6 +325,7 @@ export function useContext(
   const password = new PasswordController(logger.error, passwordService);
 
   const user = useUserController(logger.error, mainDB);
+  const reaction = useReactionController(logger.error, mainDB);
   const userFollow = useUserFollowController(logger.error, mainDB);
   const userInfo = useUserInfoController(logger.error, mainDB, mapper);
   const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
@@ -425,7 +438,18 @@ export function useContext(
   );
   const filmRate = useFilmRateController(logger.error, queryDB, mapper);
   const filmReaction = useFilmReactionController(logger.error, queryDB, mapper);
-  const filmComment = useFilmRateCommentController(logger.error, queryDB, mapper);
+  const filmComment = useFilmRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
+  const userRate = useUserRateController(logger.error, queryDB, mapper);
+  const userReaction = useUserReactionController(logger.error, queryDB, mapper);
+  const userComment = useUserRateCommentController(
+    logger.error,
+    queryDB,
+    mapper
+  );
   const filmCategory = useFilmCategoryController(logger.error, queryDB, mapper);
 
   const backOfficeFilmUpload = useFilmUploadController(
@@ -519,6 +543,7 @@ export function useContext(
     password,
     myprofile,
     user,
+    reaction,
     userFollow,
     skill,
     interest,
@@ -539,6 +564,9 @@ export function useContext(
     filmRate,
     filmReaction,
     filmComment,
+    userRate,
+    userReaction,
+    userComment,
     filmCategory,
     backOfficeFilmUpload,
     director,

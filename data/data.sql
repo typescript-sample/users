@@ -55,8 +55,9 @@ create table history (
 );
 create table userinfo (
   id character varying(40) not null primary key,
-  followercount bigint,
-  followingcount bigint
+  followercount bigint default 0,
+  followingcount bigint default 0,
+  rate1 int default 0
 )
 create table userfollowing (
   id character varying(40) not null ,
@@ -129,7 +130,71 @@ insert into searchs(item) values('room mate');
 insert into searchs(item) values('basketball team');
 -- insert into skills(skill) values ('java') on conflict(skill) do nothing
 
-
+--rate user-------------------------------------------
+CREATE TABLE userrateinfo(
+  id varchar(255),
+  rate numeric DEFAULT 0,
+  rate1 integer DEFAULT 0,
+  rate2 integer DEFAULT 0,
+  rate3 integer DEFAULT 0,
+  rate4 integer DEFAULT 0,
+  rate5 integer DEFAULT 0,
+  rate6 integer DEFAULT 0,
+  rate7 integer DEFAULT 0,
+  rate8 integer DEFAULT 0,
+  rate9 integer DEFAULT 0,
+  rate10 integer DEFAULT 0,
+  count integer,
+  score numeric,
+  primary key(id)
+)
+CREATE TABLE userrate(
+  id varchar(255),
+  author varchar(255),
+  rate integer,
+  time timestamp,
+  review text,
+  usefulcount integer default 0,
+  replycount integer default 0,
+  histories jsonb[],
+  primary key(id, author)
+)
+CREATE TABLE userratereaction(
+	id varchar(255),
+	author varchar(255),
+	userid varchar(255),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
+CREATE TABLE userratecomment(
+  commentId varchar(255),
+  id varchar(255),
+  author varchar(255),
+  userid varchar(255),
+  comment text,
+  time timestamp,
+  updatedat timestamp,
+  histories jsonb[],
+  primary key(commentid)
+)
+--userreaction-----------------------------------------------
+create table userreaction (
+  id varchar(255),
+  author varchar(255),
+  reaction smallint,
+  time timestamp,
+  primary key(id, author, userid)
+)
+create table userinfomation(
+  id varchar(255),
+  appreciate bigint default 0,
+  respect bigint default 0,
+  admire bigint default 0,
+  reactioncount bigint default 0,
+  primary key(id)
+)
+-------------------------------------------------------------
 create table articles (
   id character varying(40) primary key,
   title character varying(300),
@@ -679,7 +744,8 @@ CREATE TABLE filmrateinfo(
   rate8 integer DEFAULT 0,
   rate9 integer DEFAULT 0,
   rate10 integer DEFAULT 0,
-  viewCount integer DEFAULT 0,
+  count integer,
+  score numeric,
   primary key(id)
 )
 

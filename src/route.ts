@@ -64,10 +64,25 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
 
-  app.get('/users/follow/:id/:target', ctx.userFollow.follow);
-  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow);
-  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow);
-  app.get('/users/loadfollow/:id/', ctx.userInfo.load);
+  app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react)
+  app.delete('/users/unreaction/:id/:author/:reaction', ctx.reaction.unreact)
+  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReact)
+
+  app.get('/users/follow/:id/:target', ctx.userFollow.follow)
+  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
+  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow)
+  app.get('/users/loadfollow/:id/', ctx.userInfo.load)
+  
+  app.get('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/:id/:author', ctx.userRate.rate);
+  app.post('/users/rates/:id/:author/useful/:userId', ctx.userReaction.setUseful);
+  app.delete('/users/rates/:id/:author/useful/:userId', ctx.userReaction.removeUseful);
+  app.get('/users/rates/:id/:author/comments', ctx.userReaction.getComments);
+  app.post('/users/rates/:id/:author/comments/:userId', ctx.userReaction.comment);
+  app.put('/users/rates/:id/:author/comments/:userId/:commentId', ctx.userReaction.updateComment);
+  app.delete('/users/rates/:id/:author/comments/:commentId', ctx.userReaction.removeComment);
+
 
   app.post('/appreciation/rates/comments', ctx.appreciationComment.search);
   app.get('/appreciation/rates/search', ctx.appreciationReaction.search);
@@ -286,9 +301,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
   app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
 
-  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
-  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
-  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
+  // app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
+  // app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
+  // app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
   app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load);
 
 

@@ -53,6 +53,7 @@ export class FilmService extends ViewSearchManager<Film, string, FilmFilter> imp
   }
   load(id: string): Promise<Film | null> {
     return this.repository.load(id).then((film) => {
+      console.log(film)
       if (!film) {
         return null;
       } else {
