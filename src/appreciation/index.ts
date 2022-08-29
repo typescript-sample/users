@@ -14,11 +14,7 @@ import { Appreciation, AppreciationFilter, appreciationModel, AppreciationReposi
 export * from './appreciation';
 
 export class AppreciationController {
-  constructor(
-    protected log: Log,
-    protected responseService: AppreciationService,
-    public validator: Validator<Appreciation>
-  ) {
+  constructor(protected log: Log, protected responseService: AppreciationService, public validator: Validator<Appreciation>) {
     this.reply = this.reply.bind(this);
   }
 
@@ -43,6 +39,7 @@ export class AppreciationController {
       })
       .catch((err) => handleError(err, res, this.log));
   }
+
 }
 
 export class AppreciationManager implements AppreciationService {

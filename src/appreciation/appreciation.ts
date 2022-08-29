@@ -33,6 +33,7 @@ export interface AppreciationRepository {
 }
 export interface AppreciationService {
   response(response: Appreciation): Promise<number>;
+  //remove(id: string, author: string): Promise<number>;
 }
 
 export const appreciationModel: Attributes = {

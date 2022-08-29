@@ -91,11 +91,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.setUseful);
   app.delete('/appreciation/rates/:id/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
   // app.get('/appreciation/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
-
   app.post('/appreciation/rates/:id/:author/comments/:userId', ctx.appreciationReaction.comment);
-  app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId/', ctx.appreciationReaction.updateComment);
+  app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId', ctx.appreciationReaction.updateComment);
   app.delete('/appreciation/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
-
   // Aticles
   app.post('/articles/search', ctx.article.search);
   app.get('/articles/search', ctx.article.search);
