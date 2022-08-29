@@ -26,7 +26,7 @@ import { check } from 'xvalidators';
 import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
 import shortid from 'shortid';
 import { UserReactionController } from '../reaction/reaction-controller';
-import { ReactService } from '../reaction/reaction-repository'
+import { ReactionService as ReactService } from '../reaction/reaction-repository'
 
 export class UserController extends QueryController<User, string, UserFilter> {
   constructor(log: Log, service: UserService) {

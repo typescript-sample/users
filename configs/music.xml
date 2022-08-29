@@ -15,7 +15,7 @@
         lyric ilike #{lyric} and
     </if>
     <if test="author != null" array="skip">
-        author && #{author} and
+        author && (#{author}) and
     </if>
     <if test="q != null">
         (name ilike #{q} or lyric ilike #{q} and

@@ -2,7 +2,7 @@ import { Statement } from "pg-extension";
 import { DB } from "query-core";
 import { Reaction } from "./reaction";
 
-export class ReactService<ID> {
+export class ReactionService<ID> {
   constructor(
     public db: DB,
     public userreactionTable: string,
@@ -17,7 +17,7 @@ export class ReactService<ID> {
     ) {
     this.react = this.react.bind(this);
     this.unreact = this.unreact.bind(this);
-    this.checkReact = this.checkReact.bind(this);
+    this.checkReaction = this.checkReaction.bind(this);
   }
   react(id: ID, author: ID, reaction: string): Promise<number> {
     const query = `select reaction from ${this.userreactionTable} where ${this.id} = $1 and ${this.author} = $2`;
@@ -63,7 +63,7 @@ export class ReactService<ID> {
       return Promise.resolve(0)
     });
   }
-  checkReact(id: ID, author: ID):Promise<any> {
+  checkReaction(id: ID, author: ID):Promise<any> {
     const query = `select reaction from ${this.userreactionTable} where ${this.id} = $1 and ${this.author} = $2`;
     return this.db.query<Reaction>(query, [id, author]).then(r=>{
       console.log(r)
