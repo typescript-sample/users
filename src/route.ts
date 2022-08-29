@@ -66,7 +66,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react)
   app.delete('/users/unreaction/:id/:author/:reaction', ctx.reaction.unreact)
-  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReact)
+  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReaction)
 
   app.get('/users/follow/:id/:target', ctx.userFollow.follow)
   app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow)

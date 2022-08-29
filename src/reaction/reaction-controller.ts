@@ -2,9 +2,9 @@ import { handleError, Log } from "express-ext";
 import { Request, Response } from 'express';
 
 export interface ReactService {
-  react(id: string, author: string, reaction:string): Promise<number | undefined>;
-  unreact(id: string, author: string, reaction:string): Promise<number | undefined>;
-  checkReact(id: string, author: string): Promise<number | undefined>;
+  react(id: string, author: string, reaction:string): Promise<number>;
+  unreact(id: string, author: string, reaction:string): Promise<number>;
+  checkReaction(id: string, author: string): Promise<number>;
   }
   // tslint:disable-next-line:max-classes-per-file
   export class UserReactionController {
@@ -12,7 +12,7 @@ export interface ReactService {
       this.id = (id && id.length > 0 ? id : 'id');
       this.react = this.react.bind(this);
       this.unreact = this.unreact.bind(this);
-      this.checkReact = this.checkReact.bind(this);
+      this.checkReaction = this.checkReaction.bind(this);
     }
     id: string;
     react(req: Request, res: Response): void {
@@ -55,7 +55,7 @@ export interface ReactService {
         return res.status(200).json(count).end();
       }).catch(err => handleError(err, res, this.log));
     }
-    checkReact(req: Request, res: Response): void {
+    checkReaction(req: Request, res: Response): void {
       const id = req.params.id;
       const author = req.params.author;
       if (!id || id.length === 0) {
@@ -66,7 +66,7 @@ export interface ReactService {
         res.status(400).end(`'${this.author}' cannot be empty`);
         return;
       }
-      this.service.checkReact(id,author).then(count => {
+      this.service.checkReaction(id,author).then(count => {
         return res.status(200).json(count).end();
       }).catch(err => handleError(err, res, this.log));
     }

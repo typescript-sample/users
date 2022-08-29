@@ -4108,10 +4108,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.9":
-  "integrity" "sha512-RCPrjnQxgoasrSnovTEQ4f1ImawZFv3MzD8SCaITazB8/LFw0oRPfVJMFLNay3ap7Dshe8hvK/WQh82SVGWrZQ=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.9.tgz"
-  "version" "0.1.9"
+"pg-extension@^0.1.11":
+  "integrity" "sha512-K555phEK8g8OC1x3/r9WWhLpvvueXgcf+XYRsmWGQ6a+rh/UF1wDuZDvPIz9mbjT0vahzzUR/PcC8JVMvIzEEg=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.11.tgz"
+  "version" "0.1.11"
   dependencies:
     "pg" "^8.6.0"
 

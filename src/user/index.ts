@@ -1,7 +1,6 @@
-import { Log, Search, ViewManager, ViewSearchManager } from 'onecore';
-import { DB, postgres, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
+import { Log, Search, ViewSearchManager } from 'onecore';
+import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
-import { buildQuery } from './query';
 import {
   User,
   UserFilter,
@@ -14,10 +13,10 @@ import {
   UserRepository,
   UserService
 } from './user';
-import { buildToSave, FollowService } from 'pg-extension';
+import { buildToSave, FollowService, ReactService } from 'pg-extension';
 import { FollowController } from 'express-ext';
 export * from './user';
-import { LoadSearchHandler,QueryController } from 'express-ext';
+import { QueryController } from 'express-ext';
 import { Comment, commentModel, CommentQuery, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
 import { Info10, info10Model, Rate, RateFilter, rateModel, RateService, RateValidator } from 'rate-core';
 import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
@@ -26,7 +25,6 @@ import { check } from 'xvalidators';
 import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
 import shortid from 'shortid';
 import { UserReactionController } from '../reaction/reaction-controller';
-import { ReactService } from '../reaction/reaction-repository'
 
 export class UserController extends QueryController<User, string, UserFilter> {
   constructor(log: Log, service: UserService) {
