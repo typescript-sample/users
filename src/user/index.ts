@@ -14,9 +14,7 @@ import {
   UserService
 } from './user';
 import { buildToSave, FollowService, ReactService } from 'pg-extension';
-import { FollowController } from 'express-ext';
-export * from './user';
-import { QueryController, ReactionController as UserReactionController } from 'express-ext';
+import { FollowController, QueryController, UserReactionController } from 'express-ext';
 import { Comment, commentModel, CommentQuery, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
 import { Info10, info10Model, Rate, RateFilter, rateModel, RateService, RateValidator } from 'rate-core';
 import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
@@ -25,12 +23,7 @@ import { check } from 'xvalidators';
 import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
 import shortid from 'shortid';
 
-export class UserController extends QueryController<User, string, UserFilter> {
-  constructor(log: Log, service: UserService) {
-    super(log, service);
-  }
-}
-
+export * from './user';
 
 export class UserManager
   extends ViewSearchManager<User, string,UserFilter>
@@ -59,6 +52,12 @@ export class UserManager
   }
 }
 
+
+export class UserController extends QueryController<User, string, UserFilter> {
+  constructor(log: Log, service: UserService) {
+    super(log, service);
+  }
+}
 export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserController {
   const query = useQuery('users', mapper, userModel, true);
   const builder = new SearchBuilder<User, UserFilter>(db.query, 'users', userModel, db.driver, query);

@@ -2149,10 +2149,10 @@
   "resolved" "https://registry.npmjs.org/expand-template/-/expand-template-2.0.3.tgz"
   "version" "2.0.3"
 
-"express-ext@^0.1.33":
-  "integrity" "sha512-pfUlULv8nFtqI5UQHyOp036MJgcHOpU3duL+JagRebrPMiN3u7Sh7pqPaIsLG6NFVoNC+E8H4S57arKspMNdaA=="
-  "resolved" "https://registry.npmjs.org/express-ext/-/express-ext-0.1.33.tgz"
-  "version" "0.1.33"
+"express-ext@^0.1.35":
+  "integrity" "sha512-dBRkccGXga9q+/typXqY+iGrdrCgVqbVMFlJXQYrO1Fnkx+m8cVFqou6XrIYV15+n8+QdkkiHHeLFjgYFIDQQA=="
+  "resolved" "https://registry.npmjs.org/express-ext/-/express-ext-0.1.35.tgz"
+  "version" "0.1.35"
   dependencies:
     "express" "^4.17.1"
 

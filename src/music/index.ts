@@ -1,7 +1,7 @@
-import { Controller, QueryController, SavedController } from 'express-ext';
-import { Log, Manager, SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
+import { Controller, QueryController, SavedController,Log } from 'express-ext';
+import { Manager, SavedRepository, SavedService, Search, ViewSearchManager} from 'onecore';
 import { ArrayRepository } from 'pg-extension';
-import { DB, QueryRepository, Repository, SearchBuilder } from 'query-core';
+import { DB, QueryRepository, Repository, SearchBuilder  } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
   Music,
@@ -43,6 +43,7 @@ export function useSavedMusicsController(log: Log, db: DB): SavedController<Musi
   const service = new SavedService<string, Music>(savedRepository, repository.query, 50);
   return new SavedController<Music>(log, service, 'itemId', 'id');
 }
+
 export function useSavedListSongController(log: Log, db: DB): SavedController<Music> {
   const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'listsong', 'songs', 'id');
   const repository = new QueryRepository<Music, string>(db, 'music', musicModel);
