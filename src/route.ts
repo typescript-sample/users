@@ -97,7 +97,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/appreciations/rates/:id/:author/comments/:userId/:commentId', ctx.appreciationReaction.updateComment);
   // app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId', ctx.appreciationReaction.updateComment);
   app.delete('/appreciations/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
-  // Aticles
+  // Articles
   app.post('/articles/search', ctx.article.search);
   app.get('/articles/search', ctx.article.search);
   app.get('/articles/:id', ctx.article.load);
