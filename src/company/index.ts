@@ -73,7 +73,7 @@ export function useCompanyController(log: Log, db: DB, mapper?: TemplateMap): Qu
 }
 
 export function useCompanyRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<RateCriteria> {
-  const rateRepository = new SqlRatesRepository<RateCriteria>(db, 'companyrate', 'companyratefulliinnfo',
+  const rateRepository = new SqlRatesRepository<RateCriteria>(db, 'companyrate', 'companyratefullinfo',
     ['companyrateinfo01', 'companyrateinfo02', 'companyrateinfo03', 'companyrateinfo04', 'companyrateinfo05'],
     rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id');
   const infoRepository = new SqlInfoRepository<RateFullInfo>(db, 'companyratefullinfo', infoModel, buildToSave);

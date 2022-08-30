@@ -12,12 +12,14 @@ export interface AppreciationFilter extends Filter {
 export interface Appreciation {
   id: string;
   author: string;
-  title: string;
+  title?: string;
   review: string;
   time: Date;
-  updateAt: Date;
+  updateAt?: Date;
   histories?: Histories[];
   replyCount?: number;
+  usefulCount?: number;
+  rate?:number;
 }
 
 export interface Histories {

@@ -22,6 +22,7 @@ const app = express();
 
 app.use(allow(conf.allow), json(), cookieParser(), middleware.log);
 const templates = loadTemplates(conf.template, buildTemplates, trim, [
+  './configs/appreciation.xml',
   './configs/article.xml',
   './configs/cinema.xml',
   './configs/comment.xml',

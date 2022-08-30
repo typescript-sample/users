@@ -87,7 +87,7 @@ export function useFilmRateController(log: Log, db: DB, mapper?: TemplateMap): R
 }
 
 export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap): ReactionController<Rate, RateFilter, Comment> {
-  const query = useQuery('filmrate', mapper, rateModel, true);
+  const query = useQuery('filmrate', mapper, rateModel, true);  
   const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'filmrate', rateModel, db.driver, query);
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
