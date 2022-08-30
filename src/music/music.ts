@@ -48,7 +48,7 @@ export const musicModel: Attributes = {
   },
   mp3URL: {
     length: 1500,
-  }
+  } 
 };
 
 export interface PlaylistFilter extends Filter {
