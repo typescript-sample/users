@@ -36,7 +36,7 @@ export const musicModel: Attributes = {
     q: true
   },
   author: {
-    type: 'strings',
+    type: 'strings'
   },
   releaseDate: {
     type: 'datetime'

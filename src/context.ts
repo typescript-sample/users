@@ -28,7 +28,8 @@ import {
   RateController,
   ReactionController,
   SavedController,
-  UploadController
+  UploadController,
+  UserReactionController
 } from 'express-types';
 import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
 import {
@@ -114,8 +115,6 @@ import { MyItemController, useMyItemController, useMyItemUploadController } from
 import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
 import { useRoomController } from './room';
 import { useUserController, useUserFollowController } from './user';
-
-import { UserReactionController } from 'reaction/reaction-controller';
 
 resources.createValidator = createValidator;
 
