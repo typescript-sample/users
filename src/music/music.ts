@@ -17,7 +17,7 @@ export interface Music {
   duration?: TimeRange;
   lyric?: string;
   imageURL?: string;
-  mp3URL?: string;
+  url?: string;
 }
 
 export interface MusicRepository extends ViewRepository<Music, string> {
@@ -46,7 +46,7 @@ export const musicModel: Attributes = {
   imageURL: {
     length: 1500,
   },
-  mp3URL: {
+  url: {
     length: 1500,
   } 
 };
@@ -61,6 +61,7 @@ export interface Playlist {
   id?: string;
   title?: string;
   userId?: string;
+  imageurl?:string;
 }
 export interface PlaylistRepository extends Repository<Playlist, string> {
 }
@@ -75,6 +76,9 @@ export const playlistModel: Attributes = {
     length: 250,
   },
   userId: {
+    length: 250,
+  },
+  imageurl: {
     length: 250,
   }
 };

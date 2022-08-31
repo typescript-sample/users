@@ -17,7 +17,7 @@ export interface Music {
   duration?: Date;
   lyric?: string;
   imageURL?: string;
-  mp3URL?: string;
+  url?: string;
 }
 
 export interface MusicRepository extends Repository<Music, string> {
@@ -46,7 +46,7 @@ export const musicModel: Attributes = {
   imageURL: {
     length: 1500,
   },
-  mp3URL: {
+  url: {
     length: 1500,
   },
 };
