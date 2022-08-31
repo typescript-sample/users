@@ -172,7 +172,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/films/save/:id/:itemId', ctx.saveFilm.save);
   app.get('/films/save/:id/', ctx.saveFilm.load);
-  app.delete('/films/unsave/:id/:itemId', ctx.saveFilm.remove);
+  app.delete('/films/save/:id/:itemId', ctx.saveFilm.remove);
 
   app.post('/backoffice/films', ctx.backOfficeFilm.create);
   app.get('/backoffice/films/search', ctx.backOfficeFilm.search);
@@ -221,7 +221,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/items/:id', ctx.items.load);
 
   app.get('/saved-items/:id/', ctx.saveItem.load);
-  app.post('/saved-items/:id/:itemId', ctx.saveItem.save);
+  app.get('/saved-items/:id/:itemId', ctx.saveItem.save);
   app.delete('/saved-items/:id/:itemId', ctx.saveItem.remove);
 
 
@@ -302,15 +302,15 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
   app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
 
-  // app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
-  // app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
-  // app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
+  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
+  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
+  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
   app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load);
 
 
   app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);
   app.get('/locations/save/:id/', ctx.saveLocation.load);
-  app.delete('/locations/unsave/:id/:itemId', ctx.saveLocation.remove);
+  app.delete('/locations/save/:id/:itemId', ctx.saveLocation.remove);
 
 
   // Company
