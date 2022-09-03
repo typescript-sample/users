@@ -67,7 +67,6 @@ export class LocationService
   }
   load(id: string): Promise<Location | null> {
     return this.repository.load(id).then((location) => {
-      console.log(location)
       if (!location) {
         return null;
       } else {
@@ -145,7 +144,7 @@ export function useLocationReactionService(db: DB, mapper?: TemplateMap): Reacti
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'locationrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'locationratereaction', rateReactionModel, 'locationrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'id');
-  const queryUrl = useUrlQuery<string>(db.query, "users", "imageURL", "id");
+  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   return new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
 }
 

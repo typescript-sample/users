@@ -25,10 +25,8 @@ export interface Job {
   benefit: string;
 }
 export interface JobRepository extends Repository<Job, string> {
-
 }
 export interface JobService extends Service<Job, string, JobFilter> {
-
 }
 
 export const jobModel: Attributes = {

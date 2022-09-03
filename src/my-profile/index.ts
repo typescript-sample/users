@@ -5,6 +5,7 @@ import { DB, Repository } from 'query-core';
 import { clone } from 'reflectx';
 import { MyProfileService, User, userModel, UserRepository, UserSettings } from './user';
 import { MyProfileController, Save } from './user-controller';
+
 export * from './user';
 export { MyProfileController };
 

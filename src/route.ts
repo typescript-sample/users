@@ -29,7 +29,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/my-profile/:id/settings', ctx.myprofile.saveMySettings);
   app.post(
     '/my-profile/:id/cover',
-    parser.array('files'),  
+    parser.array('files'),
     ctx.myprofile.uploadCover
   );
   app.post(
@@ -64,15 +64,15 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
 
-  app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react)
-  app.delete('/users/unreaction/:id/:author/:reaction', ctx.reaction.unreact)
-  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReaction)
+  app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react);
+  app.delete('/users/unreaction/:id/:author/:reaction', ctx.reaction.unreact);
+  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReaction);
 
-  app.get('/users/follow/:id/:target', ctx.userFollow.follow)
-  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow)
-  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow)
-  app.get('/users/loadfollow/:id/', ctx.userInfo.load)
-  
+  app.get('/users/follow/:id/:target', ctx.userFollow.follow);
+  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow);
+  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow);
+  app.get('/users/loadfollow/:id/', ctx.userInfo.load);
+
   app.post('/users/rates/comments', ctx.userComment.search);
   app.get('/users/rates/search', ctx.userReaction.search);
   app.post('/users/rates/search', ctx.userReaction.search);
@@ -224,7 +224,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/saved-items/:id/:itemId', ctx.saveItem.save);
   app.delete('/saved-items/:id/:itemId', ctx.saveItem.remove);
 
-
   app.get('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/search', ctx.itemReaction.search);
   app.post('/items/responses/:id/:author', ctx.itemResponse.reply);
@@ -352,7 +351,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/companies/categories/:id', ctx.companyCategory.patch);
   app.delete('/companies/categories/:id', ctx.companyCategory.delete);
 
-
   // app.post('/companies/rates', ctx.companyRate.rate);
   // app.get('/companies/rates/search', ctx.companyReaction.search);
   // app.post('/companies/rates/search', ctx.companyReaction.search);
@@ -377,7 +375,6 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/jobs/:id', ctx.backofficeJob.update);
   app.patch('/backoffice/jobs/:id', ctx.backofficeJob.patch);
   app.delete('/backoffice/jobs/:id', ctx.backofficeJob.delete);
-
 
   app.post('/backoffice/rooms/search', ctx.backofficeRoom.search);
   app.get('/backoffice/rooms/search', ctx.backofficeRoom.search);
@@ -419,5 +416,4 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/saved-listsong/:id/', ctx.saveListsong.load);
   app.post('/saved-listsong/:id/:itemId', ctx.saveListsong.save);
   app.delete('/saved-listsong/:id/:itemId', ctx.saveListsong.remove);
-
 }

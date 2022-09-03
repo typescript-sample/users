@@ -1,6 +1,15 @@
+import { FollowController, QueryController, UserReactionController } from 'express-ext';
 import { Log, Search, ViewSearchManager } from 'onecore';
+import { buildToSave, FollowService, ReactService } from 'pg-extension';
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
+import { Info10, info10Model, Rate, RateFilter, rateModel, RateService, RateValidator } from 'rate-core';
+import { SqlRateRepository } from 'rate-query';
+import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
+import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
+import { Comment, commentModel, CommentQuery, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
+import shortid from 'shortid';
+import { check } from 'xvalidators';
 import {
   User,
   UserFilter,
@@ -13,27 +22,18 @@ import {
   UserRepository,
   UserService
 } from './user';
-import { buildToSave, FollowService, ReactService } from 'pg-extension';
-import { FollowController, QueryController, UserReactionController } from 'express-ext';
-import { Comment, commentModel, CommentQuery, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query';
-import { Info10, info10Model, Rate, RateFilter, rateModel, RateService, RateValidator } from 'rate-core';
-import { RateCommentController, RateController, ReactionController } from 'review-reaction-express';
-import { SqlRateRepository } from 'rate-query';
-import { check } from 'xvalidators';
-import { CommentFilter, CommentValidator, ReactionService } from 'review-reaction';
-import shortid from 'shortid';
 
 export * from './user';
 
 export class UserManager
-  extends ViewSearchManager<User, string,UserFilter>
+  extends ViewSearchManager<User, string, UserFilter>
   implements UserService {
   constructor(
     search: Search<User, UserFilter>,
     protected repository: UserRepository,
     private infoRepository: InfoRepository<Info10>
     ) {
-    super(search,repository);
+    super(search, repository);
   }
   load(id: string): Promise<User | null> {
     return this.repository.load(id).then((user) => {
@@ -63,10 +63,10 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserC
   const builder = new SearchBuilder<User, UserFilter>(db.query, 'users', userModel, db.driver, query);
   const repository = new Repository<User, string>(db, 'users', userModel);
   const infoRepository = new SqlInfoRepository<Info10>(db, 'userrateinfo', info10Model, buildToSave);
-  const service = new UserManager(builder.search, repository,infoRepository);
+  const service = new UserManager(builder.search, repository, infoRepository);
   return new UserController(log, service);
 }
-//-----rate----------------------------
+// -----rate----------------------------
 export function useUserRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {
   const rateRepository = new SqlRateRepository<Rate>(db, 'userrate', rateModel, buildToSave, 10, 'userrateinfo', 'rate', 'count', 'score', 'author', 'id');
   const infoRepository = new SqlInfoRepository<Info10>(db, 'userrateinfo', info10Model, buildToSave);
@@ -99,16 +99,16 @@ export function generate(): string {
   return shortid.generate();
 }
 
-//--reaction------------------------------------
+// --reaction------------------------------------
 export function useReactionController(log: Log, db: DB): UserReactionController {
   const service = new ReactService<string>(
     db,
-    'userreaction', 'id', 'author','reaction',
-    'level','count',
-    'userinfo', 'id','reactioncount');
-  return new UserReactionController(log, service,  'author','id','reaction');
+    'userreaction', 'id', 'author', 'reaction',
+    'level', 'count',
+    'userinfo', 'id', 'reactioncount');
+  return new UserReactionController(log, service,  'author', 'id', 'reaction');
   }
- //-------follow----------------------------- 
+ // -------follow-----------------------------
 export function useUserFollowController(log: Log, db: DB): FollowController {
   const service = new FollowService<string>(
     db.execBatch,

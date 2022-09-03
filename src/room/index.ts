@@ -27,7 +27,7 @@ export class RoomController extends QueryController<Room, string, RoomFilter> {
     this.roomService.saveReservation(roomid, startdate, enddate).then(data => {
       return res.status(200).json(data).end();
     })
-    .catch(err => console.log(err));
+    .catch(err => this.log(err));
   }
 }
 
@@ -38,7 +38,6 @@ export class RoomService extends ViewSearchManager<Room, string, RoomFilter> imp
   }
   async saveReservation(roomid: string, startdate: Date, enddate: Date): Promise<number|undefined> {
     const rep = await this.reservationRepository.search(roomid, startdate, enddate);
-    console.log(rep);
     if (rep) {
       return Promise.resolve(1);
     }

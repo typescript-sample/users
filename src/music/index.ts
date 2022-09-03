@@ -1,4 +1,4 @@
-import { Controller, QueryController, SavedController,Log } from 'express-ext';
+import { Controller, Log, QueryController, SavedController } from 'express-ext';
 import { Manager, SavedRepository, SavedService, Search, ViewSearchManager} from 'onecore';
 import { ArrayRepository } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder  } from 'query-core';
