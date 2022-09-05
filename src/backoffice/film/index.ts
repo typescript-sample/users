@@ -126,7 +126,6 @@ export class FilmUploadService extends GenericSearchStorageService<Film, string,
   async getGalllery(id: string): Promise<UploadInfo[]> {
     return this.repository.load(id).then((item) => {
       if (item) {
-        console.log('this.model.gallery', this.model.gallery);
         return (item as any)[this.model.gallery];
       }
       return [];

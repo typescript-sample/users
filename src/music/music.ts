@@ -48,7 +48,7 @@ export const musicModel: Attributes = {
   },
   url: {
     length: 1500,
-  } 
+  }
 };
 
 export interface PlaylistFilter extends Filter {
@@ -61,7 +61,7 @@ export interface Playlist {
   id?: string;
   title?: string;
   userId?: string;
-  imageurl?:string;
+  imageurl?: string;
 }
 export interface PlaylistRepository extends Repository<Playlist, string> {
 }

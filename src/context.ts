@@ -31,7 +31,6 @@ import {
   UploadController,
   UserReactionController
 } from 'express-types';
-import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user'
 import {
   deleteFile,
   GoogleStorageRepository,
@@ -113,7 +112,8 @@ import { useMusicController, usePlaylistController, useSavedListSongController, 
 import { useMyArticleController } from './my-articles';
 import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
 import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
-import { RoomController, useRoomController } from './room';
+import { RoomController, useRoomController  } from './room';
+import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user';
 import { useUserController, useUserFollowController } from './user';
  
 resources.createValidator = createValidator;

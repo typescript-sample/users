@@ -19,7 +19,7 @@ export interface Appreciation {
   histories?: Histories[];
   replyCount?: number;
   usefulCount?: number;
-  rate?:number;
+  rate?: number;
 }
 
 export interface Histories {
@@ -35,7 +35,7 @@ export interface AppreciationRepository {
 }
 export interface AppreciationService {
   response(response: Appreciation): Promise<number>;
-  //remove(id: string, author: string): Promise<number>;
+  // remove(id: string, author: string): Promise<number>;
 }
 
 export const appreciationModel: Attributes = {
@@ -91,7 +91,6 @@ export interface Reply {
   time: Date;
   updateAt: Date;
 }
-
 
 export const replyModel: Attributes = {
   id: {

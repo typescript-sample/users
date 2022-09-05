@@ -43,8 +43,6 @@ export interface CinemaRepository extends Repository<Cinema, string> {}
 
 export interface CinemaQuery extends Query<Cinema, string, CinemaFilter> {}
 
-
-
 export const cinemaModel: Attributes = {
   id: {
     key: true,

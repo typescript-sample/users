@@ -55,7 +55,7 @@ export class CompanyService extends ViewSearchManager<Company, string, CompanyFi
             delete (info as any)['count'];
             delete (info as any)['score'];
             company.info = info;
-          } 
+          }
           return company;
         });
       }

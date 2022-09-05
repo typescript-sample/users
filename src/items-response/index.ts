@@ -85,7 +85,6 @@ export class ResponseManager implements ResponseService {
       return r0;
     }
     const exist = await this.repository.load(response.id, response.author);
-    console.log(exist);
     if (!exist) {
       const r1 = await this.repository.insert(response);
       return r1;
@@ -93,15 +92,12 @@ export class ResponseManager implements ResponseService {
     const sr: ShortResponse = { description: exist.description, time: exist.time };
     if (exist.histories && exist.histories.length > 0) {
       const history = exist.histories;
-      console.log(history);
       history.push(sr);
       response.histories = history;
     } else {
       response.histories = [sr];
     }
-    console.log(sr, response);
     const res = await this.repository.update(response);
-    console.log(res);
     return res;
   }
 }

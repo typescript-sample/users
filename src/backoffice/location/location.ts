@@ -23,10 +23,11 @@ export interface Location {
   coverURL?: string;
 }
 
-export interface LocationRepository extends Repository<Location, string> {}
+export interface LocationRepository extends Repository<Location, string> {
+}
 
-export interface LocationService
-  extends Service<Location, string, LocationFilter> {}
+export interface LocationService extends Service<Location, string, LocationFilter> {
+}
 
 
 export const locationModel: Attributes = {
