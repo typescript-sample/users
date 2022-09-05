@@ -37,6 +37,8 @@ export class RoomService extends ViewSearchManager<Room, string, RoomFilter> imp
     this.saveReservation = this.saveReservation.bind(this);
   }
   async saveReservation(roomid: string, startdate: Date, enddate: Date): Promise<number|undefined> {
+    const test = await this.reservationRepository.load(roomid)
+    console.log(test);
     const rep = await this.reservationRepository.search(roomid, startdate, enddate);
     console.log(rep);
     if (rep) {
@@ -56,17 +58,20 @@ export function useRoomController(log: Log, db: DB, mapper?: TemplateMap): RoomC
 
 export class SqlReservationRoomRepository extends Repository<Reservation, string> implements ReservationRoomRepository {
   constructor(
-    db: DB,
+    public db: DB,
     public execute: (statements: Statement[], firstSuccess?: boolean, ctx?: any) => Promise<number>,
     public startdate: string,
     public enddate: string,
     public roomid: string
   ) {
     super(db, 'reservation', reservationModel);
-    this.search = this.search.bind(this);
+    this.search = this.search.bind(this); 
   }
-  search(roomid: string, startdate: Date, enddate: Date): Promise<number> {
+  search(roomid: string, startdate: Date, enddate: Date): Promise<Reservation[]> {
     const check = `select ${this.roomid} from ${this.table} where ${this.startdate} = $1 and ${this.enddate} = $2 `;
-    return this.execute([{ query: check, params: [startdate, enddate] }], true);
+    return this.db.query<Reservation>(check, [startdate, enddate]).then(room => {
+      console.log(room)
+      return room
+    })
   }
 }

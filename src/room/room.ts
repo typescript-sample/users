@@ -123,7 +123,7 @@ export const roomModel: Attributes = {
   },
 };
 export interface ReservationRoomRepository extends Repository<Reservation, string> {
-  search(roomid: string, startdate: Date, enddate: Date): Promise<number>;
+  search(roomid: string, startdate: Date, enddate: Date): Promise<Reservation[]>;
 }
 export interface Reservation {
   id: string;

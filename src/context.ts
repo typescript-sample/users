@@ -113,9 +113,9 @@ import { useMusicController, usePlaylistController, useSavedListSongController, 
 import { useMyArticleController } from './my-articles';
 import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
 import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
-import { useRoomController } from './room';
+import { RoomController, useRoomController } from './room';
 import { useUserController, useUserFollowController } from './user';
-
+ 
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -204,7 +204,7 @@ export interface ApplicationContext {
   locationComment: QueryController;
   locationFollow: FollowController;
   jobs: QueryController;
-  room: QueryController;
+  room: RoomController;
   backofficeJob: Controller;
   saveItem: SavedController;
   saveLocation: SavedController;
