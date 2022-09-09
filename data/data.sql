@@ -58,15 +58,15 @@ create table userinfo (
   followercount bigint default 0,
   followingcount bigint default 0,
   rate1 int default 0
-)
+);
 create table userfollowing (
   id character varying(40) not null ,
   following character varying(40) not null 
-)
+);
 create table userfollower (
   id character varying(40) not null ,
   follower character varying(40) not null 
-)
+);
 create table signupcodes (
 	id character varying(40) not null primary key,
 	code character varying(500) not null,
