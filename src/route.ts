@@ -304,7 +304,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
   app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
   app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
-  app.get('/locations/loadfollow/:id/', ctx.locationInfomation.load);
+  app.get('/locations/loadfollow/:id', ctx.locationInfomation.load);
 
 
   app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);

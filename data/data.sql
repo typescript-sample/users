@@ -292,7 +292,8 @@ create table item (
 	publishedat timestamp with time zone,
 	expiredat timestamp with time zone,
   description character varying(1000),
-  category character varying[]
+  category character varying[],
+  gallery jsonb[]
 );
 
 insert into item (id, title, status, price, imageurl, brand, publishedat, expiredat, description, category) values ('01', 'Movie tickets', 'A', 100000, 'https://lebaostore.com/wp-content/uploads/2022/02/iphone-13-pro-family-hero.png', 'Disney', '2022-07-19', '2022-08-25', 'Thor movie ticket', '{comedy,action}');
@@ -824,7 +825,7 @@ create table room(
   property varchar(255),
   language character varying[],
   imageUrl jsonb[]
-)
+);
 
 insert into room ( id,title,description,price,offer,location,host,guest,bedrooms,bed,bathrooms,highlight,status,region,category,typeof,property,language,imageUrl) 
 values (
@@ -847,7 +848,7 @@ values (
   'Nhà',
   '{Tiếng Anh, Tiếng Việt}',
   '{"{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_3VZT2SW8b\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_oSipzWeYi\", \"type\": \"image\"}","{\"url\": \"https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/JSg3tgoY0_EF7bCPZry\", \"type\": \"image\"}"}'
-  )
+  );
 
 
 
@@ -883,8 +884,13 @@ create table playlist(
   id character varying(40) primary key,
   title varchar(255),
   userid varchar(255)
-)
+);
 create table listsong(
   id varchar(40),
   songs character varying[]
+);
+
+create table savedlocation(
+  id varchar(40) primary key,
+  items character varying[]
 )

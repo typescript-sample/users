@@ -11,6 +11,10 @@
     <if test="title != null">
         title ilike #{title} and
     </if>
+    
+    <if test = "author != null">
+        author ilike #{author} and
+    </if>
     <if test="status != null">
         status ilike #{status} and
     </if>
@@ -30,7 +34,7 @@
         categories && #{categories} and
     </if>
     <if test="q != null">
-        (title ilike #{q} or description ilike #{q} and
+        (title ilike #{q} or description ilike #{q} ) and
     </if>
         1 = 1
     <if test="sort != null">

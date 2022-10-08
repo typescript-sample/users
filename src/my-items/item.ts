@@ -4,6 +4,7 @@ import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 
 export interface Item {
   id: string;
   title: string;
+  author: string;
   status: string;
   price: number;
   imageURL?: string;
@@ -18,6 +19,7 @@ export interface Item {
 export interface ItemFilter extends Filter {
   id?: string;
   title?: string;
+  author?: string;
   price?: NumberRange;
   status?: string;
   brand?: string;
@@ -51,6 +53,10 @@ export const itemModel: Attributes = {
     required: true,
     length: 300,
     q: true
+  },
+  author: {
+    required: true,
+    length: 255
   },
   imageURL: {
     length: 1500,
