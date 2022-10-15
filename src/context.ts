@@ -266,7 +266,7 @@ export function useContext(
   );
   const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
 
-  const signupMailSender = new SignupSender(
+    const signupMailSender = new SignupSender(
     conf.signup.url,
     sendMail,
     conf.mail.from,
@@ -276,7 +276,7 @@ export function useContext(
   const passcodeRepository = new CodeRepository<string>(mainDB, 'signupcodes');
   const signupRepository = useRepository<string, Signup>(
     mainDB,
-    'users',
+    'users2',
     'passwords',
     conf.signup.userStatus,
     conf.signup.fields,

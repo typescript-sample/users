@@ -11,6 +11,9 @@
     <if test="title != null">
       title ilike #{title} and
     </if>
+    <if test="name != null">
+      name ilike #{name} and
+    </if>
     <if test="type != null">
       status ilike #{status} and
     </if>

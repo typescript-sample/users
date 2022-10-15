@@ -20,7 +20,8 @@ export interface Location {
   latitude?: number;
   longitude?: number;
   imageURL?: string;
-  coverURL?: string;
+  customURL?: string;
+  version?:number;
 }
 
 export interface LocationRepository extends Repository<Location, string> {
@@ -57,7 +58,7 @@ export const locationModel: Attributes = {
     type: 'number',
   },
   imageURL: {},
-  coverURL: {},
+  customURL: {},
   gallery: {
     type: 'array',
     typeof: uploadModel,
