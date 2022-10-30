@@ -29,7 +29,7 @@ exports.locationModel = {
         type: 'number',
     },
     imageURL: {},
-    coverURL: {},
+    customURL: {},
     gallery: {
         type: 'array',
         typeof: one_storage_1.uploadModel,

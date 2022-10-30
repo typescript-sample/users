@@ -103,6 +103,8 @@ export interface MyProfileService {
   getMySettings(id: string): Promise<UserSettings | null>;
   saveMyProfile(user: User): Promise<number>;
   saveMySettings(id: string, settings: UserSettings): Promise<number>;
+}
+export interface MyProfileServiceUpload {
   uploadCoverImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
   uploadImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
   uploadGalleryFile(uploadGallery: UploadGallery): Promise<UploadInfo[]>;

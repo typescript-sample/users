@@ -23,34 +23,34 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/my-profile/:id/settings', ctx.myprofile.getMySettings);
   app.get(
     '/my-profile/:id/fetchImageGalleryUploaded',
-    ctx.myprofile.getGallery
+    ctx.myprofileUpload.getGallery
   );
   app.patch('/my-profile/:id', ctx.myprofile.saveMyProfile);
   app.patch('/my-profile/:id/settings', ctx.myprofile.saveMySettings);
   app.post(
     '/my-profile/:id/cover',
     parser.array('files'),
-    ctx.myprofile.uploadCover
+    ctx.myprofileUpload.uploadCover
   );
   app.post(
     '/my-profile/:id/upload',
     parser.array('files'),
-    ctx.myprofile.uploadImage
+    ctx.myprofileUpload.uploadImage
   );
   app.post(
     '/my-profile/:id/gallery',
-    parser.single('file'),
-    ctx.myprofile.uploadGallery
+    parser.single('files'),
+    ctx.myprofileUpload.uploadGallery
   );
-  app.patch('/my-profile/:id/gallery', ctx.myprofile.updateGallery);
-  app.delete('/my-profile/:id/gallery', ctx.myprofile.deleteGalleryFile);
+  app.patch('/my-profile/:id/gallery', ctx.myprofileUpload.updateGallery);
+  app.delete('/my-profile/:id/gallery', ctx.myprofileUpload.deleteGalleryFile);
   app.post(
     '/my-profile/:id/external-resource',
-    ctx.myprofile.addExternalResource
+    ctx.myprofileUpload.addExternalResource
   );
   app.delete(
     '/my-profile/:id/external-resource',
-    ctx.myprofile.deleteExternalResource
+    ctx.myprofileUpload.deleteExternalResource
   );
 
   app.get('/skills', ctx.skill.query);
@@ -140,7 +140,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   // upload
   app.post('/backoffice/cinemas/:id/cover', parser.array('files'), ctx.backofficeCinemaUpload.uploadCover);
   app.post('/backoffice/cinemas/:id/upload', parser.array('files'), ctx.backofficeCinemaUpload.uploadImage);
-  app.post('/backoffice/cinemas/:id/gallery', parser.single('file'), ctx.backofficeCinemaUpload.uploadGallery);
+  app.post('/backoffice/cinemas/:id/gallery', parser.single('files'), ctx.backofficeCinemaUpload.uploadGallery);
   app.patch('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.updateGallery);
   app.delete('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.deleteGalleryFile);
   app.post('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.addExternalResource);
@@ -190,7 +190,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
     ctx.backOfficeFilmUpload.uploadCover
   );
   app.post('/backoffice/films/:id/gallery',
-    parser.single('file'),
+    parser.single('files'),
     ctx.backOfficeFilmUpload.uploadGallery
   );
   app.get('/backoffice/films/:id/fetchImageGalleryUploaded', ctx.backOfficeFilmUpload.getGallery);
@@ -252,7 +252,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   );
   app.post(
     '/my-items/:id/gallery',
-    parser.single('file'),
+    parser.single('files'),
     ctx.myitemsUpload.uploadGallery
   );
   app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
@@ -282,7 +282,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   // upload
   app.post('/backoffice/locations/:id/cover', parser.array('files'), ctx.backofficeLocationUpload.uploadCover);
   app.post('/backoffice/locations/:id/upload', parser.array('files'), ctx.backofficeLocationUpload.uploadImage);
-  app.post('/backoffice/locations/:id/gallery', parser.single('file'), ctx.backofficeLocationUpload.uploadGallery);
+  app.post('/backoffice/locations/:id/gallery', parser.single('files'), ctx.backofficeLocationUpload.uploadGallery);
   app.patch('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.updateGallery);
   app.delete('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.deleteGalleryFile);
   app.post('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.addExternalResource);
@@ -337,7 +337,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   // upload
   app.post('/backoffice/companies/:id/cover', parser.array('files'), ctx.backofficeCompanyUpload.uploadCover);
   app.post('/backoffice/companies/:id/upload', parser.array('files'), ctx.backofficeCompanyUpload.uploadImage);
-  app.post('/backoffice/companies/:id/gallery', parser.single('file'), ctx.backofficeCompanyUpload.uploadGallery);
+  app.post('/backoffice/companies/:id/gallery', parser.single('files'), ctx.backofficeCompanyUpload.uploadGallery);
   app.patch('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.updateGallery);
   app.delete('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.deleteGalleryFile);
   app.post('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.addExternalResource);

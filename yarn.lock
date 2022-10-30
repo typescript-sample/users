@@ -3901,10 +3901,10 @@
   dependencies:
     "wrappy" "1"
 
-"one-storage@^0.1.5":
-  "integrity" "sha512-jd8fNZtRtqwzcUIJd+sC/amijnUq2FcOtDk5KButROc2ByUdK60A6LgME4z7uLgYckP20jE2orkyPo4nh3XynQ=="
-  "resolved" "https://registry.npmjs.org/one-storage/-/one-storage-0.1.5.tgz"
-  "version" "0.1.5"
+"one-storage@^0.1.6":
+  "integrity" "sha512-+m0QQXteFER9FApbF3zkGTck0u04ESgZAJC7QkbeFPxpu+kYfJaBieVudJ4QYX/qF0Ow4Sa+n7sbBYYQo1H18Q=="
+  "resolved" "https://registry.npmjs.org/one-storage/-/one-storage-0.1.6.tgz"
+  "version" "0.1.6"
 
 "onecore@^0.0.40":
   "integrity" "sha512-Zg/IPxo/PnhN0qYb7dyN93W7lUEtHKPAqp7zyfgDbw+4/YE1EFJ6j0blDAlUQktUlsDS8xUMIDY67SLR8N4sxw=="
@@ -5746,10 +5746,10 @@
     "semver-diff" "^2.0.0"
     "xdg-basedir" "^3.0.0"
 
-"upload-express@^0.1.2":
-  "integrity" "sha512-v6vTKrF+PfxmgR34yY9HPTINsPVDNsBAx1NsR1LvERKNCht6vAaFTyNhfWzPmN3vlaYsLf2kcx6Ydp1u/Rs/yQ=="
-  "resolved" "https://registry.npmjs.org/upload-express/-/upload-express-0.1.2.tgz"
-  "version" "0.1.2"
+"upload-express@^0.1.4":
+  "integrity" "sha512-7+MHPis3xajin7loNI5cyaObiQuSrLWQzM/YLm3hvSYCS0kz/pcSE1qfOvEICDGLGxU0PI9KLFPyQk57qODkKQ=="
+  "resolved" "https://registry.npmjs.org/upload-express/-/upload-express-0.1.4.tgz"
+  "version" "0.1.4"
 
 "uri-js@^4.2.2":
   "integrity" "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg=="

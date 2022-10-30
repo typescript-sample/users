@@ -67,7 +67,7 @@ function useContext(mainDB, queryDB, logger, midLogger, conf, mapper) {
     var authentication = new authen_express_1.AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
     var signupMailSender = new signup_service_1.SignupSender(conf.signup.url, sendMail, conf.mail.from, conf.signup.template.body, conf.signup.template.subject);
     var passcodeRepository = new pg_extension_1.CodeRepository(mainDB, 'signupcodes');
-    var signupRepository = (0, signup_service_1.useRepository)(mainDB, 'users', 'passwords', conf.signup.userStatus, conf.signup.fields, conf.signup.maxPasswordAge, conf.signup.track, conf.signup.map);
+    var signupRepository = (0, signup_service_1.useRepository)(mainDB, 'users2', 'passwords', conf.signup.userStatus, conf.signup.fields, conf.signup.maxPasswordAge, conf.signup.track, conf.signup.map);
     var validator = new signup_service_1.Validator();
     var signupStatus = (0, signup_service_1.initStatus)(conf.signup.status);
     var signupService = new signup_service_1.SignupService(signupStatus, signupRepository, generate, comparator, comparator, passcodeRepository, signupMailSender.send, conf.signup.expires, validator.validate);
@@ -101,7 +101,9 @@ function useContext(mainDB, queryDB, logger, midLogger, conf, mapper) {
     var storageRepository = new google_storage_1.GoogleStorageRepository(bucket, storageConfig, google_storage_1.map);
     var sizesCover = [576, 768];
     var sizesImage = [40, 400];
-    var myprofile = (0, my_profile_1.useMyProfileController)(logger.error, mainDB, conf.settings, storageRepository, google_storage_1.deleteFile, generate, (0, google_storage_1.useBuildUrl)(conf.bucket), skillService.save, interestService.save, lookingForService.save, educationService.save, companyService.save, sizesCover, sizesImage, undefined, conf.model);
+    var repository = new query_core_1.Repository(mainDB, 'users', my_profile_1.userModel);
+    var myprofile = (0, my_profile_1.useMyProfileController)(logger.error, repository, conf.settings, skillService.save, interestService.save, lookingForService.save, educationService.save, companyService.save);
+    var myprofileUpload = (0, my_profile_1.useMyProfileUploadController)(logger.error, repository, storageRepository, google_storage_1.deleteFile, generate, (0, google_storage_1.useBuildUrl)(conf.bucket), sizesCover, sizesImage, undefined, conf.model);
     var article = (0, article_1.useArticleController)(logger.error, mainDB);
     var articleRate = (0, article_1.useArticleRateController)(logger.error, queryDB, mapper);
     var articleReaction = (0, article_1.useArticleReactionController)(logger.error, queryDB, mapper);
@@ -175,6 +177,7 @@ function useContext(mainDB, queryDB, logger, midLogger, conf, mapper) {
         signup: signup,
         password: password,
         myprofile: myprofile,
+        myprofileUpload: myprofileUpload,
         user: user,
         reaction: reaction,
         userFollow: userFollow,

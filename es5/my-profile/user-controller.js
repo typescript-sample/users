@@ -1,38 +1,16 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyProfileController = void 0;
 var express_ext_1 = require("express-ext");
-var upload_express_1 = require("upload-express");
-var MyProfileController = /** @class */ (function (_super) {
-    __extends(MyProfileController, _super);
-    function MyProfileController(log, service, generateId, sizesCover, sizesImage, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany) {
-        var _this = _super.call(this, log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id') || this;
-        _this.service = service;
-        _this.saveSkills = saveSkills;
-        _this.saveInterests = saveInterests;
-        _this.saveLookingFor = saveLookingFor;
-        _this.saveEducation = saveEducation;
-        _this.saveCompany = saveCompany;
-        _this.getMyProfile = _this.getMyProfile.bind(_this);
-        _this.getMySettings = _this.getMySettings.bind(_this);
-        _this.saveMyProfile = _this.saveMyProfile.bind(_this);
-        _this.saveMySettings = _this.saveMySettings.bind(_this);
-        return _this;
+var MyProfileController = /** @class */ (function () {
+    function MyProfileController(log, service, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany) {
+        this.log = log;
+        this.service = service;
+        this.saveSkills = saveSkills;
+        this.saveInterests = saveInterests;
+        this.saveLookingFor = saveLookingFor;
+        this.saveEducation = saveEducation;
+        this.saveCompany = saveCompany;
     }
     MyProfileController.prototype.getMyProfile = function (req, res) {
         var _this = this;
@@ -120,6 +98,6 @@ var MyProfileController = /** @class */ (function (_super) {
         }
     };
     return MyProfileController;
-}(upload_express_1.UploadController));
+}());
 exports.MyProfileController = MyProfileController;
 //# sourceMappingURL=user-controller.js.map
