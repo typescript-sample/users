@@ -54,7 +54,7 @@
     "shortid": "^2.2.16",
     "signup-express": "^0.0.1",
     "signup-service": "^0.0.7",
-    "upload-express": "^0.1.2",
+    "upload-express": "^0.1.4",
     "xvalidators": "^0.0.5"
   },
   "devDependencies": {

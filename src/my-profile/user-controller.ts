@@ -6,24 +6,21 @@ import { UserSettings } from '../my-profile';
 import { MyProfileService, User } from './user';
 
 export type Save = (values: string[]) => Promise<number>;
-export class MyProfileController extends UploadController {
+export class MyProfileController {
   constructor(
-    log: Log,
+    private log: Log,
     private service: MyProfileService,
-    generateId: () => string,
-    sizesCover: number[],
-    sizesImage: number[],
     public saveSkills?: Save,
     public saveInterests?: Save,
     public saveLookingFor?: Save,
     public saveEducation?: Save,
     public saveCompany?: Save,
   ) {
-    super(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
-    this.getMyProfile = this.getMyProfile.bind(this);
-    this.getMySettings = this.getMySettings.bind(this);
-    this.saveMyProfile = this.saveMyProfile.bind(this);
-    this.saveMySettings = this.saveMySettings.bind(this);
+    this.getMyProfile=this.getMyProfile.bind(this)
+    this.getMySettings=this.getMySettings.bind(this)
+    this.saveMyProfile=this.saveMyProfile.bind(this)
+    this.saveMyProfile=this.saveMyProfile.bind(this)
+
   }
   getMyProfile(req: Request, res: Response) {
     const id = buildAndCheckId<string>(req, res);

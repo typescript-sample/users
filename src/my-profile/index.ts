@@ -5,37 +5,29 @@ import { DB, Repository } from 'query-core';
 import { clone } from 'reflectx';
 import { MyProfileService, User, userModel, UserRepository, UserSettings } from './user';
 import { MyProfileController, Save } from './user-controller';
-
+import { UploadController } from './upload';
 export * from './user';
 export { MyProfileController };
 
-export function useMyProfileController(log: Log, db: DB, settings: UserSettings, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined, sizesCover: number[],
-  sizesImage: number[], config?: StorageConf, model?: ModelConf): MyProfileController {
-  const repository = new Repository<User, string>(db, 'users', userModel);
-  const service = new MyProfileManager(repository, settings, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new MyProfileController(log, service, generateId, sizesCover, sizesImage, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany);
+export function useMyProfileController(log: Log,repository: Repository<User, string>, settings: UserSettings, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined,
+): MyProfileController {
+  const service = new MyProfileManager(repository, settings);
+
+  return new MyProfileController(log, service, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany);
 }
 
-export class MyProfileManager extends StorageService<User, string> implements MyProfileService {
+export function useMyProfileUploadController(log: Log,repository:  Repository<User, string>, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl ,sizesCover: number[],
+  sizesImage: number[], config?: StorageConf, model?: ModelConf): UploadController {
+  const service = new StorageService(repository.load, repository.patch, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
+  return new UploadController(log, service, generateId, sizesCover, sizesImage);
+}
+
+
+export class MyProfileManager implements MyProfileService {
   constructor(
     private repository: UserRepository,
-    private settings: UserSettings,
-    storage: StorageRepository,
-    deleteFile: Delete,
-    generateId: Generate,
-    buildUrl: BuildUrl,
-    sizesCover: number[],
-    sizesImage: number[],
-    config?: StorageConf,
-    model?: ModelConf,
+    private settings: UserSettings
   ) {
-    super(repository.load, repository.patch, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-    this.uploadCoverImage = this.uploadCoverImage.bind(this);
-    this.uploadGalleryFile = this.uploadGalleryFile.bind(this);
-    this.updateGallery = this.updateGallery.bind(this);
-    this.deleteGalleryFile = this.deleteGalleryFile.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
-    this.getGalllery = this.getGalllery.bind(this);
   }
   getMyProfile(id: string): Promise<User | null> {
     return this.repository.load(id).then((user) => {
@@ -58,13 +50,5 @@ export class MyProfileManager extends StorageService<User, string> implements My
   }
   saveMySettings(id: string, settings: UserSettings): Promise<number> {
     return this.repository.patch({ id, settings });
-  }
-  getGalllery(id: string): Promise<UploadInfo[]> {
-    return this.repository.load(id).then((user) => {
-      if (user) {
-        return (user as any)[this.model.gallery];
-      }
-      return [];
-    });
   }
 }

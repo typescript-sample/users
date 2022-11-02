@@ -46,7 +46,7 @@ import { ModelConf, StorageConf } from 'one-storage';
 import { PasswordController } from 'password-express';
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from 'password-service';
 import { CodeRepository, DB, StringService } from 'pg-extension';
-import { createChecker } from 'query-core';
+import { createChecker, Repository } from 'query-core';
 import { TemplateMap } from 'query-mappers';
 import { SendGridMailService } from 'sendgrid-plus';
 import shortid from 'shortid';
@@ -112,11 +112,10 @@ import {
 import { useMusicController, usePlaylistController, useSavedListSongController, useSavedMusicsController } from './music';
 import { useMyArticleController } from './my-articles';
 import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
-import { MyProfileController, useMyProfileController, UserSettings } from './my-profile';
-import { RoomController, useRoomController  } from './room';
-import {useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController} from './user';
+import { MyProfileController, useMyProfileController, useMyProfileUploadController, userModel, UserSettings, User as Profile } from './my-profile';
+import { RoomController, useRoomController } from './room';
+import { useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController } from './user';
 import { useUserController, useUserFollowController } from './user';
- 
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -141,6 +140,7 @@ export interface ApplicationContext {
   signup: SignupController<Signup>;
   password: PasswordController;
   myprofile: MyProfileController;
+  myprofileUpload: UploadController;
   user: QueryController;
   userFollow: FollowController;
   reaction: UserReactionController;
@@ -267,7 +267,7 @@ export function useContext(
   );
   const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
 
-    const signupMailSender = new SignupSender(
+  const signupMailSender = new SignupSender(
     conf.signup.url,
     sendMail,
     conf.mail.from,
@@ -350,19 +350,24 @@ export function useContext(
   const storageRepository = new GoogleStorageRepository(bucket, storageConfig, map);
   const sizesCover: number[] = [576, 768];
   const sizesImage: number[] = [40, 400];
+  const repository = new Repository<Profile, string>(mainDB, 'users', userModel);
   const myprofile = useMyProfileController(
     logger.error,
-    mainDB,
-    conf.settings,
-    storageRepository,
-    deleteFile,
-    generate,
-    useBuildUrl(conf.bucket),
+    repository,
+    conf.settings, 
     skillService.save,
     interestService.save,
     lookingForService.save,
     educationService.save,
     companyService.save,
+  );
+  const myprofileUpload = useMyProfileUploadController(
+    logger.error,
+    repository,
+    storageRepository,
+    deleteFile,
+    generate,
+    useBuildUrl(conf.bucket),
     sizesCover,
     sizesImage,
     undefined,
@@ -542,6 +547,7 @@ export function useContext(
     signup,
     password,
     myprofile,
+    myprofileUpload,
     user,
     reaction,
     userFollow,
