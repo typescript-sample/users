@@ -57,6 +57,7 @@ create table userinfo (
   id character varying(40) not null primary key,
   followercount bigint default 0,
   followingcount bigint default 0,
+  reactioncount bigint default 0,
   rate1 int default 0
 );
 create table userfollowing (
@@ -184,7 +185,7 @@ create table userreaction (
   author varchar(255),
   reaction smallint,
   time timestamp,
-  primary key(id, author, userid)
+  primary key(id, author)
 )
 create table userinfomation(
   id varchar(255),
@@ -281,6 +282,14 @@ create table if not exists comments (
   createdat date
 );
 
+create table if not exists appreciationreaction(
+  id varchar(255),
+	author varchar(255),
+	userid varchar(255),
+	time timestamp,
+	reaction smallint,
+	primary key(id, author, userid)
+)
 -- Item
 create table item (
   id character varying(40) primary key,
@@ -894,3 +903,15 @@ create table savedlocation(
   id varchar(40) primary key,
   items character varying[]
 )
+
+create table  articlecommentthread(
+  commentId varchar(40) primary key,
+  id varchar(40),
+  author varchar(255),
+  comment text,
+  parent varchar(255),
+  replycount int default 0,
+  time timestamp with time zone,
+  updatedat timestamp with time zone,
+  histories jsonb[]
+);

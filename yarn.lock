@@ -3906,10 +3906,10 @@
   "resolved" "https://registry.npmjs.org/one-storage/-/one-storage-0.1.5.tgz"
   "version" "0.1.5"
 
-"onecore@^0.0.40":
-  "integrity" "sha512-Zg/IPxo/PnhN0qYb7dyN93W7lUEtHKPAqp7zyfgDbw+4/YE1EFJ6j0blDAlUQktUlsDS8xUMIDY67SLR8N4sxw=="
-  "resolved" "https://registry.npmjs.org/onecore/-/onecore-0.0.40.tgz"
-  "version" "0.0.40"
+"onecore@^0.0.43":
+  "integrity" "sha512-RUQCSOW45nEU+5Qb0S9Obc6ZSdpVajtp4Gdb+aWOmUNHMfyVvE62l+dKCn53cbXz5Bev2oU0Qerv4SfAtRFL4Q=="
+  "resolved" "https://registry.npmjs.org/onecore/-/onecore-0.0.43.tgz"
+  "version" "0.0.43"
 
 "onetime@^5.1.2":
   "integrity" "sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg=="
@@ -4108,10 +4108,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.11":
-  "integrity" "sha512-K555phEK8g8OC1x3/r9WWhLpvvueXgcf+XYRsmWGQ6a+rh/UF1wDuZDvPIz9mbjT0vahzzUR/PcC8JVMvIzEEg=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.11.tgz"
-  "version" "0.1.11"
+"pg-extension@^0.1.15":
+  "integrity" "sha512-FVbw47A+//FaP/V41g13FV1MzwP3ahDTqbdEKLnVP3WpH/Znws8DtMo/bYVV9pexdBgV9LWWOUoEKMUiUctjdA=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.15.tgz"
+  "version" "0.1.15"
   dependencies:
     "pg" "^8.6.0"
 

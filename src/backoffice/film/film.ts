@@ -44,7 +44,8 @@ export interface FilmService extends Service<Film, string, FilmFilter> {
 export const filmModel: Attributes = {
   id: {
     key: true,
-    length: 40
+    length: 40,
+    match:"equal"
   },
   title: {
     required: true,

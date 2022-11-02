@@ -10,6 +10,7 @@ import {
 } from 'authen-service';
 import { compare } from 'bcrypt';
 import { Comparator } from 'bcrypt-plus';
+import { CommentThread, CommentThreadController, CommentThreadFilter } from 'comment-thread';
 import {
   HealthController,
   ItemController as ItemsController,
@@ -62,7 +63,7 @@ import {
 import { createValidator } from 'xvalidators';
 import { useAppreciationCommentController, useAppreciationController, useAppreciationReactionController } from './appreciation';
 import { AppreciationController } from './appreciation';
-import { useArticleController ,
+import { useArticleCommentThreadController, useArticleController ,
   useArticleRateCommentController,
   useArticleRateController,
   useArticleReactionController
@@ -218,7 +219,7 @@ export interface ApplicationContext {
   music: QueryController;
   backofficeMusic: Controller;
   playlist: Controller;
-
+  articleCommentThread:CommentThreadController<CommentThread>;
 
 }
 
@@ -276,7 +277,7 @@ export function useContext(
   const passcodeRepository = new CodeRepository<string>(mainDB, 'signupcodes');
   const signupRepository = useRepository<string, Signup>(
     mainDB,
-    'users2',
+    'users',
     'passwords',
     conf.signup.userStatus,
     conf.signup.fields,
@@ -342,7 +343,7 @@ export function useContext(
   const appreciation = useAppreciationController(logger.error, mainDB);
   const appreciationComment = useAppreciationCommentController(logger.error, mainDB);
   const appreciationReaction = useAppreciationReactionController(logger.error, mainDB, generate);
-
+  const articleCommentThread =useArticleCommentThreadController(logger.error,mainDB,mapper);
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
   const bucket = storage.bucket(conf.bucket);
@@ -612,7 +613,8 @@ export function useContext(
     room,
     saveMusic,
     playlist,
-    saveListsong
+    saveListsong,
+    articleCommentThread
   };
 }
 

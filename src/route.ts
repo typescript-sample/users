@@ -102,6 +102,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/articles/search', ctx.article.search);
   app.get('/articles/:id', ctx.article.load);
 
+  app.post('/articles/commentthread/search',ctx.articleCommentThread.search)
+  app.post('/articles/commentthread/:id/:author/reply/:commentThreadId', ctx.articleCommentThread.reply)
+  app.post('/articles/commentthread/:id/:author', ctx.articleCommentThread.comment)
+  app.delete('/articles/commentthread/:commentid', ctx.articleCommentThread.remove)
+  app.put('/articles/commentthread/:commentid', ctx.articleCommentThread.updateComment)
+  app.get('/articles/commentthread/search', ctx.articleCommentThread.search)
+  app.get('/articles/commentthread/:commentThreadId/reply', ctx.articleCommentThread.getReplyComments)
+
   app.post('/articles/rates/comments', ctx.articleComment.search);
   app.get('/articles/rates/search', ctx.articleReaction.search);
   app.post('/articles/rates/search', ctx.articleReaction.search);
@@ -120,7 +128,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/my-articles/:id', ctx.myarticles.update);
   app.patch('/my-articles/:id', ctx.myarticles.patch);
   app.delete('/my-articles/:id', ctx.myarticles.delete);
-  app.delete('/my-articles/userId', ctx.myarticles.delete);
+  // app.delete('/my-articles/userId', ctx.myarticles.delete);
 
 
   // Cinema
