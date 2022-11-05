@@ -38,7 +38,7 @@ export interface ItemService extends Service<Item, string, ItemFilter> {
   uploadGalleryFile(uploadGallery: UploadGallery<string>): Promise<UploadInfo[]>;
   updateGallery(id: string, data: UploadInfo[]): Promise<boolean>;
   deleteGalleryFile(id: string, url: string): Promise<boolean>;
-  getGalllery(id: string): Promise<UploadInfo[]>;
+  getGallery(id: string): Promise<UploadInfo[]>;
   addExternalResource(id: string, data: UploadInfo): Promise<boolean>;
   deleteExternalResource(id: string, url: string): Promise<boolean>;
 }

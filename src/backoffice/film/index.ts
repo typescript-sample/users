@@ -138,5 +138,5 @@ export function useFilmUploadController(log: Log, db: DB, storage: StorageReposi
   const builder = new SearchBuilder<Film, FilmFilter>(db.query, 'film', filmModel, postgres, queryItems);
   const repository = new Repository<Film, string>(db, 'film', filmModel);
   const service = new FilmUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
+  return new UploadController(log, service, generateId, sizesCover, sizesImage);
 }

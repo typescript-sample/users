@@ -116,13 +116,25 @@
     </if>
   </select>
   <select id="articlecommentthread">
-    select *
+    select a.*, b.replycount, b.usefulcount, c.username, c.imageurl
+    <if test="userId != null">
+      ,
+      case
+        when u.reaction = 1 then true
+        else false
+      end
+        as disable
+    </if>  
     from articlecommentthread a
     left join articlecommentthreadinfo b
-    on a.commentId = b.commentId
+    on a.commentId = b.commentid
+    left join users c
+    on c.id = a.author
+    left join articlecommentthreadreaction d
+    on a.commentId = d.id
     where
     <if test = "commentId != null">
-      a.commentId = #{commentid} and
+      a.commentId = #{commentId} and
     </if>
     <if test = "id != null">
       a.id = #{id} and
@@ -131,7 +143,7 @@
       a.author = #{author} and
     </if>
     <if test="userId != null">
-      a.userId = #{userid}
+      a.userId = #{userId}
     </if>
     <if test="time != null">
       a.time >= #{time} and

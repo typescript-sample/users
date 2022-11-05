@@ -80,5 +80,5 @@ export function useCinemaUploadController(log: Log, db: DB, storage: StorageRepo
   const builder = new SearchBuilder<Cinema, CinemaFilter>(db.query, 'cinema', cinemaModel, postgres, queryItems);
   const repository = new Repository<Cinema, string>(db, 'cinema', cinemaModel);
   const service = new CinemaUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  return new UploadController(log, service, generateId, sizesCover, sizesImage, 'id');
 }

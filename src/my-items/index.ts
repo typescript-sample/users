@@ -77,5 +77,5 @@ export function useMyItemController(log: Log, db: DB, storage: StorageRepository
 export function useMyItemUploadController(log: Log, db: DB, storage: StorageRepository, save: (values: string[]) => Promise<number>, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf, mapper?: TemplateMap): UploadController {
   const service = useMyItemService(db, storage, save, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model, mapper);
-  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
+  return new UploadController(log, service, generateId, sizesCover, sizesImage);
 }

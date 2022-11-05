@@ -10,7 +10,8 @@ import {
 } from 'authen-service';
 import { compare } from 'bcrypt';
 import { Comparator } from 'bcrypt-plus';
-import { CommentThread, CommentThreadController, CommentThreadFilter } from 'comment-thread';
+import { CommentReactionController, CommentThread, CommentThreadFilter } from 'comment-thread';
+import { CommentThreadController } from 'comment-thread/comment-thread';
 import {
   HealthController,
   ItemController as ItemsController,
@@ -63,7 +64,8 @@ import {
 import { createValidator } from 'xvalidators';
 import { useAppreciationCommentController, useAppreciationController, useAppreciationReactionController } from './appreciation';
 import { AppreciationController } from './appreciation';
-import { useArticleCommentThreadController, useArticleController ,
+import {
+  useArticleCommentThreadController, useArticleCommentThreadReactionController, useArticleController,
   useArticleRateCommentController,
   useArticleRateController,
   useArticleReactionController
@@ -159,7 +161,7 @@ export interface ApplicationContext {
   article: QueryController;
   articleRate: RateController;
   articleReaction: ReactionController;
-  articleComment: QueryController;
+  articleRateComment: QueryController;
 
   myarticles: Controller;
   cinema: QueryController;
@@ -219,8 +221,8 @@ export interface ApplicationContext {
   music: QueryController;
   backofficeMusic: Controller;
   playlist: Controller;
-  articleCommentThread:CommentThreadController<CommentThread>;
-
+  articleCommentThread: CommentThreadController;
+  articleCommentThreadReaction:CommentReactionController;
 }
 
 export function useContext(
@@ -343,7 +345,6 @@ export function useContext(
   const appreciation = useAppreciationController(logger.error, mainDB);
   const appreciationComment = useAppreciationCommentController(logger.error, mainDB);
   const appreciationReaction = useAppreciationReactionController(logger.error, mainDB, generate);
-  const articleCommentThread =useArticleCommentThreadController(logger.error,mainDB,mapper);
   const storageConfig: StorageConfig = { bucket: conf.bucket, public: true };
   const storage = new Storage();
   const bucket = storage.bucket(conf.bucket);
@@ -354,7 +355,7 @@ export function useContext(
   const myprofile = useMyProfileController(
     logger.error,
     repository,
-    conf.settings, 
+    conf.settings,
     skillService.save,
     interestService.save,
     lookingForService.save,
@@ -376,8 +377,10 @@ export function useContext(
   const article = useArticleController(logger.error, mainDB);
   const articleRate = useArticleRateController(logger.error, queryDB, mapper);
   const articleReaction = useArticleReactionController(logger.error, queryDB, mapper);
-  const articleComment = useArticleRateCommentController(logger.error, queryDB, mapper);
-
+  const articleRateComment = useArticleRateCommentController(logger.error, queryDB, mapper);
+  const articleCommentThread = useArticleCommentThreadController(logger.error, mainDB, mapper);
+  const articleCommentThreadReaction = useArticleCommentThreadReactionController(logger.error,mainDB,mapper)
+  
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
@@ -585,7 +588,7 @@ export function useContext(
     locationComment,
     article,
     articleRate,
-    articleComment,
+    articleRateComment,
     articleReaction,
     myarticles,
     items,
@@ -620,7 +623,8 @@ export function useContext(
     saveMusic,
     playlist,
     saveListsong,
-    articleCommentThread
+    articleCommentThread,
+    articleCommentThreadReaction
   };
 }
 

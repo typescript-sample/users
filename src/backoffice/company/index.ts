@@ -59,5 +59,5 @@ export function useCompanyUploadController(log: Log, db: DB, storage: StorageRep
   const builder = new SearchBuilder<Company, CompanyFilter>(db.query, 'company', companyModel, postgres, queryItems);
   const repository = new Repository<Company, string>(db, 'company', companyModel);
   const service = new CompanyUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage, 'id');
+  return new UploadController(log, service, generateId, sizesCover, sizesImage, 'id');
 }

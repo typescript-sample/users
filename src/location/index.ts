@@ -205,5 +205,5 @@ export function useLocationUploadController(log: Log, db: DB, storage: StorageRe
   const builder = new SearchBuilder<Location, LocationFilter>(db.query, 'item', locationModel, postgres, queryItems);
   const repository = new Repository<Location, string>(db, 'item', locationModel);
   const service = new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
-  return new UploadController(log, service, service.getGalllery, generateId, sizesCover, sizesImage);
+  return new UploadController(log, service, generateId, sizesCover, sizesImage);
 }
