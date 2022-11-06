@@ -62,6 +62,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
+  app.get('/users/company/:companyId', ctx.user.getUsersByCompany);
   app.get('/users/:id', ctx.user.load);
 
   app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react);
@@ -346,6 +347,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/backoffice/companies/:id', ctx.backofficeCompany.update);
   app.patch('/backoffice/companies/:id', ctx.backofficeCompany.patch);
   app.delete('/backoffice/companies/:id', ctx.backofficeCompany.delete);
+  app.patch('/backoffice/companies/:id/assign-users', ctx.backofficeCompany.assignUsers);
+  app.patch('/backoffice/companies/:id/deassign-users', ctx.backofficeCompany.deassignUsers);
+
   // upload
   app.post('/backoffice/companies/:id/cover', parser.array('files'), ctx.backofficeCompanyUpload.uploadCover);
   app.post('/backoffice/companies/:id/upload', parser.array('files'), ctx.backofficeCompanyUpload.uploadImage);

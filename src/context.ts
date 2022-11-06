@@ -71,7 +71,7 @@ import {
   useArticleReactionController
 } from './article';
 import { useBackOfficeCinemaController, useCinemaUploadController } from './backoffice/cinema';
-import { useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
+import { BackOfficeCompanyController, useBackOfficeCompanyController, useCompanyUploadController } from './backoffice/company';
 import { useBackOfficeFilmController, useFilmUploadController } from './backoffice/film';
 import { useBackOfficeJobController } from './backoffice/job';
 import { useBackOfficeLocationController, useLocationUploadController } from './backoffice/location';
@@ -116,7 +116,7 @@ import { useMyArticleController } from './my-articles';
 import { MyItemController, useMyItemController, useMyItemUploadController } from './my-items';
 import { MyProfileController, useMyProfileController, useMyProfileUploadController, userModel, UserSettings, User as Profile } from './my-profile';
 import { RoomController, useRoomController } from './room';
-import { useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController } from './user';
+import { UserController, useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController } from './user';
 import { useUserController, useUserFollowController } from './user';
 resources.createValidator = createValidator;
 
@@ -143,7 +143,7 @@ export interface ApplicationContext {
   password: PasswordController;
   myprofile: MyProfileController;
   myprofileUpload: UploadController;
-  user: QueryController;
+  user: UserController;
   userFollow: FollowController;
   reaction: UserReactionController;
   userInfo: QueryController;
@@ -171,7 +171,7 @@ export interface ApplicationContext {
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
   company: QueryController;
-  backofficeCompany: Controller;
+  backofficeCompany: BackOfficeCompanyController;
   backofficeCompanyUpload: UploadController;
   // companyRate: RateController;
   // companyReaction: ReactionController;

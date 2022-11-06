@@ -589,12 +589,17 @@ create table company_categories(
   updatedat timestamp
 );
 
-
 insert into company_categories (categoryid,categoryname) VALUES ('Entertainment','Entertainment');
 insert into company_categories (categoryid,categoryname) VALUES ('Financial business','Financial business');
 insert into company_categories (categoryid,categoryname) VALUES ('Industrial production','Industrial production');
 insert into company_categories (categoryid,categoryname) VALUES ('Real estate business','Real estate business');
 insert into company_categories (categoryid,categoryname) VALUES ('Business services','Business services');
+
+CREATE TABLE company_users (
+	company_id varchar(40) NOT NULL,
+	user_id varchar(40) NOT NULL,
+	CONSTRAINT company_users_pk PRIMARY KEY (company_id,user_id)
+);
 
 CREATE TABLE review_company(
   id varchar(255),
