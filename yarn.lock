@@ -3897,10 +3897,10 @@
   "resolved" "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   "version" "2.5.0"
 
-"pg-extension@^0.1.15":
-  "integrity" "sha512-FVbw47A+//FaP/V41g13FV1MzwP3ahDTqbdEKLnVP3WpH/Znws8DtMo/bYVV9pexdBgV9LWWOUoEKMUiUctjdA=="
-  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.15.tgz"
-  "version" "0.1.15"
+"pg-extension@^0.1.16":
+  "integrity" "sha512-0UPzI9T9pNbYFXhack5vOw+V5AzZNxfHUKiOJ4iBjuD3KN451a5x2Z2RM4NyW4qQJfWIdHcnSy9EHRmTSlKvRQ=="
+  "resolved" "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.16.tgz"
+  "version" "0.1.16"
   dependencies:
     "pg" "^8.6.0"
 

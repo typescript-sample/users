@@ -104,6 +104,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/articles/:id', ctx.article.load);
 
   app.post('/articles/commentthread/search', ctx.articleCommentThread.search)
+  app.post('/articles/commentthread/:commentThreadId/reply', ctx.articleCommentThread.getReplyComments)
   app.post('/articles/commentthread/:id/:author/reply/:commentThreadId', ctx.articleCommentThread.reply)
   app.post('/articles/commentthread/:id/:author', ctx.articleCommentThread.comment)
   app.delete('/articles/commentthread/:commentThreadId/reply/:commentId', ctx.articleCommentThread.removeCommentReply)
@@ -111,10 +112,11 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/articles/commentthread/reply/:commentId', ctx.articleCommentThread.updateCommentReply)
   app.put('/articles/commentthread/:commentId', ctx.articleCommentThread.updateComment)
   app.get('/articles/commentthread/search', ctx.articleCommentThread.search)
-  app.get('/articles/commentthread/:commentThreadId/reply', ctx.articleCommentThread.getReplyComments)
-  app.get('/articles/commentthread/:commentId/:author/useful/:userId', ctx.articleCommentThreadReaction.setUserful)
+  app.post('/articles/commentthread/:commentId/:author/useful/:userId', ctx.articleCommentThreadReaction.setUserful)
   app.delete('/articles/commentthread/:commentId/:author/useful/:userId', ctx.articleCommentThreadReaction.removeUseful)
-
+  app.post('/articles/commentthread/reply/:commentId/:author/useful/:userId', ctx.articleCommentReaction.setUserful)
+  app.delete('/articles/commentthread/reply/:commentId/:author/useful/:userId', ctx.articleCommentReaction.removeUseful)
+ 
   app.post('/articles/rates/comments', ctx.articleRateComment.search);
   app.get('/articles/rates/search', ctx.articleReaction.search);
   app.post('/articles/rates/search', ctx.articleReaction.search);

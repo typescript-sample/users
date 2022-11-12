@@ -84,31 +84,33 @@
   </select>
 
   <select id="articleratecomment">
-    select * from articleratecomment
+    select a.*, u.username as "authorName", u.imageurl from articleratecomment a
+    left join users u on
+    a.author = u.id
     where
     <if test="commentId != null">
-      commentId = #{commentId} and
+      a.commentId = #{commentId} and
     </if> 
     <if test="id != null">
-      id = #{id} and
+      a.id = #{id} and
     </if> 
     <if test="author != null">
-      author = #{author} and
+      a.author = #{author} and
     </if> 
     <if test="userId != null">
-      userId = #{userId} and
+      a.userId = #{userId} and
     </if>   
     <if test="comment != null">
-      comment ilike #{comment} and
+      a.comment ilike #{comment} and
     </if>  
     <if test="time != null">
-      time >= #{time} and
+      a.time >= #{time} and
     </if>
     <if test="updateAt != null">
       updateAt >= #{updateAt} and
     </if>
     <if test="histories != null">
-      histories in #{histories} and
+      a.histories in #{histories} and
     </if>
     1 = 1
     <if test="sort != null">
@@ -120,7 +122,7 @@
     <if test="userId != null">
       ,
       case
-        when u.reaction = 1 then true
+        when d.reaction = 1 then true
         else false
       end
         as disable
@@ -130,8 +132,10 @@
     on a.commentId = b.commentid
     left join users c
     on c.id = a.author
+    <if test = "userId != null">
     left join articlecommentthreadreaction d
-    on a.commentId = d.id
+    on a.commentId = d.commentId and a.userId = #{userId}
+    </if>
     where
     <if test = "commentId != null">
       a.commentId = #{commentId} and
@@ -141,9 +145,6 @@
     </if>
     <if test="author != null">
       a.author = #{author} and
-    </if>
-    <if test="userId != null">
-      a.userId = #{userId}
     </if>
     <if test="time != null">
       a.time >= #{time} and

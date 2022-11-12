@@ -65,6 +65,7 @@ import { createValidator } from 'xvalidators';
 import { useAppreciationCommentController, useAppreciationController, useAppreciationReactionController } from './appreciation';
 import { AppreciationController } from './appreciation';
 import {
+  useArticleCommentReactionController,
   useArticleCommentThreadController, useArticleCommentThreadReactionController, useArticleController,
   useArticleRateCommentController,
   useArticleRateController,
@@ -223,6 +224,7 @@ export interface ApplicationContext {
   playlist: Controller;
   articleCommentThread: CommentThreadController;
   articleCommentThreadReaction:CommentReactionController;
+  articleCommentReaction: CommentReactionController;
 }
 
 export function useContext(
@@ -380,7 +382,7 @@ export function useContext(
   const articleRateComment = useArticleRateCommentController(logger.error, queryDB, mapper);
   const articleCommentThread = useArticleCommentThreadController(logger.error, mainDB, mapper);
   const articleCommentThreadReaction = useArticleCommentThreadReactionController(logger.error,mainDB,mapper)
-  
+  const articleCommentReaction = useArticleCommentReactionController(logger.error, mainDB, mapper)
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
   const company = useCompanyController(logger.error, queryDB);
@@ -624,7 +626,8 @@ export function useContext(
     playlist,
     saveListsong,
     articleCommentThread,
-    articleCommentThreadReaction
+    articleCommentThreadReaction,
+    articleCommentReaction
   };
 }
 

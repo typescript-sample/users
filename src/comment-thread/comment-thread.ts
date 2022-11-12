@@ -18,19 +18,19 @@ export interface CommentThreadController {
 
 export interface CommentThreadService {
     search(s: CommentThreadFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<CommentThread>>
-    comment(comment: CommentThread): Promise<number>
+    comment(comment: CommentThread): Promise<string>
     updateComment(comment: CommentThread): Promise<number>
     updateReplyComment(comment: CommentThreadReply): Promise<number>
-    replyComment(obj: CommentThreadReply): Promise<number>
-    getReplyComments(commentThreadId: string): Promise<CommentThreadReply[]>
+    replyComment(obj: CommentThreadReply): Promise<string|number>
+    getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]>
     removeReplyComment(commentId: string, commentThreadId: string): Promise<number>
     removeThreadComment(commentThreadId: string): Promise<number>
 }
 
-export interface SqlCommentThreadRepository<R> {
+export interface CommentThreadRepository<R> {
     updateComment(comment: R): Promise<number>
     load(commentid: string): Promise<R | null>
-    insert(obj: R): Promise<number>
+    comment(obj: R): Promise<string>
     removeThreadComment(commentId: string): Promise<number>
 }
 export interface ErrorMessage {
@@ -70,12 +70,6 @@ export interface CommentThreadFilter {
 
 }
 
-// export interface CommentThreadInfo {
-//     commentid: string,
-//     replyCount: number,
-//     usefulCount: number
-// }
-
 
 export const commentThreadHistoryModel: Attributes = {
     comment: {
@@ -85,19 +79,7 @@ export const commentThreadHistoryModel: Attributes = {
         type: 'datetime'
     },
 }
-// export const commentThreadInfoModel: Attributes = {
-//     commentid: {
-//         key: true,
-//         required: true
-//     },
-//     replyCount: {
-//         default: 0
-//     },
-//     usefulCount: {
-//         default: 0
-//     }
 
-// }
 export const commentThreadModel: Attributes = {
     commentId: {
         key: true,
@@ -133,22 +115,12 @@ export const commentThreadModel: Attributes = {
         column: "replycount"
     },
     usefulCount: {
-        column: "useful"
+        column: "usefulcount"
     },
     authorName: {
         column: 'username'
     }
-    // info: {
-    //     typeof: commentThreadInfoModel
-    // }
 }
-
-
-// export interface SqlInfoCommentThreadRepository {
-//     remove(commentid: string): Promise<number>
-// }
-
-
 
 // ------------------------
 
@@ -166,6 +138,8 @@ export interface CommentThreadReply {
     authorURL?: string
     userURL?: string
     authorName?: string
+    usefulCount?: number
+    replyCount?: number
 }
 
 export interface CommentThreadReplyFilter {
@@ -189,10 +163,10 @@ export interface ShortComment {
     time: Date;
 }
 
-export interface SqlCommentThreadReplyRepository {
+export interface CommentThreadReplyRepository {
     load(commentId: string): Promise<CommentThreadReply | null>
-    getComments(commentThreadId: string): Promise<CommentThreadReply[]>
-    replyComment(obj: CommentThreadReply): Promise<number>
+    getComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]>
+    replyComment(obj: CommentThreadReply): Promise<string>
     updateComment(obj: CommentThreadReply): Promise<number>
     removeComment(commentId: string, commentThreadId: string): Promise<number>
 }
@@ -230,6 +204,12 @@ export const commentThreadReplyModel: Attributes = {
     },
     userURL: {
         column: "imageurl"
+    },
+    replyCount: {
+        column: "replycount"
+    },
+    usefulCount: {
+        column: "usefulcount"
     }
 }
 
@@ -242,13 +222,6 @@ export interface CommentReaction {
     time: Date
     reaction: number
 }
-// export interface CommentReactionFilter {
-//     commentId?: string
-//     author?: string
-//     userId?: string
-//     time?: Date
-//     reaction?: number
-// }
 
 export const commentReactionModel: Attributes = {
     commentId: {
@@ -280,9 +253,8 @@ export interface CommentReactionService {
     removeUseful(commentId: string, author: string, userId: string): Promise<number>;
 }
 
-// export interface SqlCommentReactionRepository<T> {
-//     load(commentId: string, id: string, author: string): Promise<T | null>;
-//     setUseful(obj:T): Promise<number>;
-//     removeUseful(commentId: string, id: string, author: string): Promise<number>;
-// }
+export interface CommentReactionRepository {
+    save(commentId: string, author: string, userId: string, reaction: number): Promise<number>
+    remove(commentId: string, author: string, userId: string): Promise<number>
+}
 

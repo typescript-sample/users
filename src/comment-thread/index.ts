@@ -4,7 +4,7 @@ import { Search } from "onecore";
 import { Statement } from "pg-extension";
 import { Attributes, buildMap, buildToDelete, buildToInsert, buildToUpdate, DB, Repository, StringMap } from "query-core";
 import { ReactionRepository } from "review-reaction";
-import { CommentReactionService, CommentThread, CommentThreadFilter, CommentThreadReply, CommentThreadService, ShortComment, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from "./comment-thread";
+import { CommentReaction, CommentReactionRepository, CommentReactionService, CommentThread, CommentThreadFilter, CommentThreadReply, CommentThreadReplyRepository, CommentThreadRepository, CommentThreadService, ShortComment } from "./comment-thread";
 export * from './comment-thread'
 
 // ------------- COMMENT THREAD -------------- 
@@ -17,7 +17,7 @@ export class CommentThreadValidator {
         return Promise.resolve(errs);
     }
 }
-export class CommentThreadController<R> implements CommentThreadController<R> {
+export class CommentThreadController<R> {
     protected commentIdCol: string
     protected idCol: string
     protected authorCol: string
@@ -117,7 +117,7 @@ export class CommentThreadController<R> implements CommentThreadController<R> {
         })
     }
     getReplyComments(req: Request, res: Response) {
-        this.commentThreadService.getReplyComments(req.params[this.commentThreadIdCol])
+        this.commentThreadService.getReplyComments(req.params[this.commentThreadIdCol], req.body[this.userIdCol])
             .then(result => res.status(200).json(result).end())
             .catch(error => handleError(error, res, this.log))
     }
@@ -157,8 +157,8 @@ function binarySearch(ar: URL[], el: string): number {
 export class CommentThreadClient implements CommentThreadService {
     constructor(
         protected find: Search<CommentThread, CommentThreadFilter>,
-        protected commentThreadRepository: SqlCommentThreadRepository<CommentThread>,
-        protected commentThreadReplyRepository: SqlCommentThreadReplyRepository,
+        protected commentThreadRepository: CommentThreadRepository<CommentThread>,
+        protected commentThreadReplyRepository: CommentThreadReplyRepository,
         protected queryURL?: (ids: string[]) => Promise<URL[]>
     ) {
         this.search = this.search.bind(this)
@@ -189,10 +189,12 @@ export class CommentThreadClient implements CommentThreadService {
     removeReplyComment(commentId: string, commentThreadId: string): Promise<number> {
         return this.commentThreadReplyRepository.removeComment(commentId, commentThreadId)
     }
-    getReplyComments(commentThreadId: string): Promise<CommentThreadReply[]> {
-        return this.commentThreadReplyRepository.getComments(commentThreadId)
+    getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]> {
+        return this.commentThreadReplyRepository.getComments(commentThreadId, userId)
     }
-    replyComment(obj: CommentThreadReply): Promise<number> {
+    replyComment(obj: CommentThreadReply): Promise<string> {
+        obj.histories = []
+        obj.time = new Date()
         return this.commentThreadReplyRepository.replyComment(obj)
     }
     search(s: CommentThreadFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<CommentThread>> {
@@ -220,9 +222,10 @@ export class CommentThreadClient implements CommentThreadService {
             }
         });
     }
-    comment(comment: CommentThread): Promise<number> {
+    comment(comment: CommentThread): Promise<string> {
         comment.time = comment.time ?? new Date()
-        return this.commentThreadRepository.insert(comment)
+        comment.histories = []
+        return this.commentThreadRepository.comment(comment)
     }
     async removeThreadComment(commentId: string): Promise<number> {
         const obj = await this.commentThreadRepository.load(commentId);
@@ -252,13 +255,16 @@ export class CommentThreadClient implements CommentThreadService {
     }
 }
 
-export class CommentThreadRepository
+export class SqlCommentThreadRepository
     extends Repository<CommentThread, string>
-    implements SqlCommentThreadRepository<CommentThread> {
+    implements CommentThreadRepository<CommentThread> {
     constructor(protected db: DB, table: string, attributes: Attributes,
         commentIdCol: string, idCol: string, authorCol: string, commentCol: string, timeCol: string,
-        commentReplyTable: string, idCommentThreadReplyCol: string,
-        infoTable: string, idInfoCol: string) {
+        commentReplyTable: string, commentIdReplyCol: string, idCommentThreadReplyCol: string,
+        infoTable: string, idInfoCol: string,
+        infoReplyTable: string, commentIdInfoReplyCol: string,
+        reactionTable: string, commentIdReactionCol: string,
+        reactionReplyTable: string, commentIdReactionReplyCol: string,) {
         super(db, table, attributes)
         this.commentIdCol = commentIdCol;
         this.idCol = idCol;
@@ -266,9 +272,16 @@ export class CommentThreadRepository
         this.commentCol = commentCol;
         this.timeCol = timeCol;
         this.commentReplyTable = commentReplyTable
+        this.commentIdReplyCol = commentIdReplyCol
         this.idCommentThreadReplyCol = idCommentThreadReplyCol
         this.infoTable = infoTable
         this.idInfoCol = idInfoCol
+        this.infoReplyTable = infoReplyTable
+        this.commentIdInfoReplyCol = commentIdInfoReplyCol
+        this.reactionTable = reactionTable
+        this.commentIdReactionCol = commentIdReactionCol
+        this.reactionReplyTable = reactionReplyTable
+        this.commentIdReactionReplyCol = commentIdReactionReplyCol
         this.mapper = buildMap(this.attributes)
         this.insert = this.insert.bind(this);
         this.load = this.load.bind(this)
@@ -282,9 +295,16 @@ export class CommentThreadRepository
     protected commentCol: string;
     protected timeCol: string;
     protected commentReplyTable: string;
+    protected commentIdReplyCol: string;
     protected idCommentThreadReplyCol: string;
     protected infoTable: string;
     protected idInfoCol: string;
+    protected infoReplyTable: string;
+    protected commentIdInfoReplyCol: string;
+    protected reactionTable: string;
+    protected commentIdReactionCol: string;
+    protected reactionReplyTable: string;
+    protected commentIdReactionReplyCol: string;
     protected mapper: StringMap;
 
     async load(commentId: string): Promise<CommentThread | null> {
@@ -300,12 +320,16 @@ export class CommentThreadRepository
             }
         }
     }
-    insert(obj: CommentThread): Promise<number> {
+    async comment(obj: CommentThread): Promise<string> {
         const stmt = buildToInsert(obj, this.table, this.attributes, this.param, this.version);
         if (stmt) {
-            return this.execBatch([stmt], true);
+            const res = await this.execBatch([stmt], true);
+            if (res > 0) {
+                return obj.commentId;
+            }
+            return "";
         } else {
-            return Promise.resolve(0);
+            return Promise.resolve("");
         }
     }
     updateComment(obj: CommentThread): Promise<number> {
@@ -313,7 +337,7 @@ export class CommentThreadRepository
         if (stmt) {
             return this.execBatch([stmt])
         }
-        return Promise.resolve(-1)
+        return Promise.resolve(0)
     }
     removeThreadComment(commentId: string): Promise<number> {
         const stmt = buildToDelete<string>(commentId, this.table, this.primaryKeys, this.param)
@@ -326,7 +350,19 @@ export class CommentThreadRepository
                 query: `delete from ${this.infoTable} where ${this.idInfoCol} = ${this.param(1)}`,
                 params: [commentId]
             }
-            return this.execBatch([stmt, stmt2, stmt3])
+            const stmt4: Statement = {
+                query: `delete from ${this.infoReplyTable} a where ${this.commentIdInfoReplyCol} in (select ${this.commentIdReplyCol} from ${this.commentReplyTable} where ${this.idCommentThreadReplyCol} = ${this.param(1)})`,
+                params: [commentId]
+            }
+            const stmt5: Statement = {
+                query: `delete from ${this.reactionTable} where ${this.commentIdReactionCol} = ${this.param(1)}`,
+                params: [commentId]
+            }
+            const stmt6: Statement = {
+                query: `delete from ${this.reactionReplyTable} where ${this.commentIdReactionReplyCol} in (select ${this.commentIdReplyCol} from ${this.commentReplyTable} where ${this.idCommentThreadReplyCol} = ${this.param(1)})`,
+                params: [commentId]
+            }
+            return this.execBatch([stmt, stmt2, stmt3, stmt4, stmt5, stmt6])
         } else {
             return Promise.resolve(-1)
         }
@@ -334,7 +370,7 @@ export class CommentThreadRepository
 
 }
 
-export class CommentThreadReplyRepository extends Repository<CommentThreadReply, string> implements SqlCommentThreadReplyRepository {
+export class SqlCommentThreadReplyRepository extends Repository<CommentThreadReply, string> implements CommentThreadReplyRepository {
     protected commentIdCol: string
     protected commentThreadIdCol: string;
     protected authorCol: string;
@@ -346,8 +382,11 @@ export class CommentThreadReplyRepository extends Repository<CommentThreadReply,
     protected usernameCol: string;
     protected avatarCol: string;
     protected userIdCol: string;
-    constructor(db: DB, table: string, protected attrs: Attributes, commentIdCol: string, authorCol: string, commentThreadIdCol: string, tableCommentThreadInfo: string, commentThreadIdInfoCol: string, replyCountInfoCol: string, usefulCountInfoCol: string,
-        userTable: string, userIdCol: string, usernameCol: string, avatarCol: string) {
+    constructor(db: DB, table: string, protected attrs: Attributes, commentIdCol: string, authorCol: string, commentThreadIdCol: string, protected userIdCommentCol: string,
+        tableCommentThreadInfo: string, commentThreadIdInfoCol: string, replyCountInfoCol: string, usefulCountInfoCol: string,
+        userTable: string, userIdCol: string, usernameCol: string, avatarCol: string,
+        protected commentInfoTable: string, protected commentIdCommentInfoCol: string, protected usefulCountCommentInfoCol: string,
+        protected commentReactionTable: string, protected commentIdCommentReactionCol: string, protected reactionCol: string) {
         super(db, table, attrs)
         this.tableCommentThreadInfo = tableCommentThreadInfo
         this.commentIdCol = commentIdCol
@@ -388,11 +427,23 @@ export class CommentThreadReplyRepository extends Repository<CommentThreadReply,
             return Promise.resolve(-1)
         }
     }
-    getComments(commentThreadId: string): Promise<CommentThreadReply[]> {
-        return this.query<CommentThreadReply>(`select a.*, b.${this.usernameCol}, b.${this.avatarCol} from ${this.table} a join ${this.userTable} b on a.${this.authorCol} = b.${this.userIdCol} where a.${this.commentThreadIdCol} = ${this.param(1)}`, [commentThreadId], this.map);
+    getComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]> {
+        let qr = ``
+        let qr2 = ``
+        let arr = []
+        if (userId && userId.length > 0) {
+            arr.push(userId)
+            qr = `, case when d.${this.reactionCol} = 1 then true else false end as disable`
+            qr2 = `left join ${this.commentReactionTable} d on a.${this.commentIdCol} = d.${this.commentIdCommentReactionCol} and a.${this.userIdCommentCol} = ${this.param(1)}`
+        }
+        const query =
+            `select a.*, b.${this.usernameCol}, b.${this.avatarCol}, c.${this.usefulCountCommentInfoCol}${qr} from ${this.table} a left join ${this.userTable} b on a.${this.authorCol} = b.${this.userIdCol} left join ${this.commentInfoTable} c on a.${this.commentIdCol} = c.${this.commentIdCommentInfoCol} ${qr2} where a.${this.commentThreadIdCol} = ${this.param(userId && userId.length > 0 ? 2 : 1)}`
+
+        return this.query<CommentThreadReply>(
+            query, [...arr, commentThreadId], this.map);
 
     }
-    replyComment(obj: CommentThreadReply): Promise<number> {
+    replyComment(obj: CommentThreadReply): Promise<string> {
         obj.time = new Date()
         const stmt = buildToInsert(obj, this.table, this.attrs, this.param)
         if (stmt) {
@@ -401,19 +452,32 @@ export class CommentThreadReplyRepository extends Repository<CommentThreadReply,
                 query: sql,
                 params: [obj.commentThreadId]
             }
-            return this.execBatch([stmt, stmt2], true)
+            return this.execBatch([stmt, stmt2], true).then((res) => {
+                if (res > 0) {
+                    return obj.commentId
+                }
+                return ""
+            })
         }
-        return Promise.resolve(-1)
+        return Promise.resolve("")
     }
     removeComment(commentId: string, commentThreadId: string): Promise<number> {
         const stmt = buildToDelete(commentId, this.table, this.primaryKeys, this.param)
         if (stmt) {
-            const query = `update ${this.tableCommentThreadInfo} set ${this.replyCountInfoCol} = ${this.replyCountInfoCol} - 1 where ${this.commentThreadIdInfoCol} = ${this.param(1)}`
             const stmt2: Statement = {
+                query: `delete  from ${this.commentInfoTable} where ${this.commentIdCommentInfoCol} = ${this.param(1)}`,
+                params: [commentId]
+            }
+            const stmt3: Statement = {
+                query: `delete  from ${this.commentReactionTable} where ${this.commentIdCommentReactionCol} = ${this.param(1)}`,
+                params: [commentId]
+            }
+            const query = `update ${this.tableCommentThreadInfo} set ${this.replyCountInfoCol} = ${this.replyCountInfoCol} - 1 where ${this.commentThreadIdInfoCol} = ${this.param(1)}`
+            const stmt4: Statement = {
                 query: query,
                 params: [commentThreadId]
             }
-            return this.execBatch([stmt, stmt2])
+            return this.execBatch([stmt, stmt2, stmt3, stmt4])
         }
         return Promise.resolve(-1)
     }
@@ -423,51 +487,48 @@ export class CommentThreadReplyRepository extends Repository<CommentThreadReply,
 
 
 // ------------ COMMENT REACTION ---------------------
-// export class CommentReactionRepository<T> implements SqlCommentReactionRepository<T>{
-//     constructor(protected db: DB, protected reactionTable: string, protected attrs: Attributes,
-//         protected commentIdCol: string,
-//         protected idCol: string,
-//         protected authorCol: string,
-//         protected infoTable: string,
-//         protected commentIdInfoCol:string,
-//         protected replyCountCol:string,
-//         protected usefulCountCol: string,
-        
-//     ) {
-//         this.load = this.load.bind(this)
-//         this.setUseful = this.setUseful.bind(this)
-//         this.removeUseful = this.removeUseful.bind(this)
-//     }
+export class SqlCommentReactionRepository implements CommentReactionRepository {
+    constructor(protected db: DB, protected table: string, protected attributes: Attributes,
+        protected parent: string, usefulCountParentCol?: string, parentIdCol?: string, userIdCol?: string, authorCol?: string, idCol?: string) {
+        this.usefulCountParentCol = (usefulCountParentCol && usefulCountParentCol.length > 0 ? usefulCountParentCol : 'usefulcount');
+        this.parentIdCol = (parentIdCol && parentIdCol.length > 0 ? parentIdCol : 'id');
+        this.userIdCol = (userIdCol && userIdCol.length > 0 ? userIdCol : 'userId');
+        this.idCol = (idCol && idCol.length > 0 ? idCol : this.parentIdCol);
+        this.authorCol = (authorCol && authorCol.length > 0 ? authorCol : 'author');
+        this.exist = this.exist.bind(this);
+        this.save = this.save.bind(this);
+        this.remove = this.remove.bind(this);
+    }
+    usefulCountParentCol: string;
+    parentIdCol: string;
+    idCol: string;
+    authorCol: string;
+    userIdCol: string;
+    exist(commentId: string, author: string, userId: string): Promise<boolean> {
+        return this.db.query<CommentReaction>(`select ${this.idCol} from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)} and ${this.userIdCol} = ${this.db.param(3)}`, [commentId, author, userId]).then(result => {
+            return result && result.length > 0 ? true : false;
+        });
+    }
+    remove(commentId: string, author: string, userId: string): Promise<number> {
+        const query1 = `delete from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)} and ${this.userIdCol}= ${this.db.param(3)}`;
+        const s1: Statement = { query: query1, params: [commentId, author, userId] };
+        const query2 = `update ${this.parent} set ${this.usefulCountParentCol} = ${this.usefulCountParentCol} - 1 where ${this.parentIdCol} = ${this.db.param(1)}`;
+        const s2: Statement = { query: query2, params: [commentId] };
+        return this.db.execBatch([s1, s2], true);
+    }
+    save(commentId: string, author: string, userId: string, reaction: number): Promise<number> {
+        const obj: CommentReaction = { commentId, userId, author, time: new Date(), reaction };
+        const stmt = buildToInsert(obj, this.table, this.attributes, this.db.param);
+        if (stmt) {
+            const query = `insert into ${this.parent}(${this.parentIdCol},${this.usefulCountParentCol}) values(${this.db.param(1)},1) on conflict (${this.parentIdCol}) do update set ${this.usefulCountParentCol} = ${this.parent}.${this.usefulCountParentCol} + 1 where ${this.parent}.${this.parentIdCol} = ${this.db.param(1)}`;
+            const s2: Statement = { query, params: [commentId] };
+            return this.db.execBatch([stmt, s2]);
+        } else {
+            return Promise.resolve(0);
+        }
+    }
 
-//     async load(commentId: string, id: string, author: string): Promise<T | null> {
-//         const objs: T[] = await this.db.query<T>(`select *from where ${this.commentIdCol} = ${this.db.param(1)}`);
-//         if (!objs || objs.length === 0) {
-//             return null;
-//         } else {
-//             return objs[0];
-//         }
-//     }
-
-//     setUseful(obj: T): Promise<number> {
-//         const stmt = buildToInsert(obj, this.reactionTable, this.attrs, this.db.param)
-//         const date
-//         if (stmt) {
-//             const stmt2: Statement = {
-//                 query: `insert into ${this.infoTable}(${this.commentIdInfoCol},${this}) values(${this.db.param(1),}) on conflict do update set ${this.usefulCountCol} = ${this.db.param(1)}`,
-//                 params: []
-//             }
-//             return this.db.execBatch([stmt, stmt2])
-//         }
-//         return Promise.resolve(-1)
-//     }
-//     removeUseful(commentId: string, id: string, author: string): Promise<number> {
-//         // const stmt: Statement = {
-//         //     // query: `delete from ${this.retable} where `
-//         // }
-//         return Promise.resolve(-1);
-//     }
-
-// }
+}
 
 
 export class CommentReactionClient implements CommentReactionService {
@@ -476,7 +537,7 @@ export class CommentReactionClient implements CommentReactionService {
         this.removeUseful = this.removeUseful.bind(this)
     }
     async setUseful(commentId: string, author: string, userId: string): Promise<number> {
-        return this.commentReactionRepository.save(commentId,author,userId,1)
+        return this.commentReactionRepository.save(commentId, author, userId, 1)
     }
     async removeUseful(commentId: string, author: string, userId: string): Promise<number> {
         return this.commentReactionRepository.remove(commentId, author, userId)
@@ -485,7 +546,7 @@ export class CommentReactionClient implements CommentReactionService {
 
 export class CommentReactionController {
     constructor(protected log: Log, protected commentReactionService: CommentReactionService,
-        protected commentIdCol: string, protected authorCol: string, protected userCol:string) {
+        protected commentIdCol: string, protected authorCol: string, protected userCol: string) {
         this.setUserful = this.setUserful.bind(this)
         this.removeUseful = this.removeUseful.bind(this)
     }

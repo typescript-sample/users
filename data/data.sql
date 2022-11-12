@@ -920,3 +920,18 @@ create table  articlecommentthread(
   updatedat timestamp with time zone,
   histories jsonb[]
 );
+
+create table articlecommentinfo(
+  commentId varchar(40) primary key,
+  replycount int default 0,
+  usefulcount int default 0
+);
+
+create table articlecommentreaction(
+  commentid varchar(40),
+  author varchar(40),
+  userid varchar(40),
+  time timestamp with time zone,
+  reaction smallint,
+  primary key(commentid, author, userid)
+);

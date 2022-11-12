@@ -1,4 +1,4 @@
-import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadReplyRepository, CommentThreadRepository, CommentThreadService, CommentThreadValidator } from '../comment-thread';
+import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
 import { LoadSearchHandler } from 'express-ext';
 import { Log, ViewManager } from 'onecore';
 import { buildToSave, useUrlQuery } from 'pg-extension';
@@ -18,19 +18,22 @@ import {
   Comment,
   CommentFilter,
   CommentValidator,
-  ReactionService
+  // ReactionService
 } from 'review-reaction';
+import {ReactionService} from '../review-reaction'
 import {
   RateCommentController,
   RateController,
-  ReactionController
+  // ReactionController
 } from 'review-reaction-express';
+import{ReactionController}from "../review-reaction-express"
 import {
   commentModel, CommentQuery, rateReactionModel,
-  SqlCommentRepository,
+  // SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository
 } from 'review-reaction-query';
+import {SqlCommentRepository} from '../review-reaction-query'
 import shortid from 'shortid';
 import { check } from 'xvalidators';
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from './article';
@@ -74,7 +77,7 @@ export function useArticleReactionController(log: Log, db: DB, mapper?: Template
 export function useArticleRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
   const query = useQuery('articleratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'articleratecomment', commentModel, db.driver, query);
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'articleratecomment', commentModel, 'cinemarate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'articleratecomment', commentModel, 'articlerate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   const service = new CommentQuery(builder.search, rateCommentRepository, queryUrl);
   return new RateCommentController(log, service);
@@ -85,9 +88,9 @@ export function generate(): string {
 }
 
 export function useArticleCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
-  const commentThreadRepository = new CommentThreadRepository(db, "articlecommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "articlecomment", "CommentThreadId", "articlecommentthreadinfo", "commentId")
-  const commentThreadReplyRepository = new CommentThreadReplyRepository(db, 'articlecomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "articlecommentthreadinfo", "commentId", "replyCount", "usefulCount",
-    "users", "id", "username", "imageurl")
+  const commentThreadRepository = new SqlCommentThreadRepository(db, "articlecommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "articlecomment","commentId", "CommentThreadId", "articlecommentthreadinfo", "commentId", "articlecommentinfo","commentId","articlecommentthreadreaction","commentId","articlecommentreaction","commentId")
+  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'articlecomment', commentThreadReplyModel, "commentId", "author", "commentThreadId","userId","articlecommentthreadinfo", "commentId", "replyCount", "usefulCount",
+    "users", "id", "username", "imageurl","articlecommentinfo","commentId", "usefulCount","articlecommentreaction","commentId","reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('articlecommentthread', mapper, commentThreadModel, true)
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
@@ -97,7 +100,13 @@ export function useArticleCommentThreadController(log: Log, db: DB, mapper?: Tem
 }
 
 export function useArticleCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {
-  const commentReactionRepository = new SqlReactionRepository(db, "articlecommentthreadreaction", commentReactionModel, "articlecommentthreadinfo", "usefulcount", "author", "commentId", "userId", "author", "id")
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "articlecommentthreadreaction", commentReactionModel, "articlecommentthreadinfo", "usefulcount", "commentId", "userId", "author", "commentId")
   const commentReactionService = new CommentReactionClient(commentReactionRepository)
-  return new CommentReactionController(log, commentReactionService, "id", "author", "userid")
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
+}
+
+export function useArticleCommentReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "articlecommentreaction", commentReactionModel, "articlecommentinfo", "usefulcount", "commentId", "userId", "author", "commentId")
+  const commentReactionService = new CommentReactionClient(commentReactionRepository)
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
 }
