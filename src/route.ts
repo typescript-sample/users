@@ -23,114 +23,415 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/my-profile/:id/settings', ctx.myprofile.getMySettings);
   app.get(
     '/my-profile/:id/fetchImageGalleryUploaded',
-    ctx.myprofile.getGallery
+    ctx.myprofileUpload.getGallery
   );
   app.patch('/my-profile/:id', ctx.myprofile.saveMyProfile);
   app.patch('/my-profile/:id/settings', ctx.myprofile.saveMySettings);
   app.post(
     '/my-profile/:id/cover',
     parser.array('files'),
-    ctx.myprofile.uploadCover
+    ctx.myprofileUpload.uploadCover
   );
   app.post(
     '/my-profile/:id/upload',
     parser.array('files'),
-    ctx.myprofile.uploadImage
+    ctx.myprofileUpload.uploadImage
   );
   app.post(
     '/my-profile/:id/gallery',
-    parser.single('file'),
-    ctx.myprofile.uploadGallery
+    parser.single('files'),
+    ctx.myprofileUpload.uploadGallery
   );
-  app.patch('/my-profile/:id/gallery', ctx.myprofile.updateGallery);
-  app.delete('/my-profile/:id/gallery', ctx.myprofile.deleteGalleryFile);
+  app.patch('/my-profile/:id/gallery', ctx.myprofileUpload.updateGallery);
+  app.delete('/my-profile/:id/gallery', ctx.myprofileUpload.deleteGalleryFile);
   app.post(
     '/my-profile/:id/external-resource',
-    ctx.myprofile.addExternalResource
+    ctx.myprofileUpload.addExternalResource
   );
   app.delete(
     '/my-profile/:id/external-resource',
-    ctx.myprofile.deleteExternalResource
+    ctx.myprofileUpload.deleteExternalResource
   );
 
   app.get('/skills', ctx.skill.query);
   app.get('/interests', ctx.interest.query);
   app.get('/looking-for', ctx.lookingFor.query);
+  app.get('/user-companies', ctx.companyQuery.query);
+  app.get('/educations', ctx.educationQuery.query);
   app.get('/brands/', ctx.brand.query);
 
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
+  app.get('/users/company/:companyId', ctx.user.getUsersByCompany);
   app.get('/users/:id', ctx.user.load);
 
-  app.get('/appreciation', ctx.appreciation.search);
-  app.post('/appreciation/search', ctx.appreciation.search);
-  app.get('/appreciation/search', ctx.appreciation.search);
-  app.get('/appreciation/:id', ctx.appreciation.load);
-  app.post('/appreciation', ctx.appreciation.create);
-  app.put('/appreciation/:id', ctx.appreciation.update);
-  app.patch('/appreciation/:id', ctx.appreciation.patch);
-  app.delete('/appreciation/:id', ctx.appreciation.delete);
-  app.post('/appreciation/useful', ctx.appreciation.usefulAppreciation);
-  // appreciation reply
-  app.get('/appreciation-reply', ctx.appreciationReply.search);
-  app.post('/appreciation-reply/search', ctx.appreciationReply.search);
-  app.get('/appreciation-reply/search', ctx.appreciationReply.search);
-  app.get('/appreciation-reply/:id', ctx.appreciationReply.load);
-  app.post('/appreciation-reply', ctx.appreciationReply.insert);
-  app.put('/appreciation-reply/:id', ctx.appreciationReply.update);
-  app.patch('/appreciation-reply/:id', ctx.appreciationReply.patch);
-  app.delete('/appreciation-reply/:id', ctx.appreciationReply.delete);
-  app.post(
-    '/appreciation-reply/useful',
-    ctx.appreciationReply.usefulAppreciation
-  );
+  app.get('/users/reaction/:id/:author/:reaction', ctx.reaction.react);
+  app.delete('/users/unreaction/:id/:author/:reaction', ctx.reaction.unreact);
+  app.get('/users/checkreaction/:id/:author', ctx.reaction.checkReaction);
 
+  app.get('/users/follow/:id/:target', ctx.userFollow.follow);
+  app.delete('/users/unfollow/:id/:target', ctx.userFollow.unfollow);
+  app.get('/users/checkfollow/:id/:target', ctx.userFollow.checkFollow);
+  app.get('/users/loadfollow/:id/', ctx.userInfo.load);
+
+  app.post('/users/rates/comments', ctx.userComment.search);
+  app.get('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/search', ctx.userReaction.search);
+  app.post('/users/rates/:id/:author', ctx.userRate.rate);
+  app.post('/users/rates/:id/:author/useful/:userId', ctx.userReaction.setUseful);
+  app.delete('/users/rates/:id/:author/useful/:userId', ctx.userReaction.removeUseful);
+  app.get('/users/rates/:id/:author/comments', ctx.userReaction.getComments);
+  app.post('/users/rates/:id/:author/comments/:userId', ctx.userReaction.comment);
+  app.put('/users/rates/:id/:author/comments/:userId/:commentId', ctx.userReaction.updateComment);
+  app.delete('/users/rates/:id/:author/comments/:commentId', ctx.userReaction.removeComment);
+
+
+  app.post('/appreciations/rates/comments', ctx.appreciationComment.search);
+  app.get('/appreciations/rates/search', ctx.appreciationReaction.search);
+  app.post('/appreciations/rates/search', ctx.appreciationReaction.search);
+  app.post('/appreciations/rates/:id/:author', ctx.appreciation.reply);
+  // app.post('/appreciations/rates/search/useful')
+  app.post('/appreciations/rates/:id/:author/useful/:userId', ctx.appreciationReaction.setUseful);
+  app.delete('/appreciations/rates/:id/:author/useful/:userId', ctx.appreciationReaction.removeUseful);
+  app.get('/appreciations/rates/:id/:author/comments', ctx.appreciationReaction.getComments);
+  app.post('/appreciations/rates/:id/:author/comments/:userId', ctx.appreciationReaction.comment);
+  app.put('/appreciations/rates/:id/:author/comments/:userId/:commentId', ctx.appreciationReaction.updateComment);
+  // app.put('/appreciation/rates/:id/:author/comments/:userId/:commentId', ctx.appreciationReaction.updateComment);
+  app.delete('/appreciations/rates/:id/:author/comments/:commentId', ctx.appreciationReaction.removeComment);
+  // Articles
   app.post('/articles/search', ctx.article.search);
   app.get('/articles/search', ctx.article.search);
   app.get('/articles/:id', ctx.article.load);
 
+  app.post('/articles/commentthread/search', ctx.articleCommentThread.search)
+  app.post('/articles/commentthread/:commentThreadId/reply', ctx.articleCommentThread.getReplyComments)
+  app.post('/articles/commentthread/:id/:author/reply/:commentThreadId', ctx.articleCommentThread.reply)
+  app.post('/articles/commentthread/:id/:author', ctx.articleCommentThread.comment)
+  app.delete('/articles/commentthread/:commentThreadId/reply/:commentId', ctx.articleCommentThread.removeCommentReply)
+  app.delete('/articles/commentthread/:commentId', ctx.articleCommentThread.removeCommentThread)
+  app.put('/articles/commentthread/reply/:commentId', ctx.articleCommentThread.updateCommentReply)
+  app.put('/articles/commentthread/:commentId', ctx.articleCommentThread.updateComment)
+  app.get('/articles/commentthread/search', ctx.articleCommentThread.search)
+  app.post('/articles/commentthread/:commentId/:author/useful/:userId', ctx.articleCommentThreadReaction.setUserful)
+  app.delete('/articles/commentthread/:commentId/:author/useful/:userId', ctx.articleCommentThreadReaction.removeUseful)
+  app.post('/articles/commentthread/reply/:commentId/:author/useful/:userId', ctx.articleCommentReaction.setUserful)
+  app.delete('/articles/commentthread/reply/:commentId/:author/useful/:userId', ctx.articleCommentReaction.removeUseful)
+ 
+  app.post('/articles/rates/comments', ctx.articleRateComment.search);
+  app.get('/articles/rates/search', ctx.articleReaction.search);
+  app.post('/articles/rates/search', ctx.articleReaction.search);
+  app.post('/articles/rates/:id/:author', ctx.articleRate.rate);
+  app.post('/articles/rates/:id/:author/useful/:userId', ctx.articleReaction.setUseful);
+  app.delete('/articles/rates/:id/:author/useful/:userId', ctx.articleReaction.removeUseful);
+  app.get('/articles/rates/:id/:author/comments', ctx.articleReaction.search);
+  app.post('/articles/rates/:id/:author/comments/:userId', ctx.articleReaction.comment);
+  app.put('/articles/rates/:id/:author/comments/:userId/:commentId', ctx.articleReaction.updateComment);
+  app.delete('/articles/rates/:id/:author/comments/:commentId', ctx.articleReaction.removeComment);
+
   app.post('/my-articles/search', ctx.myarticles.search);
   app.get('/my-articles/search', ctx.myarticles.search);
-  app.get('/my-articles/:id', ctx.myarticles.load);
   app.post('/my-articles', ctx.myarticles.create);
+  app.get('/my-articles/:id', ctx.myarticles.load);
   app.put('/my-articles/:id', ctx.myarticles.update);
   app.patch('/my-articles/:id', ctx.myarticles.patch);
   app.delete('/my-articles/:id', ctx.myarticles.delete);
-  app.delete('/my-articles/userId', ctx.myarticles.delete);
+  // app.delete('/my-articles/userId', ctx.myarticles.delete);
+
+
+  // Cinema
+  app.get('/cinemas/search', ctx.cinema.search);
+  app.post('/cinemas/search', ctx.cinema.search);
+  app.get('/cinemas', ctx.cinema.search);
+  app.get('/cinemas/:id', ctx.cinema.load);
+
+  app.get('/backoffice/cinemas/search', ctx.backofficeCinema.search);
+  app.post('/backoffice/cinemas/search', ctx.backofficeCinema.search);
+  app.get('/backoffice/cinemas', ctx.backofficeCinema.search);
+  app.post('/backoffice/cinemas', ctx.backofficeCinema.create);
+  app.get('/backoffice/cinemas/:id', ctx.backofficeCinema.load);
+  app.put('/backoffice/cinemas/:id', ctx.backofficeCinema.update);
+  app.patch('/backoffice/cinemas/:id', ctx.backofficeCinema.patch);
+  app.delete('/backoffice/cinemas/:id', ctx.backofficeCinema.delete);
+  // upload
+  app.post('/backoffice/cinemas/:id/cover', parser.array('files'), ctx.backofficeCinemaUpload.uploadCover);
+  app.post('/backoffice/cinemas/:id/upload', parser.array('files'), ctx.backofficeCinemaUpload.uploadImage);
+  app.post('/backoffice/cinemas/:id/gallery', parser.single('files'), ctx.backofficeCinemaUpload.uploadGallery);
+  app.patch('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.updateGallery);
+  app.delete('/backoffice/cinemas/:id/gallery', ctx.backofficeCinemaUpload.deleteGalleryFile);
+  app.post('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.addExternalResource);
+  app.delete('/backoffice/cinemas/:id/external-resource', ctx.backofficeCinemaUpload.deleteExternalResource);
+  app.get('/backoffice/cinemas/:id/fetchImageGalleryUploaded', ctx.backofficeCinemaUpload.getGallery);
+
+  app.get('/cinemas/rates/search', ctx.cinemaReaction.search);
+  app.post('/cinemas/rates/search', ctx.cinemaReaction.search);
+  app.post('/cinemas/rates/:id/:author', ctx.cinemaRate.rate);
+  app.post('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.setUseful);
+  app.delete('/cinemas/rates/:id/:author/useful/:userId', ctx.cinemaReaction.removeUseful);
+  app.get('/cinemas/rates/:id/:author/comments', ctx.cinemaReaction.getComments);
+  app.post('/cinemas/rates/:id/:author/comments', ctx.cinemaReaction.getComments);
+  app.post('/cinemas/rates/:id/:author/comments/:userId', ctx.cinemaReaction.comment);
+  app.put('/cinemas/rates/:id/:author/comments/:userId/:commentId/', ctx.cinemaReaction.updateComment);
+  app.delete('/cinemas/rates/:id/:author/comments/:commentId', ctx.cinemaReaction.removeComment);
+
+  // Film
+  app.get('/films/categories/search', ctx.filmCategory.search);
+  app.post('/films/categories/', ctx.filmCategory.create);
+  app.get('/films/categories/:id', ctx.filmCategory.load);
+  app.put('/films/categories/:id', ctx.filmCategory.update);
+  app.patch('/films/categories/:id', ctx.filmCategory.patch);
+  app.delete('/films/categories/:id', ctx.filmCategory.delete);
+
+  app.get('/films/search', ctx.film.search);
+  app.post('/films/search', ctx.film.search);
+  app.get('/films/:id', ctx.film.load);
+
+  app.get('/films/save/:id/:itemId', ctx.saveFilm.save);
+  app.get('/films/save/:id/', ctx.saveFilm.load);
+  app.delete('/films/save/:id/:itemId', ctx.saveFilm.remove);
+
+  app.post('/backoffice/films', ctx.backOfficeFilm.create);
+  app.get('/backoffice/films/search', ctx.backOfficeFilm.search);
+  app.post('/backoffice/films/search', ctx.backOfficeFilm.search);
+  app.get('/backoffice/films/:id', ctx.backOfficeFilm.load);
+  app.put('/backoffice/films/:id', ctx.backOfficeFilm.update);
+  app.patch('/backoffice/films/:id', ctx.backOfficeFilm.patch);
+  app.delete('/backoffice/films/:id', ctx.backOfficeFilm.delete);
+  app.post('/backoffice/films/:id/upload',
+    parser.array('files'),
+    ctx.backOfficeFilmUpload.uploadImage
+  );
+  app.post('/backoffice/films/:id/cover',
+    parser.array('files'),
+    ctx.backOfficeFilmUpload.uploadCover
+  );
+  app.post('/backoffice/films/:id/gallery',
+    parser.single('files'),
+    ctx.backOfficeFilmUpload.uploadGallery
+  );
+  app.get('/backoffice/films/:id/fetchImageGalleryUploaded', ctx.backOfficeFilmUpload.getGallery);
+
+  app.post('/films/rates/comments', ctx.filmComment.search);
+  app.get('/films/rates/search', ctx.filmReaction.search);
+  app.post('/films/rates/search', ctx.filmReaction.search);
+  // app.get('/films/:id/rates/:author', ctx.filmReaction.load);
+  app.post('/films/rates/:id/:author', ctx.filmRate.rate);
+  app.post('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.setUseful);
+  app.delete('/films/rates/:id/:author/useful/:userId', ctx.filmReaction.removeUseful);
+  // app.get('/films/:id/rates/comment/search', ctx.filmComment.search);
+  app.get('/films/rates/:id/:author/comments', ctx.filmReaction.getComments);
+  app.post('/films/rates/:id/:author/comments/:userId', ctx.filmReaction.comment);
+  app.put('/films/rates/:id/:author/comments/:userId/:commentId', ctx.filmReaction.updateComment);
+  app.delete('/films/rates/:id/:author/comments/:commentId', ctx.filmReaction.removeComment);
+
+
+  app.get('/items/categories/search', ctx.itemCategory.search);
+  app.get('/items/categories/:id', ctx.itemCategory.load);
+  app.post('/items/categories/', ctx.itemCategory.create);
+  app.put('/items/categories/:id', ctx.itemCategory.update);
+  app.patch('/items/categories/:id', ctx.itemCategory.patch);
+  app.delete('/items/categories/:id', ctx.itemCategory.delete);
 
   app.post('/items/search', ctx.items.search);
   app.get('/items/search', ctx.items.search);
   app.get('/items/:id', ctx.items.load);
-  // app.post('/items/', ctx.items.create);
-  // app.put('/items/:id', ctx.items.update);
-  // app.patch('/items/:id', ctx.items.patch);
-  // app.delete('/items/:id', ctx.items.delete);
 
-  app.post('/item-appreciation/search', ctx.items.search);
-  app.get('/item-appreciation/search', ctx.items.search);
-  app.get('/item-appreciation/:id', ctx.items.load);
+  app.get('/saved-items/:id/', ctx.saveItem.load);
+  app.get('/saved-items/:id/:itemId', ctx.saveItem.save);
+  app.delete('/saved-items/:id/:itemId', ctx.saveItem.remove);
+
+  app.get('/items/responses/search', ctx.itemReaction.search);
+  app.post('/items/responses/search', ctx.itemReaction.search);
+  app.post('/items/responses/:id/:author', ctx.itemResponse.reply);
+  app.post('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.setUseful);
+  app.delete('/items/responses/:id/:author/useful/:userId', ctx.itemReaction.removeUseful);
+  app.get('/items/responses/:id/:author/comments', ctx.itemReaction.getComments);
+  app.post('/items/responses/:id/:author/comments/:userId', ctx.itemReaction.comment);
+  app.put('/items/responses/:id/:author/comments/:userId/:commentId', ctx.itemReaction.updateComment);
+  app.delete('/items/responses/:id/:author/comments/:commentId', ctx.itemReaction.removeComment);
 
   app.post('/my-items/search', ctx.myitems.search);
   app.get('/my-items/search', ctx.myitems.search);
   app.get('/my-items/:id', ctx.myitems.load);
+  app.get(
+    '/my-items/:id/fetchImageGalleryUploaded',
+    ctx.myitemsUpload.getGallery
+  );
   app.post('/my-items', ctx.myitems.create);
   app.put('/my-items/:id', ctx.myitems.update);
   app.patch('/my-items/:id', ctx.myitems.patch);
   app.delete('/my-items/:id', ctx.myitems.delete);
+  app.post(
+    '/my-items/:id/upload',
+    parser.array('files'),
+    ctx.myitemsUpload.uploadImage
+  );
+  app.post(
+    '/my-items/:id/gallery',
+    parser.single('files'),
+    ctx.myitemsUpload.uploadGallery
+  );
+  app.patch('/my-items/:id/gallery', ctx.myitemsUpload.updateGallery);
+  app.delete('/my-items/:id/gallery', ctx.myitemsUpload.deleteGalleryFile);
 
-  app.post('/comment/search', ctx.comment.search);
-  app.get('/comment/search', ctx.comment.search);
-  app.get('/comment/:id', ctx.comment.load);
-  app.post('/comment', ctx.comment.create);
-  app.put('/comment/:id', ctx.comment.update);
-  app.patch('/comment/:id', ctx.comment.patch);
-  app.delete('/comment/:id', ctx.comment.delete);
+  // Comment
+  app.post('/comments/search', ctx.comment.search);
+  app.get('/comments/search', ctx.comment.search);
+  app.get('/comments/:id', ctx.comment.load);
+  app.post('/comments', ctx.comment.create);
+  app.put('/comments/:id', ctx.comment.update);
+  app.patch('/comments/:id', ctx.comment.patch);
+  app.delete('/comments/:id', ctx.comment.delete);
 
-  app.post('/categories/search', ctx.category.search);
-  app.get('/categories/search', ctx.category.search);
-  app.get('/categories/:id', ctx.category.load);
-  app.post('/categories/', ctx.category.create);
-  app.put('/categories/:id', ctx.category.update);
-  app.patch('/categories/:id', ctx.category.patch);
-  app.delete('/categories/:id', ctx.category.delete);
+  // Location
+  app.post('/locations/search', ctx.location.search);
+  app.get('/locations/search', ctx.location.search);
+  app.get('/locations/:id', ctx.location.load);
+
+  app.post('/backoffice/locations/search', ctx.backofficeLocation.search);
+  app.get('/backoffice/locations/search', ctx.backofficeLocation.search);
+  app.get('/backoffice/locations/:id', ctx.backofficeLocation.load);
+  app.post('/backoffice/locations', ctx.backofficeLocation.create);
+  app.put('/backoffice/locations/:id', ctx.backofficeLocation.update);
+  app.patch('/backoffice/locations/:id', ctx.backofficeLocation.patch);
+  app.delete('/backoffice/locations/:id', ctx.backofficeLocation.delete);
+  // upload
+  app.post('/backoffice/locations/:id/cover', parser.array('files'), ctx.backofficeLocationUpload.uploadCover);
+  app.post('/backoffice/locations/:id/upload', parser.array('files'), ctx.backofficeLocationUpload.uploadImage);
+  app.post('/backoffice/locations/:id/gallery', parser.single('files'), ctx.backofficeLocationUpload.uploadGallery);
+  app.patch('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.updateGallery);
+  app.delete('/backoffice/locations/:id/gallery', ctx.backofficeLocationUpload.deleteGalleryFile);
+  app.post('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.addExternalResource);
+  app.delete('/backoffice/locations/:id/external-resource', ctx.backofficeLocationUpload.deleteExternalResource);
+  app.get('/backoffice/locations/:id/fetchImageGalleryUploaded', ctx.backofficeLocationUpload.getGallery);
+
+  app.post('/locations/rates/comments', ctx.locationComment.search);
+  app.get('/locations/rates/search', ctx.locationReaction.search);
+  app.post('/locations/rates/search', ctx.locationReaction.search);
+  app.post('/locations/rates/:id/:author', ctx.locationRate.rate);
+  app.post('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.setUseful);
+  app.delete('/locations/rates/:id/:author/useful/:userId', ctx.locationReaction.removeUseful);
+  app.get('/locations/rates/:id/:author/comments', ctx.locationReaction.getComments);
+  app.post('/locations/rates/:id/:author/comments', ctx.locationReaction.getComments);
+  app.post('/locations/rates/:id/:author/comments/:userId', ctx.locationReaction.comment);
+  app.put('/locations/rates/:id/:author/comments/:userId/:commentId', ctx.locationReaction.updateComment);
+  app.delete('/locations/rates/:id/:author/comments/:commentId', ctx.locationReaction.removeComment);
+
+  app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
+  app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);
+  app.get('/locations/checkfollow/:id/:target', ctx.locationFollow.checkFollow);
+  app.get('/locations/loadfollow/:id', ctx.locationInfomation.load);
+
+
+  app.get('/locations/save/:id/:itemId', ctx.saveLocation.save);
+  app.get('/locations/save/:id/', ctx.saveLocation.load);
+  app.delete('/locations/save/:id/:itemId', ctx.saveLocation.remove);
+
+
+  // Company
+  app.post('/companies/search', ctx.company.search);
+  app.get('/companies/search', ctx.company.search);
+  app.get('/companies/:id', ctx.company.load);
+
+  app.post('/companies/rates/search', ctx.criteriaReaction.search);
+  app.get('/companies/rates/search', ctx.criteriaReaction.search);
+  app.post('/companies/rates/:id/:author', ctx.criteriaRate.rate);
+  app.post('/companies/rates/:id/:author/useful/:userId', ctx.criteriaReaction.setUseful);
+  app.delete('/companies/rates/:id/:author/useful/:userId', ctx.criteriaReaction.removeUseful);
+  app.get('/companies/rates/:id/:author/comments', ctx.criteriaReaction.getComments);
+  app.post('/companies/rates/:id/:author/comments/:userId', ctx.criteriaReaction.comment);
+  app.put('/companies/rates/:id/:author/comments/:userId/:commentId', ctx.criteriaReaction.updateComment);
+  app.delete('/companies/rates/:id/:author/comments/:commentId', ctx.criteriaReaction.removeComment);
+
+  app.post('/backoffice/companies/search', ctx.backofficeCompany.search);
+  app.get('/backoffice/companies/search', ctx.backofficeCompany.search);
+  app.get('/backoffice/companies/:id', ctx.backofficeCompany.load);
+  app.post('/backoffice/companies/', ctx.backofficeCompany.create);
+  app.put('/backoffice/companies/:id', ctx.backofficeCompany.update);
+  app.patch('/backoffice/companies/:id', ctx.backofficeCompany.patch);
+  app.delete('/backoffice/companies/:id', ctx.backofficeCompany.delete);
+  app.patch('/backoffice/companies/:id/assign-users', ctx.backofficeCompany.assignUsers);
+  app.patch('/backoffice/companies/:id/deassign-users', ctx.backofficeCompany.deassignUsers);
+
+  // upload
+  app.post('/backoffice/companies/:id/cover', parser.array('files'), ctx.backofficeCompanyUpload.uploadCover);
+  app.post('/backoffice/companies/:id/upload', parser.array('files'), ctx.backofficeCompanyUpload.uploadImage);
+  app.post('/backoffice/companies/:id/gallery', parser.single('files'), ctx.backofficeCompanyUpload.uploadGallery);
+  app.patch('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.updateGallery);
+  app.delete('/backoffice/companies/:id/gallery', ctx.backofficeCompanyUpload.deleteGalleryFile);
+  app.post('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.addExternalResource);
+  app.delete('/backoffice/companies/:id/external-resource', ctx.backofficeCompanyUpload.deleteExternalResource);
+  app.get('/backoffice/companies/:id/fetchImageGalleryUploaded', ctx.backofficeCompanyUpload.getGallery);
+
+  app.get('/companies/categories/search', ctx.companyCategory.search);
+  app.get('/companies/categories/:id', ctx.companyCategory.load);
+  app.post('/companies/categories/', ctx.companyCategory.create);
+  app.put('/companies/categories/:id', ctx.companyCategory.update);
+  app.patch('/companies/categories/:id', ctx.companyCategory.patch);
+  app.delete('/companies/categories/:id', ctx.companyCategory.delete);
+
+  // app.post('/companies/rates', ctx.companyRate.rate);
+  // app.get('/companies/rates/search', ctx.companyReaction.search);
+  // app.post('/companies/rates/search', ctx.companyReaction.search);
+  // app.get('/companies/rates/comment/search', ctx.companyComment.search);
+  // app.post('/companies/rates/comment/search', ctx.companyComment.search);
+  // app.get('/companies/rates/:id/:author', ctx.companyReaction.load);
+  // app.post('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.setUseful);
+  // app.delete('/companies/rates/useful/:id/:author/:userId', ctx.companyReaction.removeUseful);
+  // app.post('/companies/rates/comment/:id/:author/:userId', ctx.companyReaction.comment);
+  // app.delete('/companies/rates/comment/:commentId/:author', ctx.companyReaction.removeComment);
+  // app.put('/companies/rates/comment/:commentId/:id/:author/:userId', ctx.companyReaction.updateComment);
+
+  // Job
+  app.get('/jobs/search', ctx.jobs.search);
+  app.post('/jobs/search', ctx.jobs.search);
+  app.get('/jobs/:id', ctx.jobs.load);
+
+  app.get('/backoffice/jobs/search', ctx.backofficeJob.search);
+  app.post('/backoffice/jobs/search', ctx.backofficeJob.search);
+  app.get('/backoffice/jobs/:id', ctx.backofficeJob.load);
+  app.post('/backoffice/jobs/', ctx.backofficeJob.create);
+  app.put('/backoffice/jobs/:id', ctx.backofficeJob.update);
+  app.patch('/backoffice/jobs/:id', ctx.backofficeJob.patch);
+  app.delete('/backoffice/jobs/:id', ctx.backofficeJob.delete);
+
+  app.post('/backoffice/rooms/search', ctx.backofficeRoom.search);
+  app.get('/backoffice/rooms/search', ctx.backofficeRoom.search);
+  app.get('/backoffice/rooms/:id', ctx.backofficeRoom.load);
+  app.post('/backoffice/rooms/', ctx.backofficeRoom.create);
+  app.put('/backoffice/rooms/:id', ctx.backofficeRoom.update);
+  app.patch('/backoffice/rooms/:id', ctx.backofficeRoom.patch);
+  app.delete('/backoffice/rooms/:id', ctx.backofficeRoom.delete);
+  app.get('/rooms/search', ctx.room.search);
+  app.post('/rooms/search', ctx.room.search);
+  app.get('/rooms/:id', ctx.room.load);
+  app.post('/rooms/reserve', ctx.room.saveReservation);
+
+  // Music
+  app.get('/musics/search', ctx.music.search);
+  app.post('/musics/search', ctx.music.search);
+  app.get('/musics/:id', ctx.music.load);
+
+  app.get('/backoffice/musics/search', ctx.backofficeMusic.search);
+  app.post('/backoffice/musics/search', ctx.backofficeMusic.search);
+  app.get('/backoffice/musics/:id', ctx.backofficeMusic.load);
+  app.post('/backoffice/musics/', ctx.backofficeMusic.create);
+  app.put('/backoffice/musics/:id', ctx.backofficeMusic.update);
+  app.patch('/backoffice/musics/:id', ctx.backofficeMusic.patch);
+  app.delete('/backoffice/musics/:id', ctx.backofficeMusic.delete);
+
+  app.get('/saved-musics/:id/', ctx.saveMusic.load);
+  app.get('/saved-musics/:id/:itemId', ctx.saveMusic.save);
+  app.delete('/saved-musics/:id/:itemId', ctx.saveMusic.remove);
+
+  app.get('/musics/playlist/search', ctx.playlist.search);
+  app.post('/musics/playlist/search', ctx.playlist.search);
+  app.get('/musics/playlist/:id', ctx.playlist.load);
+  app.post('/musics/playlist/', ctx.playlist.create);
+  app.put('/musics/playlist/:id', ctx.playlist.update);
+  app.patch('/musics/playlist/:id', ctx.playlist.patch);
+  app.delete('/musics/playlist/:id', ctx.playlist.delete);
+
+  app.get('/saved-listsong/:id/', ctx.saveListsong.load);
+  app.post('/saved-listsong/:id/:itemId', ctx.saveListsong.save);
+  app.delete('/saved-listsong/:id/:itemId', ctx.saveListsong.remove);
 }

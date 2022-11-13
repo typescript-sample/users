@@ -3,6 +3,7 @@ import { Attributes, Filter, ViewRepository, ViewService } from 'onecore';
 export interface ArticleFilter extends Filter {
   id?: string;
   title?: string;
+  name?:string;
   type?: string;
   tags?: string[];
   status?: string[] | string;
@@ -11,6 +12,7 @@ export interface Article {
   id?: string;
   title?: string;
   type?: string;
+  name?:string;
   description?: string;
   content?: string;
   tags?: string[];

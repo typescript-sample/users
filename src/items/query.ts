@@ -2,11 +2,10 @@ import { Statement } from 'query-core';
 import { ItemFilter } from './item';
 
 export function buildQuery(s: ItemFilter): Statement {
-  let query = `select * from items`;
+  let query = `select * from item`;
   const where = [];
   const params = [];
   let i = 1;
-
   if (s.id && s.id.length > 0) {
     where.push(`id = $${i++}`);
     params.push(s.id);
@@ -38,7 +37,7 @@ export function buildQuery(s: ItemFilter): Statement {
       brand.push(`brand = $${i++}`);
       params.push(b);
     }
-    where.push(`(${brand.join(" or ")})`); 
+    where.push(`(${brand.join(' or ')})`);
   }
   if (s.price) {
     if (s.price.min && s.price.max) {
@@ -56,8 +55,8 @@ export function buildQuery(s: ItemFilter): Statement {
   if (where.length > 0) {
     query = query + ` where ` + where.join(' and ');
   }
-  console.log(query, params);
-
+  if (s.sort) {
+    query = query + ` order by ${s.sort}`;
+  }
   return { query, params };
 }
-

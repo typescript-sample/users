@@ -1,0 +1,27 @@
+{
+  "name": "review-reaction-express",
+  "version": "0.1.1",
+  "description": "review-reaction-express",
+  "main": "./lib/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build:lib": "tsc",
+    "clean:lib": "rimraf lib"
+  },
+  "devDependencies": {
+    "express-ext": "^0.1.28",
+    "tslint": "5.10.0",
+    "typescript": "^3.3.3333"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/core-ts/review-reaction-express"
+  },
+  "keywords": [
+    "review-reaction-express",
+    "reaction-express"
+  ]
+}

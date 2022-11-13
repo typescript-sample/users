@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers">
+  <select id="job">
+    select * from job
+    where
+    <if test="id != null">
+      id = (#{id}) and
+    </if>
+    <if test="title != null">
+      title ilike #{title} and
+    </if>
+    <if test="description != null">
+      description ilike #{description} and
+    </if>
+    <if test="skill != null" array="skip">
+      skill && (#{skill}) and
+    </if>
+    1 = 1
+  </select>
+</mapper>

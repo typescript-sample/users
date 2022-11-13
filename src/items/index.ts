@@ -1,27 +1,35 @@
-import { Log, Manager, Search } from 'onecore';
-import { DB, postgres, Query, SearchBuilder } from 'query-core';
-import { Item, ItemFilter, itemModel, ItemRepository, ItemService } from './item';
-import { ItemController } from './item-controller';
+import { Log, QueryController, SavedController } from 'express-ext';
+import {  SavedRepository, SavedService, Search, ViewSearchManager } from 'onecore';
+import { ArrayRepository } from 'pg-extension';
+import { DB, postgres, QueryRepository, Repository, SearchBuilder } from 'query-core';
+import { Item, ItemFilter, itemModel, ItemQuery, ItemRepository, } from './item';
 import { buildQuery } from './query';
+
 export * from './item';
-import { useQuery } from 'query-mappers';
 
-export { ItemController };
-
-import { SqlItemRepository } from './sql-item-repository';
-
-export class ItemManager extends Manager<Item, string, ItemFilter> implements ItemService {
-  constructor(search: Search<Item, ItemFilter>, repository: ItemRepository) {
-    super(search, repository);
+export class ItemManager extends ViewSearchManager<Item, string, ItemFilter> implements ItemQuery {
+  constructor(search: Search<Item, ItemFilter>, protected itemRepository: ItemRepository, protected saveItemsRepository: SavedRepository<string>, public max: number) {
+    super(search, itemRepository);
   }
 }
-export function useItemService(db: DB): ItemService {
-  // const queryItems = useQuery('items', mapper, itemModel, true);
-  const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
-  const repository = new SqlItemRepository(db);
-  return new ItemManager(builder.search, repository);
+
+export class ItemController extends QueryController<Item, string, ItemFilter> {
+  constructor(log: Log, protected itemQuery: ItemQuery) {
+    super(log, itemQuery);
+  }
 }
 export function useItemController(log: Log, db: DB): ItemController {
-  const query = new Query<Item, string, ItemFilter>(db.query, 'items', itemModel, postgres, buildQuery);
-  return new ItemController(log, query);
+  const savedItemMax = 50;
+  const builder = new SearchBuilder<Item, ItemFilter>(db.query, 'item', itemModel, postgres, buildQuery);
+  const repository = new Repository<Item, string>(db, 'item', itemModel);
+  const saveItemRepository = new ArrayRepository<string, string>(db.query, db.exec, 'saveditem', 'items', 'id');
+  const service = new ItemManager(builder.search, repository, saveItemRepository, savedItemMax);
+  return new ItemController(log, service);
+}
+
+export function useSavedController(log: Log, db: DB): SavedController<Item> {
+  const savedRepository = new ArrayRepository<string, string>(db.query, db.exec, 'saveditem', 'items', 'id');
+  const repository = new QueryRepository<Item, string>(db, 'item', itemModel);
+  const service = new SavedService<string, Item>(savedRepository, repository.query, 50);
+  return new SavedController<Item>(log, service, 'itemId', 'id');
 }

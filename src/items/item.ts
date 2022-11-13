@@ -1,4 +1,5 @@
-import { Attributes, DateRange, Filter, NumberRange, Query, Repository, Service } from 'onecore';
+import { UploadInfo, uploadModel } from 'one-storage';
+import { Attributes, DateRange, Filter, NumberRange, Query, Repository } from 'onecore';
 
 export interface Item {
   id: string;
@@ -11,6 +12,7 @@ export interface Item {
   expiredAt?: Date;
   description?: string;
   categories?: string[];
+  gallery?: UploadInfo[];
 }
 
 export interface ItemFilter extends Filter {
@@ -18,20 +20,18 @@ export interface ItemFilter extends Filter {
   title?: string;
   price?: NumberRange;
   brand?: string;
-  publishAt?: DateRange;
+  publishedAt?: DateRange;
   expiredAt?: DateRange;
   status?: string;
   description?: string;
   categories?: string[];
+  sortItem: string;
 }
 
 export interface ItemRepository extends Repository<Item, string> {
 }
-export interface ItemService extends Service<Item, string, ItemFilter> {
-}
 export interface ItemQuery extends Query<Item, string, ItemFilter> {
 }
-
 export const itemModel: Attributes = {
   id: {
     key: true,
@@ -66,5 +66,9 @@ export const itemModel: Attributes = {
   },
   categories: {
     type: 'strings',
+  },
+  gallery: {
+    type: 'array',
+    typeof: uploadModel,
   },
 };

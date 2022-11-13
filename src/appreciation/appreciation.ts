@@ -1,146 +1,151 @@
-import { Attributes, DateRange, Filter, Repository, Service } from 'onecore';
-import { SearchResult } from 'query-core';
+import { Attributes, Filter } from 'onecore';
 
 export interface AppreciationFilter extends Filter {
   id?: string;
-  authorId?: string;
-  userId?: string;
+  author?: string;
   title?: string;
-  description?: string;
+  review?: string;
+  createAt?: Date;
   replyCount?: number;
-  usefulCount?: number;
-  createdAt?: Date;
-}
-export interface Appreciation {
-  id: string;
-  authorId: string;
-  userId?: string;
-  title?: string;
-  description?: string;
-  replyCount: number;
-  usefulCount: number;
-  createdAt?: Date;
-  isUseful?: boolean;
-}
-export interface AppreciationRepository extends Repository<Appreciation, string> {
-  increaseReply(id: string, count: number): Promise<boolean>;
-}
-export interface AppreciationService extends Service<Appreciation, string, AppreciationFilter> {
-  usefulAppreciation(obj: UsefulAppreciationFilter): Promise<number>;
-  searchWithReply(s: AppreciationFilter, userId?: string, limit?: number, offset?: string | number, fields?: string[]): Promise<SearchResult<Appreciation>>;
 }
 
-export const AppreciationModel: Attributes = {
+export interface Appreciation {
+  id: string;
+  author: string;
+  title?: string;
+  review: string;
+  time: Date;
+  updateAt?: Date;
+  histories?: Histories[];
+  replyCount?: number;
+  usefulCount?: number;
+  rate?: number;
+}
+
+export interface Histories {
+  time: Date;
+  review: string;
+  // title: string;
+}
+export interface AppreciationRepository {
+  load(id: string, author: string): Promise<Appreciation | null>;
+  insert(obj: Appreciation, newInfo?: boolean): Promise<number>;
+  update(obj: Appreciation): Promise<number>;
+  delete(id: string, author: string, ctx?: any): Promise<number>;
+}
+export interface AppreciationService {
+  response(response: Appreciation): Promise<number>;
+  // remove(id: string, author: string): Promise<number>;
+}
+
+export const appreciationModel: Attributes = {
   id: {
     key: true,
-    length: 40
-  },
-  userId: {
+    match: 'equal',
     required: true,
-    length: 255,
   },
-  authorId: {
+  author: {
+    key: true,
     required: true,
-    length: 255,
+    match: 'equal',
   },
-  title: {
+  // title: {
+  //   length: 255
+  // },
+  review: {
     length: 255
   },
-  description: {
-    length: 255
-  },
-  replyCount: { type: 'number' },
-  usefulCount: { type: 'number' },
-  createdAt: {
+  time: {
     type: 'datetime'
+  },
+  updateAt: {
+    type: 'datetime'
+  },
+  usefulCount: {
+    type: 'integer',
+    min: 0,
+  },
+  replyCount: {
+    type: 'integer',
+    min: 0
+  },
+  histories: {
   }
 };
 
-//////////
-
-export interface AppreciationReplyFilter extends Filter {
+export interface ReplyFilter extends Filter {
   id?: string;
-  authorId?: string;
+  author?: string;
   userId?: string;
   title?: string;
-  description?: string;
-  replyCount?: number;
-  usefulCount?: number;
+  review?: string;
   createdAt?: Date;
   updatedAt?: Date;
   appreciationId?: string;
 }
-export interface AppreciationReply {
+export interface Reply {
   id: string;
-  authorId: string;
-  userId?: string;
-  title?: string;
-  description?: string;
-  replyCount: number;
-  usefulCount: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  isUseful?: boolean;
-  appreciationId?: string;
-}
-export interface AppreciationReplyRepository extends Repository<AppreciationReply, string> {
-
-}
-export interface AppreciationReplyService extends Service<AppreciationReply, string, AppreciationReplyFilter> {
-  usefulAppreciation(obj: UsefulAppreciationFilter): Promise<number>;
-  searchWithReply(s: AppreciationReplyFilter, userId?: string, limit?: number, offset?: string | number, fields?: string[]): Promise<SearchResult<AppreciationReply>>;
+  author: string;
+  userId: string;
+  comment: string;
+  time: Date;
+  updateAt: Date;
 }
 
-export const AppreciationReplyModel: Attributes = {
+export const replyModel: Attributes = {
   id: {
     key: true,
-    length: 40
+    required: true,
+    match: 'equal'
   },
   userId: {
+    key: true,
     required: true,
-    length: 255,
+    match: 'equal'
   },
-  appreciationId: {
+  author: {
+    key: true,
     required: true,
-    length: 255,
-  },
-  authorId: {
-    required: true,
-    length: 255,
+    match: 'equal'
   },
   title: {
     length: 255
   },
-  description: {
+  review: {
     length: 255
   },
-  replyCount: { type: 'number' },
-  usefulCount: { type: 'number' },
-  createdAt: {
+  time: {
     type: 'datetime'
   },
-  updatedAt: {
+  updateAt: {
     type: 'datetime'
   },
 };
-//////
-export interface UsefulAppreciationFilter extends Filter {
-  appreciationId: string;
+
+export interface UsefulId {
+  id: string;
+  author: string;
   userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
-export interface UsefulAppreciation {
-  appreciationId: string;
+export interface UsefulFilter extends Filter {
+  id?: string;
+  userId?: string;
+  author?: string;
+  reviewTime?: Date;
+}
+export interface Useful {
+  id: string;
+  author: string;
   userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  reviewTime: Date;
 }
-export interface UsefulAppreciationRepository extends Repository<UsefulAppreciation, string> {
-  deleteUseful(appreciationId: string, userId: string, ctx?: any): Promise<boolean>;
+export interface UsefulRepository {
+  getUseful(id: string, author: string, userId: string): Promise<Useful | null>;
+  removeUseful(id: string, author: string, userId: string, ctx?: any): Promise<number>;
+  save(obj: Useful, ctx?: any): Promise<number>;
 }
 
-export const UsefulAppreciationModel: Attributes = {
+export const usefulModel: Attributes = {
   userId: {
     required: true,
     length: 255,

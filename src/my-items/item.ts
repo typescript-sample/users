@@ -1,8 +1,10 @@
-import { Attributes, DateRange, Filter, NumberRange, Repository, Service, Query } from 'onecore';
+import { UploadData, UploadGallery, UploadInfo, uploadModel } from 'one-storage';
+import { Attributes, DateRange, Filter, NumberRange, Repository, Service } from 'onecore';
 
 export interface Item {
   id: string;
   title: string;
+  author: string;
   status: string;
   price: number;
   imageURL?: string;
@@ -11,16 +13,18 @@ export interface Item {
   expiredAt?: Date;
   description?: string;
   categories?: string[];
+  gallery?: UploadInfo[];
 }
 
 export interface ItemFilter extends Filter {
   id?: string;
   title?: string;
+  author?: string;
   price?: NumberRange;
+  status?: string;
   brand?: string;
   publishAt?: DateRange;
   expiredAt?: DateRange;
-  status?: string;
   description?: string;
   categories?: string[];
 }
@@ -29,6 +33,14 @@ export interface ItemRepository extends Repository<Item, string> {
 }
 
 export interface ItemService extends Service<Item, string, ItemFilter> {
+  uploadCoverImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
+  uploadImage(id: string, data: UploadData[], sizes?: number[]): Promise<string>;
+  uploadGalleryFile(uploadGallery: UploadGallery<string>): Promise<UploadInfo[]>;
+  updateGallery(id: string, data: UploadInfo[]): Promise<boolean>;
+  deleteGalleryFile(id: string, url: string): Promise<boolean>;
+  getGallery(id: string): Promise<UploadInfo[]>;
+  addExternalResource(id: string, data: UploadInfo): Promise<boolean>;
+  deleteExternalResource(id: string, url: string): Promise<boolean>;
 }
 
 export const itemModel: Attributes = {
@@ -41,6 +53,10 @@ export const itemModel: Attributes = {
     required: true,
     length: 300,
     q: true
+  },
+  author: {
+    required: true,
+    length: 255
   },
   imageURL: {
     length: 1500,
@@ -67,4 +83,8 @@ export const itemModel: Attributes = {
   categories: {
     type: 'strings',
   },
+  gallery: {
+    type: 'array',
+    typeof: uploadModel,
+  }
 };

@@ -25,21 +25,41 @@ export const config = {
     size: 'size',
   },
   db: {
+    // user: {
+    //   user: 'wdqjcywz',
+    //   host: 'jelani.db.elephantsql.com',
+    //   password: 'Lu5alCoRRRnqjAGJg0zeNfxPjGG684WK',
+    //   database: 'wdqjcywz',
+    //   port: 5432,
+    //   ssl: {
+    //     rejectUnauthorized: false,
+    //   }
+    // },
+    // query: {
+    //   user: 'wdqjcywz',
+    //   host: 'jelani.db.elephantsql.com',
+    //   password: 'Lu5alCoRRRnqjAGJg0zeNfxPjGG684WK',
+    //   database: 'wdqjcywz',
+    //   port: 5432,
+    //   ssl: {
+    //     rejectUnauthorized: false,
+    //   }
+    // }
     user: {
-      user: 'dqcpsquyjmmxkb',
-      host: 'ec2-54-228-125-183.eu-west-1.compute.amazonaws.com',
-      password: '1093639f514498fbf09e803d98714b853849704783dc052aa1ef2039c60fe6e0',
-      database: 'd8maa489i4calm',
+      user: 'renhnmkhkoqvjr',
+      host: 'ec2-34-199-68-114.compute-1.amazonaws.com',
+      password: '05b33690540167d997be040566dfcbc61a85bcdfad400e69cd76ed81aef7eeeb',
+      database: 'd1mrc2lb73u081',
       port: 5432,
       ssl: {
         rejectUnauthorized: false,
       }
     },
     query: {
-      user: 'dqcpsquyjmmxkb',
-      host: 'ec2-54-228-125-183.eu-west-1.compute.amazonaws.com',
-      password: '1093639f514498fbf09e803d98714b853849704783dc052aa1ef2039c60fe6e0',
-      database: 'd8maa489i4calm',
+      user: 'renhnmkhkoqvjr',
+      host: 'ec2-34-199-68-114.compute-1.amazonaws.com',
+      password: '05b33690540167d997be040566dfcbc61a85bcdfad400e69cd76ed81aef7eeeb',
+      database: 'd1mrc2lb73u081',
       port: 5432,
       ssl: {
         rejectUnauthorized: false,
@@ -164,8 +184,8 @@ Nếu đường link đó không hoạt động, hãy sao chép đường link �
       port: 465,
       secure: true,
       auth: {
-        user: '',
-        pass: '',
+        user: 'testsmtp318@gmail.com',
+        pass: 'vaseaqiscbgedkga',
       },
     },
   },
@@ -176,13 +196,15 @@ Nếu đường link đó không hoạt động, hãy sao chép đường link �
     gallery: 'gallery',
   },
   model: {
-    id: 'userId',
+    id: 'id',
+  },
+  modelItem: {
+    id: 'id',
   },
   modelAppreciation: {
-    id: 'id',
     payload: 'payload',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
+    createdAt: 'time',
+    updatedAt: 'updateAt',
   },
   settings: {
     language: 'en-us',

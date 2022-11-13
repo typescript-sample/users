@@ -1,0 +1,26 @@
+{
+  "name": "review-reaction-query",
+  "version": "0.0.1",
+  "description": "review-reaction-query",
+  "main": "./lib/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build:lib": "tsc",
+    "clean:lib": "rimraf lib"
+  },
+  "devDependencies": {
+    "query-core": "^0.1.22",
+    "tslint": "5.10.0",
+    "typescript": "^3.3.3333"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/core-ts/review-reaction-query"
+  },
+  "keywords": [
+    "reaction-query"
+  ]
+}
