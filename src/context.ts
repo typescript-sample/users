@@ -87,6 +87,7 @@ import {
 } from './cinema';
 import { useCommentController } from './comment';
 import {
+  CompanyController,
   useCompanyController,
   useCompanyRateCommentController,
   useCompanyRateController,
@@ -119,6 +120,7 @@ import { MyProfileController, useMyProfileController, useMyProfileUploadControll
 import { RoomController, useRoomController } from './room';
 import { UserController, useReactionController, useUserInfoController, useUserRateCommentController, useUserRateController, useUserReactionController } from './user';
 import { useUserController, useUserFollowController } from './user';
+
 resources.createValidator = createValidator;
 
 export interface Config {
@@ -134,7 +136,8 @@ export interface Config {
   model: ModelConf;
   modelAppreciation: ModelConfig;
   modelItem: ModelConf;
-}
+} // End of Config
+
 export interface ApplicationContext {
   health: HealthController;
   log: LogController;
@@ -171,12 +174,9 @@ export interface ApplicationContext {
   cinemaRate: RateController;
   cinemaReaction: ReactionController;
   cinemaComment: QueryController;
-  company: QueryController;
+  company: CompanyController;
   backofficeCompany: BackOfficeCompanyController;
   backofficeCompanyUpload: UploadController;
-  // companyRate: RateController;
-  // companyReaction: ReactionController;
-  // companyComment: QueryController;
   companyCategory: Controller;
   comment: Controller;
   film: QueryController;
@@ -225,7 +225,7 @@ export interface ApplicationContext {
   articleCommentThread: CommentThreadController;
   articleCommentThreadReaction:CommentReactionController;
   articleCommentReaction: CommentReactionController;
-}
+} // End of ApplicationContext
 
 export function useContext(
   mainDB: DB,

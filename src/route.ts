@@ -326,11 +326,11 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/locations/save/:id/', ctx.saveLocation.load);
   app.delete('/locations/save/:id/:itemId', ctx.saveLocation.remove);
 
-
-  // Company
-  app.post('/companies/search', ctx.company.search);
-  app.get('/companies/search', ctx.company.search);
-  app.get('/companies/:id', ctx.company.load);
+  const companies = '/companies'
+  app.post(`${companies}/search`, ctx.company.search)
+  app.get(`${companies}/search`, ctx.company.search)
+  app.get(`${companies}/:id`, ctx.company.load)
+  app.get(`${companies}/user/:id`, ctx.company.getAllByUser)
 
   app.post('/companies/rates/search', ctx.criteriaReaction.search);
   app.get('/companies/rates/search', ctx.criteriaReaction.search);
