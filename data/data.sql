@@ -935,3 +935,18 @@ create table articlecommentreaction(
   reaction smallint,
   primary key(commentid, author, userid)
 );
+
+CREATE TABLE job (
+	id varchar(40) NOT NULL,
+	title varchar(300) NULL,
+	description varchar(1000) NULL,
+	skill _jsonb NULL,
+	publishedat timestamptz NULL,
+	expiredat timestamptz NULL,
+	quantity int8 NULL DEFAULT 0,
+	applicantcount int8 NULL DEFAULT 0,
+	requirements varchar(255) NULL,
+	benefit varchar(255) NULL,
+	company_id varchar(40) NOT NULL,
+	CONSTRAINT job_pkey PRIMARY KEY (id)
+);
