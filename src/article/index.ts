@@ -96,7 +96,7 @@ export function useArticleCommentThreadController(log: Log, db: DB, mapper?: Tem
   const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'articlecommentthread', commentThreadModel, db.driver, query);
   const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryUrl)
-  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "articlecomment", "commentId")
+  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "articlecomment", "commentId","comment")
 }
 
 export function useArticleCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {

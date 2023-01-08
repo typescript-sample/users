@@ -25,45 +25,21 @@ export const config = {
     size: 'size',
   },
   db: {
-    // user: {
-    //   user: 'wdqjcywz',
-    //   host: 'jelani.db.elephantsql.com',
-    //   password: 'Lu5alCoRRRnqjAGJg0zeNfxPjGG684WK',
-    //   database: 'wdqjcywz',
-    //   port: 5432,
-    //   ssl: {
-    //     rejectUnauthorized: false,
-    //   }
-    // },
-    // query: {
-    //   user: 'wdqjcywz',
-    //   host: 'jelani.db.elephantsql.com',
-    //   password: 'Lu5alCoRRRnqjAGJg0zeNfxPjGG684WK',
-    //   database: 'wdqjcywz',
-    //   port: 5432,
-    //   ssl: {
-    //     rejectUnauthorized: false,
-    //   }
-    // }
     user: {
-      user: 'renhnmkhkoqvjr',
-      host: 'ec2-34-199-68-114.compute-1.amazonaws.com',
-      password: '05b33690540167d997be040566dfcbc61a85bcdfad400e69cd76ed81aef7eeeb',
-      database: 'd1mrc2lb73u081',
+      user: 'yhjnkfrf',
+      host: 'peanut.db.elephantsql.com',
+      password: 'HJ2Z7WiHxBzRKl5e8To_fcIko-i93wda',
+      database: 'yhjnkfrf',
       port: 5432,
-      ssl: {
-        rejectUnauthorized: false,
-      }
+      sslmode:'require'
     },
     query: {
-      user: 'renhnmkhkoqvjr',
-      host: 'ec2-34-199-68-114.compute-1.amazonaws.com',
-      password: '05b33690540167d997be040566dfcbc61a85bcdfad400e69cd76ed81aef7eeeb',
-      database: 'd1mrc2lb73u081',
+      user: 'yhjnkfrf',
+      host: 'peanut.db.elephantsql.com',
+      password: 'HJ2Z7WiHxBzRKl5e8To_fcIko-i93wda',
+      database: 'yhjnkfrf',
       port: 5432,
-      ssl: {
-        rejectUnauthorized: false,
-      }
+      sslmode:'require'
     }
   },
   secret: 'secret',
