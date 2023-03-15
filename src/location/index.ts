@@ -15,14 +15,14 @@ import {
   rateModel,
   RateService,
   RateValidator,
-} from 'rate-core';
+} from '../rate-core';
 import { SqlRateRepository } from 'rate-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from 'review-reaction';
+} from '../review-reaction';
 import {
   RateCommentController,
   RateController,
@@ -35,7 +35,7 @@ import {
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from 'review-reaction-query';
+} from '../review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { UploadController, UploadService } from 'upload-express';
@@ -54,6 +54,7 @@ import {
   LocationQuery,
   LocationRepository,
 } from './location';
+import { useInfoQuery } from '../rate-user-query';
 
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
@@ -73,8 +74,6 @@ export class LocationService
         return this.infoRepository.load(id).then((info) => {
           if (info) {
             delete (info as any)['id'];
-            delete (info as any)['count'];
-            delete (info as any)['score'];
             location.info = info;
           }
           return location;
@@ -121,13 +120,13 @@ export class LocationInfomationController extends QueryController<LocationInfoma
   }
 }
 
-export function useLocationController(log: Log, db: DB, mapper?: TemplateMap): LocationController {
+export function useLocationController(log: Log, db: DB, mapper?: TemplateMap): QueryController<Location, string, LocationFilter> {
   const query = useQuery('location', mapper, locationModel, true);
   const builder = new SearchBuilder<Location, LocationFilter>(db.query, 'location', locationModel, db.driver, query);
   const repository = new Repository<Location, string>(db, 'location', locationModel);
   const infoRepository = new SqlInfoRepository<Info>(db, 'locationinfo', infoModel, buildToSave);
   const service = new LocationService(builder.search, repository, infoRepository);
-  return new LocationController(log, service);
+  return new QueryController<Location, string, LocationFilter>(log, service);
 }
 
 export function useLocationRateController(log: Log, db: DB, mapper?: TemplateMap): RateController<Rate> {
@@ -144,7 +143,7 @@ export function useLocationReactionService(db: DB, mapper?: TemplateMap): Reacti
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'locationrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'locationratereaction', rateReactionModel, 'locationrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'id');
-  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   return new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
 }
 
@@ -159,7 +158,7 @@ export function useLocationRateCommentService(db: DB, mapper?: TemplateMap): Com
   const query = useQuery('locationcomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'locationcomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   return new CommentQuery(builder.search, rateCommentRepository, queryUrl);
 }
 

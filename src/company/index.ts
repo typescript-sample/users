@@ -3,16 +3,16 @@ import { Log, Search, ViewSearchManager } from 'onecore'
 import { buildToSave, useUrlQuery } from 'pg-extension'
 import { DB, Repository, SearchBuilder, SqlLoadRepository } from 'query-core'
 import { TemplateMap, useQuery } from 'query-mappers'
-import { Info, infoModel, RatesService, RatesValidator } from 'rate-core'
+import { Info, infoModel, Rates, RatesService, RatesValidator } from '../rate-core'
 import { SqlRatesRepository } from 'rate-query'
-import { Comment,CommentFilter, CommentValidator, ReactionService } from 'review-reaction'
+import { Comment, CommentFilter, CommentValidator, ReactionService } from 'review-reaction'
 import { RateCommentController, RateController, ReactionController } from 'review-reaction-express'
 import { commentModel, CommentQuery, InfoRepository, rateReactionModel, SqlCommentRepository, SqlInfoRepository, SqlReactionRepository } from 'review-reaction-query'
 import shortid from 'shortid'
 import { check } from 'xvalidators'
 import { RateCriteria, RateCriteriaFilter, rateCriteriaModel, RateFullInfo } from './company'
 import { Company, CompanyFilter, companyModel, CompanyQuery, CompanyRepository } from './company'
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 
 const generate = () => shortid.generate()
 
@@ -95,12 +95,12 @@ export const useCompanyController = (log: Log, db: DB, mapper?: TemplateMap) => 
 ) // End of useCompanyController
 
 export function useCompanyRateController(log: Log, db: DB, mapper?: TemplateMap) {
-  const rateRepository = new SqlRatesRepository<RateCriteria>(db, 'companyrate', 'companyratefullinfo', ['companyrateinfo01', 'companyrateinfo02', 'companyrateinfo03', 'companyrateinfo04', 'companyrateinfo05'], rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id')
+  const rateRepository = new SqlRatesRepository<Rates>(db, 'companyrate', 'companyratefullinfo', ['companyrateinfo01', 'companyrateinfo02', 'companyrateinfo03', 'companyrateinfo04', 'companyrateinfo05'], rateCriteriaModel, buildToSave, 5, 'rate', 'count', 'score', 'author', 'id')
   const infoRepository = new SqlInfoRepository<RateFullInfo>(db, 'companyratefullinfo', infoModel, buildToSave)
   const rateValidator = new RatesValidator(rateCriteriaModel, check, 5, 5)
   const rateService = new RatesService(rateRepository, infoRepository)
 
-  return new RateController<RateCriteria>(log, rateService.rate, rateValidator.validate, 'author', 'id')
+  return new RateController<Rates>(log, rateService.rate, rateValidator.validate, 'author', 'id')
 } // End of useCompanyRateController
 
 export function useCompanyRateReactionController(log: Log, db: DB, mapper?: TemplateMap) {

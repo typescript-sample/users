@@ -1,6 +1,6 @@
 import { Log, QueryController, SavedController } from 'express-ext';
 import { SavedService, Search, ViewSearchManager } from 'onecore';
-import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
+import { ArrayRepository, buildToSave } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
@@ -11,14 +11,14 @@ import {
   rateModel,
   RateService,
   RateValidator,
-} from 'rate-core';
+} from '../rate-core';
 import { SqlRateRepository } from 'rate-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from 'review-reaction';
+} from '../review-reaction';
 import {
   RateCommentController,
   RateController,
@@ -31,7 +31,7 @@ import {
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from 'review-reaction-query';
+} from '../review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
@@ -42,6 +42,7 @@ import {
   FilmQuery,
   FilmRepository,
 } from './film';
+import { useInfoQuery } from '../rate-user-query';
 
 export class FilmService extends ViewSearchManager<Film, string, FilmFilter> implements FilmQuery {
   constructor(
@@ -91,7 +92,7 @@ export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
@@ -102,7 +103,7 @@ export function useFilmRateCommentController(log: Log, db: DB, mapper?: Template
   const query = useQuery('filmratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryUrl = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id');
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryUrl);
   return new RateCommentController(log, service);
 }

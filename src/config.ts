@@ -26,20 +26,20 @@ export const config = {
   },
   db: {
     user: {
-      user: 'yhjnkfrf',
-      host: 'peanut.db.elephantsql.com',
-      password: 'HJ2Z7WiHxBzRKl5e8To_fcIko-i93wda',
-      database: 'yhjnkfrf',
+      user: 'postgres',
+      host: 'localhost',
+      password: '123456',
+      database: 'postgres',
       port: 5432,
-      sslmode:'require'
+      sslmode: 'require'
     },
     query: {
-      user: 'yhjnkfrf',
-      host: 'peanut.db.elephantsql.com',
-      password: 'HJ2Z7WiHxBzRKl5e8To_fcIko-i93wda',
-      database: 'yhjnkfrf',
+      user: 'postgres',
+      host: 'localhost',
+      password: '123456',
+      database: 'postgres',
       port: 5432,
-      sslmode:'require'
+      sslmode: 'require'
     }
   },
   secret: 'secret',

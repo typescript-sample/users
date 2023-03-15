@@ -42,6 +42,7 @@ import {
 } from 'google-storage';
 import { generateToken } from 'jsonwebtoken-plus';
 import { MailConfig, MailService, Send } from 'mail-core';
+import { MiddlewareAuth } from './middleware/auth';
 import nodemailer from 'nodemailer';
 import { ModelConf, StorageConf } from 'one-storage';
 import { PasswordController } from 'password-express';
@@ -142,6 +143,7 @@ export interface ApplicationContext {
   health: HealthController;
   log: LogController;
   middleware: MiddlewareController;
+  authMiddleware: MiddlewareAuth;
   authentication: AuthenticationController<User, string>;
   signup: SignupController<Signup>;
   password: PasswordController;
@@ -223,7 +225,7 @@ export interface ApplicationContext {
   backofficeMusic: Controller;
   playlist: Controller;
   articleCommentThread: CommentThreadController;
-  articleCommentThreadReaction:CommentReactionController;
+  articleCommentThreadReaction: CommentReactionController;
   articleCommentReaction: CommentReactionController;
 } // End of ApplicationContext
 
@@ -237,6 +239,7 @@ export function useContext(
 ): ApplicationContext {
   const log = new LogController(logger);
   const middleware = new MiddlewareController(midLogger);
+  const authMiddleware = new MiddlewareAuth(conf.auth.token.secret)
   const sqlChecker = createChecker(mainDB);
   const health = new HealthController([sqlChecker]);
   const sendMail = useSend(conf.mail);
@@ -381,7 +384,7 @@ export function useContext(
   const articleReaction = useArticleReactionController(logger.error, queryDB, mapper);
   const articleRateComment = useArticleRateCommentController(logger.error, queryDB, mapper);
   const articleCommentThread = useArticleCommentThreadController(logger.error, mainDB, mapper);
-  const articleCommentThreadReaction = useArticleCommentThreadReactionController(logger.error,mainDB,mapper)
+  const articleCommentThreadReaction = useArticleCommentThreadReactionController(logger.error, mainDB, mapper)
   const articleCommentReaction = useArticleCommentReactionController(logger.error, mainDB, mapper)
   const myarticles = useMyArticleController(logger.error, queryDB, mapper);
 
@@ -548,6 +551,7 @@ export function useContext(
     health,
     log,
     middleware,
+    authMiddleware,
     authentication,
     signup,
     password,
