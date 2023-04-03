@@ -27,10 +27,10 @@ export class CommentThreadController<R> {
     protected commentThreadIdCol: string
     protected commentReplyTable: string
     protected commentIdReplyCol: string
-    protected commentReplyCol:string
+    protected commentReplyCol: string
     constructor(protected log: Log, protected commentThreadService: CommentThreadService, public commentThreadValidator: CommentThreadValidator,
         commentIdCol: string, idCol: string, authorCol: string, userIdCol: string, commentCol: string, commentThreadIdCol: string, parentReplyCol: string, private generate: () => string,
-        commentReplyTable: string, commentIdReplyCol: string,commentReplyCol:string) {
+        commentReplyTable: string, commentIdReplyCol: string, commentReplyCol: string) {
         this.idCol = idCol;
         this.commentIdCol = commentIdCol;
         this.authorCol = authorCol;
@@ -67,8 +67,8 @@ export class CommentThreadController<R> {
         const id = req.params['id']
         const author = req.params['author']
         const commentId = this.generate()
-        let comment: any
-        comment[this.commentCol] = req.body;
+        let comment: any = {}
+        comment[this.commentCol] = req?.body?.comment;
         comment[this.idCol] = id
         comment[this.authorCol] = author
         comment[this.commentIdCol] = commentId
@@ -96,7 +96,7 @@ export class CommentThreadController<R> {
     }
 
     updateComment(req: Request, res: Response) {
-        let comment:any 
+        let comment: any
         comment[this.commentReplyCol] = req.body;
         comment[this.commentIdCol] = req.params[this.commentIdCol]
         this.commentThreadService.updateComment(comment).then(rep => {
@@ -107,8 +107,8 @@ export class CommentThreadController<R> {
     }
 
     reply(req: Request, res: Response) {
-        let comment:any
-        comment[this.commentReplyCol] = req.body
+        let comment: any = {}
+        comment[this.commentReplyCol] = req.body.comment
         comment[this.commentThreadIdCol] = req.params[this.commentThreadIdCol]
         comment[this.authorCol] = req.params[this.authorCol]
         comment[this.userIdCol] = req.params[this.authorCol]
@@ -228,7 +228,7 @@ export class CommentThreadClient implements CommentThreadService {
         });
     }
     comment(comment: CommentThread): Promise<string> {
-        comment.time = comment.time ?? new Date()
+        comment.time ? comment.time = comment.time : comment.time = new Date();
         comment.histories = []
         return this.commentThreadRepository.comment(comment)
     }

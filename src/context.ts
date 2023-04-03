@@ -95,6 +95,9 @@ import {
   useCompanyRateReactionController
 } from './company';
 import {
+  useFilmCommentReactionController,
+  useFilmCommentThreadController,
+  useFilmCommentThreadReactionController,
   useFilmController,
   useFilmRateCommentController,
   useFilmRateController,
@@ -106,6 +109,9 @@ import { useSavedController } from './items';
 import { ResponseController, useResponseController, useResponseReactionController } from './items-response';
 import { useJobController } from './job';
 import {
+  useLocationCommentReactionController,
+  useLocationCommentThreadController,
+  useLocationCommentThreadReactionController,
   useLocationController,
   useLocationFollowController,
   useLocationInfomationController,
@@ -186,6 +192,9 @@ export interface ApplicationContext {
   filmRate: RateController;
   filmReaction: ReactionController;
   filmComment: QueryController;
+  filmCommentThread: CommentThreadController
+  filmCommentThreadReaction: CommentReactionController;
+  filmCommentReaction: CommentReactionController;
   userRate: RateController;
   userReaction: ReactionController;
   userComment: QueryController;
@@ -206,6 +215,9 @@ export interface ApplicationContext {
   backofficeLocation: Controller;
   backofficeLocationUpload: UploadController;
   locationRate: RateController;
+  locationCommentThread: CommentThreadController
+  locationCommentThreadReaction: CommentReactionController;
+  locationCommentReaction: CommentReactionController;
   locationReaction: ReactionController;
   locationComment: QueryController;
   locationFollow: FollowController;
@@ -456,6 +468,9 @@ export function useContext(
     queryDB,
     mapper
   );
+  const filmCommentThread = useFilmCommentThreadController(logger.error, mainDB, mapper);
+  const filmCommentThreadReaction = useFilmCommentThreadReactionController(logger.error, mainDB, mapper)
+  const filmCommentReaction = useFilmCommentReactionController(logger.error, mainDB, mapper)
   const userRate = useUserRateController(logger.error, queryDB, mapper);
   const userReaction = useUserReactionController(logger.error, queryDB, mapper);
   const userComment = useUserRateCommentController(
@@ -479,7 +494,6 @@ export function useContext(
     mapper
   );
 
-  const location = useLocationController(logger.error, queryDB, mapper);
   const backofficeLocation = useBackOfficeLocationController(logger.error, queryDB, mapper);
   const backofficeLocationUpload = useLocationUploadController(
     logger.error,
@@ -494,6 +508,11 @@ export function useContext(
     conf.modelItem,
     mapper
   );
+
+  const location = useLocationController(logger.error, queryDB, mapper);
+  const locationCommentThread = useLocationCommentThreadController(logger.error, mainDB, mapper);
+  const locationCommentThreadReaction = useLocationCommentThreadReactionController(logger.error, mainDB, mapper)
+  const locationCommentReaction = useLocationCommentReactionController(logger.error, mainDB, mapper)
   const locationRate = useLocationRateController(logger.error, queryDB, mapper);
   const locationReaction = useLocationReactionController(logger.error, queryDB, mapper);
   const locationComment = useLocationRateCommentController(logger.error, queryDB, mapper);
@@ -579,6 +598,9 @@ export function useContext(
     filmRate,
     filmReaction,
     filmComment,
+    filmCommentThread,
+    filmCommentThreadReaction,
+    filmCommentReaction,
     userRate,
     userReaction,
     userComment,
@@ -590,9 +612,11 @@ export function useContext(
     country,
     location,
     locationRate,
+    locationCommentThread,
+    locationCommentThreadReaction,
+    locationCommentReaction,
     locationReaction,
     locationComment,
-    article,
     articleRate,
     articleRateComment,
     articleReaction,
@@ -629,6 +653,7 @@ export function useContext(
     saveMusic,
     playlist,
     saveListsong,
+    article,
     articleCommentThread,
     articleCommentThreadReaction,
     articleCommentReaction

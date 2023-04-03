@@ -26,7 +26,7 @@ export const config = {
   },
   db: {
     user: {
-      user: 'postgres',
+      user: 'quangta',
       host: 'localhost',
       password: '123456',
       database: 'postgres',
@@ -34,7 +34,7 @@ export const config = {
       sslmode: 'require'
     },
     query: {
-      user: 'postgres',
+      user: 'quangta',
       host: 'localhost',
       password: '123456',
       database: 'postgres',

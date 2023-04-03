@@ -55,6 +55,7 @@ import {
   LocationRepository,
 } from './location';
 import { useInfoQuery } from '../rate-user-query';
+import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
 
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
@@ -205,4 +206,28 @@ export function useLocationUploadController(log: Log, db: DB, storage: StorageRe
   const repository = new Repository<Location, string>(db, 'item', locationModel);
   const service = new LocationUploadService(builder.search, repository, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
   return new UploadController(log, service, generateId, sizesCover, sizesImage);
+}
+
+export function useLocationCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
+  const commentThreadRepository = new SqlCommentThreadRepository(db, "locationcommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "locationreplycomment", "commentId", "CommentThreadId", "locationcommentthreadinfo", "commentId", "locationreplycommentinfo", "commentId", "locationcommentthreadreaction", "commentId", "locationreplycommentreaction", "commentId")
+  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'locationreplycomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "userId", "locationcommentthreadinfo", "commentId", "replyCount", "usefulCount",
+    "users", "id", "username", "imageurl", "locationreplycommentinfo", "commentId", "usefulCount", "locationreplycommentreaction", "commentId", "reaction")
+  const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
+  const query = useQuery('locationcommentthread', mapper, commentThreadModel, true)
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'locationcommentthread', commentThreadModel, db.driver, query);
+  const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryUrl)
+  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "locationreplycomment", "commentId", "comment")
+}
+
+export function useLocationCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "locationcommentthreadreaction", commentReactionModel, "locationcommentthreadinfo", "usefulcount", "commentId", "userId", "author", "commentId")
+  const commentReactionService = new CommentReactionClient(commentReactionRepository)
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
+}
+
+export function useLocationCommentReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "locationreplycommentreaction", commentReactionModel, "locationreplycommentinfo", "usefulcount", "commentId", "userId", "author", "commentId")
+  const commentReactionService = new CommentReactionClient(commentReactionRepository)
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
 }

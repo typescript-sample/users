@@ -43,6 +43,8 @@ import {
   FilmRepository,
 } from './film';
 import { useInfoQuery } from '../rate-user-query';
+import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
+
 
 export class FilmService extends ViewSearchManager<Film, string, FilmFilter> implements FilmQuery {
   constructor(
@@ -117,4 +119,28 @@ export function useSavedFilmsController(log: Log, db: DB): SavedController<Film>
   const repository = new QueryRepository<Film, string>(db, 'film', filmModel);
   const service = new SavedService<string, Film>(savedRepository, repository.query, 50);
   return new SavedController<Film>(log, service, 'itemId', 'id');
+}
+
+export function useFilmCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
+  const commentThreadRepository = new SqlCommentThreadRepository(db, "filmcommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "filmreplycomment", "commentId", "CommentThreadId", "filmcommentthreadinfo", "commentId", "filmreplycommentinfo", "commentId", "filmcommentthreadreaction", "commentId", "filmreplycommentreaction", "commentId")
+  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'filmreplycomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "userId", "filmcommentthreadinfo", "commentId", "replyCount", "usefulCount",
+    "users", "id", "username", "imageurl", "filmreplycommentinfo", "commentId", "usefulCount", "filmreplycommentreaction", "commentId", "reaction")
+  const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
+  const query = useQuery('filmcommentthread', mapper, commentThreadModel, true)
+  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'filmcommentthread', commentThreadModel, db.driver, query);
+  const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryUrl)
+  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "filmreplycomment", "commentId", "comment")
+}
+
+export function useFilmCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "filmcommentthreadreaction", commentReactionModel, "filmcommentthreadinfo", "usefulcount", "commentId", "userId", "author", "commentId")
+  const commentReactionService = new CommentReactionClient(commentReactionRepository)
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
+}
+
+export function useFilmCommentReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+  const commentReactionRepository = new SqlCommentReactionRepository(db, "filmreplycommentreaction", commentReactionModel, "filmreplycommentinfo", "usefulcount", "commentId", "userId", "author", "commentId")
+  const commentReactionService = new CommentReactionClient(commentReactionRepository)
+  return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
 }

@@ -25,7 +25,7 @@ export interface Location {
   gallery?: UploadInfo[];
 }
 
-export interface LocationRepository extends Repository<Location, string> {}
+export interface LocationRepository extends Repository<Location, string> { }
 
 export interface LocationQuery extends Query<Location, string, LocationFilter> {
 
@@ -76,14 +76,14 @@ export interface LocationInfomationFilter extends Filter {
 }
 export const locationInfomationModel: Attributes = {
   id: {
-      key: true,
-      length: 40
+    key: true,
+    length: 40
   },
   followingcount: {
-      type: 'number'
+    type: 'number'
   },
   followercount: {
-      type: 'number'
+    type: 'number'
   }
 };
 export interface LocationInfomationQuery extends Query<LocationInfomation, string, LocationInfomationFilter> {
