@@ -89,7 +89,7 @@ export function generate(): string {
 }
 
 export function useArticleCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
-  const commentThreadRepository = new SqlCommentThreadRepository(db, "articlecommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "articlecomment", "commentId", "CommentThreadId", "articlecommentthreadinfo", "commentId", "articlecommentinfo", "commentId", "articlecommentthreadreaction", "commentId", "articlecommentreaction", "commentId")
+  const commentThreadRepository = new SqlCommentThreadRepository(db, "articlecommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "articlecomment", "commentId", "commentThreadId", "articlecommentthreadinfo", "commentId", "articlecommentinfo", "commentId", "articlecommentthreadreaction", "commentId", "articlecommentreaction", "commentId")
   const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'articlecomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "userId", "articlecommentthreadinfo", "commentId", "replyCount", "usefulCount",
     "users", "id", "username", "imageurl", "articlecommentinfo", "commentId", "usefulCount", "articlecommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)

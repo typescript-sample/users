@@ -339,10 +339,10 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/locations/commentthread/reply/:commentId', ctx.locationCommentThread.updateCommentReply)
   app.put('/locations/commentthread/:commentId', ctx.locationCommentThread.updateComment)
   app.get('/locations/commentthread/search', ctx.locationCommentThread.search)
-  app.post('/locations/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentThreadReaction.setUserful)
-  app.delete('/locations/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentThreadReaction.removeUseful)
-  app.post('/locations/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReaction.setUserful)
-  app.delete('/locations/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReaction.removeUseful)
+  app.post('/locations/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.locationCommentThreadReaction.setUserful)
+  app.delete('/locations/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.locationCommentThreadReaction.removeUseful)
+  app.post('/locations/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.locationCommentReaction.setUserful)
+  app.delete('/locations/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.locationCommentReaction.removeUseful)
 
   app.get('/locations/follow/:id/:target', ctx.locationFollow.follow);
   app.delete('/locations/unfollow/:id/:target', ctx.locationFollow.unfollow);

@@ -21,7 +21,7 @@ export interface CommentThreadService {
     comment(comment: CommentThread): Promise<string>
     updateComment(comment: CommentThread): Promise<number>
     updateReplyComment(comment: CommentThreadReply): Promise<number>
-    replyComment(obj: CommentThreadReply): Promise<string|number>
+    replyComment(obj: CommentThreadReply): Promise<string | number>
     getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]>
     removeReplyComment(commentId: string, commentThreadId: string): Promise<number>
     removeThreadComment(commentThreadId: string): Promise<number>
