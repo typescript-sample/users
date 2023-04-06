@@ -250,9 +250,11 @@ export class SqlReactionRepository implements ReactionRepository {
     }
   }
 }
-export interface URL {
+export interface Info {
   id: string;
-  url: string;
+  url?: string;
+  name?: string
+  displayname?: string
 }
 export interface SearchResult<T> {
   list: T[];
@@ -264,6 +266,8 @@ export type Search<T, F> = (s: F, limit?: number, offset?: number | string, fiel
 export interface BaseComment {
   userId: string;
   userURL?: string;
+  authorURL?: string;
+  authorName?: string;
 }
 export interface CommentsRepository<T> {
   load(commentId: string, ctx?: any): Promise<T | null>;
@@ -271,7 +275,7 @@ export interface CommentsRepository<T> {
 }
 // tslint:disable-next-line:max-classes-per-file
 export class BaseCommentQuery<T extends BaseComment> {
-  constructor(protected repository: CommentsRepository<T>, protected queryURL?: (ids: string[]) => Promise<URL[]>) {
+  constructor(protected repository: CommentsRepository<T>, protected queryInfo?: (ids: string[]) => Promise<Info[]>) {
     this.load = this.load.bind(this);
     this.getComment = this.getComment.bind(this);
     this.getComments = this.getComments.bind(this);
@@ -281,11 +285,12 @@ export class BaseCommentQuery<T extends BaseComment> {
   }
   load(id: string, ctx?: any): Promise<T | null> {
     return this.repository.load(id, ctx).then(comment => {
-      if (comment && this.queryURL) {
-        return this.queryURL([id]).then(urls => {
-          const i = binarySearch(urls, comment.userId);
+      if (comment && this.queryInfo) {
+        return this.queryInfo([id]).then(info => {
+          const i = binarySearch(info, comment.userId);
           if (i >= 0) {
-            comment.userURL = urls[i].url;
+            comment.userURL = info[i].url;
+            comment.authorName = info[i].displayname ? info[i].displayname : info[i].name
           }
           return comment;
         });
@@ -296,16 +301,17 @@ export class BaseCommentQuery<T extends BaseComment> {
   }
   getComments(id: string, author: string, limit?: number): Promise<T[]> {
     return this.repository.getComments(id, author, limit).then(comments => {
-      if (this.queryURL) {
+      if (this.queryInfo) {
         const ids: string[] = [];
         for (const comment of comments) {
           ids.push(comment.userId);
         }
-        return this.queryURL(ids).then(urls => {
+        return this.queryInfo(ids).then(info => {
           for (const comment of comments) {
-            const i = binarySearch(urls, comment.userId);
+            const i = binarySearch(info, comment.userId);
             if (i >= 0) {
-              comment.userURL = urls[i].url;
+              comment.userURL = info[i].url;
+              comment.authorName = info[i].displayname ? info[i].displayname : info[i].name
             }
           }
           return comments;
@@ -318,25 +324,28 @@ export class BaseCommentQuery<T extends BaseComment> {
 }
 // tslint:disable-next-line:max-classes-per-file
 export class CommentQuery<T extends BaseComment, F> extends BaseCommentQuery<T> {
-  constructor(protected find: Search<T, F>, repository: CommentsRepository<T>, queryURL?: (ids: string[]) => Promise<URL[]>) {
-    super(repository, queryURL);
+  constructor(protected find: Search<T, F>, repository: CommentsRepository<T>, queryInfo?: (ids: string[]) => Promise<Info[]>) {
+    super(repository, queryInfo);
     this.search = this.search.bind(this);
   }
   search(s: F, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<T>> {
     return this.find(s, limit, offset, fields).then(res => {
-      if (!this.queryURL) {
+      if (!this.queryInfo) {
         return res;
       } else {
         if (res.list && res.list.length > 0) {
           const ids: string[] = [];
           for (const rate of res.list) {
-            ids.push(rate.userId);
+            if (!ids.includes(rate.userId)) {
+              ids.push(rate.userId);
+            }
           }
-          return this.queryURL(ids).then(urls => {
+          return this.queryInfo(ids).then(info => {
             for (const rate of res.list) {
-              const i = binarySearch(urls, rate.userId);
+              const i = binarySearch(info, rate.userId);
               if (i >= 0) {
-                rate.userURL = urls[i].url;
+                rate.userURL = info[i].url;
+                rate.authorName = info[i].displayname ? info[i].displayname : info[i].name
               }
             }
             return res;
@@ -348,7 +357,7 @@ export class CommentQuery<T extends BaseComment, F> extends BaseCommentQuery<T> 
     });
   }
 }
-function binarySearch(ar: URL[], el: string): number {
+function binarySearch(ar: Info[], el: string): number {
   let m = 0;
   let n = ar.length - 1;
   while (m <= n) {

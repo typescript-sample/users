@@ -94,8 +94,8 @@ export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
-  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryUrl);
+  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryInfo);
   const commentValidator = new CommentValidator(commentModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
@@ -105,8 +105,8 @@ export function useFilmRateCommentController(log: Log, db: DB, mapper?: Template
   const query = useQuery('filmratecomment', mapper, commentModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
-  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryUrl);
+  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryInfo);
   return new RateCommentController(log, service);
 }
 
@@ -127,9 +127,9 @@ export function useFilmCommentThreadController(log: Log, db: DB, mapper?: Templa
     "users", "id", "username", "imageurl", "filmreplycommentinfo", "commentId", "usefulCount", "filmreplycommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('filmcommentthread', mapper, commentThreadModel, true)
-  const queryUrl = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'filmcommentthread', commentThreadModel, db.driver, query);
-  const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryUrl)
+  const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryInfo)
   return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "filmreplycomment", "commentId", "comment")
 }
 
@@ -139,7 +139,7 @@ export function useFilmCommentThreadReactionController(log: Log, db: DB, mapper?
   return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")
 }
 
-export function useFilmCommentReactionController(log: Log, db: DB, mapper?: TemplateMap) {
+export function useFilmReplyCommentReactionController(log: Log, db: DB, mapper?: TemplateMap) {
   const commentReactionRepository = new SqlCommentReactionRepository(db, "filmreplycommentreaction", commentReactionModel, "filmreplycommentinfo", "usefulcount", "commentId", "userId", "author", "commentId")
   const commentReactionService = new CommentReactionClient(commentReactionRepository)
   return new CommentReactionController(log, commentReactionService, "commentId", "author", "userId")

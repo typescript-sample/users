@@ -34,7 +34,9 @@ export class ReactionService<R extends Model, F> {
         if (res.list && res.list.length > 0) {
           const ids: string[] = [];
           for (const rate of res.list) {
-            ids.push(rate.author);
+            if (!ids.includes(rate.author)) {
+              ids.push(rate.author);
+            }
           }
           return this.queryInfo(ids).then(info => {
             for (const rate of res.list) {
@@ -113,13 +115,15 @@ export class ReactionService<R extends Model, F> {
       if (this.queryInfo) {
         const ids: string[] = [];
         for (const comment of comments) {
-          ids.push(comment.userId);
+          if (!ids.includes(comment.userId)) {
+            ids.push(comment.userId);
+          }
         }
         return this.queryInfo(ids).then(info => {
           for (const comment of comments) {
             const i = binarySearch(info, comment.userId);
             if (i >= 0 && !comment.anonymous) {
-              comment.userURL = info[i].url;
+              comment.authorURL = info[i].url;
               comment.authorName = info[i].displayname ? info[i].displayname : info[i].name;
             }
           }
@@ -136,7 +140,7 @@ export class ReactionService<R extends Model, F> {
         return this.queryInfo([id]).then(info => {
           const i = binarySearch(info, comment.userId);
           if (i >= 0 && !comment.anonymous) {
-            comment.userURL = info[i].url;
+            comment.authorURL = info[i].url;
             comment.authorName = info[i].displayname ? info[i].displayname : info[i].name;
           }
           return comment;

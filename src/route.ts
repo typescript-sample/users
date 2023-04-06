@@ -234,8 +234,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/films/commentthread/search', ctx.filmCommentThread.search)
   app.post('/films/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentThreadReaction.setUserful)
   app.delete('/films/commentthread/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentThreadReaction.removeUseful)
-  app.post('/films/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReaction.setUserful)
-  app.delete('/films/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReaction.removeUseful)
+  app.post('/films/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReplyReaction.setUserful)
+  app.delete('/films/commentthread/reply/:commentId/:author/useful/:userId', ctx.authMiddleware.auth, ctx.filmCommentReplyReaction.removeUseful)
 
 
   app.get('/items/categories/search', ctx.itemCategory.search);

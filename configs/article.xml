@@ -118,7 +118,7 @@
     </if>
   </select>
   <select id="articlecommentthread">
-    select a.*, b.replycount, b.usefulcount, c.username, c.imageurl
+    select a.*, b.replycount, b.usefulcount
     <if test="userId != null">
       ,
       case
@@ -130,8 +130,6 @@
     from articlecommentthread a
     left join articlecommentthreadinfo b
     on a.commentId = b.commentid
-    left join users c
-    on c.id = a.author
     <if test = "userId != null">
     left join articlecommentthreadreaction d
     on a.commentId = d.commentId and a.userId = #{userId}

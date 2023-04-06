@@ -95,7 +95,7 @@ import {
   useCompanyRateReactionController
 } from './company';
 import {
-  useFilmCommentReactionController,
+  useFilmReplyCommentReactionController,
   useFilmCommentThreadController,
   useFilmCommentThreadReactionController,
   useFilmController,
@@ -194,7 +194,7 @@ export interface ApplicationContext {
   filmComment: QueryController;
   filmCommentThread: CommentThreadController
   filmCommentThreadReaction: CommentReactionController;
-  filmCommentReaction: CommentReactionController;
+  filmCommentReplyReaction: CommentReactionController;
   userRate: RateController;
   userReaction: ReactionController;
   userComment: QueryController;
@@ -470,7 +470,7 @@ export function useContext(
   );
   const filmCommentThread = useFilmCommentThreadController(logger.error, mainDB, mapper);
   const filmCommentThreadReaction = useFilmCommentThreadReactionController(logger.error, mainDB, mapper)
-  const filmCommentReaction = useFilmCommentReactionController(logger.error, mainDB, mapper)
+  const filmCommentReplyReaction = useFilmReplyCommentReactionController(logger.error, mainDB, mapper)
   const userRate = useUserRateController(logger.error, queryDB, mapper);
   const userReaction = useUserReactionController(logger.error, queryDB, mapper);
   const userComment = useUserRateCommentController(
@@ -600,7 +600,7 @@ export function useContext(
     filmComment,
     filmCommentThread,
     filmCommentThreadReaction,
-    filmCommentReaction,
+    filmCommentReplyReaction,
     userRate,
     userReaction,
     userComment,

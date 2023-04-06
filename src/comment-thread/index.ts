@@ -96,8 +96,8 @@ export class CommentThreadController<R> {
     }
 
     updateComment(req: Request, res: Response) {
-        let comment: any
-        comment[this.commentReplyCol] = req.body;
+        let comment: any = {}
+        comment[this.commentReplyCol] = req.body.comment;
         comment[this.commentIdCol] = req.params[this.commentIdCol]
         this.commentThreadService.updateComment(comment).then(rep => {
             return res.status(200).json(rep).end()
@@ -137,7 +137,9 @@ export class CommentThreadController<R> {
 }
 export interface URL {
     id: string;
-    url: string;
+    url?: string;
+    name?: string
+    displayname?: string
 }
 function compare(s1: string, s2: string): number {
     return s1.localeCompare(s2);
@@ -164,7 +166,7 @@ export class CommentThreadClient implements CommentThreadService {
         protected find: Search<CommentThread, CommentThreadFilter>,
         protected commentThreadRepository: CommentThreadRepository<CommentThread>,
         protected commentThreadReplyRepository: CommentThreadReplyRepository,
-        protected queryURL?: (ids: string[]) => Promise<URL[]>
+        protected queryInfo?: (ids: string[]) => Promise<URL[]>
     ) {
         this.search = this.search.bind(this)
         this.comment = this.comment.bind(this)
@@ -195,7 +197,32 @@ export class CommentThreadClient implements CommentThreadService {
         return this.commentThreadReplyRepository.removeComment(commentId, commentThreadId)
     }
     getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]> {
-        return this.commentThreadReplyRepository.getComments(commentThreadId, userId)
+        return this.commentThreadReplyRepository.getComments(commentThreadId, userId).then(res => {
+            if (!this.queryInfo) {
+                return res
+            } else {
+                if (res.length > 0) {
+                    const ids: string[] = [];
+                    for (const comment of res) {
+                        if (!ids.includes(comment.author)) {
+                            ids.push(comment.author);
+                        }
+                    }
+                    return this.queryInfo(ids).then(info => {
+                        for (const comment of res) {
+                            const i = binarySearch(info, comment.author);
+                            if (i >= 0) {
+                                comment.authorURL = info[i].url;
+                                comment.authorName = info[i].displayname ? info[i].displayname : info[i].name
+                            }
+                        }
+                        return res;
+                    });
+                } else {
+                    return res;
+                }
+            }
+        })
     }
     replyComment(obj: CommentThreadReply): Promise<string> {
         obj.histories = []
@@ -204,19 +231,22 @@ export class CommentThreadClient implements CommentThreadService {
     }
     search(s: CommentThreadFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<CommentThread>> {
         return this.find(s, limit, offset, fields).then(res => {
-            if (!this.queryURL) {
+            if (!this.queryInfo) {
                 return res;
             } else {
                 if (res.list && res.list.length > 0) {
                     const ids: string[] = [];
                     for (const comment of res.list) {
-                        ids.push(comment.author);
+                        if (!ids.includes(comment.author)) {
+                            ids.push(comment.author);
+                        }
                     }
-                    return this.queryURL(ids).then(urls => {
+                    return this.queryInfo(ids).then(info => {
                         for (const comment of res.list) {
-                            const i = binarySearch(urls, comment.author);
+                            const i = binarySearch(info, comment.author);
                             if (i >= 0) {
-                                comment.authorURL = urls[i].url;
+                                comment.authorURL = info[i].url;
+                                comment.authorName = info[i].displayname ? info[i].displayname : info[i].name
                             }
                         }
                         return res;
@@ -442,8 +472,8 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
             qr2 = `left join ${this.commentReactionTable} d on a.${this.commentIdCol} = d.${this.commentIdCommentReactionCol} and a.${this.userIdCommentCol} = ${this.param(1)}`
         }
         const query =
-            `select a.*, b.${this.usernameCol}, b.${this.avatarCol}, c.${this.usefulCountCommentInfoCol}${qr} from ${this.table} a left join ${this.userTable} b on a.${this.authorCol} = b.${this.userIdCol} left join ${this.commentInfoTable} c on a.${this.commentIdCol} = c.${this.commentIdCommentInfoCol} ${qr2} where a.${this.commentThreadIdCol} = ${this.param(userId && userId.length > 0 ? 2 : 1)}`
-
+            `select a.*, c.${this.usefulCountCommentInfoCol}${qr} from ${this.table} a left join ${this.commentInfoTable} c on a.${this.commentIdCol} = c.${this.commentIdCommentInfoCol} ${qr2} where a.${this.commentThreadIdCol} = ${this.param(userId && userId.length > 0 ? 2 : 1)}`
+        console.log({ query });
         return this.query<CommentThreadReply>(
             query, [...arr, commentThreadId], this.map);
 
