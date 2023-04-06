@@ -225,7 +225,7 @@ export class CommentThreadClient implements CommentThreadService {
         })
     }
     replyComment(obj: CommentThreadReply): Promise<string> {
-        obj.histories = []
+        obj.histories = undefined
         obj.time = new Date()
         return this.commentThreadReplyRepository.replyComment(obj)
     }
@@ -259,7 +259,7 @@ export class CommentThreadClient implements CommentThreadService {
     }
     comment(comment: CommentThread): Promise<string> {
         comment.time ? comment.time = comment.time : comment.time = new Date();
-        comment.histories = []
+        comment.histories = undefined;
         return this.commentThreadRepository.comment(comment)
     }
     async removeThreadComment(commentId: string): Promise<number> {

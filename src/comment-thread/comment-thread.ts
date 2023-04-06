@@ -134,7 +134,7 @@ export interface CommentThreadReply {
     parent: string
     time: Date
     updatedAt: Date
-    histories: ShortComment[]
+    histories?: ShortComment[]
     authorURL?: string
     userURL?: string
     authorName?: string
