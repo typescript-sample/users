@@ -133,7 +133,7 @@
     on a.commentId = b.commentid
     <if test = "userId != null">
     left join filmcommentthreadreaction d
-    on a.commentId = d.commentId and a.userId = #{userId}
+    on a.commentId = d.commentId and d.userId = #{userId}
     </if>
     where
     <if test = "commentId != null">

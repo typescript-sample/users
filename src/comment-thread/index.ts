@@ -469,7 +469,7 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
         if (userId && userId.length > 0) {
             arr.push(userId)
             qr = `, case when d.${this.reactionCol} = 1 then true else false end as disable`
-            qr2 = `left join ${this.commentReactionTable} d on a.${this.commentIdCol} = d.${this.commentIdCommentReactionCol} and a.${this.userIdCommentCol} = ${this.param(1)}`
+            qr2 = `left join ${this.commentReactionTable} d on a.${this.commentIdCol} = d.${this.commentIdCommentReactionCol} and d.${this.userIdCommentCol} = ${this.param(1)}`
         }
         const query =
             `select a.*, c.${this.usefulCountCommentInfoCol}${qr} from ${this.table} a left join ${this.commentInfoTable} c on a.${this.commentIdCol} = c.${this.commentIdCommentInfoCol} ${qr2} where a.${this.commentThreadIdCol} = ${this.param(userId && userId.length > 0 ? 2 : 1)}`
