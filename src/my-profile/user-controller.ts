@@ -16,10 +16,10 @@ export class MyProfileController {
     public saveEducation?: Save,
     public saveCompany?: Save,
   ) {
-    this.getMyProfile=this.getMyProfile.bind(this)
-    this.getMySettings=this.getMySettings.bind(this)
-    this.saveMyProfile=this.saveMyProfile.bind(this)
-    this.saveMyProfile=this.saveMyProfile.bind(this)
+    this.getMyProfile = this.getMyProfile.bind(this)
+    this.getMySettings = this.getMySettings.bind(this)
+    this.saveMyProfile = this.saveMyProfile.bind(this)
+    this.saveMyProfile = this.saveMyProfile.bind(this)
 
   }
   getMyProfile(req: Request, res: Response) {
@@ -76,7 +76,7 @@ export class MyProfileController {
         const listCompanyName = user.companies.map(c => c.name);
         this.saveCompany(listCompanyName);
       }
-      this.service
+      return this.service
         .saveMyProfile(user)
         .then((result) => res.status(200).json(result).send())
         .catch((err) => handleError(err, res, this.log));

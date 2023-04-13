@@ -15,27 +15,27 @@ import {
   rateModel,
   RateService,
   RateValidator,
-} from '../rate-core';
+} from 'rate-core';
 import { SqlRateRepository } from 'rate-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from '../review-reaction';
+} from 'review-reaction';
 import {
   RateCommentController,
   RateController,
   ReactionController,
 } from 'review-reaction-express';
 import {
-  commentModel,
+  commentModel as commentRateModel,
   InfoRepository,
   rateReactionModel,
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from '../review-reaction-query';
+} from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { UploadController, UploadService } from 'upload-express';
@@ -55,7 +55,7 @@ import {
   LocationRepository,
 } from './location';
 import { useInfoQuery } from '../rate-user-query';
-import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
+import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository, commentModel } from '../comment-thread';
 
 export class LocationService
   extends ViewSearchManager<Location, string, LocationFilter>
@@ -143,22 +143,22 @@ export function useLocationReactionService(db: DB, mapper?: TemplateMap): Reacti
   const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'locationrate', rateModel, db.driver, query);
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'locationrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'locationratereaction', rateReactionModel, 'locationrate', 'usefulCount', 'author', 'id');
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentRateModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'id');
   const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   return new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryInfo);
 }
 
 export function useLocationReactionController(log: Log, db: DB, mapper?: TemplateMap): ReactionController<Rate, RateFilter, Comment> {
-  const commentValidator = new CommentValidator(commentModel, check);
+  const commentValidator = new CommentValidator(commentRateModel, check);
   return new ReactionController(log, useLocationReactionService(db, mapper), commentValidator,
     ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
 }
 
 export function useLocationRateCommentService(db: DB, mapper?: TemplateMap): CommentQuery<Comment, CommentFilter> {
-  const query = useQuery('locationcomment', mapper, commentModel, true);
-  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'locationcomment', commentModel, db.driver, query);
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const query = useQuery('locationcomment', mapper, commentRateModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'locationcomment', commentRateModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'locationcomment', commentRateModel, 'locationrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   return new CommentQuery(builder.search, rateCommentRepository, queryInfo);
 }
@@ -210,7 +210,7 @@ export function useLocationUploadController(log: Log, db: DB, storage: StorageRe
 
 export function useLocationCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
   const commentThreadRepository = new SqlCommentThreadRepository(db, "locationcommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "locationreplycomment", "commentId", "CommentThreadId", "locationcommentthreadinfo", "commentId", "locationreplycommentinfo", "commentId", "locationcommentthreadreaction", "commentId", "locationreplycommentreaction", "commentId")
-  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'locationreplycomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "userId", "locationcommentthreadinfo", "commentId", "replyCount", "usefulCount",
+  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'locationreplycomment', commentModel, "commentId", "author", "commentThreadId", "userId", "locationcommentthreadinfo", "commentId", "replyCount", "usefulCount",
     "users", "id", "username", "imageurl", "locationreplycommentinfo", "commentId", "usefulCount", "locationreplycommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('locationcommentthread', mapper, commentThreadModel, true)

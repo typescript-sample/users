@@ -123,6 +123,60 @@ export const skillsModel: Attributes = {
     type: 'boolean',
   },
 };
+export const companiesModel: Attributes = {
+  description: {
+    type: 'string',
+
+  },
+  from: {
+    type: 'string',
+
+  },
+  name: {
+    type: 'string',
+
+  },
+  position: {
+    type: 'string',
+  },
+  to: {
+    type: 'string',
+  },
+};
+export const achievementsModel: Attributes = {
+  description: {
+    type: 'string',
+
+  },
+  highlight: {
+    type: 'boolean',
+
+  },
+  subject: {
+    type: 'string',
+  }
+};
+export const educationsModel: Attributes = {
+  from: {
+    type: 'string',
+  },
+  to: {
+    type: 'boolean',
+
+  },
+  major: {
+    type: 'string',
+  },
+  title: {
+    type: 'string'
+  },
+  degree: {
+    type: 'string'
+  },
+  school: {
+    type: 'string'
+  }
+};
 export const fileUploadModel: Attributes = {
   url: {
     required: true,
@@ -141,10 +195,6 @@ export const userSettingsModel: Attributes = {
   notification: {
     type: 'boolean',
   },
-};
-export const achievements: Attributes = {
-  subject: {},
-  description: {},
 };
 export const userModel: Attributes = {
   id: {
@@ -171,10 +221,6 @@ export const userModel: Attributes = {
     type: 'primitives',
     typeof: skillsModel,
   },
-  achievements: {
-    type: 'primitives',
-    typeof: achievements,
-  },
   settings: {
     type: 'object',
     typeof: userSettingsModel,
@@ -182,10 +228,25 @@ export const userModel: Attributes = {
   bio: {
   },
   coverURL: {
-
+    type: 'string',
   },
   imageURL: {
-
+    type: 'string',
+  },
+  familyName: {
+    type: 'string',
+  },
+  givenName: {
+    type: 'string',
+  },
+  displayname: {
+    type: 'string',
+  },
+  occupation: {
+    type: 'string',
+  },
+  website: {
+    type: 'string',
   },
   gallery: {
     type: 'array',
@@ -194,11 +255,23 @@ export const userModel: Attributes = {
   links: {
     type: 'object',
   },
+  lookingFor: {
+    type: 'strings',
+  },
+  company: {
+    type: 'strings',
+  },
   companies: {
-
+    type: 'primitives',
+    typeof: companiesModel
+  },
+  achievements: {
+    type: 'primitives',
+    typeof: achievementsModel
   },
   educations: {
-
+    type: 'primitives',
+    typeof: educationsModel
   },
   works: {
 

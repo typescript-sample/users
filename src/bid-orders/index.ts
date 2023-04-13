@@ -81,7 +81,7 @@ export class ResponseManager implements ResponseService {
     response.time = new Date();
     const info = await this.infoRepository.exist?.(response.id);
     if (!info) {
-      const r0 = await this.repository.insert(response, true);
+      const r0 = await this.repository.insert(response);
       return r0;
     }
     const exist = await this.repository.load(response.id, response.author);

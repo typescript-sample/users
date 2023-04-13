@@ -11,27 +11,27 @@ import {
   rateModel,
   RateService,
   RateValidator,
-} from '../rate-core';
+} from 'rate-core';
 import { SqlRateRepository } from 'rate-query';
 import {
   Comment,
   CommentFilter,
   CommentValidator,
   ReactionService,
-} from '../review-reaction';
+} from 'review-reaction';
 import {
   RateCommentController,
   RateController,
   ReactionController,
 } from 'review-reaction-express';
 import {
-  commentModel,
+  commentModel as commentRateModel,
   InfoRepository,
   rateReactionModel,
   SqlCommentRepository,
   SqlInfoRepository,
   SqlReactionRepository,
-} from '../review-reaction-query';
+} from 'review-reaction-query';
 import { CommentQuery } from 'review-reaction-query';
 import shortid from 'shortid';
 import { check } from 'xvalidators';
@@ -43,7 +43,7 @@ import {
   FilmRepository,
 } from './film';
 import { useInfoQuery } from '../rate-user-query';
-import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentThreadReplyModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
+import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
 
 
 export class FilmService extends ViewSearchManager<Film, string, FilmFilter> implements FilmQuery {
@@ -93,18 +93,18 @@ export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap
   const builder = new SearchBuilder<Rate, RateFilter>(db.query, 'filmrate', rateModel, db.driver, query);
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentRateModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryInfo);
-  const commentValidator = new CommentValidator(commentModel, check);
+  const commentValidator = new CommentValidator(commentRateModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
     generate, 'commentId', 'userId', 'author', 'id');
 }
 
 export function useFilmRateCommentController(log: Log, db: DB, mapper?: TemplateMap): RateCommentController<Comment> {
-  const query = useQuery('filmratecomment', mapper, commentModel, true);
-  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentModel, db.driver, query);
-  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
+  const query = useQuery('filmratecomment', mapper, commentRateModel, true);
+  const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentRateModel, db.driver, query);
+  const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentRateModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
   const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryInfo);
   return new RateCommentController(log, service);
@@ -123,7 +123,7 @@ export function useSavedFilmsController(log: Log, db: DB): SavedController<Film>
 
 export function useFilmCommentThreadController(log: Log, db: DB, mapper?: TemplateMap): CommentThreadController<CommentThread> {
   const commentThreadRepository = new SqlCommentThreadRepository(db, "filmcommentthread", commentThreadModel, "commentid", "id", "author", "comment", "time", "filmreplycomment", "commentId", "CommentThreadId", "filmcommentthreadinfo", "commentId", "filmreplycommentinfo", "commentId", "filmcommentthreadreaction", "commentId", "filmreplycommentreaction", "commentId")
-  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'filmreplycomment', commentThreadReplyModel, "commentId", "author", "commentThreadId", "userId", "filmcommentthreadinfo", "commentId", "replyCount", "usefulCount",
+  const commentThreadReplyRepository = new SqlCommentThreadReplyRepository(db, 'filmreplycomment', commentModel, "commentId", "author", "commentThreadId", "userId", "filmcommentthreadinfo", "commentId", "replyCount", "usefulCount",
     "users", "id", "username", "imageurl", "filmreplycommentinfo", "commentId", "usefulCount", "filmreplycommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('filmcommentthread', mapper, commentThreadModel, true)

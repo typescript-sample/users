@@ -4,7 +4,7 @@ import { Search } from "onecore";
 import { Statement } from "pg-extension";
 import { Attributes, buildMap, buildToDelete, buildToInsert, buildToUpdate, DB, Repository, StringMap } from "query-core";
 import { ReactionRepository } from "review-reaction";
-import { CommentReaction, CommentReactionRepository, CommentReactionService, CommentThread, CommentThreadFilter, CommentThreadReply, CommentThreadReplyRepository, CommentThreadRepository, CommentThreadService, ShortComment } from "./comment-thread";
+import { CommentReaction, CommentReactionRepository, CommentReactionService, CommentThread, CommentThreadFilter, Comment, CommentThreadReplyRepository, CommentThreadRepository, CommentThreadService, ShortComment } from "./comment-thread";
 export * from './comment-thread'
 
 // ------------- COMMENT THREAD -------------- 
@@ -175,7 +175,7 @@ export class CommentThreadClient implements CommentThreadService {
         this.removeThreadComment = this.removeThreadComment.bind(this)
         this.removeReplyComment = this.removeReplyComment.bind(this)
     }
-    async updateReplyComment(comment: CommentThreadReply): Promise<number> {
+    async updateReplyComment(comment: Comment): Promise<number> {
         const exist = await this.commentThreadReplyRepository.load(comment.commentId);
         if (!exist)
             return -1;
@@ -196,7 +196,7 @@ export class CommentThreadClient implements CommentThreadService {
     removeReplyComment(commentId: string, commentThreadId: string): Promise<number> {
         return this.commentThreadReplyRepository.removeComment(commentId, commentThreadId)
     }
-    getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]> {
+    getReplyComments(commentThreadId: string, userId?: string): Promise<Comment[]> {
         return this.commentThreadReplyRepository.getComments(commentThreadId, userId).then(res => {
             if (!this.queryInfo) {
                 return res
@@ -224,7 +224,7 @@ export class CommentThreadClient implements CommentThreadService {
             }
         })
     }
-    replyComment(obj: CommentThreadReply): Promise<string> {
+    replyComment(obj: Comment): Promise<string> {
         obj.histories = undefined
         obj.time = new Date()
         return this.commentThreadReplyRepository.replyComment(obj)
@@ -405,7 +405,7 @@ export class SqlCommentThreadRepository
 
 }
 
-export class SqlCommentThreadReplyRepository extends Repository<CommentThreadReply, string> implements CommentThreadReplyRepository {
+export class SqlCommentThreadReplyRepository extends Repository<Comment, string> implements CommentThreadReplyRepository {
     protected commentIdCol: string
     protected commentThreadIdCol: string;
     protected authorCol: string;
@@ -441,8 +441,8 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
         this.updateComment = this.updateComment.bind(this)
         this.load = this.load.bind(this)
     }
-    async load(commentId: string): Promise<CommentThreadReply | null> {
-        const objs: CommentThreadReply[] = await this.query<CommentThreadReply>(`select * from ${this.table} where ${this.commentIdCol} = ${this.param(1)}`, [commentId], this.map)
+    async load(commentId: string): Promise<Comment | null> {
+        const objs: Comment[] = await this.query<Comment>(`select * from ${this.table} where ${this.commentIdCol} = ${this.param(1)}`, [commentId], this.map)
         if (!objs || objs.length === 0) {
             return null;
         } else {
@@ -454,7 +454,7 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
             }
         }
     }
-    updateComment(obj: CommentThreadReply): Promise<number> {
+    updateComment(obj: Comment): Promise<number> {
         const stmt = buildToUpdate(obj, this.table, this.attrs, this.param)
         if (stmt) {
             return this.execBatch([stmt])
@@ -462,7 +462,7 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
             return Promise.resolve(-1)
         }
     }
-    getComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]> {
+    getComments(commentThreadId: string, userId?: string): Promise<Comment[]> {
         let qr = ``
         let qr2 = ``
         let arr = []
@@ -474,11 +474,11 @@ export class SqlCommentThreadReplyRepository extends Repository<CommentThreadRep
         const query =
             `select a.*, c.${this.usefulCountCommentInfoCol}${qr} from ${this.table} a left join ${this.commentInfoTable} c on a.${this.commentIdCol} = c.${this.commentIdCommentInfoCol} ${qr2} where a.${this.commentThreadIdCol} = ${this.param(userId && userId.length > 0 ? 2 : 1)}`
         console.log({ query });
-        return this.query<CommentThreadReply>(
+        return this.query<Comment>(
             query, [...arr, commentThreadId], this.map);
 
     }
-    replyComment(obj: CommentThreadReply): Promise<string> {
+    replyComment(obj: Comment): Promise<string> {
         obj.time = new Date()
         const stmt = buildToInsert(obj, this.table, this.attrs, this.param)
         if (stmt) {

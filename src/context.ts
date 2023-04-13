@@ -106,7 +106,7 @@ import {
 } from './film';
 import { useItemController } from './items';
 import { useSavedController } from './items';
-import { ResponseController, useResponseController, useResponseReactionController } from './items-response';
+import { ResponseController, useResponseController, useResponseReactionController } from './bid-orders';
 import { useJobController } from './job';
 import {
   useLocationCommentReactionController,
@@ -349,15 +349,15 @@ export function useContext(
   const userInfo = useUserInfoController(logger.error, mainDB, mapper);
   const locationInfomation = useLocationInfomationController(logger.error, mainDB, mapper);
 
-  const skillService = new StringService('skill', 'skill', queryDB.query, queryDB.exec);
+  const skillService = new StringService('userskills', 'skill', queryDB.query, queryDB.exec);
   const skill = new ItemsController<string[]>(logger.error, skillService.load, 'keyword');
-  const interestService = new StringService('interest', 'interest', queryDB.query, queryDB.exec);
+  const interestService = new StringService('userinterests', 'interest', queryDB.query, queryDB.exec);
   const interest = new ItemsController<string[]>(logger.error, interestService.load, 'keyword');
-  const lookingForService = new StringService('search', 'item', queryDB.query, queryDB.exec);
-  const lookingFor = new ItemsController<string[]>(logger.error, interestService.load, 'keyword');
-  const companyService = new StringService('user_companies', 'company', queryDB.query, queryDB.exec);
+  const lookingForService = new StringService('usersearchs', 'item', queryDB.query, queryDB.exec);
+  const lookingFor = new ItemsController<string[]>(logger.error, lookingForService.load, 'keyword');
+  const companyService = new StringService('usercompanies', 'company', queryDB.query, queryDB.exec);
   const companyQuery = new ItemsController<string[]>(logger.error, companyService.load, 'keyword');
-  const educationService = new StringService('educations', 'school', queryDB.query, queryDB.exec);
+  const educationService = new StringService('usereducations', 'school', queryDB.query, queryDB.exec);
   const educationQuery = new ItemsController<string[]>(logger.error, educationService.load, 'keyword');
   const appreciation = useAppreciationController(logger.error, mainDB);
   const appreciationComment = useAppreciationCommentController(logger.error, mainDB);

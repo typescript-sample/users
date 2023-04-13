@@ -20,8 +20,8 @@ export interface Work {
   position: string
   description: string
   item: string[]
-  from: Date
-  to: Date
+  from: string
+  to: string
 } // End of Work
 
 export interface Company {
@@ -29,8 +29,8 @@ export interface Company {
   name: string
   position: string
   descrition: string
-  from: Date
-  to: Date
+  from: string
+  to: string
 } // Company
 
 export interface Education {
@@ -38,8 +38,8 @@ export interface Education {
   degree: string
   major: string
   title: string
-  from: Date
-  to: Date
+  from: string
+  to: string
 } // Education
 
 export interface User {

@@ -9,14 +9,14 @@ import { UploadController } from './upload';
 export * from './user';
 export { MyProfileController };
 
-export function useMyProfileController(log: Log,repository: Repository<User, string>, settings: UserSettings, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined,
+export function useMyProfileController(log: Log, repository: Repository<User, string>, settings: UserSettings, saveSkills: Save | undefined, saveInterests: Save | undefined, saveLookingFor: Save | undefined, saveEducation: Save | undefined, saveCompany: Save | undefined,
 ): MyProfileController {
   const service = new MyProfileManager(repository, settings);
 
   return new MyProfileController(log, service, saveSkills, saveInterests, saveLookingFor, saveEducation, saveCompany);
 }
 
-export function useMyProfileUploadController(log: Log,repository:  Repository<User, string>, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl ,sizesCover: number[],
+export function useMyProfileUploadController(log: Log, repository: Repository<User, string>, storage: StorageRepository, deleteFile: Delete, generateId: Generate, buildUrl: BuildUrl, sizesCover: number[],
   sizesImage: number[], config?: StorageConf, model?: ModelConf): UploadController {
   const service = new StorageService(repository.load, repository.patch, storage, deleteFile, generateId, buildUrl, sizesCover, sizesImage, config, model);
   return new UploadController(log, service, generateId, sizesCover, sizesImage);

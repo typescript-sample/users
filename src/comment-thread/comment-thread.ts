@@ -20,9 +20,9 @@ export interface CommentThreadService {
     search(s: CommentThreadFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<CommentThread>>
     comment(comment: CommentThread): Promise<string>
     updateComment(comment: CommentThread): Promise<number>
-    updateReplyComment(comment: CommentThreadReply): Promise<number>
-    replyComment(obj: CommentThreadReply): Promise<string | number>
-    getReplyComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]>
+    updateReplyComment(comment: Comment): Promise<number>
+    replyComment(obj: Comment): Promise<string | number>
+    getReplyComments(commentThreadId: string, userId?: string): Promise<Comment[]>
     removeReplyComment(commentId: string, commentThreadId: string): Promise<number>
     removeThreadComment(commentThreadId: string): Promise<number>
 }
@@ -124,7 +124,7 @@ export const commentThreadModel: Attributes = {
 
 // ------------------------
 
-export interface CommentThreadReply {
+export interface Comment {
     commentId: string
     id: string
     author: string
@@ -142,7 +142,7 @@ export interface CommentThreadReply {
     replyCount?: number
 }
 
-export interface CommentThreadReplyFilter {
+export interface CommentFilter {
     commentId?: string
     id?: string
     userId?: string
@@ -164,10 +164,10 @@ export interface ShortComment {
 }
 
 export interface CommentThreadReplyRepository {
-    load(commentId: string): Promise<CommentThreadReply | null>
-    getComments(commentThreadId: string, userId?: string): Promise<CommentThreadReply[]>
-    replyComment(obj: CommentThreadReply): Promise<string>
-    updateComment(obj: CommentThreadReply): Promise<number>
+    load(commentId: string): Promise<Comment | null>
+    getComments(commentThreadId: string, userId?: string): Promise<Comment[]>
+    replyComment(obj: Comment): Promise<string>
+    updateComment(obj: Comment): Promise<number>
     removeComment(commentId: string, commentThreadId: string): Promise<number>
 }
 
@@ -179,7 +179,7 @@ export const commentThreadReplyHistoryModel: Attributes = {
         type: 'datetime'
     },
 }
-export const commentThreadReplyModel: Attributes = {
+export const commentModel: Attributes = {
     commentId: {
         key: true,
         column: "commentid"
