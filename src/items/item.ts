@@ -6,6 +6,7 @@ export interface Item {
   title: string;
   status: string;
   price: number;
+  condittion: string;
   imageurl?: string;
   brand: string;
   publishedAt?: Date;
@@ -44,6 +45,9 @@ export const itemModel: Attributes = {
   },
   price: {
     type: 'number'
+  },
+  condition: {
+    type: 'string'
   },
   imageURL: {
     length: 1500,

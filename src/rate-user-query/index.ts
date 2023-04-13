@@ -2,7 +2,6 @@ export interface Info<ID> {
     id: ID;
     url: string;
     name: string;
-    displayname: string;
 }
 export function param(i: number): string {
     return '$' + i;
@@ -13,7 +12,7 @@ export class InfoQuery<ID> {
         this.id = (id && id.length > 0 ? id : 'id');
         this.url = (url && url.length > 0 ? url : 'url');
         this.name = (name && name.length > 0 ? name : 'name');
-        this.displayName = (displayName && displayName.length > 0 ? displayName : 'displayName');
+        this.displayName = (displayName && displayName.length > 0 ? displayName : 'displayname');
         this.query = this.query.bind(this);
         this.load = this.load.bind(this);
     }
@@ -39,7 +38,7 @@ export class InfoQuery<ID> {
             ps.push(ids[i - 1]);
             pv.push(param(i));
         }
-        const sql = `select ${this.id} as id, ${this.url} as url, ${this.name} as name, ${this.displayName} as displayname from ${this.table} where ${this.id} in (${pv.join(',')}) and ${this.url} is not null order by ${this.id}`;
+        const sql = `select ${this.id} as id, ${this.url} as url, case when ${this.displayName} is not null then ${this.displayName} else ${this.name} end as name from ${this.table} where ${this.id} in (${pv.join(',')}) and ${this.url} is not null order by ${this.id}`;
         return this.queryF(sql, ps);
     }
 }
