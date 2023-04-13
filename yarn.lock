@@ -3781,10 +3781,10 @@ pg-connection-string@^2.5.0:
   resolved "https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz"
   integrity sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==
 
-pg-extension@^0.1.16:
-  version "0.1.16"
-  resolved "https://registry.npmjs.org/pg-extension/-/pg-extension-0.1.16.tgz"
-  integrity sha512-0UPzI9T9pNbYFXhack5vOw+V5AzZNxfHUKiOJ4iBjuD3KN451a5x2Z2RM4NyW4qQJfWIdHcnSy9EHRmTSlKvRQ==
+pg-extension@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/pg-extension/-/pg-extension-0.2.2.tgz#b03f3dba8979dd3f6d5cf4582cca1cc6018b9ecf"
+  integrity sha512-xUhzTgRAlJ4d+a4FaJ6m2jd6ILLMjPYVR11VOUwt4R2bf6t5d8iMIdb5yydeG9URlhtD2tXJ1Wet9IkT8sNi3g==
   dependencies:
     pg "^8.6.0"
 

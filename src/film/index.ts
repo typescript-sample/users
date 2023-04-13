@@ -1,6 +1,6 @@
 import { Log, QueryController, SavedController } from 'express-ext';
 import { SavedService, Search, ViewSearchManager } from 'onecore';
-import { ArrayRepository, buildToSave } from 'pg-extension';
+import { ArrayRepository, buildToSave, useUrlQuery } from 'pg-extension';
 import { DB, QueryRepository, Repository, SearchBuilder, SqlLoadRepository } from 'query-core';
 import { TemplateMap, useQuery } from 'query-mappers';
 import {
@@ -42,7 +42,6 @@ import {
   FilmQuery,
   FilmRepository,
 } from './film';
-import { useInfoQuery } from '../rate-user-query';
 import { CommentReactionClient, CommentReactionController, commentReactionModel, CommentThread, CommentThreadClient, CommentThreadController, CommentThreadFilter, commentThreadModel, commentModel, CommentThreadRepository, CommentThreadValidator, SqlCommentReactionRepository, SqlCommentThreadReplyRepository, SqlCommentThreadRepository } from '../comment-thread';
 
 
@@ -94,7 +93,7 @@ export function useFilmReactionController(log: Log, db: DB, mapper?: TemplateMap
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'filmrate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'filmratereaction', rateReactionModel, 'filmrate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentRateModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new ReactionService<Rate, RateFilter>(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryInfo);
   const commentValidator = new CommentValidator(commentRateModel, check);
   return new ReactionController(log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
@@ -105,7 +104,7 @@ export function useFilmRateCommentController(log: Log, db: DB, mapper?: Template
   const query = useQuery('filmratecomment', mapper, commentRateModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'filmratecomment', commentRateModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'filmratecomment', commentRateModel, 'filmrate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new CommentQuery<Comment, CommentFilter>(builder.search, rateCommentRepository, queryInfo);
   return new RateCommentController(log, service);
 }
@@ -127,7 +126,7 @@ export function useFilmCommentThreadController(log: Log, db: DB, mapper?: Templa
     "users", "id", "username", "imageurl", "filmreplycommentinfo", "commentId", "usefulCount", "filmreplycommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('filmcommentthread', mapper, commentThreadModel, true)
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'filmcommentthread', commentThreadModel, db.driver, query);
   const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryInfo)
   return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "filmreplycomment", "commentId", "comment")

@@ -38,7 +38,6 @@ import shortid from 'shortid';
 import { check } from 'xvalidators';
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from './article';
 export * from './article';
-import { useInfoQuery } from '../rate-user-query';
 
 export class ArticleManager extends ViewManager<Article, string> implements ArticleService {
   constructor(repository: ArticleRepository) {
@@ -68,7 +67,7 @@ export function useArticleReactionController(log: Log, db: DB, mapper?: Template
   const rateRepository = new SqlLoadRepository<Rate, string, string>(db.query, 'articlerate', rateModel, db.param, 'id', 'author');
   const rateReactionRepository = new SqlReactionRepository(db, 'articleratereaction', rateReactionModel, 'articlerate', 'usefulCount', 'author', 'id');
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'articleratecomment', commentRateModel, 'articlerate', 'id', 'author', 'replyCount', 'author', 'id');
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new ReactionService(builder.search, rateRepository, rateReactionRepository, rateCommentRepository, queryInfo);
   return new ReactionController(
     log, service, commentValidator, ['time'], ['rate', 'usefulCount', 'replyCount', 'count', 'score'],
@@ -79,7 +78,7 @@ export function useArticleRateCommentController(log: Log, db: DB, mapper?: Templ
   const query = useQuery('articleratecomment', mapper, commentRateModel, true);
   const builder = new SearchBuilder<Comment, CommentFilter>(db.query, 'articleratecomment', commentRateModel, db.driver, query);
   const rateCommentRepository = new SqlCommentRepository<Comment>(db, 'articleratecomment', commentRateModel, 'articlerate', 'id', 'author', 'replyCount', 'author', 'time', 'id');
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const service = new CommentQuery(builder.search, rateCommentRepository, queryInfo);
   return new RateCommentController(log, service);
 }
@@ -94,7 +93,7 @@ export function useArticleCommentThreadController(log: Log, db: DB, mapper?: Tem
     "users", "id", "username", "imageurl", "articlecommentinfo", "commentId", "usefulCount", "articlecommentreaction", "commentId", "reaction")
   const commentThreadValidator = new CommentThreadValidator(commentThreadModel, check)
   const query = useQuery('articlecommentthread', mapper, commentThreadModel, true)
-  const queryInfo = useInfoQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
+  const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'articlecommentthread', commentThreadModel, db.driver, query);
   const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryInfo)
   return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "articlecomment", "commentId", "comment")
