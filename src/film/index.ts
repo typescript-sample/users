@@ -129,7 +129,7 @@ export function useFilmCommentThreadController(log: Log, db: DB, mapper?: Templa
   const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'filmcommentthread', commentThreadModel, db.driver, query);
   const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryInfo)
-  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "filmreplycomment", "commentId", "comment")
+  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", generate, "filmreplycomment", "commentId", "comment")
 }
 
 export function useFilmCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {

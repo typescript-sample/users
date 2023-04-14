@@ -131,7 +131,6 @@ export interface Comment {
     commentThreadId: string
     userId: string
     comment: string
-    parent: string
     time: Date
     updatedAt: Date
     histories?: ShortComment[]
@@ -149,7 +148,6 @@ export interface CommentFilter {
     author?: string
     commentThreadId?: string
     comment?: string
-    parent?: string
     time?: Date
     updatedAt?: Date
     histories?: ShortComment[]
@@ -194,7 +192,6 @@ export const commentModel: Attributes = {
     },
     comment: {},
     time: {},
-    parent: {},
     histories: {
         type: "array",
         typeof: commentThreadHistoryModel

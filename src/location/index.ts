@@ -216,7 +216,7 @@ export function useLocationCommentThreadController(log: Log, db: DB, mapper?: Te
   const queryInfo = useUrlQuery<string>(db.query, 'users', 'imageURL', 'id', 'username', 'displayname');
   const builder = new SearchBuilder<CommentThread, CommentThreadFilter>(db.query, 'locationcommentthread', commentThreadModel, db.driver, query);
   const commentThreadService = new CommentThreadClient(builder.search, commentThreadRepository, commentThreadReplyRepository, queryInfo)
-  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", "parent", generate, "locationreplycomment", "commentId", "comment")
+  return new CommentThreadController(log, commentThreadService, commentThreadValidator, "commentId", "id", "author", "userId", "comment", "commentThreadId", generate, "locationreplycomment", "commentId", "comment")
 }
 
 export function useLocationCommentThreadReactionController(log: Log, db: DB, mapper?: TemplateMap) {

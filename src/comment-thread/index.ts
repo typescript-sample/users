@@ -23,13 +23,12 @@ export class CommentThreadController<R> {
     protected authorCol: string
     protected commentCol: string
     protected userIdCol: string
-    protected parentReplyCol: string
     protected commentThreadIdCol: string
     protected commentReplyTable: string
     protected commentIdReplyCol: string
     protected commentReplyCol: string
     constructor(protected log: Log, protected commentThreadService: CommentThreadService, public commentThreadValidator: CommentThreadValidator,
-        commentIdCol: string, idCol: string, authorCol: string, userIdCol: string, commentCol: string, commentThreadIdCol: string, parentReplyCol: string, private generate: () => string,
+        commentIdCol: string, idCol: string, authorCol: string, userIdCol: string, commentCol: string, commentThreadIdCol: string, private generate: () => string,
         commentReplyTable: string, commentIdReplyCol: string, commentReplyCol: string) {
         this.idCol = idCol;
         this.commentIdCol = commentIdCol;
@@ -37,7 +36,6 @@ export class CommentThreadController<R> {
         this.commentCol = commentCol;
         this.userIdCol = userIdCol;
         this.commentThreadIdCol = commentThreadIdCol;
-        this.parentReplyCol = parentReplyCol;
         this.commentReplyTable = commentReplyTable;
         this.commentIdReplyCol = commentIdReplyCol;
         this.commentReplyCol = commentReplyCol;
@@ -113,7 +111,6 @@ export class CommentThreadController<R> {
         comment[this.authorCol] = req.params[this.authorCol]
         comment[this.userIdCol] = req.params[this.authorCol]
         comment[this.idCol] = req.params[this.idCol]
-        comment[this.parentReplyCol] = req.body[this.parentReplyCol]
         comment[this.commentIdCol] = this.generate()
         this.commentThreadService.replyComment(comment).then(rep => {
             return res.status(200).json(rep).end()
@@ -524,18 +521,18 @@ export class SqlCommentThreadReplyRepository extends Repository<Comment, string>
 // ------------ COMMENT REACTION ---------------------
 export class SqlCommentReactionRepository implements CommentReactionRepository {
     constructor(protected db: DB, protected table: string, protected attributes: Attributes,
-        protected parent: string, usefulCountParentCol?: string, parentIdCol?: string, userIdCol?: string, authorCol?: string, idCol?: string) {
-        this.usefulCountParentCol = (usefulCountParentCol && usefulCountParentCol.length > 0 ? usefulCountParentCol : 'usefulcount');
-        this.parentIdCol = (parentIdCol && parentIdCol.length > 0 ? parentIdCol : 'id');
+        protected tblInfo: string, usefulCountInfoCol?: string, commentIdCol?: string, userIdCol?: string, authorCol?: string, idCol?: string) {
+        this.usefulCountInfoCol = (usefulCountInfoCol && usefulCountInfoCol.length > 0 ? usefulCountInfoCol : 'usefulcount');
+        this.commentIdCol = (commentIdCol && commentIdCol.length > 0 ? commentIdCol : 'id');
         this.userIdCol = (userIdCol && userIdCol.length > 0 ? userIdCol : 'userId');
-        this.idCol = (idCol && idCol.length > 0 ? idCol : this.parentIdCol);
+        this.idCol = (idCol && idCol.length > 0 ? idCol : this.commentIdCol);
         this.authorCol = (authorCol && authorCol.length > 0 ? authorCol : 'author');
         this.exist = this.exist.bind(this);
         this.save = this.save.bind(this);
         this.remove = this.remove.bind(this);
     }
-    usefulCountParentCol: string;
-    parentIdCol: string;
+    usefulCountInfoCol: string;
+    commentIdCol: string;
     idCol: string;
     authorCol: string;
     userIdCol: string;
@@ -547,7 +544,7 @@ export class SqlCommentReactionRepository implements CommentReactionRepository {
     remove(commentId: string, author: string, userId: string): Promise<number> {
         const query1 = `delete from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)} and ${this.userIdCol}= ${this.db.param(3)}`;
         const s1: Statement = { query: query1, params: [commentId, author, userId] };
-        const query2 = `update ${this.parent} set ${this.usefulCountParentCol} = ${this.usefulCountParentCol} - 1 where ${this.parentIdCol} = ${this.db.param(1)}`;
+        const query2 = `update ${this.tblInfo} set ${this.usefulCountInfoCol} = ${this.usefulCountInfoCol} - 1 where ${this.commentIdCol} = ${this.db.param(1)}`;
         const s2: Statement = { query: query2, params: [commentId] };
         return this.db.execBatch([s1, s2], true);
     }
@@ -555,7 +552,7 @@ export class SqlCommentReactionRepository implements CommentReactionRepository {
         const obj: CommentReaction = { commentId, userId, author, time: new Date(), reaction };
         const stmt = buildToInsert(obj, this.table, this.attributes, this.db.param);
         if (stmt) {
-            const query = `insert into ${this.parent}(${this.parentIdCol},${this.usefulCountParentCol}) values(${this.db.param(1)},1) on conflict (${this.parentIdCol}) do update set ${this.usefulCountParentCol} = ${this.parent}.${this.usefulCountParentCol} + 1 where ${this.parent}.${this.parentIdCol} = ${this.db.param(1)}`;
+            const query = `insert into ${this.tblInfo}(${this.commentIdCol},${this.usefulCountInfoCol}) values(${this.db.param(1)},1) on conflict (${this.commentIdCol}) do update set ${this.usefulCountInfoCol} = ${this.tblInfo}.${this.usefulCountInfoCol} + 1 where ${this.tblInfo}.${this.commentIdCol} = ${this.db.param(1)}`;
             const s2: Statement = { query, params: [commentId] };
             return this.db.execBatch([stmt, s2]);
         } else {
